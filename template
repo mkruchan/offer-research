@@ -205,6 +205,24 @@
       text-align: center;
       color: var(--text-secondary);
     }
+    .remove-col { width: 32px; }
+    .remove-row-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      border-radius: 4px;
+      font-size: 16px;
+      line-height: 1;
+      transition: background 0.15s, color 0.15s;
+    }
+    .remove-row-btn:hover { background: var(--bg-secondary); color: #A32D2D; }
 
     /* Add row button */
     .add-row { padding: 8px 12px; border-top: 1px solid var(--border-light); }
@@ -364,9 +382,10 @@
             <tr>
               <th style="width:40px">#</th>
               <th style="width:26%">Source / Channel</th>
-              <th style="width:14%">Est. Share %</th>
+              <th style="width:14%">Est. Ads Quantity</th>
               <th style="width:18%">Traffic Type</th>
               <th>Notes</th>
+              <th class="remove-col"></th>
             </tr>
           </thead>
           <tbody id="traffic-body"></tbody>
@@ -395,11 +414,16 @@
           <thead>
             <tr>
               <th style="width:40px">#</th>
-              <th style="width:22%">Ad / Creative Name</th>
-              <th style="width:16%">Format</th>
-              <th style="width:14%">CTA</th>
-              <th style="width:18%">Creative</th>
+              <th style="width:12%">Traffic Channel</th>
+              <th style="width:12%">Format</th>
+              <th style="width:16%">Headline</th>
+              <th style="width:12%">CTA</th>
+              <th style="width:12%">Imp. Estimate</th>
+              <th style="width:14%">Creative</th>
               <th>Angle / Hook</th>
+              <th style="width:13%">Spy Tool Link</th>
+              <th style="width:14%">Fan Page Link</th>
+              <th class="remove-col"></th>
             </tr>
           </thead>
           <tbody id="ads-body"></tbody>
@@ -427,11 +451,12 @@
           <thead>
             <tr>
               <th style="width:40px">#</th>
+              <th style="width:16%">Link</th>
               <th style="width:20%">Advertiser</th>
               <th style="width:18%">Funnel Type</th>
               <th style="width:16%">Entry Point</th>
-              <th style="width:12%">Lead Form?</th>
               <th>Key Observations</th>
+              <th class="remove-col"></th>
             </tr>
           </thead>
           <tbody id="funnels-body"></tbody>
@@ -487,7 +512,7 @@
     return `<tr>
       <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
       <td><input type="text" placeholder="e.g. Google Organic, Meta Paid"></td>
-      <td><input type="text" placeholder="~35%"></td>
+      <td><input type="text" placeholder="e.g. 120"></td>
       <td><select>
         ${opt('','— select —')}
         ${opt('paid-search','Paid Search')}
@@ -501,6 +526,7 @@
         ${opt('native','Native')}
       </select></td>
       <td><input type="text" placeholder="Observations..."></td>
+      <td><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')" title="Remove row">×</button></td>
     </tr>`;
   }
 
@@ -508,7 +534,13 @@
     const uid = 'media-' + Date.now() + '-' + n;
     return `<tr>
       <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
-      <td><input type="text" placeholder="Ad name or ID"></td>
+      <td><select>
+        ${opt('','— select —')}
+        ${opt('meta','Meta')}
+        ${opt('tiktok','TikTok')}
+        ${opt('google','Google')}
+        ${opt('native','Native')}
+      </select></td>
       <td><select>
         ${opt('','— select —')}
         ${opt('static','Static Image')}
@@ -518,7 +550,9 @@
         ${opt('native-article','Native Article')}
         ${opt('email','Email')}
       </select></td>
+      <td><input type="text" placeholder="Ad headline text"></td>
       <td><input type="text" placeholder="e.g. Get a Free Quote"></td>
+      <td><input type="text" placeholder="e.g. 500K"></td>
       <td class="media-cell">
         <input type="file" id="${uid}" class="hidden-input" accept="image/*,video/*" onchange="handleMediaUpload(this, '${uid}-preview')">
         <div id="${uid}-preview">
@@ -532,12 +566,16 @@
         </div>
       </td>
       <td><input type="text" placeholder="Describe the hook or messaging angle"></td>
+      <td><input type="url" placeholder="https://..."></td>
+      <td><input type="url" placeholder="https://..."></td>
+      <td><button class="remove-row-btn" onclick="removeRow(this,'ads-body')" title="Remove row">×</button></td>
     </tr>`;
   }
 
   function funnelRow(n) {
     return `<tr>
       <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
+      <td><input type="url" placeholder="https://..."></td>
       <td><input type="text" placeholder="Advertiser name"></td>
       <td><select>
         ${opt('','— select —')}
@@ -550,12 +588,8 @@
         ${opt('comparison','Comparison Page')}
       </select></td>
       <td><input type="text" placeholder="Ad, email, organic..."></td>
-      <td><select>
-        ${opt('','—')}
-        ${opt('yes','Yes')}
-        ${opt('no','No')}
-      </select></td>
       <td><input type="text" placeholder="Structure, copy, offer details..."></td>
+      <td><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')" title="Remove row">×</button></td>
     </tr>`;
   }
 
@@ -609,14 +643,22 @@
   }
 
 
+  function renumberTable(tbodyId) {
+    const rows = document.getElementById(tbodyId).querySelectorAll('tr');
+    rows.forEach((row, i) => {
+      const numInput = row.querySelector('.row-num input');
+      if (numInput) numInput.value = i + 1;
+    });
+  }
+
+  function removeRow(btn, tbodyId) {
+    btn.closest('tr').remove();
+    renumberTable(tbodyId);
+  }
+
   function addRow(tbodyId, templateFn) {
     const tbody = document.getElementById(tbodyId);
-    if (tbodyId === 'traffic-body') trafficCount++;
-    else if (tbodyId === 'ads-body') adsCount++;
-    else funnelCount++;
-    const count = tbodyId === 'traffic-body' ? trafficCount
-                : tbodyId === 'ads-body'     ? adsCount
-                : funnelCount;
+    const count = tbody.querySelectorAll('tr').length + 1;
     const tmp = document.createElement('tbody');
     tmp.innerHTML = templateFn(count);
     tbody.appendChild(tmp.firstChild);
