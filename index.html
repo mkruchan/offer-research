@@ -17,37 +17,22 @@
       --border-mid: rgba(0,0,0,0.22);
       --radius-md: 8px;
       --radius-lg: 12px;
-      --blue-bg: #E6F1FB;
-      --blue-text: #0C447C;
-      --teal-bg: #E1F5EE;
-      --teal-text: #085041;
-      --amber-bg: #FAEEDA;
-      --amber-text: #633806;
-      --purple-bg: #EEEDFE;
-      --purple-text: #3C3489;
-      --coral-bg: #FAECE7;
-      --coral-text: #712B13;
+      --blue-bg: #E6F1FB; --blue-text: #0C447C;
+      --teal-bg: #E1F5EE; --teal-text: #085041;
+      --amber-bg: #FAEEDA; --amber-text: #633806;
+      --purple-bg: #EEEDFE; --purple-text: #3C3489;
+      --coral-bg: #FAECE7; --coral-text: #712B13;
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg-primary: #1e1e1c;
-        --bg-secondary: #272725;
-        --bg-tertiary: #2e2e2b;
-        --text-primary: #f0ede8;
-        --text-secondary: #999890;
-        --border-light: rgba(255,255,255,0.10);
-        --border-mid: rgba(255,255,255,0.18);
-        --blue-bg: #042C53;
-        --blue-text: #B5D4F4;
-        --teal-bg: #04342C;
-        --teal-text: #9FE1CB;
-        --amber-bg: #412402;
-        --amber-text: #FAC775;
-        --purple-bg: #26215C;
-        --purple-text: #CECBF6;
-        --coral-bg: #4A1B0C;
-        --coral-text: #F5C4B3;
+        --bg-primary: #1e1e1c; --bg-secondary: #272725; --bg-tertiary: #2e2e2b;
+        --text-primary: #f0ede8; --text-secondary: #999890;
+        --border-light: rgba(255,255,255,0.10); --border-mid: rgba(255,255,255,0.18);
+        --blue-bg: #042C53; --blue-text: #B5D4F4;
+        --teal-bg: #04342C; --teal-text: #9FE1CB;
+        --amber-bg: #412402; --amber-text: #FAC775;
+        --purple-bg: #26215C; --purple-text: #CECBF6;
+        --coral-bg: #4A1B0C; --coral-text: #F5C4B3;
       }
     }
 
@@ -58,680 +43,558 @@
       min-height: 100vh;
       padding: 2rem 1rem;
     }
-
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+    .container { max-width: 1400px; margin: 0 auto; }
 
     /* Header */
     .header { margin-bottom: 2rem; }
+    .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .header-left { flex: 1; min-width: 0; }
     .badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 10px;
-      border-radius: 20px;
-      background: var(--blue-bg);
-      color: var(--blue-text);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
+      display: inline-block; font-size: 11px; font-weight: 500;
+      padding: 3px 10px; border-radius: 20px;
+      background: var(--blue-bg); color: var(--blue-text);
+      letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px;
     }
-    .header h1 {
-      font-size: 24px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 4px;
+    .header h1 { font-size: 24px; font-weight: 600; margin-bottom: 4px; }
+    .header p { font-size: 14px; color: var(--text-secondary); }
+
+    /* Save bar */
+    .save-bar { display: flex; align-items: center; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
+    .autosave-status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
+    .autosave-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--text-secondary); flex-shrink: 0;
+      transition: background 0.4s, box-shadow 0.4s;
     }
-    .header p {
-      font-size: 14px;
-      color: var(--text-secondary);
+    .autosave-dot.saving { background: #e8a020; box-shadow: 0 0 0 3px rgba(232,160,32,0.2); }
+    .autosave-dot.saved { background: #22a05a; box-shadow: 0 0 0 3px rgba(34,160,90,0.15); }
+
+    .toolbar-btn {
+      display: flex; align-items: center; gap: 5px;
+      padding: 7px 12px; font-size: 12px; font-family: inherit; font-weight: 500;
+      border-radius: var(--radius-md); cursor: pointer;
+      border: 1px solid var(--border-light);
+      background: var(--bg-primary); color: var(--text-primary);
+      transition: background 0.15s; white-space: nowrap;
     }
+    .toolbar-btn:hover { background: var(--bg-secondary); }
+
+    /* Toast */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+    .toast {
+      padding: 10px 16px; border-radius: var(--radius-md); font-size: 13px; font-family: inherit;
+      background: var(--text-primary); color: var(--bg-primary);
+      opacity: 0; transform: translateY(8px); transition: opacity 0.2s, transform 0.2s;
+      max-width: 320px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: #1a5c2a; color: #e3f5e8; }
+    .toast.error { background: #5c1a1a; color: #f5e3e3; }
 
     /* Meta fields */
-    .meta-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-bottom: 1.75rem;
-    }
-    .meta-field label {
-      display: block;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 5px;
-    }
-    .meta-field input {
-      width: 100%;
-      padding: 8px 12px;
-      font-size: 13px;
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-md);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      outline: none;
-      transition: border-color 0.15s;
-    }
+    .meta-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1.75rem; }
+    .meta-field label { display: block; font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+    .meta-field input { width: 100%; padding: 8px 12px; font-size: 13px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-primary); color: var(--text-primary); outline: none; transition: border-color 0.15s; }
     .meta-field input:focus { border-color: var(--border-mid); }
 
-    /* Section cards */
-    .section {
-      margin-bottom: 1.25rem;
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      background: var(--bg-primary);
-    }
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border-light);
-    }
-    .section-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .icon-blue   { background: var(--blue-bg); }
-    .icon-teal   { background: var(--teal-bg); }
-    .icon-amber  { background: var(--amber-bg); }
-    .icon-purple { background: var(--purple-bg); }
-    .icon-coral  { background: var(--coral-bg); }
-
-    .section-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-primary);
-    }
+    /* Sections */
+    .section { margin-bottom: 1.25rem; border: 1px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-primary); }
+    .section-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-light); }
+    .section-icon { width: 30px; height: 30px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .icon-blue { background: var(--blue-bg); } .icon-teal { background: var(--teal-bg); }
+    .icon-amber { background: var(--amber-bg); } .icon-purple { background: var(--purple-bg); }
+    .icon-coral { background: var(--coral-bg); }
+    .section-title { font-size: 14px; font-weight: 500; }
     .section-body { padding: 0; }
 
     /* Tables */
     .table-scroll { overflow-x: auto; }
-    table {
-      border-collapse: collapse;
-      font-size: 13px;
-      table-layout: fixed;
-    }
-    thead th {
-      text-align: left;
-      padding: 8px 12px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border-bottom: 1px solid var(--border-light);
-      background: var(--bg-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-    }
+    table { border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+    thead th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; }
     th.remove-col, th.num-col { width: 36px; }
     tbody tr:last-child td { border-bottom: none; }
-    tbody td {
-      border-bottom: 1px solid var(--border-light);
-      padding: 0;
-      vertical-align: top;
-      overflow: hidden;
-    }
-    tbody td input,
-    tbody td select,
-    tbody td textarea {
-      padding: 8px 12px;
-      font-size: 13px;
-      border: none;
-      border-right: 1px solid var(--border-light);
-      background: transparent;
-      color: var(--text-primary);
-      outline: none;
-      font-family: inherit;
-      box-sizing: border-box;
-      resize: none;
-      overflow: hidden;
-      line-height: 1.5;
-      display: block;
-    }
-    tbody td textarea {
-      min-height: 34px;
-      white-space: pre-wrap;
-      word-break: break-word;
-      width: 100%;
-      overflow: hidden;
-    }
-    tbody td select {
-      width: 100%;
-      min-width: 0;
-      cursor: pointer;
-      height: 34px;
-    }
+    tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: top; overflow: hidden; }
+    tbody td input, tbody td select, tbody td textarea { padding: 8px 12px; font-size: 13px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.5; display: block; }
+    tbody td textarea { min-height: 34px; white-space: pre-wrap; word-break: break-word; width: 100%; }
+    tbody td select { width: 100%; cursor: pointer; height: 34px; }
     tbody td:has(select) { vertical-align: middle; }
-    tbody td:last-child input,
-    tbody td:last-child select,
-    tbody td:last-child textarea { border-right: none; }
-    tbody td input:focus,
-    tbody td select:focus,
-    tbody td textarea:focus { background: var(--bg-secondary); }
-
-    .row-num {
-      width: 36px;
-      text-align: center;
-      color: var(--text-secondary);
-      vertical-align: middle !important;
-    }
-    .row-num input {
-      padding: 2px 4px !important;
-      width: 100% !important;
-      text-align: center;
-      border-right: 1px solid var(--border-light) !important;
-    }
-    tbody td.remove-col {
-      width: 36px;
-      vertical-align: middle !important;
-    }
-    .remove-row-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-      margin: auto;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-secondary);
-      border-radius: 4px;
-      font-size: 16px;
-      line-height: 1;
-      transition: background 0.15s, color 0.15s;
-    }
+    tbody td:last-child input, tbody td:last-child select, tbody td:last-child textarea { border-right: none; }
+    tbody td input:focus, tbody td select:focus, tbody td textarea:focus { background: var(--bg-secondary); }
+    .row-num { width: 36px; text-align: center; color: var(--text-secondary); vertical-align: middle !important; }
+    .row-num input { padding: 2px 4px !important; width: 100% !important; text-align: center; border-right: 1px solid var(--border-light) !important; }
+    tbody td.remove-col { width: 36px; vertical-align: middle !important; }
+    .remove-row-btn { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin: auto; background: none; border: none; cursor: pointer; color: var(--text-secondary); border-radius: 4px; font-size: 16px; line-height: 1; transition: background 0.15s, color 0.15s; }
     .remove-row-btn:hover { background: var(--bg-secondary); color: #A32D2D; }
-
-    /* Add row button */
     .add-row { padding: 8px 12px; border-top: 1px solid var(--border-light); }
-    .add-btn {
-      width: 100%;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-family: inherit;
-      color: var(--text-secondary);
-      background: none;
-      border: 1px dashed var(--border-light);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-    }
+    .add-btn { width: 100%; padding: 6px 12px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; transition: background 0.15s, color 0.15s; }
     .add-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
-
-    /* Notes / textarea sections */
-    .notes-body textarea {
-      width: 100%;
-      min-height: 90px;
-      padding: 12px 16px;
-      font-size: 13px;
-      font-family: inherit;
-      color: var(--text-primary);
-      background: transparent;
-      border: none;
-      resize: vertical;
-      outline: none;
-      line-height: 1.6;
-    }
+    .notes-body textarea { width: 100%; min-height: 90px; padding: 12px 16px; font-size: 13px; font-family: inherit; color: var(--text-primary); background: transparent; border: none; resize: vertical; outline: none; line-height: 1.6; }
     .notes-body textarea:focus { background: var(--bg-secondary); }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
 
-    /* Two-column layout */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-    @media (max-width: 620px) {
-      .two-col { grid-template-columns: 1fr; }
-    }
-
-    /* Media cell */
+    /* Media */
     .media-cell { padding: 6px 10px !important; border-right: 1px solid var(--border-light); }
     .media-cell:last-child { border-right: none; }
-    .media-upload-btn {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 10px;
-      font-size: 12px;
-      font-family: inherit;
-      color: var(--text-secondary);
-      background: none;
-      border: 1px dashed var(--border-light);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.15s, color 0.15s;
-    }
+    .media-upload-btn { display: flex; align-items: center; gap: 6px; padding: 5px 10px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; white-space: nowrap; transition: background 0.15s, color 0.15s; }
     .media-upload-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
-    .media-upload-btn svg { flex-shrink: 0; }
-    .media-preview {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .media-thumb {
-      width: 48px;
-      height: 36px;
-      object-fit: cover;
-      border-radius: 4px;
-      border: 1px solid var(--border-light);
-      flex-shrink: 0;
-    }
-    .media-video-thumb {
-      width: 48px;
-      height: 36px;
-      border-radius: 4px;
-      border: 1px solid var(--border-light);
-      background: var(--bg-secondary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .media-filename {
-      font-size: 11px;
-      color: var(--text-secondary);
-      max-width: 80px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .media-remove {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-secondary);
-      padding: 2px;
-      line-height: 1;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
+    .media-preview { display: flex; align-items: center; gap: 8px; }
+    .media-thumb { width: 48px; height: 36px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-light); flex-shrink: 0; }
+    .media-video-thumb { width: 48px; height: 36px; border-radius: 4px; border: 1px solid var(--border-light); background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .media-filename { font-size: 11px; color: var(--text-secondary); max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .media-remove { background: none; border: none; cursor: pointer; color: var(--text-secondary); padding: 2px; line-height: 1; font-size: 14px; flex-shrink: 0; }
     .media-remove:hover { color: var(--text-primary); }
     .hidden-input { display: none; }
 
-    /* Print styles */
     @media print {
       body { background: white; padding: 0; }
-      .add-row { display: none; }
-      .media-upload-btn { display: none; }
+      .add-row, .save-bar { display: none; }
     }
   </style>
 </head>
 <body>
 <div class="container">
 
-  <!-- Header -->
   <div class="header">
-    <div class="badge">Competitive Analysis</div>
-    <h1>eCoverage / eFinancial Analysis Multi-Platform Research</h1>
-    <p>Track advertiser strategies, traffic sources, and funnel tactics</p>
+    <div class="header-top">
+      <div class="header-left">
+        <div class="badge">Competitive Analysis</div>
+        <h1>eCoverage / eFinancial Analysis Multi-Platform Research</h1>
+        <p>Track advertiser strategies, traffic sources, and funnel tactics</p>
+      </div>
+      <div class="save-bar">
+        <div class="autosave-status">
+          <div class="autosave-dot" id="autosaveDot"></div>
+          <span id="autosaveText">Loading…</span>
+        </div>
+        <button class="toolbar-btn" onclick="exportJSON()">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Export
+        </button>
+        <button class="toolbar-btn" onclick="triggerImport()">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 13V4M4 8l4-4 4 4M2 13h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Import
+        </button>
+        <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(this)">
+      </div>
+    </div>
   </div>
 
-  <!-- Meta fields -->
   <div class="meta-row">
-    <div class="meta-field">
-      <label>Analyst</label>
-      <input type="text" placeholder="Your name">
-    </div>
-    <div class="meta-field">
-      <label>Date</label>
-      <input type="date">
-    </div>
-    <div class="meta-field">
-      <label>Report Period</label>
-      <input type="text" placeholder="e.g. Apr 2025">
-    </div>
+    <div class="meta-field"><label>Analyst</label><input type="text" id="meta-analyst" placeholder="Your name"></div>
+    <div class="meta-field"><label>Date</label><input type="date" id="meta-date"></div>
+    <div class="meta-field"><label>Report Period</label><input type="text" id="meta-period" placeholder="e.g. Apr 2025"></div>
   </div>
 
-  <!-- ── Top Traffic Sources ── -->
   <div class="section">
     <div class="section-header">
       <div class="section-icon icon-blue">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-          <path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <span class="section-title">Top traffic sources</span>
     </div>
     <div class="section-body">
       <div class="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th class="num-col">#</th>
-              <th style="width:26%">Source / Channel</th>
-              <th style="width:14%">Est. Ads Quantity</th>
-              <th style="width:18%">Traffic Type</th>
-              <th>Notes</th>
-              <th class="remove-col"></th>
-            </tr>
-          </thead>
-          <tbody id="traffic-body"></tbody>
-        </table>
+        <table><thead><tr>
+          <th class="num-col">#</th>
+          <th style="width:26%">Source / Channel</th>
+          <th style="width:14%">Est. Ads Quantity</th>
+          <th style="width:18%">Traffic Type</th>
+          <th>Notes</th>
+          <th class="remove-col"></th>
+        </tr></thead><tbody id="traffic-body"></tbody></table>
       </div>
-      <div class="add-row">
-        <button class="add-btn" onclick="addRow('traffic-body', trafficRow)">+ Add row</button>
-      </div>
+      <div class="add-row"><button class="add-btn" onclick="addRow('traffic-body',trafficRow)">+ Add row</button></div>
     </div>
   </div>
 
-  <!-- ── Top Ads ── -->
   <div class="section">
     <div class="section-header">
       <div class="section-icon icon-amber">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-          <rect x="2" y="4" width="12" height="8" rx="1.5" stroke="#854F0B" stroke-width="1.5"/>
-          <path d="M5 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="#854F0B" stroke-width="1.5"/>
-        </svg>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8" rx="1.5" stroke="#854F0B" stroke-width="1.5"/><path d="M5 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="#854F0B" stroke-width="1.5"/></svg>
       </div>
       <span class="section-title">Top ads</span>
     </div>
     <div class="section-body">
       <div class="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th class="num-col">#</th>
-              <th style="width:12%">Traffic Channel</th>
-              <th style="width:12%">Format</th>
-              <th style="width:16%">Headline</th>
-              <th style="width:12%">CTA</th>
-              <th style="width:12%">Imp. Estimate</th>
-              <th style="width:14%">Creative</th>
-              <th style="width:13%">Creative Link</th>
-              <th>Angle / Hook</th>
-              <th style="width:13%">Spy Tool Link</th>
-              <th style="width:14%">Fan Page Link</th>
-              <th class="remove-col"></th>
-            </tr>
-          </thead>
-          <tbody id="ads-body"></tbody>
-        </table>
+        <table><thead><tr>
+          <th class="num-col">#</th>
+          <th style="width:12%">Traffic Channel</th><th style="width:12%">Format</th>
+          <th style="width:16%">Headline</th><th style="width:12%">CTA</th>
+          <th style="width:12%">Imp. Estimate</th><th style="width:14%">Creative</th>
+          <th style="width:13%">Creative Link</th><th>Angle / Hook</th>
+          <th style="width:13%">Spy Tool Link</th><th style="width:14%">Fan Page Link</th>
+          <th class="remove-col"></th>
+        </tr></thead><tbody id="ads-body"></tbody></table>
       </div>
-      <div class="add-row">
-        <button class="add-btn" onclick="addRow('ads-body', adsRow)">+ Add row</button>
-      </div>
+      <div class="add-row"><button class="add-btn" onclick="addRow('ads-body',adsRow)">+ Add row</button></div>
     </div>
   </div>
 
-  <!-- ── Top Funnels ── -->
   <div class="section">
     <div class="section-header">
       <div class="section-icon icon-teal">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-          <path d="M3 13 L3 8 M7 13 L7 5 M11 13 L11 10 M13 4 L11 2 L9 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 13 L3 8 M7 13 L7 5 M11 13 L11 10 M13 4 L11 2 L9 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <span class="section-title">Top funnels used by advertisers</span>
     </div>
     <div class="section-body">
       <div class="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th class="num-col">#</th>
-              <th style="width:16%">Link</th>
-              <th style="width:20%">Advertiser</th>
-              <th style="width:18%">Funnel Type</th>
-              <th style="width:16%">Entry Point</th>
-              <th>Key Observations</th>
-              <th class="remove-col"></th>
-            </tr>
-          </thead>
-          <tbody id="funnels-body"></tbody>
-        </table>
+        <table><thead><tr>
+          <th class="num-col">#</th><th style="width:16%">Link</th>
+          <th style="width:20%">Advertiser</th><th style="width:18%">Funnel Type</th>
+          <th style="width:16%">Entry Point</th><th>Key Observations</th>
+          <th class="remove-col"></th>
+        </tr></thead><tbody id="funnels-body"></tbody></table>
       </div>
-      <div class="add-row">
-        <button class="add-btn" onclick="addRow('funnels-body', funnelRow)">+ Add row</button>
-      </div>
+      <div class="add-row"><button class="add-btn" onclick="addRow('funnels-body',funnelRow)">+ Add row</button></div>
     </div>
   </div>
 
-  <!-- ── Key Takeaways & Recommended Actions ── -->
   <div class="two-col">
     <div class="section">
       <div class="section-header">
         <div class="section-icon icon-purple">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-            <circle cx="8" cy="8" r="5.5" stroke="#534AB7" stroke-width="1.5"/>
-            <path d="M8 5.5 V8 L10 9.5" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#534AB7" stroke-width="1.5"/><path d="M8 5.5 V8 L10 9.5" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/></svg>
         </div>
         <span class="section-title">Key takeaways</span>
       </div>
-      <div class="notes-body">
-        <textarea placeholder="Summarize the main findings, patterns, and strategic insights from this analysis..."></textarea>
-      </div>
+      <div class="notes-body"><textarea id="notes-takeaways" placeholder="Summarize the main findings, patterns, and strategic insights from this analysis..."></textarea></div>
     </div>
     <div class="section">
       <div class="section-header">
         <div class="section-icon icon-coral">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-            <path d="M4 8 L7 11 L12 5" stroke="#993C1D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 8 L7 11 L12 5" stroke="#993C1D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
         <span class="section-title">Recommended actions</span>
       </div>
-      <div class="notes-body">
-        <textarea placeholder="List specific actions to test, replicate, or counter based on these findings..."></textarea>
-      </div>
+      <div class="notes-body"><textarea id="notes-actions" placeholder="List specific actions to test, replicate, or counter based on these findings..."></textarea></div>
     </div>
   </div>
 
-</div><!-- /container -->
+</div>
+<div class="toast-container" id="toastContainer"></div>
 
 <script>
-  let trafficCount = 0, adsCount = 0, funnelCount = 0;
+/* ── Helpers ── */
+function opt(v, l) { return `<option value="${v}">${l}</option>`; }
 
-  function opt(val, label) {
-    return `<option value="${val}">${label}</option>`;
-  }
+/* ── Row templates ── */
+function trafficRow(n) {
+  return `<tr>
+    <td class="row-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
+    <td><textarea placeholder="e.g. Google Organic, Meta Paid" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="e.g. 120" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><select onchange="scheduleSave()">
+      ${opt('','— select —')}${opt('paid-search','Paid Search')}${opt('organic-search','Organic Search')}
+      ${opt('paid-social','Paid Social')}${opt('organic-social','Organic Social')}
+      ${opt('email','Email')}${opt('direct','Direct')}${opt('referral','Referral')}
+      ${opt('display','Display')}${opt('native','Native')}
+    </select></td>
+    <td><textarea placeholder="Observations..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')">×</button></td>
+  </tr>`;
+}
 
-  function trafficRow(n) {
-    return `<tr>
-      <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
-      <td><textarea placeholder="e.g. Google Organic, Meta Paid" oninput="autoGrow(this)"></textarea></td>
-      <td><textarea placeholder="e.g. 120" oninput="autoGrow(this)"></textarea></td>
-      <td><select>
-        ${opt('','— select —')}
-        ${opt('paid-search','Paid Search')}
-        ${opt('organic-search','Organic Search')}
-        ${opt('paid-social','Paid Social')}
-        ${opt('organic-social','Organic Social')}
-        ${opt('email','Email')}
-        ${opt('direct','Direct')}
-        ${opt('referral','Referral')}
-        ${opt('display','Display')}
-        ${opt('native','Native')}
-      </select></td>
-      <td><textarea placeholder="Observations..." oninput="autoGrow(this)"></textarea></td>
-      <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')" title="Remove row">×</button></td>
-    </tr>`;
-  }
-
-  function adsRow(n) {
-    const uid = 'media-' + Date.now() + '-' + n;
-    return `<tr>
-      <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
-      <td><select>
-        ${opt('','— select —')}
-        ${opt('meta','Meta')}
-        ${opt('tiktok','TikTok')}
-        ${opt('google','Google')}
-        ${opt('native','Native')}
-      </select></td>
-      <td><select>
-        ${opt('','— select —')}
-        ${opt('static','Static Image')}
-        ${opt('video','Video')}
-        ${opt('carousel','Carousel')}
-        ${opt('text','Text / Search')}
-        ${opt('native-article','Native Article')}
-        ${opt('email','Email')}
-      </select></td>
-      <td><textarea placeholder="Ad headline text" oninput="autoGrow(this)"></textarea></td>
-      <td><textarea placeholder="e.g. Get a Free Quote" oninput="autoGrow(this)"></textarea></td>
-      <td><textarea placeholder="e.g. 500K" oninput="autoGrow(this)"></textarea></td>
-      <td class="media-cell">
-        <input type="file" id="${uid}" class="hidden-input" accept="image/*,video/*" onchange="handleMediaUpload(this, '${uid}-preview')">
-        <div id="${uid}-preview">
-          <button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-              <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            Upload
-          </button>
-        </div>
-      </td>
-      <td><textarea placeholder="https://..." oninput="autoGrow(this)"></textarea></td>
-      <td><textarea placeholder="Describe the hook or messaging angle" oninput="autoGrow(this)"></textarea></td>
-      <td><textarea placeholder="https://..." oninput="autoGrow(this)"></textarea></td>
-      <td><textarea placeholder="https://..." oninput="autoGrow(this)"></textarea></td>
-      <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'ads-body')" title="Remove row">×</button></td>
-    </tr>`;
-  }
-
-  function funnelRow(n) {
-    return `<tr>
-      <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
-      <td><textarea placeholder="https://..." oninput="autoGrow(this)"></textarea></td>
-      <td><textarea placeholder="Advertiser name" oninput="autoGrow(this)"></textarea></td>
-      <td><select>
-        ${opt('','— select —')}
-        ${opt('quiz','Quiz / Survey')}
-        ${opt('landing-page','Direct Landing Page')}
-        ${opt('vsl','VSL')}
-        ${opt('lead-gen','Lead Gen Form')}
-        ${opt('multi-step','Multi-Step Form')}
-        ${opt('advertorial','Advertorial')}
-        ${opt('comparison','Comparison Page')}
-      </select></td>
-      <td><textarea placeholder="Ad, email, organic..." oninput="autoGrow(this)"></textarea></td>
-      <td><textarea placeholder="Structure, copy, offer details..." oninput="autoGrow(this)"></textarea></td>
-      <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')" title="Remove row">×</button></td>
-    </tr>`;
-  }
-
-  function handleMediaUpload(input, previewId) {
-    const file = input.files[0];
-    if (!file) return;
-    const preview = document.getElementById(previewId);
-    const isVideo = file.type.startsWith('video/');
-    const uid = input.id;
-    const shortName = file.name.length > 16 ? file.name.slice(0, 14) + '…' : file.name;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const dataUrl = e.target.result;
-      if (isVideo) {
-        preview.innerHTML = `
-          <div class="media-preview">
-            <div class="media-video-thumb" onclick="openMedia('${dataUrl}','${file.type}')" style="cursor:pointer" title="Click to open">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <polygon points="5,3 13,8 5,13" fill="var(--text-secondary)"/>
-              </svg>
-            </div>
-            <span class="media-filename" title="${file.name}">${shortName}</span>
-            <button class="media-remove" title="Remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
-          </div>`;
-      } else {
-        preview.innerHTML = `
-          <div class="media-preview">
-            <img class="media-thumb" src="${dataUrl}" alt="${file.name}" onclick="openMedia('${dataUrl}','${file.type}')" style="cursor:pointer" title="Click to open">
-            <span class="media-filename" title="${file.name}">${shortName}</span>
-            <button class="media-remove" title="Remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
-          </div>`;
-      }
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function openMedia(dataUrl, mimeType) {
-    const byteString = atob(dataUrl.split(',')[1]);
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
-    const blob = new Blob([ab], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
-  }
-
-  function removeMedia(uid, previewId) {
-    const input = document.getElementById(uid);
-    if (input) input.value = '';
-    const preview = document.getElementById(previewId);
-    if (preview) {
-      preview.innerHTML = `
+function adsRow(n) {
+  const uid = 'media-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
+  return `<tr>
+    <td class="row-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
+    <td><select onchange="scheduleSave()">
+      ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}
+    </select></td>
+    <td><select onchange="scheduleSave()">
+      ${opt('','— select —')}${opt('static','Static Image')}${opt('video','Video')}${opt('carousel','Carousel')}
+      ${opt('text','Text / Search')}${opt('native-article','Native Article')}${opt('email','Email')}
+    </select></td>
+    <td><textarea placeholder="Ad headline text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="e.g. Get a Free Quote" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="e.g. 500K" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td class="media-cell">
+      <input type="file" id="${uid}" class="hidden-input" accept="image/*,video/*" onchange="handleMediaUpload(this,'${uid}-preview')">
+      <div id="${uid}-preview">
         <button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
             <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-          Upload
-        </button>`;
+          </svg>Upload
+        </button>
+      </div>
+    </td>
+    <td><textarea placeholder="https://..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="Describe the hook or messaging angle" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="https://..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="https://..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'ads-body')">×</button></td>
+  </tr>`;
+}
+
+function funnelRow(n) {
+  return `<tr>
+    <td class="row-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
+    <td><textarea placeholder="https://..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="Advertiser name" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><select onchange="scheduleSave()">
+      ${opt('','— select —')}${opt('quiz','Quiz / Survey')}${opt('landing-page','Direct Landing Page')}
+      ${opt('vsl','VSL')}${opt('lead-gen','Lead Gen Form')}${opt('multi-step','Multi-Step Form')}
+      ${opt('advertorial','Advertorial')}${opt('comparison','Comparison Page')}
+    </select></td>
+    <td><textarea placeholder="Ad, email, organic..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="Structure, copy, offer details..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')">×</button></td>
+  </tr>`;
+}
+
+/* ── Media ── */
+function handleMediaUpload(input, previewId) {
+  const file = input.files[0];
+  if (!file) return;
+  const isVideo = file.type.startsWith('video/');
+  const uid = input.id;
+  const shortName = file.name.length > 16 ? file.name.slice(0,14)+'…' : file.name;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const src = e.target.result;
+    const preview = document.getElementById(previewId);
+    if (!preview) return;
+    if (isVideo) {
+      preview.innerHTML = `<div class="media-preview">
+        <div class="media-video-thumb" onclick="openMedia('${src}','${file.type}')" style="cursor:pointer">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><polygon points="5,3 13,8 5,13" fill="var(--text-secondary)"/></svg>
+        </div>
+        <span class="media-filename" title="${file.name}">${shortName}</span>
+        <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
+      </div>`;
+    } else {
+      preview.innerHTML = `<div class="media-preview">
+        <img class="media-thumb" src="${src}" onclick="openMedia('${src}','image/jpeg')" style="cursor:pointer">
+        <span class="media-filename" title="${file.name}">${shortName}</span>
+        <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
+      </div>`;
     }
+    scheduleSave();
+  };
+  reader.readAsDataURL(file);
+}
+
+function openMedia(dataUrl, mimeType) {
+  const b = atob(dataUrl.split(',')[1]), ab = new ArrayBuffer(b.length), ia = new Uint8Array(ab);
+  for (let i = 0; i < b.length; i++) ia[i] = b.charCodeAt(i);
+  window.open(URL.createObjectURL(new Blob([ab], { type: mimeType })), '_blank');
+}
+
+function removeMedia(uid, previewId) {
+  const inp = document.getElementById(uid); if (inp) inp.value = '';
+  const prev = document.getElementById(previewId);
+  if (prev) {
+    prev.innerHTML = `<button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+        <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>Upload
+    </button>`;
+    scheduleSave();
   }
+}
 
-
-  function renumberTable(tbodyId) {
-    const rows = document.getElementById(tbodyId).querySelectorAll('tr');
-    rows.forEach((row, i) => {
-      const numInput = row.querySelector('.row-num input');
-      if (numInput) numInput.value = i + 1;
-    });
-  }
-
-  function removeRow(btn, tbodyId) {
-    btn.closest('tr').remove();
-    renumberTable(tbodyId);
-  }
-
-  function addRow(tbodyId, templateFn) {
-    const tbody = document.getElementById(tbodyId);
-    const count = tbody.querySelectorAll('tr').length + 1;
-    const tmp = document.createElement('tbody');
-    tmp.innerHTML = templateFn(count);
-    tbody.appendChild(tmp.firstChild);
-    setTimeout(resizeAllInputs, 0);
-  }
-
-  const MAX_W = 260;
-
-  function autoGrow(el) {
-    el.style.height = '0';
-    el.style.height = Math.max(el.scrollHeight, 34) + 'px';
-  }
-
-  function resizeAllInputs() {
-    document.querySelectorAll('tbody td textarea').forEach(autoGrow);
-  }
-
-
-  document.addEventListener('input', function(e) {
-    if (e.target.matches('tbody td textarea')) autoGrow(e.target);
+/* ── Table utils ── */
+function autoGrow(el) { el.style.height = '0'; el.style.height = Math.max(el.scrollHeight, 34) + 'px'; }
+function resizeAllInputs() { document.querySelectorAll('tbody td textarea').forEach(autoGrow); }
+function renumberTable(id) {
+  document.getElementById(id).querySelectorAll('tr').forEach((r, i) => {
+    const inp = r.querySelector('.row-num input'); if (inp) inp.value = i + 1;
   });
-
-  for (let i = 0; i < 3; i++) {
-    trafficCount++; adsCount++; funnelCount++;
-    document.getElementById('traffic-body').insertAdjacentHTML('beforeend', trafficRow(trafficCount));
-    document.getElementById('ads-body').insertAdjacentHTML('beforeend', adsRow(adsCount));
-    document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(funnelCount));
-  }
+}
+function removeRow(btn, id) { btn.closest('tr').remove(); renumberTable(id); scheduleSave(); }
+function addRow(id, fn) {
+  const tbody = document.getElementById(id);
+  const tmp = document.createElement('tbody');
+  tmp.innerHTML = fn(tbody.querySelectorAll('tr').length + 1);
+  tbody.appendChild(tmp.firstChild);
   setTimeout(resizeAllInputs, 0);
+  scheduleSave();
+}
+
+document.addEventListener('input', function(e) {
+  if (e.target.matches('tbody td textarea')) autoGrow(e.target);
+  if (e.target.matches('#meta-analyst,#meta-date,#meta-period,#notes-takeaways,#notes-actions')) scheduleSave();
+});
+
+/* ── Auto-save ── */
+const STORAGE_KEY = 'ecoverage_autosave_v2';
+let saveTimer = null;
+
+function setStatus(state, text) {
+  document.getElementById('autosaveDot').className = 'autosave-dot ' + (state || '');
+  document.getElementById('autosaveText').textContent = text;
+}
+
+function scheduleSave() {
+  setStatus('saving', 'Saving…');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+
+function doSave() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(collectData()));
+    const t = new Date().toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    setStatus('saved', 'Saved at ' + t);
+  } catch(e) {
+    setStatus('', 'Save failed — try exporting');
+  }
+}
+
+/* ── Collect / Restore ── */
+function collectData() {
+  return {
+    v: 2, savedAt: new Date().toISOString(),
+    meta: {
+      analyst: document.getElementById('meta-analyst').value,
+      date: document.getElementById('meta-date').value,
+      period: document.getElementById('meta-period').value,
+    },
+    notes: {
+      takeaways: document.getElementById('notes-takeaways').value,
+      actions: document.getElementById('notes-actions').value,
+    },
+    traffic: collectTable('traffic-body', ['num','source','qty','type','notes']),
+    ads: collectTable('ads-body', ['num','channel','format','headline','cta','imp','creative','creativeLink','angle','spyLink','fanPage']),
+    funnels: collectTable('funnels-body', ['num','link','advertiser','type','entry','obs']),
+  };
+}
+
+function collectTable(id, keys) {
+  return Array.from(document.getElementById(id).querySelectorAll('tr')).map(row => {
+    const cells = row.querySelectorAll('td:not(.remove-col)');
+    const obj = {};
+    cells.forEach((cell, i) => {
+      const k = keys[i] || 'c' + i;
+      if (k === 'creative') {
+        const img = cell.querySelector('.media-preview img');
+        const vid = cell.querySelector('.media-video-thumb');
+        const fname = cell.querySelector('.media-filename');
+        if (img) obj[k] = { t: 'img', src: img.src, name: fname?.title || '' };
+        else if (vid) obj[k] = { t: 'vid', name: fname?.title || '' };
+        else obj[k] = null;
+      } else {
+        const s = cell.querySelector('select');
+        const ta = cell.querySelector('textarea');
+        const inp = cell.querySelector('input:not([type="file"])');
+        obj[k] = s ? s.value : ta ? ta.value : inp ? inp.value : '';
+      }
+    });
+    return obj;
+  });
+}
+
+function restoreData(data) {
+  if (!data) return false;
+  document.getElementById('meta-analyst').value = data.meta?.analyst || '';
+  document.getElementById('meta-date').value = data.meta?.date || '';
+  document.getElementById('meta-period').value = data.meta?.period || '';
+  document.getElementById('notes-takeaways').value = data.notes?.takeaways || '';
+  document.getElementById('notes-actions').value = data.notes?.actions || '';
+  restoreTable('traffic-body', data.traffic || [], trafficRow, ['num','source','qty','type','notes']);
+  restoreTable('ads-body', data.ads || [], adsRow, ['num','channel','format','headline','cta','imp','creative','creativeLink','angle','spyLink','fanPage']);
+  restoreTable('funnels-body', data.funnels || [], funnelRow, ['num','link','advertiser','type','entry','obs']);
+  setTimeout(resizeAllInputs, 0);
+  return true;
+}
+
+function restoreTable(id, rows, fn, keys) {
+  const tbody = document.getElementById(id);
+  tbody.innerHTML = '';
+  if (!rows.length) { for (let i = 1; i <= 3; i++) tbody.insertAdjacentHTML('beforeend', fn(i)); return; }
+  rows.forEach((rd, idx) => {
+    tbody.insertAdjacentHTML('beforeend', fn(idx + 1));
+    const tr = tbody.querySelectorAll('tr')[idx];
+    const cells = tr.querySelectorAll('td:not(.remove-col)');
+    cells.forEach((cell, i) => {
+      const k = keys[i] || 'c' + i;
+      const v = rd[k];
+      if (k === 'creative' && v) {
+        if (v.t === 'img' && v.src) {
+          const fi = cell.querySelector('input[type="file"]');
+          const pd = cell.querySelector('[id$="-preview"]');
+          if (pd && fi) {
+            const uid = fi.id, pid = pd.id;
+            const sn = (v.name||'').length > 16 ? (v.name||'').slice(0,14)+'…' : (v.name||'');
+            pd.innerHTML = `<div class="media-preview">
+              <img class="media-thumb" src="${v.src}" onclick="openMedia('${v.src}','image/jpeg')" style="cursor:pointer">
+              <span class="media-filename" title="${v.name||''}">${sn}</span>
+              <button class="media-remove" onclick="removeMedia('${uid}','${pid}')">×</button>
+            </div>`;
+          }
+        }
+      } else if (v !== undefined && v !== null) {
+        const s = cell.querySelector('select');
+        const ta = cell.querySelector('textarea');
+        const inp = cell.querySelector('input:not([type="file"])');
+        if (s) s.value = v;
+        else if (ta) ta.value = v;
+        else if (inp) inp.value = v;
+      }
+    });
+  });
+}
+
+/* ── Export / Import ── */
+function exportJSON() {
+  const data = collectData();
+  const name = ('ecoverage-' + (document.getElementById('meta-period').value || 'report')).replace(/[^a-z0-9\-]/gi,'-').toLowerCase();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)], {type:'application/json'}));
+  a.download = name + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Exported as ' + name + '.json', 'success');
+}
+function triggerImport() { document.getElementById('importInput').value=''; document.getElementById('importInput').click(); }
+function importJSON(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      restoreData(JSON.parse(e.target.result));
+      scheduleSave();
+      showToast('Imported "' + file.name + '"', 'success');
+    } catch { showToast('Could not parse file.', 'error'); }
+  };
+  reader.readAsText(file);
+}
+
+/* ── Toast ── */
+function showToast(msg, type) {
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type||'');
+  t.textContent = msg;
+  document.getElementById('toastContainer').appendChild(t);
+  requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 250); }, 3000);
+}
+
+/* ── Init ── */
+(function() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      restoreData(JSON.parse(raw));
+      const dt = new Date(JSON.parse(raw).savedAt);
+      const ts = dt.toLocaleString(undefined, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+      setStatus('saved', 'Restored · ' + ts);
+      return;
+    }
+  } catch(e) {}
+  // fresh
+  for (let i = 1; i <= 3; i++) {
+    document.getElementById('traffic-body').insertAdjacentHTML('beforeend', trafficRow(i));
+    document.getElementById('ads-body').insertAdjacentHTML('beforeend', adsRow(i));
+    document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
+  }
+  setStatus('', 'Auto-save on');
+  setTimeout(resizeAllInputs, 0);
+})();
 </script>
 </body>
 </html>
