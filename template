@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>eCoverage / eFinancial Analysis Template</title>
+  <title>eCoverage / eFinancial Analysis Multi-Platform Research</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -248,10 +248,76 @@
       .two-col { grid-template-columns: 1fr; }
     }
 
+    /* Media cell */
+    .media-cell { padding: 6px 10px !important; border-right: 1px solid var(--border-light); }
+    .media-cell:last-child { border-right: none; }
+    .media-upload-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--text-secondary);
+      background: none;
+      border: 1px dashed var(--border-light);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+    }
+    .media-upload-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    .media-upload-btn svg { flex-shrink: 0; }
+    .media-preview {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .media-thumb {
+      width: 48px;
+      height: 36px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+    .media-video-thumb {
+      width: 48px;
+      height: 36px;
+      border-radius: 4px;
+      border: 1px solid var(--border-light);
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .media-filename {
+      font-size: 11px;
+      color: var(--text-secondary);
+      max-width: 80px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .media-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      padding: 2px;
+      line-height: 1;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .media-remove:hover { color: var(--text-primary); }
+    .hidden-input { display: none; }
+
     /* Print styles */
     @media print {
       body { background: white; padding: 0; }
       .add-row { display: none; }
+      .media-upload-btn { display: none; }
     }
   </style>
 </head>
@@ -261,7 +327,7 @@
   <!-- Header -->
   <div class="header">
     <div class="badge">Competitive Analysis</div>
-    <h1>eCoverage / eFinancial Analysis</h1>
+    <h1>eCoverage / eFinancial Analysis Multi-Platform Research</h1>
     <p>Track advertiser strategies, traffic sources, and funnel tactics</p>
   </div>
 
@@ -274,10 +340,6 @@
     <div class="meta-field">
       <label>Date</label>
       <input type="date">
-    </div>
-    <div class="meta-field">
-      <label>Platform</label>
-      <input type="text" placeholder="eCoverage / eFinancial">
     </div>
     <div class="meta-field">
       <label>Report Period</label>
@@ -334,9 +396,9 @@
             <tr>
               <th style="width:40px">#</th>
               <th style="width:22%">Ad / Creative Name</th>
-              <th style="width:14%">Platform</th>
-              <th style="width:14%">Format</th>
-              <th style="width:16%">CTA</th>
+              <th style="width:16%">Format</th>
+              <th style="width:14%">CTA</th>
+              <th style="width:18%">Creative</th>
               <th>Angle / Hook</th>
             </tr>
           </thead>
@@ -443,19 +505,10 @@
   }
 
   function adsRow(n) {
+    const uid = 'media-' + Date.now() + '-' + n;
     return `<tr>
       <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
       <td><input type="text" placeholder="Ad name or ID"></td>
-      <td><select>
-        ${opt('','— select —')}
-        ${opt('google','Google')}
-        ${opt('meta','Meta')}
-        ${opt('youtube','YouTube')}
-        ${opt('tiktok','TikTok')}
-        ${opt('native','Native / Taboola')}
-        ${opt('programmatic','Programmatic')}
-        ${opt('email','Email')}
-      </select></td>
       <td><select>
         ${opt('','— select —')}
         ${opt('static','Static Image')}
@@ -466,6 +519,18 @@
         ${opt('email','Email')}
       </select></td>
       <td><input type="text" placeholder="e.g. Get a Free Quote"></td>
+      <td class="media-cell">
+        <input type="file" id="${uid}" class="hidden-input" accept="image/*,video/*" onchange="handleMediaUpload(this, '${uid}-preview')">
+        <div id="${uid}-preview">
+          <button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Upload
+          </button>
+        </div>
+      </td>
       <td><input type="text" placeholder="Describe the hook or messaging angle"></td>
     </tr>`;
   }
@@ -493,6 +558,56 @@
       <td><input type="text" placeholder="Structure, copy, offer details..."></td>
     </tr>`;
   }
+
+  function handleMediaUpload(input, previewId) {
+    const file = input.files[0];
+    if (!file) return;
+    const preview = document.getElementById(previewId);
+    const isVideo = file.type.startsWith('video/');
+    const uid = input.id;
+    const shortName = file.name.length > 16 ? file.name.slice(0, 14) + '…' : file.name;
+
+    if (isVideo) {
+      preview.innerHTML = `
+        <div class="media-preview">
+          <div class="media-video-thumb">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <polygon points="5,3 13,8 5,13" fill="var(--text-secondary)"/>
+            </svg>
+          </div>
+          <span class="media-filename" title="${file.name}">${shortName}</span>
+          <button class="media-remove" title="Remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
+        </div>`;
+    } else {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.innerHTML = `
+          <div class="media-preview">
+            <img class="media-thumb" src="${e.target.result}" alt="${file.name}">
+            <span class="media-filename" title="${file.name}">${shortName}</span>
+            <button class="media-remove" title="Remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
+          </div>`;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function removeMedia(uid, previewId) {
+    const input = document.getElementById(uid);
+    if (input) input.value = '';
+    const preview = document.getElementById(previewId);
+    if (preview) {
+      preview.innerHTML = `
+        <button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Upload
+        </button>`;
+    }
+  }
+
 
   function addRow(tbodyId, templateFn) {
     const tbody = document.getElementById(tbodyId);
