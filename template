@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eCoverage / eFinancial Analysis Template</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f7f7f5;
+      --bg-tertiary: #f0eeea;
+      --text-primary: #1a1a18;
+      --text-secondary: #6b6b67;
+      --border-light: rgba(0,0,0,0.12);
+      --border-mid: rgba(0,0,0,0.22);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --blue-bg: #E6F1FB;
+      --blue-text: #0C447C;
+      --teal-bg: #E1F5EE;
+      --teal-text: #085041;
+      --amber-bg: #FAEEDA;
+      --amber-text: #633806;
+      --purple-bg: #EEEDFE;
+      --purple-text: #3C3489;
+      --coral-bg: #FAECE7;
+      --coral-text: #712B13;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #1e1e1c;
+        --bg-secondary: #272725;
+        --bg-tertiary: #2e2e2b;
+        --text-primary: #f0ede8;
+        --text-secondary: #999890;
+        --border-light: rgba(255,255,255,0.10);
+        --border-mid: rgba(255,255,255,0.18);
+        --blue-bg: #042C53;
+        --blue-text: #B5D4F4;
+        --teal-bg: #04342C;
+        --teal-text: #9FE1CB;
+        --amber-bg: #412402;
+        --amber-text: #FAC775;
+        --purple-bg: #26215C;
+        --purple-text: #CECBF6;
+        --coral-bg: #4A1B0C;
+        --coral-text: #F5C4B3;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header { margin-bottom: 2rem; }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--blue-bg);
+      color: var(--blue-text);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .header p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* Meta fields */
+    .meta-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 1.75rem;
+    }
+    .meta-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+    }
+    .meta-field input {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 13px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .meta-field input:focus { border-color: var(--border-mid); }
+
+    /* Section cards */
+    .section {
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg-primary);
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .section-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .icon-blue   { background: var(--blue-bg); }
+    .icon-teal   { background: var(--teal-bg); }
+    .icon-amber  { background: var(--amber-bg); }
+    .icon-purple { background: var(--purple-bg); }
+    .icon-coral  { background: var(--coral-bg); }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .section-body { padding: 0; }
+
+    /* Tables */
+    .table-scroll { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 560px;
+    }
+    thead th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-secondary);
+      white-space: nowrap;
+    }
+    tbody td {
+      border-bottom: 1px solid var(--border-light);
+      padding: 0;
+      vertical-align: middle;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody td input,
+    tbody td select {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 13px;
+      border: none;
+      border-right: 1px solid var(--border-light);
+      background: transparent;
+      color: var(--text-primary);
+      outline: none;
+      font-family: inherit;
+    }
+    tbody td:last-child input,
+    tbody td:last-child select { border-right: none; }
+    tbody td input:focus,
+    tbody td select:focus { background: var(--bg-secondary); }
+    tbody td select { cursor: pointer; }
+
+    .row-num {
+      width: 36px;
+      text-align: center;
+      color: var(--text-secondary);
+    }
+
+    /* Add row button */
+    .add-row { padding: 8px 12px; border-top: 1px solid var(--border-light); }
+    .add-btn {
+      width: 100%;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--text-secondary);
+      background: none;
+      border: 1px dashed var(--border-light);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .add-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+
+    /* Notes / textarea sections */
+    .notes-body textarea {
+      width: 100%;
+      min-height: 90px;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text-primary);
+      background: transparent;
+      border: none;
+      resize: vertical;
+      outline: none;
+      line-height: 1.6;
+    }
+    .notes-body textarea:focus { background: var(--bg-secondary); }
+
+    /* Two-column layout */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 620px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    /* Print styles */
+    @media print {
+      body { background: white; padding: 0; }
+      .add-row { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">Competitive Analysis</div>
+    <h1>eCoverage / eFinancial Analysis</h1>
+    <p>Track advertiser strategies, traffic sources, and funnel tactics</p>
+  </div>
+
+  <!-- Meta fields -->
+  <div class="meta-row">
+    <div class="meta-field">
+      <label>Analyst</label>
+      <input type="text" placeholder="Your name">
+    </div>
+    <div class="meta-field">
+      <label>Date</label>
+      <input type="date">
+    </div>
+    <div class="meta-field">
+      <label>Platform</label>
+      <input type="text" placeholder="eCoverage / eFinancial">
+    </div>
+    <div class="meta-field">
+      <label>Report Period</label>
+      <input type="text" placeholder="e.g. Apr 2025">
+    </div>
+  </div>
+
+  <!-- ── Top Traffic Sources ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+          <path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="section-title">Top traffic sources</span>
+    </div>
+    <div class="section-body">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px">#</th>
+              <th style="width:26%">Source / Channel</th>
+              <th style="width:14%">Est. Share %</th>
+              <th style="width:18%">Traffic Type</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="traffic-body"></tbody>
+        </table>
+      </div>
+      <div class="add-row">
+        <button class="add-btn" onclick="addRow('traffic-body', trafficRow)">+ Add row</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Top Ads ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-amber">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="4" width="12" height="8" rx="1.5" stroke="#854F0B" stroke-width="1.5"/>
+          <path d="M5 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="#854F0B" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <span class="section-title">Top ads</span>
+    </div>
+    <div class="section-body">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px">#</th>
+              <th style="width:22%">Ad / Creative Name</th>
+              <th style="width:14%">Platform</th>
+              <th style="width:14%">Format</th>
+              <th style="width:16%">CTA</th>
+              <th>Angle / Hook</th>
+            </tr>
+          </thead>
+          <tbody id="ads-body"></tbody>
+        </table>
+      </div>
+      <div class="add-row">
+        <button class="add-btn" onclick="addRow('ads-body', adsRow)">+ Add row</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Top Funnels ── -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-teal">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+          <path d="M3 13 L3 8 M7 13 L7 5 M11 13 L11 10 M13 4 L11 2 L9 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="section-title">Top funnels used by advertisers</span>
+    </div>
+    <div class="section-body">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px">#</th>
+              <th style="width:20%">Advertiser</th>
+              <th style="width:18%">Funnel Type</th>
+              <th style="width:16%">Entry Point</th>
+              <th style="width:12%">Lead Form?</th>
+              <th>Key Observations</th>
+            </tr>
+          </thead>
+          <tbody id="funnels-body"></tbody>
+        </table>
+      </div>
+      <div class="add-row">
+        <button class="add-btn" onclick="addRow('funnels-body', funnelRow)">+ Add row</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Key Takeaways & Recommended Actions ── -->
+  <div class="two-col">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-purple">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="5.5" stroke="#534AB7" stroke-width="1.5"/>
+            <path d="M8 5.5 V8 L10 9.5" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="section-title">Key takeaways</span>
+      </div>
+      <div class="notes-body">
+        <textarea placeholder="Summarize the main findings, patterns, and strategic insights from this analysis..."></textarea>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header">
+        <div class="section-icon icon-coral">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+            <path d="M4 8 L7 11 L12 5" stroke="#993C1D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="section-title">Recommended actions</span>
+      </div>
+      <div class="notes-body">
+        <textarea placeholder="List specific actions to test, replicate, or counter based on these findings..."></textarea>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+  let trafficCount = 0, adsCount = 0, funnelCount = 0;
+
+  function opt(val, label) {
+    return `<option value="${val}">${label}</option>`;
+  }
+
+  function trafficRow(n) {
+    return `<tr>
+      <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
+      <td><input type="text" placeholder="e.g. Google Organic, Meta Paid"></td>
+      <td><input type="text" placeholder="~35%"></td>
+      <td><select>
+        ${opt('','— select —')}
+        ${opt('paid-search','Paid Search')}
+        ${opt('organic-search','Organic Search')}
+        ${opt('paid-social','Paid Social')}
+        ${opt('organic-social','Organic Social')}
+        ${opt('email','Email')}
+        ${opt('direct','Direct')}
+        ${opt('referral','Referral')}
+        ${opt('display','Display')}
+        ${opt('native','Native')}
+      </select></td>
+      <td><input type="text" placeholder="Observations..."></td>
+    </tr>`;
+  }
+
+  function adsRow(n) {
+    return `<tr>
+      <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
+      <td><input type="text" placeholder="Ad name or ID"></td>
+      <td><select>
+        ${opt('','— select —')}
+        ${opt('google','Google')}
+        ${opt('meta','Meta')}
+        ${opt('youtube','YouTube')}
+        ${opt('tiktok','TikTok')}
+        ${opt('native','Native / Taboola')}
+        ${opt('programmatic','Programmatic')}
+        ${opt('email','Email')}
+      </select></td>
+      <td><select>
+        ${opt('','— select —')}
+        ${opt('static','Static Image')}
+        ${opt('video','Video')}
+        ${opt('carousel','Carousel')}
+        ${opt('text','Text / Search')}
+        ${opt('native-article','Native Article')}
+        ${opt('email','Email')}
+      </select></td>
+      <td><input type="text" placeholder="e.g. Get a Free Quote"></td>
+      <td><input type="text" placeholder="Describe the hook or messaging angle"></td>
+    </tr>`;
+  }
+
+  function funnelRow(n) {
+    return `<tr>
+      <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
+      <td><input type="text" placeholder="Advertiser name"></td>
+      <td><select>
+        ${opt('','— select —')}
+        ${opt('quiz','Quiz / Survey')}
+        ${opt('landing-page','Direct Landing Page')}
+        ${opt('vsl','VSL')}
+        ${opt('lead-gen','Lead Gen Form')}
+        ${opt('multi-step','Multi-Step Form')}
+        ${opt('advertorial','Advertorial')}
+        ${opt('comparison','Comparison Page')}
+      </select></td>
+      <td><input type="text" placeholder="Ad, email, organic..."></td>
+      <td><select>
+        ${opt('','—')}
+        ${opt('yes','Yes')}
+        ${opt('no','No')}
+      </select></td>
+      <td><input type="text" placeholder="Structure, copy, offer details..."></td>
+    </tr>`;
+  }
+
+  function addRow(tbodyId, templateFn) {
+    const tbody = document.getElementById(tbodyId);
+    if (tbodyId === 'traffic-body') trafficCount++;
+    else if (tbodyId === 'ads-body') adsCount++;
+    else funnelCount++;
+    const count = tbodyId === 'traffic-body' ? trafficCount
+                : tbodyId === 'ads-body'     ? adsCount
+                : funnelCount;
+    const tmp = document.createElement('tbody');
+    tmp.innerHTML = templateFn(count);
+    tbody.appendChild(tmp.firstChild);
+  }
+
+  // Seed 3 starter rows in each table
+  for (let i = 0; i < 3; i++) {
+    trafficCount++; adsCount++; funnelCount++;
+    document.getElementById('traffic-body').insertAdjacentHTML('beforeend', trafficRow(trafficCount));
+    document.getElementById('ads-body').insertAdjacentHTML('beforeend', adsRow(adsCount));
+    document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(funnelCount));
+  }
+</script>
+</body>
+</html>
