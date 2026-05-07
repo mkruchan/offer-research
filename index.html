@@ -418,13 +418,13 @@ function adsRow(n) {
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
     <td class="media-cell">
-      <input type="file" id="${uid}" class="hidden-input" accept="image/*,video/*" onchange="handleMediaUpload(this,'${uid}-preview')">
+      <input type="file" id="${uid}" class="hidden-input" accept="image/*" onchange="handleMediaUpload(this,'${uid}-preview')">
       <div id="${uid}-preview">
         <button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
             <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>Upload
+          </svg>Image
         </button>
       </div>
     </td>
@@ -465,25 +465,28 @@ function handleMediaUpload(input, previewId) {
   const isVideo = file.type.startsWith('video/');
   const uid = input.id;
   const shortName = file.name.length > 16 ? file.name.slice(0,14)+'…' : file.name;
+
+  if (isVideo) {
+    showToast('Videos cannot be shared — use Creative Link instead.', 'error');
+    input.value = '';
+    return;
+  }
+
+  if (file.size > 400 * 1024) {
+    showToast('Image too large (max 400KB). Please compress it first.', 'error');
+    input.value = '';
+    return;
+  }
+
   const reader = new FileReader();
   reader.onload = function(e) {
     const src = e.target.result;
     const preview = document.getElementById(previewId); if (!preview) return;
-    if (isVideo) {
-      preview.innerHTML = `<div class="media-preview">
-        <div class="media-video-thumb" onclick="openMedia('${src}','${file.type}')">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><polygon points="5,3 13,8 5,13" fill="var(--text-secondary)"/></svg>
-        </div>
-        <span class="media-filename" title="${file.name}">${shortName}</span>
-        <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
-      </div>`;
-    } else {
-      preview.innerHTML = `<div class="media-preview">
-        <img class="media-thumb" src="${src}" onclick="openMedia('${src}','image/jpeg')">
-        <span class="media-filename" title="${file.name}">${shortName}</span>
-        <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
-      </div>`;
-    }
+    preview.innerHTML = `<div class="media-preview">
+      <img class="media-thumb" src="${src}" onclick="openMedia('${src}','image/jpeg')">
+      <span class="media-filename" title="${file.name}">${shortName}</span>
+      <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
+    </div>`;
     scheduleSave();
   };
   reader.readAsDataURL(file);
