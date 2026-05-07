@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>eCoverage / eFinancial Analysis Multi-Platform Research</title>
+  <title>OBD Fuel Saver - SynGas Multi-Platform Creative Research</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -82,20 +82,70 @@
     .section-title { font-size: 14px; font-weight: 500; }
 
     .table-scroll { overflow-x: auto; }
-    table { border-collapse: collapse; font-size: 13px; table-layout: fixed; }
-    thead th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; }
+    table { border-collapse: collapse; font-size: 13px; table-layout: fixed; width: max-content; min-width: 100%; }
+    thead th { position: relative; text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; user-select: none; }
+    th.remove-col, th.num-col { width: 36px; }
+    .col-resizer { position: absolute; right: 0; top: 0; bottom: 0; width: 6px; cursor: col-resize; z-index: 10; display: flex; align-items: center; justify-content: center; }
+    .col-resizer::after { content: ''; display: block; width: 2px; height: 60%; background: var(--border-light); border-radius: 2px; transition: background 0.15s; }
+    .col-resizer:hover::after, .col-resizer.dragging::after { background: var(--border-mid); }
     th.remove-col, th.num-col { width: 36px; }
     tbody tr:last-child td { border-bottom: none; }
     tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: top; overflow: hidden; }
-    tbody td input, tbody td select, tbody td textarea { padding: 8px 12px; font-size: 13px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.5; display: block; }
-    tbody td textarea { min-height: 34px; white-space: pre-wrap; word-break: break-word; width: 100%; overflow: hidden; }
-    tbody td select { width: 100%; cursor: pointer; height: 34px; }
+    tbody td input, tbody td select, tbody td textarea { padding: 8px 12px; font-size: 13px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.5; display: block; width: 100%; }
+    tbody td textarea { min-height: 34px; white-space: pre-wrap; word-break: break-word; }
+    tbody td textarea.link-field { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #4A90D9; text-decoration: underline; cursor: pointer; }
+    tbody td textarea.link-field:focus { white-space: nowrap; }
+    .link-open-btn { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #4A90D9; font-size: 12px; padding: 2px 4px; opacity: 0; transition: opacity 0.15s; z-index: 3; text-decoration: none; }
+    .link-cell { position: relative; }
+    .link-cell:hover .link-open-btn { opacity: 1; }
+    tbody td select { cursor: pointer; height: 34px; }
     tbody td:has(select) { vertical-align: middle; }
+
+    /* Custom colored select */
+    .sel-wrap { position: relative; width: 100%; height: 34px; overflow: hidden; }
+    .sel-wrap select { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
+    .sel-display { display: flex; align-items: center; gap: 7px; padding: 0 10px; height: 34px; font-size: 13px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; }
+    .sel-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; flex-shrink: 0; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis; }
+    .sel-arrow { margin-left: 4px; color: var(--text-secondary); font-size: 10px; flex-shrink: 0; }
+    tbody td:has(.sel-wrap) { vertical-align: middle; overflow: hidden; }
+
+    /* Traffic Channel colors */
+    .badge-meta    { background: #E8F0FE; color: #1A56DB; }
+    .badge-tiktok  { background: #FEE2E2; color: #991B1B; }
+    .badge-google  { background: #FEF3C7; color: #92400E; }
+    .badge-native  { background: #D1FAE5; color: #065F46; }
+
+    /* Format colors */
+    .badge-static        { background: #EDE9FE; color: #5B21B6; }
+    .badge-video         { background: #FCE7F3; color: #9D174D; }
+    .badge-carousel      { background: #DBEAFE; color: #1E40AF; }
+    .badge-text          { background: #F3F4F6; color: #374151; }
+    .badge-native-article{ background: #D1FAE5; color: #065F46; }
+    .badge-email         { background: #FEF3C7; color: #92400E; }
+
+    /* Traffic Type colors */
+    .badge-paid-search    { background: #DBEAFE; color: #1E40AF; }
+    .badge-organic-search { background: #D1FAE5; color: #065F46; }
+    .badge-paid-social    { background: #FCE7F3; color: #9D174D; }
+    .badge-organic-social { background: #EDE9FE; color: #5B21B6; }
+    .badge-email          { background: #FEF3C7; color: #92400E; }
+    .badge-direct         { background: #F3F4F6; color: #374151; }
+    .badge-referral       { background: #FEE2E2; color: #991B1B; }
+    .badge-display        { background: #E0F2FE; color: #075985; }
+
+    /* Funnel Type colors */
+    .badge-quiz          { background: #FEF3C7; color: #92400E; }
+    .badge-landing-page  { background: #DBEAFE; color: #1E40AF; }
+    .badge-vsl           { background: #FCE7F3; color: #9D174D; }
+    .badge-lead-gen      { background: #D1FAE5; color: #065F46; }
+    .badge-multi-step    { background: #EDE9FE; color: #5B21B6; }
+    .badge-advertorial   { background: #FEE2E2; color: #991B1B; }
+    .badge-comparison    { background: #E0F2FE; color: #075985; }
     tbody td:last-child input, tbody td:last-child select, tbody td:last-child textarea { border-right: none; }
     tbody td input:focus, tbody td select:focus, tbody td textarea:focus { background: var(--bg-secondary); }
-    .row-num { width: 36px; text-align: center; color: var(--text-secondary); vertical-align: middle !important; }
-    .row-num input { padding: 2px 4px !important; width: 100% !important; text-align: center; border-right: 1px solid var(--border-light) !important; }
-    tbody td.remove-col { width: 36px; vertical-align: middle !important; }
+    .row-num { width: 36px !important; min-width: 36px !important; max-width: 36px !important; text-align: center; color: var(--text-secondary); vertical-align: middle !important; }
+    .row-num input { padding: 2px 4px !important; width: 36px !important; text-align: center; border-right: 1px solid var(--border-light) !important; }
+    tbody td.remove-col { width: 36px !important; min-width: 36px !important; max-width: 36px !important; vertical-align: middle !important; }
     .remove-row-btn { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin: auto; background: none; border: none; cursor: pointer; color: var(--text-secondary); border-radius: 4px; font-size: 16px; line-height: 1; }
     .remove-row-btn:hover { background: var(--bg-secondary); color: #A32D2D; }
     .add-row { padding: 8px 12px; border-top: 1px solid var(--border-light); }
@@ -148,8 +198,7 @@
     <div class="header-top">
       <div class="header-left">
         <div class="badge">Competitive Analysis</div>
-        <h1>eCoverage / eFinancial Analysis Multi-Platform Research</h1>
-        <p>Track advertiser strategies, traffic sources, and funnel tactics</p>
+        <h1>OBD Fuel Saver - SynGas Multi-Platform Creative Research</h1>
       </div>
       <div class="save-bar">
         <div class="autosave-status">
@@ -180,71 +229,6 @@
     <div class="meta-field"><label>Report Period</label><input type="text" id="meta-period" placeholder="e.g. Apr 2025"></div>
   </div>
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon icon-blue">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <span class="section-title">Top traffic sources</span>
-    </div>
-    <div class="section-body">
-      <div class="table-scroll">
-        <table><thead><tr>
-          <th class="num-col">#</th>
-          <th style="width:26%">Source / Channel</th>
-          <th style="width:14%">Est. Ads Quantity</th>
-          <th style="width:18%">Traffic Type</th>
-          <th>Notes</th>
-          <th class="remove-col"></th>
-        </tr></thead><tbody id="traffic-body"></tbody></table>
-      </div>
-      <div class="add-row"><button class="add-btn" onclick="addRow('traffic-body',trafficRow)">+ Add row</button></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon icon-amber">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8" rx="1.5" stroke="#854F0B" stroke-width="1.5"/><path d="M5 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="#854F0B" stroke-width="1.5"/></svg>
-      </div>
-      <span class="section-title">Top ads</span>
-    </div>
-    <div class="section-body">
-      <div class="table-scroll">
-        <table><thead><tr>
-          <th class="num-col">#</th>
-          <th style="width:12%">Traffic Channel</th><th style="width:12%">Format</th>
-          <th style="width:16%">Headline</th><th style="width:12%">CTA</th>
-          <th style="width:12%">Imp. Estimate</th><th style="width:14%">Creative</th>
-          <th style="width:13%">Creative Link</th><th>Angle / Hook</th>
-          <th style="width:13%">Spy Tool Link</th><th style="width:14%">Fan Page Link</th>
-          <th class="remove-col"></th>
-        </tr></thead><tbody id="ads-body"></tbody></table>
-      </div>
-      <div class="add-row"><button class="add-btn" onclick="addRow('ads-body',adsRow)">+ Add row</button></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon icon-teal">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 13 L3 8 M7 13 L7 5 M11 13 L11 10 M13 4 L11 2 L9 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <span class="section-title">Top funnels used by advertisers</span>
-    </div>
-    <div class="section-body">
-      <div class="table-scroll">
-        <table><thead><tr>
-          <th class="num-col">#</th><th style="width:16%">Link</th>
-          <th style="width:20%">Advertiser</th><th style="width:18%">Funnel Type</th>
-          <th style="width:16%">Entry Point</th><th>Key Observations</th>
-          <th class="remove-col"></th>
-        </tr></thead><tbody id="funnels-body"></tbody></table>
-      </div>
-      <div class="add-row"><button class="add-btn" onclick="addRow('funnels-body',funnelRow)">+ Add row</button></div>
-    </div>
-  </div>
-
   <div class="two-col">
     <div class="section">
       <div class="section-header">
@@ -265,6 +249,72 @@
       <div class="notes-body"><textarea id="notes-actions" placeholder="List specific actions to test, replicate, or counter based on these findings..."></textarea></div>
     </div>
   </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="section-title">Top traffic sources</span>
+    </div>
+    <div class="section-body">
+      <div class="table-scroll">
+        <table><thead><tr>
+          <th class="num-col">#</th>
+          <th>Source / Channel</th>
+          <th>Est. Ads Quantity</th>
+          <th>Traffic Type</th>
+          <th>Notes</th>
+          <th class="remove-col"></th>
+        </tr></thead><tbody id="traffic-body"></tbody></table>
+      </div>
+      <div class="add-row"><button class="add-btn" onclick="addRow('traffic-body',trafficRow)">+ Add row</button></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-amber">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8" rx="1.5" stroke="#854F0B" stroke-width="1.5"/><path d="M5 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="#854F0B" stroke-width="1.5"/></svg>
+      </div>
+      <span class="section-title">Top ads</span>
+    </div>
+    <div class="section-body">
+      <div class="table-scroll">
+        <table><thead><tr>
+          <th class="num-col">#</th>
+          <th>Offer</th><th>Traffic Channel</th><th>Format</th>
+          <th>Headline</th><th>CTA</th><th>Title</th>
+          <th>Imp. Estimate</th><th>Creative</th>
+          <th>Creative Link</th><th>Landing Page Link</th><th>Angle / Hook</th>
+          <th>Spy Tool Link</th><th>Fan Page Link</th><th>Notes</th>
+          <th class="remove-col"></th>
+        </tr></thead><tbody id="ads-body"></tbody></table>
+      </div>
+      <div class="add-row"><button class="add-btn" onclick="addRow('ads-body',adsRow)">+ Add row</button></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-teal">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 13 L3 8 M7 13 L7 5 M11 13 L11 10 M13 4 L11 2 L9 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="section-title">Top funnels used by advertisers</span>
+    </div>
+    <div class="section-body">
+      <div class="table-scroll">
+        <table><thead><tr>
+          <th class="num-col">#</th><th>Link</th>
+          <th>Advertiser</th><th>Funnel Type</th>
+          <th>Key Observations</th>
+          <th class="remove-col"></th>
+        </tr></thead><tbody id="funnels-body"></tbody></table>
+      </div>
+      <div class="add-row"><button class="add-btn" onclick="addRow('funnels-body',funnelRow)">+ Add row</button></div>
+    </div>
+  </div>
+
 </div>
 
 <div class="toast-container" id="toastContainer"></div>
@@ -301,12 +351,15 @@ function trafficRow(n) {
     <td class="row-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
     <td><textarea placeholder="e.g. Google Organic, Meta Paid" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. 120" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><select onchange="scheduleSave()">
-      ${opt('','— select —')}${opt('paid-search','Paid Search')}${opt('organic-search','Organic Search')}
-      ${opt('paid-social','Paid Social')}${opt('organic-social','Organic Social')}
-      ${opt('email','Email')}${opt('direct','Direct')}${opt('referral','Referral')}
-      ${opt('display','Display')}${opt('native','Native')}
-    </select></td>
+    <td><div class="sel-wrap">
+      <select onchange="updateBadge(this);scheduleSave()">
+        ${opt('','— select —')}${opt('paid-search','Paid Search')}${opt('organic-search','Organic Search')}
+        ${opt('paid-social','Paid Social')}${opt('organic-social','Organic Social')}
+        ${opt('email','Email')}${opt('direct','Direct')}${opt('referral','Referral')}
+        ${opt('display','Display')}${opt('native','Native')}
+      </select>
+      <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
+    </div></td>
     <td><textarea placeholder="Observations..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')">×</button></td>
   </tr>`;
@@ -316,15 +369,23 @@ function adsRow(n) {
   const uid = 'media-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
   return `<tr>
     <td class="row-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
-    <td><select onchange="scheduleSave()">
-      ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}
-    </select></td>
-    <td><select onchange="scheduleSave()">
-      ${opt('','— select —')}${opt('static','Static Image')}${opt('video','Video')}${opt('carousel','Carousel')}
-      ${opt('text','Text / Search')}${opt('native-article','Native Article')}${opt('email','Email')}
-    </select></td>
+    <td><textarea placeholder="Offer name or description" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><div class="sel-wrap">
+      <select onchange="updateBadge(this);scheduleSave()">
+        ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}
+      </select>
+      <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
+    </div></td>
+    <td><div class="sel-wrap">
+      <select onchange="updateBadge(this);scheduleSave()">
+        ${opt('','— select —')}${opt('static','Static Image')}${opt('video','Video')}${opt('carousel','Carousel')}
+        ${opt('text','Text / Search')}${opt('native-article','Native Article')}${opt('email','Email')}
+      </select>
+      <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
+    </div></td>
     <td><textarea placeholder="Ad headline text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. Get a Free Quote" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="Ad title text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. 500K" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td class="media-cell">
       <input type="file" id="${uid}" class="hidden-input" accept="image/*,video/*" onchange="handleMediaUpload(this,'${uid}-preview')">
@@ -337,10 +398,12 @@ function adsRow(n) {
         </button>
       </div>
     </td>
-    <td><textarea placeholder="https://..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
+    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
     <td><textarea placeholder="Describe the hook or messaging angle" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="https://..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="https://..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
+    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
+    <td><textarea placeholder="Additional notes..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'ads-body')">×</button></td>
   </tr>`;
 }
@@ -348,14 +411,16 @@ function adsRow(n) {
 function funnelRow(n) {
   return `<tr>
     <td class="row-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
-    <td><textarea placeholder="https://..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
     <td><textarea placeholder="Advertiser name" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><select onchange="scheduleSave()">
-      ${opt('','— select —')}${opt('quiz','Quiz / Survey')}${opt('landing-page','Direct Landing Page')}
-      ${opt('vsl','VSL')}${opt('lead-gen','Lead Gen Form')}${opt('multi-step','Multi-Step Form')}
-      ${opt('advertorial','Advertorial')}${opt('comparison','Comparison Page')}
-    </select></td>
-    <td><textarea placeholder="Ad, email, organic..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><div class="sel-wrap">
+      <select onchange="updateBadge(this);scheduleSave()">
+        ${opt('','— select —')}${opt('quiz','Quiz / Survey')}${opt('landing-page','Direct Landing Page')}
+        ${opt('vsl','VSL')}${opt('lead-gen','Lead Gen Form')}${opt('multi-step','Multi-Step Form')}
+        ${opt('advertorial','Advertorial')}${opt('comparison','Comparison Page')}
+      </select>
+      <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
+    </div></td>
     <td><textarea placeholder="Structure, copy, offer details..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')">×</button></td>
   </tr>`;
@@ -409,7 +474,93 @@ function removeMedia(uid, previewId) {
   }
 }
 
-function autoGrow(el) { el.style.height = '0'; el.style.height = Math.max(el.scrollHeight, 34) + 'px'; }
+const MAX_TA_W = 420;
+const MIN_TA_W = 120;
+
+const BADGE_LABELS = {
+  '': '— select —',
+  // Traffic Channel
+  'meta': 'Meta', 'tiktok': 'TikTok', 'google': 'Google', 'native': 'Native',
+  // Format
+  'static': 'Static Image', 'video': 'Video', 'carousel': 'Carousel',
+  'text': 'Text / Search', 'native-article': 'Native Article', 'email': 'Email',
+  // Traffic Type
+  'paid-search': 'Paid Search', 'organic-search': 'Organic Search',
+  'paid-social': 'Paid Social', 'organic-social': 'Organic Social',
+  'direct': 'Direct', 'referral': 'Referral', 'display': 'Display',
+  // Funnel Type
+  'quiz': 'Quiz / Survey', 'landing-page': 'Direct Landing Page',
+  'vsl': 'VSL', 'lead-gen': 'Lead Gen Form', 'multi-step': 'Multi-Step Form',
+  'advertorial': 'Advertorial', 'comparison': 'Comparison Page',
+};
+
+function updateBadge(sel) {
+  const wrap = sel.closest('.sel-wrap'); if (!wrap) return;
+  const badge = wrap.querySelector('.sel-badge'); if (!badge) return;
+  const val = sel.value;
+  badge.textContent = BADGE_LABELS[val] || val || '— select —';
+  badge.className = 'sel-badge' + (val ? ' badge-' + val : '');
+}
+
+function syncAllLinks() {
+  document.querySelectorAll('tbody td textarea.link-field').forEach(ta => {
+    const btn = ta.closest('.link-cell')?.querySelector('.link-open-btn');
+    if (btn) btn.href = ta.value.trim() || '#';
+  });
+}
+
+function updateAllBadges() {
+  document.querySelectorAll('.sel-wrap select').forEach(updateBadge);
+}
+function initColResize(table) {
+  const ths = table.querySelectorAll('thead th');
+  ths.forEach(th => {
+    if (th.classList.contains('remove-col') || th.classList.contains('num-col')) return;
+    if (th.querySelector('.col-resizer')) return;
+    const resizer = document.createElement('div');
+    resizer.className = 'col-resizer';
+    th.appendChild(resizer);
+
+    let startX, startW, startTableW;
+    resizer.addEventListener('mousedown', e => {
+      e.preventDefault();
+      startX = e.clientX;
+      startW = th.offsetWidth;
+      startTableW = table.offsetWidth;
+      resizer.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+
+      const onMove = e => {
+        const delta = e.clientX - startX;
+        const newW = Math.max(60, startW + delta);
+        th.style.width = newW + 'px';
+        table.style.width = Math.max(startTableW + delta, startTableW) + 'px';
+      };
+      const onUp = () => {
+        resizer.classList.remove('dragging');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+}
+
+function initAllColResize() {
+  document.querySelectorAll('table').forEach(initColResize);
+}
+
+function autoGrow(el) {
+  el.style.height = '0';
+  el.style.height = Math.max(el.scrollHeight, 34) + 'px';
+}
+
+function _growOne(el) { autoGrow(el); }
+
 function resizeAllInputs() { document.querySelectorAll('tbody td textarea').forEach(autoGrow); }
 function renumberTable(id) {
   document.getElementById(id).querySelectorAll('tr').forEach((r,i) => {
@@ -422,12 +573,16 @@ function addRow(id, fn) {
   const tmp = document.createElement('tbody');
   tmp.innerHTML = fn(tbody.querySelectorAll('tr').length + 1);
   tbody.appendChild(tmp.firstChild);
-  setTimeout(resizeAllInputs, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); }, 0);
   scheduleSave();
 }
 
 document.addEventListener('input', function(e) {
   if (e.target.matches('tbody td textarea')) autoGrow(e.target);
+  if (e.target.matches('tbody td textarea.link-field')) {
+    const btn = e.target.closest('.link-cell')?.querySelector('.link-open-btn');
+    if (btn) btn.href = e.target.value.trim() || '#';
+  }
   if (e.target.matches('#meta-analyst,#meta-date,#meta-period,#notes-takeaways,#notes-actions')) scheduleSave();
 });
 
@@ -437,8 +592,8 @@ function collectData() {
     meta: { analyst: document.getElementById('meta-analyst').value, date: document.getElementById('meta-date').value, period: document.getElementById('meta-period').value },
     notes: { takeaways: document.getElementById('notes-takeaways').value, actions: document.getElementById('notes-actions').value },
     traffic: collectTable('traffic-body', ['num','source','qty','type','notes']),
-    ads: collectTable('ads-body', ['num','channel','format','headline','cta','imp','creative','creativeLink','angle','spyLink','fanPage']),
-    funnels: collectTable('funnels-body', ['num','link','advertiser','type','entry','obs']),
+    ads: collectTable('ads-body', ['num','offer','channel','format','headline','cta','title','imp','creative','creativeLink','landingPage','angle','spyLink','fanPage','notes']),
+    funnels: collectTable('funnels-body', ['num','link','advertiser','type','obs']),
   };
 }
 
@@ -470,9 +625,9 @@ function restoreData(data) {
   document.getElementById('notes-takeaways').value = data.notes?.takeaways||'';
   document.getElementById('notes-actions').value = data.notes?.actions||'';
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','qty','type','notes']);
-  restoreTable('ads-body', data.ads||[], adsRow, ['num','channel','format','headline','cta','imp','creative','creativeLink','angle','spyLink','fanPage']);
-  restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','type','entry','obs']);
-  setTimeout(resizeAllInputs, 0);
+  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','headline','cta','title','imp','creative','creativeLink','landingPage','angle','spyLink','fanPage','notes']);
+  restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','type','obs']);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); }, 0);
   return true;
 }
 
@@ -612,7 +767,8 @@ function showToast(msg, type) {
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
   setStatus('', 'Auto-save on');
-  setTimeout(resizeAllInputs, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); }, 0);
+  initAllColResize();
 })();
 </script>
 </body>
