@@ -170,11 +170,10 @@
 </head>
 <body>
 
-<!-- Setup Modal -->
 <div class="modal-overlay hidden" id="setupModal" onclick="handleModalClick(event)">
   <div class="modal">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-      <h2 style="margin:0">☁️ Connect shared cloud save</h2>
+      <h2 style="margin:0;cursor:default;user-select:none;" ondblclick="unlockCloudSettings()" title="">☁️ Connect shared cloud save</h2>
       <button onclick="skipSetup()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text-secondary);line-height:1;padding:0 4px;" title="Close">×</button>
     </div>
     <p>To sync data across all team members, connect a free <strong>JSONBin.io</strong> bin. Anyone who opens the page will see the latest saved data.</p>
@@ -186,12 +185,12 @@
       <li>Paste both below and click Connect</li>
     </ol>
     <label>Bin ID</label>
-    <input type="text" id="setup-bin-id" placeholder="e.g. 6639abc1234567890abcdef">
+    <input type="text" id="setup-bin-id" placeholder="e.g. 6639abc1234567890abcdef" readonly style="cursor:default;opacity:0.7;">
     <label>API Key</label>
-    <input type="text" id="setup-api-key" placeholder="$2a$10$...">
+    <input type="text" id="setup-api-key" placeholder="$2a$10$..." readonly style="cursor:default;opacity:0.7;">
     <div class="modal-actions">
       <button class="toolbar-btn" onclick="skipSetup()">Skip — local only</button>
-      <button class="toolbar-btn primary" onclick="saveSetup()">Connect</button>
+      <button class="toolbar-btn primary" id="connectBtn" onclick="saveSetup()" disabled style="opacity:0.4;cursor:not-allowed;">Connect</button>
     </div>
   </div>
 </div>
@@ -287,9 +286,9 @@
         <table><thead><tr>
           <th class="num-col">#</th>
           <th>Offer</th><th>Traffic Channel</th><th>Format</th>
-          <th>Headline</th><th>CTA</th><th>Title</th>
+          <th>Angle / Hook</th><th>Headline</th><th>CTA</th><th>Title</th>
           <th>Imp. Estimate</th><th>Creative</th>
-          <th>Creative Link</th><th>Landing Page Link</th><th>Angle / Hook</th>
+          <th>Creative Link</th><th>Landing Page Link</th>
           <th>Spy Tool Link</th><th>Fan Page Link</th><th>Notes</th>
           <th class="remove-col"></th>
         </tr></thead><tbody id="ads-body"></tbody></table>
@@ -333,6 +332,20 @@ function loadSettings() {
 }
 function saveSettings() { localStorage.setItem(LS_SETTINGS, JSON.stringify({ binId: BIN_ID, apiKey: API_KEY })); }
 
+function unlockCloudSettings() {
+  document.getElementById('setup-bin-id').removeAttribute('readonly');
+  document.getElementById('setup-bin-id').style.opacity = '1';
+  document.getElementById('setup-bin-id').style.cursor = 'text';
+  document.getElementById('setup-api-key').removeAttribute('readonly');
+  document.getElementById('setup-api-key').style.opacity = '1';
+  document.getElementById('setup-api-key').style.cursor = 'text';
+  const btn = document.getElementById('connectBtn');
+  btn.disabled = false;
+  btn.style.opacity = '1';
+  btn.style.cursor = 'pointer';
+  showToast('Edit mode unlocked', 'success');
+}
+
 function showSetupModal() {
   document.getElementById('setup-bin-id').value = BIN_ID;
   document.getElementById('setup-api-key').value = API_KEY;
@@ -348,7 +361,16 @@ function saveSetup() {
 function handleModalClick(e) {
   if (e.target === document.getElementById('setupModal')) skipSetup();
 }
-function skipSetup() { document.getElementById('setupModal').classList.add('hidden'); }
+function skipSetup() {
+  document.getElementById('setupModal').classList.add('hidden');
+  // re-lock fields
+  const binEl = document.getElementById('setup-bin-id');
+  const keyEl = document.getElementById('setup-api-key');
+  if (binEl) { binEl.setAttribute('readonly',''); binEl.style.opacity='0.7'; binEl.style.cursor='default'; }
+  if (keyEl) { keyEl.setAttribute('readonly',''); keyEl.style.opacity='0.7'; keyEl.style.cursor='default'; }
+  const btn = document.getElementById('connectBtn');
+  if (btn) { btn.disabled=true; btn.style.opacity='0.4'; btn.style.cursor='not-allowed'; }
+}
 
 function opt(v, l) { return `<option value="${v}">${l}</option>`; }
 
@@ -389,6 +411,7 @@ function adsRow(n) {
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
+    <td><textarea placeholder="Angle / hook description" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="Ad headline text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. Get a Free Quote" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="Ad title text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
@@ -405,8 +428,6 @@ function adsRow(n) {
       </div>
     </td>
     <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
-    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
-    <td><textarea placeholder="Describe the hook or messaging angle" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
     <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
     <td><textarea placeholder="Additional notes..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
@@ -598,7 +619,7 @@ function collectData() {
     meta: { analyst: document.getElementById('meta-analyst').value, date: document.getElementById('meta-date').value, period: document.getElementById('meta-period').value },
     notes: { takeaways: document.getElementById('notes-takeaways').value, actions: document.getElementById('notes-actions').value },
     traffic: collectTable('traffic-body', ['num','source','qty','type','notes']),
-    ads: collectTable('ads-body', ['num','offer','channel','format','headline','cta','title','imp','creative','creativeLink','landingPage','angle','spyLink','fanPage','notes']),
+    ads: collectTable('ads-body', ['num','offer','channel','format','angle','headline','cta','title','imp','creative','creativeLink','landingPage','spyLink','fanPage','notes']),
     funnels: collectTable('funnels-body', ['num','link','advertiser','type','obs']),
   };
 }
@@ -631,7 +652,7 @@ function restoreData(data) {
   document.getElementById('notes-takeaways').value = data.notes?.takeaways||'';
   document.getElementById('notes-actions').value = data.notes?.actions||'';
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','qty','type','notes']);
-  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','headline','cta','title','imp','creative','creativeLink','landingPage','angle','spyLink','fanPage','notes']);
+  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','angle','headline','cta','title','imp','creative','creativeLink','landingPage','spyLink','fanPage','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','type','obs']);
   setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); }, 0);
   return true;
