@@ -210,6 +210,12 @@
     .media-filename { font-size: 11px; color: var(--text-secondary); max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .media-remove { background: none; border: none; cursor: pointer; color: var(--text-secondary); padding: 2px; line-height: 1; font-size: 14px; }
     .hidden-input { display: none; }
+    .export-wrap { position: relative; }
+    .export-menu { position: absolute; top: calc(100% + 6px); left: 0; background: var(--bg-primary); border: 1px solid var(--border-light); border-radius: var(--radius-md); box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 100; min-width: 180px; overflow: hidden; }
+    .export-menu.hidden { display: none; }
+    .export-menu button { display: block; width: 100%; text-align: left; padding: 9px 14px; font-size: 13px; font-family: inherit; background: none; border: none; cursor: pointer; color: var(--text-primary); transition: background 0.12s; white-space: nowrap; }
+    .export-menu button:hover { background: var(--bg-secondary); }
+
     @media print { body { background: white; padding: 0; } .add-row, .save-bar, .modal-overlay { display: none; } }
   </style>
 </head>
@@ -259,10 +265,17 @@
         <button class="toolbar-btn" id="autosaveToggle" onclick="toggleAutosave()" title="Toggle auto-save">
           Auto-save: <span id="autosaveLabel">Off</span>
         </button>
-        <button class="toolbar-btn" onclick="exportJSON()">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Export
-        </button>
+        <div class="export-wrap" id="exportWrap">
+          <button class="toolbar-btn" onclick="toggleExportMenu()" id="exportBtn">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Export ▾
+          </button>
+          <div class="export-menu hidden" id="exportMenu">
+            <button onclick="exportJSON();closeExportMenu()">📄 JSON (backup)</button>
+            <button onclick="exportCSV();closeExportMenu()">📊 CSV (Excel/Sheets)</button>
+            <button onclick="exportPDF();closeExportMenu()">🖨️ PDF</button>
+          </div>
+        </div>
         <button class="toolbar-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode">🌙 <span id="themeLabel">Dark mode</span></button>
         <button class="toolbar-btn" onclick="showSetupModal()" title="Cloud sync settings">☁️</button>
         <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(this)">
@@ -862,6 +875,50 @@ async function doSave() {
   }
 }
 async function manualSave() { await doSave(); showToast('Saved!','success'); }
+
+function toggleExportMenu() {
+  const menu = document.getElementById('exportMenu');
+  menu.classList.toggle('hidden');
+}
+function closeExportMenu() {
+  document.getElementById('exportMenu').classList.add('hidden');
+}
+document.addEventListener('click', function(e) {
+  if (!document.getElementById('exportWrap')?.contains(e.target)) closeExportMenu();
+});
+
+function exportCSV() {
+  const tables = [
+    { id: 'traffic-body', keys: ['num','source','qty','type','notes'], name: 'Traffic Sources' },
+    { id: 'ads-body', keys: ['num','offer','channel','format','angle','headline','cta','title','imp','creativeLink','landingPage','spyLink','fanPage','notes'], name: 'Top Ads' },
+    { id: 'funnels-body', keys: ['num','link','advertiser','type','obs'], name: 'Top Funnels' },
+  ];
+  let csv = '';
+  tables.forEach(t => {
+    csv += t.name + '\n';
+    csv += t.keys.map(k => '"'+k+'"').join(',') + '\n';
+    document.getElementById(t.id).querySelectorAll('tr').forEach(row => {
+      const cells = row.querySelectorAll('td:not(.remove-col)');
+      const vals = Array.from(cells).map((cell, i) => {
+        const s = cell.querySelector('select'), ta = cell.querySelector('textarea'), inp = cell.querySelector('input:not([type="file"])');
+        const v = s ? s.value : ta ? ta.value : inp ? inp.value : '';
+        return '"' + v.replace(/"/g, '""') + '"';
+      });
+      csv += vals.join(',') + '\n';
+    });
+    csv += '\n';
+  });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  a.download = 'ecoverage-export.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Exported as CSV', 'success');
+}
+
+function exportPDF() {
+  window.print();
+}
 
 function exportJSON() {
   const data = collectData();
