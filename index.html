@@ -142,21 +142,19 @@
     th.frozen-offer .col-resizer::after, th.frozen-num .col-resizer::after { display: none; }
     th.remove-col { width: 30px !important; } th.num-col { width: 28px !important; }
     tbody tr:last-child td { border-bottom: none; }
-    tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: top; overflow: hidden; }
-    tbody td input, tbody td select, tbody td textarea { padding: 6px 8px; font-size: 12px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.5; display: block; width: 100%; }
-    tbody td textarea { min-height: 30px; white-space: pre-wrap; word-break: break-word; }
+    tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: middle; overflow: hidden; }
+    tbody td input, tbody td select, tbody td textarea { padding: 5px 7px; font-size: 12px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.4; display: block; width: 100%; }
+    tbody td textarea { min-height: 28px; white-space: pre-wrap; word-break: break-word; }
     /* ── Link chips ── */
-    .link-cell { position: relative; padding: 6px 8px !important; vertical-align: middle !important; }
-    .link-chip-wrap { display: flex; align-items: center; gap: 6px; min-height: 30px; }
+    .link-cell { position: relative; padding: 4px 6px !important; vertical-align: middle !important; cursor: pointer; }
+    .link-chip-wrap { display: flex; align-items: center; gap: 6px; min-height: 28px; width: 100%; }
     .link-chip { display: flex; align-items: center; gap: 6px; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 20px; padding: 4px 10px 4px 8px; font-size: 12px; color: #4A90D9; max-width: calc(100% - 28px); overflow: hidden; white-space: nowrap; flex: 1; min-width: 0; cursor: pointer; transition: background 0.15s, border-color 0.15s; text-decoration: none; }
     .link-chip:hover { background: var(--blue-bg); border-color: #4A90D9; }
     .link-chip svg { flex-shrink: 0; }
     .link-chip-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
     .link-chip-empty { font-size: 12px; color: var(--text-secondary); font-style: italic; cursor: pointer; padding: 4px 2px; flex: 1; }
     .link-chip-empty:hover { color: var(--text-primary); }
-    .link-chip-edit-btn { flex-shrink: 0; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 20px; cursor: pointer; color: var(--text-secondary); font-size: 11px; font-weight: 500; padding: 4px 10px; transition: background 0.15s, color 0.15s; white-space: nowrap; display: none; font-family: inherit; }
-    .link-chip-edit-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
-    .link-chip-wrap-display:has(.link-chip[style*="flex"]) .link-chip-edit-btn { display: inline-block; }
+    .link-chip-wrap-display:has(.link-chip[style*="flex"]) .link-chip-edit-btn { display: none; }
     .link-chip-wrap-display { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
     .link-input-wrap { display: none; align-items: center; gap: 4px; flex: 1; }
     .link-input-wrap.editing { display: flex; }
@@ -168,9 +166,9 @@
     tbody td:has(select) { vertical-align: middle; }
 
     /* Custom colored select */
-    .sel-wrap { position: relative; width: 100%; height: 30px; overflow: hidden; display: flex; align-items: center; }
+    .sel-wrap { position: relative; width: 100%; height: 28px; overflow: hidden; display: flex; align-items: center; }
     .sel-wrap select { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
-    .sel-display { display: flex; align-items: center; gap: 7px; padding: 0 10px; height: 30px; font-size: 12px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; width: 100%; }
+    .sel-display { display: flex; align-items: center; gap: 7px; padding: 0 10px; height: 28px; font-size: 12px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; width: 100%; }
     .sel-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; flex-shrink: 0; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis; }
     .sel-arrow { margin-left: 4px; color: var(--text-secondary); font-size: 10px; flex-shrink: 0; }
     tbody td:has(.sel-wrap) { vertical-align: middle !important; overflow: hidden; padding: 0 !important; }
@@ -245,7 +243,7 @@
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
 
-    .media-cell { padding: 6px 10px !important; border-right: 1px solid var(--border-light); }
+    .media-cell { padding: 4px 8px !important; border-right: 1px solid var(--border-light); }
     .media-upload-btn { display: flex; align-items: center; gap: 6px; padding: 5px 10px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; white-space: nowrap; }
     .media-upload-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
     .media-preview { display: flex; align-items: center; gap: 8px; }
@@ -292,7 +290,7 @@
     #ads-table thead tr th.frozen-offer { z-index: 21; }
 
     /* ── Cell color coding for text columns ── */
-    tbody td.offer-col, tbody td.source-col, tbody td.advertiser-col { vertical-align: middle !important; overflow: hidden; padding: 4px 6px !important; }
+    tbody td.offer-col, tbody td.source-col, tbody td.advertiser-col { vertical-align: middle !important; overflow: hidden; padding: 3px 5px !important; }
     tbody td.offer-col textarea, tbody td.source-col textarea, tbody td.advertiser-col textarea { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; overflow: hidden; }
     .text-badge-wrap { display: flex; align-items: center; justify-content: center; width: 100%; cursor: text; }
     .text-badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; cursor: text; }
@@ -777,7 +775,6 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">Edit</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -792,7 +789,6 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">Edit</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -807,7 +803,6 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">Edit</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -833,7 +828,6 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">Edit</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -861,7 +855,6 @@ function funnelRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">Edit</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -1011,6 +1004,19 @@ function updateBadge(sel) {
 }
 
 // ── Link chips ──
+// Click on link-cell empty area opens edit
+document.addEventListener('click', function(e) {
+  const cell = e.target.closest('.link-cell');
+  if (!cell) return;
+  // If clicking the chip itself, let it open the link
+  if (e.target.closest('.link-chip') || e.target.closest('.link-input-wrap')) return;
+  // Otherwise open edit
+  const wrap = cell.querySelector('.link-chip-wrap');
+  if (wrap && !wrap.querySelector('.link-input-wrap.editing')) {
+    startLinkEdit(wrap.querySelector('.link-chip-empty, .link-chip'));
+  }
+});
+
 function handleChipClick(e, chip) {
   // chips now open directly — this function kept for compatibility
 }
@@ -1047,19 +1053,16 @@ function setLinkChipValue(wrap, val) {
   const chip = wrap.querySelector('.link-chip');
   const empty = wrap.querySelector('.link-chip-empty');
   const text = wrap.querySelector('.link-chip-text');
-  const editBtn = wrap.querySelector('.link-chip-edit-btn');
   if (!chip || !empty || !text) return;
   if (val) {
     chip.href = val;
     chip.style.display = 'flex';
     text.textContent = val.replace(/^https?:\/\//, '').substring(0, 28) + (val.replace(/^https?:\/\//, '').length > 28 ? '…' : '');
     empty.style.display = 'none';
-    if (editBtn) editBtn.style.display = 'inline-block';
   } else {
     chip.href = '#';
     chip.style.display = 'none';
     empty.style.display = '';
-    if (editBtn) editBtn.style.display = 'none';
   }
 }
 function getLinkChipValue(wrap) {
@@ -1205,6 +1208,12 @@ function initColResize(table) {
           table.style.width = newTableW + 'px';
         }
         updateFrozenOffsets();
+        // Regrow all textareas in this column
+        const colIdx = Array.from(th.parentElement.children).indexOf(th);
+        table.querySelectorAll(`tbody tr`).forEach(row => {
+          const cell = row.children[colIdx];
+          if (cell) cell.querySelectorAll('textarea').forEach(autoGrow);
+        });
       };
       const onUp = () => {
         resizer.classList.remove('dragging');
@@ -1625,4 +1634,3 @@ function showToast(msg, type) {
 </script>
 </body>
 </html>
-
