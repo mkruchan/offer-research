@@ -115,6 +115,12 @@
     #ads-table tbody td:last-child { border-right: none; }
     th.frozen-num, td.frozen-num { position: sticky; left: 0; z-index: 20; background: var(--bg-primary); overflow: hidden; }
     th.frozen-num { background: var(--bg-secondary); z-index: 20; }
+    #traffic-table, #funnels-table { border-collapse: separate; border-spacing: 0; }
+    #traffic-table thead th, #traffic-table tbody td,
+    #funnels-table thead th, #funnels-table tbody td { border-bottom: 1px solid var(--border-light); border-right: 1px solid var(--border-light); border-top: none; border-left: none; }
+    #traffic-table tbody tr:last-child td, #funnels-table tbody tr:last-child td { border-bottom: none; }
+    #traffic-table thead th:last-child, #traffic-table tbody td:last-child,
+    #funnels-table thead th:last-child, #funnels-table tbody td:last-child { border-right: none; }
     #traffic-table td.frozen-num, #funnels-table td.frozen-num { vertical-align: middle !important; }
     th.frozen-offer, td.frozen-offer { position: sticky; left: 28px; z-index: 19; background: var(--bg-primary); vertical-align: top !important; box-shadow: 2px 0 0 var(--border-mid); overflow: hidden; }
     th.frozen-offer { background: var(--bg-secondary); z-index: 19; }
