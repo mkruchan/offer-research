@@ -171,9 +171,12 @@
 <body>
 
 <!-- Setup Modal -->
-<div class="modal-overlay hidden" id="setupModal">
+<div class="modal-overlay hidden" id="setupModal" onclick="handleModalClick(event)">
   <div class="modal">
-    <h2>☁️ Connect shared cloud save</h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <h2 style="margin:0">☁️ Connect shared cloud save</h2>
+      <button onclick="skipSetup()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text-secondary);line-height:1;padding:0 4px;" title="Close">×</button>
+    </div>
     <p>To sync data across all team members, connect a free <strong>JSONBin.io</strong> bin. Anyone who opens the page will see the latest saved data.</p>
     <ol>
       <li>Go to <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> → create a free account</li>
@@ -341,6 +344,9 @@ function saveSetup() {
   saveSettings();
   document.getElementById('setupModal').classList.add('hidden');
   if (BIN_ID && API_KEY) { showToast('Cloud sync connected! Loading data…', 'success'); cloudLoad().then(d => { if(d && d.v) { restoreData(d); setStatus('saved','☁️ Synced'); } }); }
+}
+function handleModalClick(e) {
+  if (e.target === document.getElementById('setupModal')) skipSetup();
 }
 function skipSetup() { document.getElementById('setupModal').classList.add('hidden'); }
 
