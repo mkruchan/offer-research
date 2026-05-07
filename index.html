@@ -130,7 +130,7 @@
 
     .table-scroll { overflow-x: auto; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
     table { border-collapse: collapse; font-size: 12px; table-layout: fixed; width: max-content; min-width: 100%; }
-    thead th { position: relative; text-align: left; padding: 5px 8px; font-size: 10px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; user-select: none; width: 90px; }
+    thead th { position: relative; text-align: left; padding: 5px 8px; font-size: 10px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; user-select: none; width: 110px; }
     .row-num { width: 28px !important; min-width: 28px !important; max-width: 28px !important; text-align: center; color: var(--text-secondary); vertical-align: middle !important; padding: 0 !important; }
     .row-num input { padding: 2px 0 !important; width: 28px !important; min-width: 28px !important; max-width: 28px !important; text-align: center; border-right: none !important; }
     #ads-table td.frozen-num .row-num input, #ads-table td.row-num input,
@@ -140,18 +140,14 @@
     .col-resizer::after { content: ''; display: block; width: 2px; height: 60%; background: var(--border-light); border-radius: 2px; transition: background 0.15s; }
     .col-resizer:hover::after, .col-resizer.dragging::after { background: var(--border-mid); }
     th.frozen-offer .col-resizer::after, th.frozen-num .col-resizer::after { display: none; }
-    .row-resizer { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; cursor: row-resize; z-index: 5; }
-    .row-resizer:hover { background: var(--border-mid); }
-    tbody tr { position: relative; min-height: 36px; }
     th.remove-col { width: 30px !important; } th.num-col { width: 28px !important; }
     tbody tr:last-child td { border-bottom: none; }
-    tbody tr { min-height: 36px; }
-    tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: top; overflow: hidden; }
+    tbody tr { height: 36px; }
+    tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: middle; overflow: hidden; max-height: 36px; }
     tbody td input, tbody td select, tbody td textarea { padding: 5px 7px; font-size: 12px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.4; display: block; width: 100%; }
     tbody td textarea { min-height: 28px; white-space: pre-wrap; word-break: break-word; }
-    tbody td textarea:focus { position: relative; z-index: 10; min-height: 60px; }
     /* ── Link chips ── */
-    .link-cell { position: relative; padding: 4px 6px !important; vertical-align: middle !important; }
+    .link-cell { position: relative; padding: 4px 6px !important; vertical-align: middle !important; cursor: pointer; }
     .link-chip-wrap { display: flex; align-items: center; gap: 6px; min-height: 28px; width: 100%; }
     .link-chip { display: flex; align-items: center; gap: 6px; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 20px; padding: 4px 10px 4px 8px; font-size: 12px; color: #4A90D9; max-width: calc(100% - 28px); overflow: hidden; white-space: nowrap; flex: 1; min-width: 0; cursor: pointer; transition: background 0.15s, border-color 0.15s; text-decoration: none; }
     .link-chip:hover { background: var(--blue-bg); border-color: #4A90D9; }
@@ -160,9 +156,6 @@
     .link-chip-empty { font-size: 12px; color: var(--text-secondary); font-style: italic; cursor: pointer; padding: 4px 2px; flex: 1; }
     .link-chip-empty:hover { color: var(--text-primary); }
     .link-chip-wrap-display:has(.link-chip[style*="flex"]) .link-chip-edit-btn { display: none; }
-    .link-chip-edit-icon { display: none; flex-shrink: 0; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 50%; cursor: pointer; color: var(--text-secondary); padding: 3px; width: 22px; height: 22px; align-items: center; justify-content: center; transition: background 0.15s, color 0.15s; }
-    .link-chip-edit-icon:hover { background: var(--bg-tertiary); color: var(--text-primary); }
-    .link-chip-wrap-display.has-link .link-chip-edit-icon { display: flex; }
     .link-chip-wrap-display { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
     .link-input-wrap { display: none; align-items: center; gap: 4px; flex: 1; }
     .link-input-wrap.editing { display: flex; }
@@ -251,13 +244,11 @@
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
 
-    .media-cell { padding: 0 !important; border-right: 1px solid var(--border-light); overflow: hidden; position: relative; }
-    .media-preview { width: 100%; height: 100%; position: relative; }
-    .media-thumb { width: 100%; height: 100%; object-fit: cover; display: block; cursor: pointer; min-height: 60px; }
-    .media-remove { position: absolute; top: 3px; right: 3px; background: rgba(0,0,0,0.5); border: none; cursor: pointer; color: #fff; padding: 2px 5px; border-radius: 4px; font-size: 12px; line-height: 1; z-index: 2; }
-    .media-remove:hover { background: rgba(180,0,0,0.8); }
-    .media-upload-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; height: 100%; min-height: 36px; padding: 5px 10px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: none; cursor: pointer; white-space: nowrap; }
+    .media-cell { padding: 4px 8px !important; border-right: 1px solid var(--border-light); }
+    .media-upload-btn { display: flex; align-items: center; gap: 6px; padding: 5px 10px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; white-space: nowrap; }
     .media-upload-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    .media-preview { display: flex; align-items: center; gap: 8px; }
+    .media-thumb { width: 48px; height: 36px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-light); flex-shrink: 0; cursor: pointer; }
     .media-video-thumb { width: 48px; height: 36px; border-radius: 4px; border: 1px solid var(--border-light); background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; }
     .media-filename { font-size: 11px; color: var(--text-secondary); max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .media-remove { background: none; border: none; cursor: pointer; color: var(--text-secondary); padding: 2px; line-height: 1; font-size: 14px; }
@@ -785,9 +776,6 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-icon" onclick="startLinkEdit(this)" title="Edit link">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -802,9 +790,6 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-icon" onclick="startLinkEdit(this)" title="Edit link">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -819,9 +804,6 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-icon" onclick="startLinkEdit(this)" title="Edit link">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -847,9 +829,6 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-icon" onclick="startLinkEdit(this)" title="Edit link">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -877,9 +856,6 @@ function funnelRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-icon" onclick="startLinkEdit(this)" title="Edit link">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -1029,6 +1005,19 @@ function updateBadge(sel) {
 }
 
 // ── Link chips ──
+// Click on link-cell empty area opens edit
+document.addEventListener('click', function(e) {
+  const cell = e.target.closest('.link-cell');
+  if (!cell) return;
+  // If clicking the chip itself, let it open the link
+  if (e.target.closest('.link-chip') || e.target.closest('.link-input-wrap')) return;
+  // Otherwise open edit
+  const wrap = cell.querySelector('.link-chip-wrap');
+  if (wrap && !wrap.querySelector('.link-input-wrap.editing')) {
+    startLinkEdit(wrap.querySelector('.link-chip-empty, .link-chip'));
+  }
+});
+
 function handleChipClick(e, chip) {
   // chips now open directly — this function kept for compatibility
 }
@@ -1065,19 +1054,16 @@ function setLinkChipValue(wrap, val) {
   const chip = wrap.querySelector('.link-chip');
   const empty = wrap.querySelector('.link-chip-empty');
   const text = wrap.querySelector('.link-chip-text');
-  const display = wrap.querySelector('.link-chip-wrap-display');
   if (!chip || !empty || !text) return;
   if (val) {
     chip.href = val;
     chip.style.display = 'flex';
     text.textContent = val.replace(/^https?:\/\//, '').substring(0, 28) + (val.replace(/^https?:\/\//, '').length > 28 ? '…' : '');
     empty.style.display = 'none';
-    if (display) display.classList.add('has-link');
   } else {
     chip.href = '#';
     chip.style.display = 'none';
     empty.style.display = '';
-    if (display) display.classList.remove('has-link');
   }
 }
 function getLinkChipValue(wrap) {
@@ -1195,62 +1181,6 @@ function syncAllLinks() { /* chips manage own state */ }
 function updateAllBadges() {
   document.querySelectorAll('.sel-wrap select').forEach(updateBadge);
 }
-// ── Resize persistence ──
-function saveColWidths() {
-  const data = {};
-  document.querySelectorAll('table').forEach(table => {
-    const id = table.id || 'table';
-    data[id] = {};
-    table.querySelectorAll('thead th').forEach((th, i) => {
-      if (th.style.width) data[id][i] = th.style.width;
-    });
-    if (table.style.width) data[id]['_tableW'] = table.style.width;
-  });
-  localStorage.setItem('ecoverage_col_widths', JSON.stringify(data));
-}
-
-function restoreColWidths() {
-  try {
-    const data = JSON.parse(localStorage.getItem('ecoverage_col_widths') || '{}');
-    document.querySelectorAll('table').forEach(table => {
-      const id = table.id || 'table';
-      if (!data[id]) return;
-      table.querySelectorAll('thead th').forEach((th, i) => {
-        if (data[id][i]) th.style.width = data[id][i];
-      });
-      if (data[id]['_tableW']) table.style.width = data[id]['_tableW'];
-    });
-  } catch(e) {}
-}
-
-function saveRowHeights() {
-  const data = {};
-  document.querySelectorAll('table').forEach(table => {
-    const id = table.id || 'table';
-    data[id] = {};
-    table.querySelectorAll('tbody tr').forEach((tr, i) => {
-      if (tr.style.height) data[id][i] = tr.style.height;
-    });
-  });
-  localStorage.setItem('ecoverage_row_heights', JSON.stringify(data));
-}
-
-function restoreRowHeights() {
-  try {
-    const data = JSON.parse(localStorage.getItem('ecoverage_row_heights') || '{}');
-    document.querySelectorAll('table').forEach(table => {
-      const id = table.id || 'table';
-      if (!data[id]) return;
-      table.querySelectorAll('tbody tr').forEach((tr, i) => {
-        if (data[id][i]) {
-          tr.style.height = data[id][i];
-          tr.style.minHeight = data[id][i];
-        }
-      });
-    });
-  } catch(e) {}
-}
-
 function initColResize(table) {
   const ths = table.querySelectorAll('thead th');
   ths.forEach(th => {
@@ -1279,8 +1209,9 @@ function initColResize(table) {
           table.style.width = newTableW + 'px';
         }
         updateFrozenOffsets();
+        // Regrow all textareas in this column
         const colIdx = Array.from(th.parentElement.children).indexOf(th);
-        table.querySelectorAll('tbody tr').forEach(row => {
+        table.querySelectorAll(`tbody tr`).forEach(row => {
           const cell = row.children[colIdx];
           if (cell) cell.querySelectorAll('textarea').forEach(autoGrow);
         });
@@ -1291,41 +1222,6 @@ function initColResize(table) {
         document.body.style.userSelect = '';
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onUp);
-        saveColWidths();
-      };
-      document.addEventListener('mousemove', onMove);
-      document.addEventListener('mouseup', onUp);
-    });
-  });
-}
-
-function initRowResize(table) {
-  table.querySelectorAll('tbody tr').forEach(tr => {
-    if (tr.querySelector('.row-resizer')) return;
-    const resizer = document.createElement('div');
-    resizer.className = 'row-resizer';
-    resizer.title = 'Drag to resize row';
-    tr.appendChild(resizer);
-
-    let startY, startH;
-    resizer.addEventListener('mousedown', e => {
-      e.preventDefault();
-      startY = e.clientY;
-      startH = tr.offsetHeight;
-      document.body.style.cursor = 'row-resize';
-      document.body.style.userSelect = 'none';
-
-      const onMove = e => {
-        const newH = Math.max(28, startH + (e.clientY - startY));
-        tr.style.height = newH + 'px';
-        tr.style.minHeight = newH + 'px';
-      };
-      const onUp = () => {
-        document.body.style.cursor = '';
-        document.body.style.userSelect = '';
-        document.removeEventListener('mousemove', onMove);
-        document.removeEventListener('mouseup', onUp);
-        saveRowHeights();
       };
       document.addEventListener('mousemove', onMove);
       document.addEventListener('mouseup', onUp);
@@ -1346,12 +1242,12 @@ function updateFrozenOffsets() {
 }
 
 function initAllColResize() {
-  document.querySelectorAll('table').forEach(t => { initColResize(t); initRowResize(t); });
+  document.querySelectorAll('table').forEach(initColResize);
 }
 
 function autoGrow(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.max(el.scrollHeight, 28) + 'px';
+  el.style.height = '0';
+  el.style.height = Math.max(el.scrollHeight, 34) + 'px';
 }
 
 function _growOne(el) { autoGrow(el); }
@@ -1493,7 +1389,7 @@ function restoreData(data) {
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','qty','type','notes']);
   restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','lifecycle','type','obs']);
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(); restoreRowHeights(); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); }, 0);
   return true;
 }
 
@@ -1733,7 +1629,7 @@ function showToast(msg, type) {
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
   setStatus('', 'Auto-save on');
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); }, 0);
   initAllColResize();
 })();
 </script>
