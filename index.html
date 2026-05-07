@@ -148,12 +148,15 @@
     /* ── Link chips ── */
     .link-cell { position: relative; padding: 6px 8px !important; vertical-align: middle !important; }
     .link-chip-wrap { display: flex; align-items: center; gap: 6px; min-height: 30px; }
-    .link-chip { display: flex; align-items: center; gap: 6px; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 20px; padding: 4px 10px 4px 8px; font-size: 12px; color: #4A90D9; max-width: 100%; overflow: hidden; white-space: nowrap; flex: 1; min-width: 0; cursor: pointer; transition: background 0.15s, border-color 0.15s; text-decoration: none; }
+    .link-chip { display: flex; align-items: center; gap: 6px; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 20px; padding: 4px 10px 4px 8px; font-size: 12px; color: #4A90D9; max-width: calc(100% - 28px); overflow: hidden; white-space: nowrap; flex: 1; min-width: 0; cursor: pointer; transition: background 0.15s, border-color 0.15s; text-decoration: none; }
     .link-chip:hover { background: var(--blue-bg); border-color: #4A90D9; }
     .link-chip svg { flex-shrink: 0; }
     .link-chip-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
     .link-chip-empty { font-size: 12px; color: var(--text-secondary); font-style: italic; cursor: pointer; padding: 4px 2px; flex: 1; }
     .link-chip-empty:hover { color: var(--text-primary); }
+    .link-chip-edit-btn { flex-shrink: 0; background: none; border: 1px solid var(--border-light); border-radius: 4px; cursor: pointer; color: var(--text-secondary); font-size: 10px; padding: 2px 6px; transition: background 0.15s; white-space: nowrap; display: none; }
+    .link-chip-edit-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    .link-chip-wrap-display:has(.link-chip[style*="flex"]) .link-chip-edit-btn { display: inline-block; }
     .link-chip-wrap-display { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
     .link-input-wrap { display: none; align-items: center; gap: 4px; flex: 1; }
     .link-input-wrap.editing { display: flex; }
@@ -172,39 +175,51 @@
     .sel-arrow { margin-left: 4px; color: var(--text-secondary); font-size: 10px; flex-shrink: 0; }
     tbody td:has(.sel-wrap) { vertical-align: middle !important; overflow: hidden; padding: 0 !important; }
 
-    /* Traffic Source colors */
-    .badge-meta    { background: #E8F0FE; color: #1A56DB; }
-    .badge-tiktok  { background: #FEE2E2; color: #991B1B; }
-    .badge-google  { background: #FEF3C7; color: #92400E; }
-    .badge-native  { background: #D1FAE5; color: #065F46; }
+    /* Traffic Source — brand-inspired colors */
+    .badge-meta    { background: #DBEAFE; color: #1D4ED8; } /* Meta blue */
+    .badge-tiktok  { background: #F3F4F6; color: #111827; } /* TikTok dark/black */
+    .badge-google  { background: #FEF9C3; color: #854D0E; } /* Google yellow */
+    .badge-native  { background: #D1FAE5; color: #065F46; } /* Native green */
+    .badge-youtube { background: #FEE2E2; color: #B91C1C; } /* YouTube red */
+    .badge-pinterest { background: #FFE4E6; color: #9F1239; } /* Pinterest red-pink */
+    .badge-snapchat { background: #FEFCE8; color: #854D0E; } /* Snapchat yellow */
+    .badge-twitter { background: #E0F2FE; color: #0369A1; } /* Twitter/X blue */
+    .badge-linkedin { background: #DBEAFE; color: #1E40AF; } /* LinkedIn blue */
+    .badge-reddit  { background: #FEF3C7; color: #92400E; } /* Reddit orange */
+    .badge-email   { background: #FCE7F3; color: #9D174D; } /* Email pink */
+    .badge-sms     { background: #D1FAE5; color: #065F46; } /* SMS green */
+    .badge-push    { background: #EDE9FE; color: #6D28D9; } /* Push purple */
+    .badge-in-app-dsp { background: #FDF4FF; color: #7E22CE; } /* In-App violet */
+    .badge-native-dsp { background: #DCFCE7; color: #166534; } /* Native DSP mint */
+    .badge-programmatic { background: #F0F9FF; color: #0C4A6E; } /* Programmatic sky */
 
-    /* Format colors */
-    .badge-static        { background: #EDE9FE; color: #5B21B6; }
-    .badge-video         { background: #FCE7F3; color: #9D174D; }
-    .badge-carousel      { background: #DBEAFE; color: #1E40AF; }
-    .badge-text          { background: #F3F4F6; color: #374151; }
-    .badge-native-article{ background: #D1FAE5; color: #065F46; }
-    .badge-playable      { background: #FFF0F0; color: #B91C1C; }
-    .badge-email         { background: #FEF3C7; color: #92400E; }
+    /* Format — visual/content type logic */
+    .badge-static        { background: #E0F2FE; color: #0369A1; } /* Static = calm blue */
+    .badge-video         { background: #FEE2E2; color: #B91C1C; } /* Video = red (YouTube-ish) */
+    .badge-carousel      { background: #EDE9FE; color: #6D28D9; } /* Carousel = purple (multi) */
+    .badge-text          { background: #F3F4F6; color: #374151; } /* Text = neutral gray */
+    .badge-native-article{ background: #D1FAE5; color: #065F46; } /* Native = green */
+    .badge-playable      { background: #FEF3C7; color: #92400E; } /* Playable = amber (game) */
+    .badge-email         { background: #FCE7F3; color: #9D174D; } /* Email = pink */
 
-    /* Traffic Type colors */
-    .badge-paid-search    { background: #DBEAFE; color: #1E40AF; }
-    .badge-organic-search { background: #D1FAE5; color: #065F46; }
-    .badge-paid-social    { background: #FCE7F3; color: #9D174D; }
-    .badge-organic-social { background: #EDE9FE; color: #5B21B6; }
-    .badge-email          { background: #FEF3C7; color: #92400E; }
-    .badge-direct         { background: #F3F4F6; color: #374151; }
-    .badge-referral       { background: #FEE2E2; color: #991B1B; }
-    .badge-display        { background: #E0F2FE; color: #075985; }
+    /* Traffic Type — paid=blue family, organic=green family */
+    .badge-paid-search    { background: #DBEAFE; color: #1E40AF; } /* Paid = blue */
+    .badge-organic-search { background: #D1FAE5; color: #065F46; } /* Organic = green */
+    .badge-paid-social    { background: #E0E7FF; color: #3730A3; } /* Paid social = indigo */
+    .badge-organic-social { background: #DCFCE7; color: #166534; } /* Organic social = light green */
+    .badge-direct         { background: #F3F4F6; color: #374151; } /* Direct = neutral */
+    .badge-referral       { background: #FEF9C3; color: #854D0E; } /* Referral = warm yellow */
+    .badge-display        { background: #FDF4FF; color: #7E22CE; } /* Display = violet (visual) */
+    .badge-native         { background: #D1FAE5; color: #065F46; } /* Native = green */
 
-    /* Funnel Type colors */
-    .badge-quiz          { background: #FEF3C7; color: #92400E; }
-    .badge-landing-page  { background: #DBEAFE; color: #1E40AF; }
-    .badge-vsl           { background: #FCE7F3; color: #9D174D; }
-    .badge-lead-gen      { background: #D1FAE5; color: #065F46; }
-    .badge-multi-step    { background: #EDE9FE; color: #5B21B6; }
-    .badge-advertorial   { background: #FEE2E2; color: #991B1B; }
-    .badge-comparison    { background: #E0F2FE; color: #075985; }
+    /* Funnel Type — complexity/intent logic */
+    .badge-quiz          { background: #FEF9C3; color: #854D0E; } /* Quiz = playful amber */
+    .badge-landing-page  { background: #E0F2FE; color: #0369A1; } /* LP = clean blue */
+    .badge-vsl           { background: #FEE2E2; color: #B91C1C; } /* VSL = red (video) */
+    .badge-lead-gen      { background: #D1FAE5; color: #065F46; } /* Lead gen = green (growth) */
+    .badge-multi-step    { background: #EDE9FE; color: #6D28D9; } /* Multi-step = purple */
+    .badge-advertorial   { background: #FEF3C7; color: #92400E; } /* Advertorial = amber (content) */
+    .badge-comparison    { background: #F0F9FF; color: #0C4A6E; } /* Comparison = light blue */
     tbody td:last-child input, tbody td:last-child select, tbody td:last-child textarea { border-right: none; }
     tbody td input:focus, tbody td select:focus, tbody td textarea:focus { background: var(--bg-secondary); }
     
@@ -220,7 +235,7 @@
     .add-row { padding: 8px 12px; border-top: 1px solid var(--border-light); }
     .add-btn { width: 100%; padding: 6px 12px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; }
     .add-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
-    .notes-body textarea { width: 100%; min-height: 90px; padding: 12px 16px; font-size: 13px; font-family: inherit; color: var(--text-primary); background: transparent; border: none; resize: vertical; outline: none; line-height: 1.6; }
+    .notes-body textarea { width: 100%; min-height: 90px; padding: 12px 16px; font-size: 13px; font-family: inherit; color: var(--text-primary); background: transparent; border: none; resize: vertical; outline: none; line-height: 1.6; box-sizing: border-box; }
     .notes-body textarea:focus { background: var(--bg-secondary); }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
@@ -403,7 +418,9 @@
       <div class="table-scroll">
         <table id="traffic-table"><thead><tr>
           <th class="num-col frozen-num">#</th>
-          <th style="width:150px">Source / Channel</th>
+          <th style="width:150px">Traffic Source</th>
+          <th style="width:90px">Geo</th>
+          <th style="width:110px">Lifecycle</th>
           <th style="width:100px">Est. Ads Quantity</th>
           <th style="width:120px">Traffic Type</th>
           <th style="width:150px">Notes</th>
@@ -425,7 +442,7 @@
       <div class="table-scroll">
         <table id="ads-table"><thead><tr>
           <th class="num-col frozen-num">#</th>
-          <th class="frozen-offer col-group-offer">Offer</th><th>Traffic Source</th><th>Format</th>
+          <th class="frozen-offer col-group-offer">Offer</th><th>Traffic Source</th><th>Format</th><th style="width:90px">Geo</th><th style="width:110px">Lifecycle</th>
           <th class="col-group-links">Landing Page Link</th>
           <th class="col-group-links">Spy Tool Link</th><th class="col-group-links">Fan Page Link</th>
           <th class="col-group-creative">Creative Preview</th><th class="col-group-creative">Creative Link</th>
@@ -450,7 +467,7 @@
       <div class="table-scroll">
         <table id="funnels-table"><thead><tr>
           <th class="num-col frozen-num">#</th><th style="width:140px">Link</th>
-          <th style="width:130px">Advertiser</th><th style="width:130px">Funnel Type</th>
+          <th style="width:130px">Advertiser</th><th style="width:90px">Geo</th><th style="width:110px">Lifecycle</th><th style="width:130px">Funnel Type</th>
           <th style="width:180px">Key Observations</th>
           <th class="remove-col"></th>
         </tr></thead><tbody id="funnels-body"></tbody></table>
@@ -616,6 +633,24 @@ function getExportSizeWarning() {
   return null;
 }
 
+// ── Notes textarea resize persistence ──
+function initNotesResize() {
+  ['notes-takeaways', 'notes-actions'].forEach(id => {
+    const ta = document.getElementById(id);
+    if (!ta) return;
+    // Restore saved height
+    const savedH = localStorage.getItem('notes-height-' + id);
+    if (savedH) ta.style.height = savedH;
+    // Save height on mouseup (after drag resize)
+    ta.addEventListener('mouseup', () => {
+      if (ta.style.height) {
+        localStorage.setItem('notes-height-' + id, ta.style.height);
+        scheduleCloudSave();
+      }
+    });
+  });
+}
+
 function loadSettings() {
   try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}'); BIN_ID = s.binId||BIN_ID; API_KEY = s.apiKey||API_KEY; } catch(e){}
 }
@@ -666,10 +701,23 @@ function opt(v, l) { return `<option value="${v}">${l}</option>`; }
 function trafficRow(n) {
   return `<tr>
     <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
-    <td class="source-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
-      <span class="text-badge-empty">e.g. Google Organic</span>
+    <td><div class="sel-wrap">
+      <select onchange="updateBadge(this);scheduleSave()">
+        ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}${opt('youtube','YouTube')}${opt('pinterest','Pinterest')}${opt('snapchat','Snapchat')}${opt('twitter','Twitter/X')}${opt('linkedin','LinkedIn')}${opt('reddit','Reddit')}${opt('email','Email')}${opt('sms','SMS')}${opt('push','Push Notifications')}${opt('in-app-dsp','In-App DSP')}${opt('programmatic','Programmatic/DSP')}
+      </select>
+      <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
+    </div></td>
+    <td class="offer-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
+      <span class="text-badge-empty">e.g. US, UK</span>
       <span class="text-badge" style="display:none"></span>
-      <input class="text-badge-input" type="text" placeholder="e.g. Google Organic" data-badge-type="source"
+      <input class="text-badge-input" type="text" placeholder="e.g. US, UK" data-badge-type="geo"
+        onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
+    </div>
+    <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
+    <td class="offer-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
+      <span class="text-badge-empty">e.g. Prospecting</span>
+      <span class="text-badge" style="display:none"></span>
+      <input class="text-badge-input" type="text" placeholder="e.g. Prospecting" data-badge-type="lifecycle"
         onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
     </div>
     <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
@@ -701,7 +749,7 @@ function adsRow(n) {
     <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
     <td><div class="sel-wrap">
       <select onchange="updateBadge(this);scheduleSave()">
-        ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}
+        ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}${opt('youtube','YouTube')}${opt('pinterest','Pinterest')}${opt('snapchat','Snapchat')}${opt('twitter','Twitter/X')}${opt('linkedin','LinkedIn')}${opt('reddit','Reddit')}${opt('email','Email')}${opt('sms','SMS')}${opt('push','Push Notifications')}${opt('in-app-dsp','In-App DSP')}${opt('programmatic','Programmatic/DSP')}
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
@@ -712,12 +760,27 @@ function adsRow(n) {
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
+    <td class="offer-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
+      <span class="text-badge-empty">e.g. US, UK</span>
+      <span class="text-badge" style="display:none"></span>
+      <input class="text-badge-input" type="text" placeholder="e.g. US, UK" data-badge-type="geo"
+        onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
+    </div>
+    <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
+    <td class="offer-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
+      <span class="text-badge-empty">e.g. Prospecting</span>
+      <span class="text-badge" style="display:none"></span>
+      <input class="text-badge-input" type="text" placeholder="e.g. Prospecting" data-badge-type="lifecycle"
+        onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
+    </div>
+    <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
     <td class="link-cell"><div class="link-chip-wrap">
       <div class="link-chip-wrap-display">
-        <a class="link-chip" href="#" target="_blank" style="display:none" onclick="handleChipClick(event, this)">
+        <a class="link-chip" href="#" target="_blank" style="display:none">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
+        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">✎</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -728,10 +791,11 @@ function adsRow(n) {
     </div></td>
     <td class="link-cell"><div class="link-chip-wrap">
       <div class="link-chip-wrap-display">
-        <a class="link-chip" href="#" target="_blank" style="display:none" onclick="handleChipClick(event, this)">
+        <a class="link-chip" href="#" target="_blank" style="display:none">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
+        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">✎</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -742,10 +806,11 @@ function adsRow(n) {
     </div></td>
     <td class="link-cell"><div class="link-chip-wrap">
       <div class="link-chip-wrap-display">
-        <a class="link-chip" href="#" target="_blank" style="display:none" onclick="handleChipClick(event, this)">
+        <a class="link-chip" href="#" target="_blank" style="display:none">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
+        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">✎</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -755,7 +820,7 @@ function adsRow(n) {
       </div>
     </div></td>
     <td class="media-cell">
-      <input type="file" id="${uid}" class="hidden-input" accept="image/*" onchange="handleMediaUpload(this,'${uid}-preview')">
+      <input type="file" id="${uid}" class="hidden-input" accept="image/*,video/*" onchange="handleMediaUpload(this,'${uid}-preview')">
       <div id="${uid}-preview">
         <button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
@@ -767,10 +832,11 @@ function adsRow(n) {
     </td>
     <td class="link-cell"><div class="link-chip-wrap">
       <div class="link-chip-wrap-display">
-        <a class="link-chip" href="#" target="_blank" style="display:none" onclick="handleChipClick(event, this)">
+        <a class="link-chip" href="#" target="_blank" style="display:none">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
+        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">✎</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -794,10 +860,11 @@ function funnelRow(n) {
     <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
     <td class="link-cell"><div class="link-chip-wrap">
       <div class="link-chip-wrap-display">
-        <a class="link-chip" href="#" target="_blank" style="display:none" onclick="handleChipClick(event, this)">
+        <a class="link-chip" href="#" target="_blank" style="display:none">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
+        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">✎</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -810,6 +877,20 @@ function funnelRow(n) {
       <span class="text-badge-empty">Advertiser name</span>
       <span class="text-badge" style="display:none"></span>
       <input class="text-badge-input" type="text" placeholder="Advertiser name" data-badge-type="advertiser"
+        onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
+    </div>
+    <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
+    <td class="offer-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
+      <span class="text-badge-empty">e.g. US, UK</span>
+      <span class="text-badge" style="display:none"></span>
+      <input class="text-badge-input" type="text" placeholder="e.g. US, UK" data-badge-type="geo"
+        onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
+    </div>
+    <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
+    <td class="offer-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
+      <span class="text-badge-empty">e.g. Prospecting</span>
+      <span class="text-badge" style="display:none"></span>
+      <input class="text-badge-input" type="text" placeholder="e.g. Prospecting" data-badge-type="lifecycle"
         onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
     </div>
     <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
@@ -826,41 +907,65 @@ function funnelRow(n) {
   </tr>`;
 }
 
-function handleMediaUpload(input, previewId) {
+const CLOUDINARY_CLOUD = 'duvwxhj6k';
+const CLOUDINARY_PRESET = 'fuel_research';
+
+async function handleMediaUpload(input, previewId) {
   const file = input.files[0]; if (!file) return;
   const isVideo = file.type.startsWith('video/');
   const uid = input.id;
-  const shortName = file.name.length > 16 ? file.name.slice(0,14)+'…' : file.name;
+  const preview = document.getElementById(previewId); if (!preview) return;
 
-  if (isVideo) {
-    showToast('Videos cannot be shared — use Creative Link instead.', 'error');
-    input.value = '';
-    return;
-  }
+  // Show uploading state
+  preview.innerHTML = `<div class="media-preview" style="opacity:0.6">
+    <div style="font-size:11px;color:var(--text-secondary);padding:4px 8px;">Uploading...</div>
+  </div>`;
 
-  if (file.size > 1024 * 1024) {
-    showToast('Image too large (max 1MB). Please compress it first.', 'error');
-    input.value = '';
-    return;
-  }
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_PRESET);
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const src = e.target.result;
-    const preview = document.getElementById(previewId); if (!preview) return;
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/auto/upload`, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!res.ok) throw new Error('Upload failed');
+    const data = await res.json();
+    const url = data.secure_url;
+    const thumbUrl = isVideo
+      ? url.replace('/upload/', '/upload/w_80,h_60,c_fill,so_0/').replace(/\.[^.]+$/, '.jpg')
+      : url.replace('/upload/', '/upload/w_80,h_60,c_fill/');
+
     preview.innerHTML = `<div class="media-preview">
-      <img class="media-thumb" src="${src}" onclick="openMedia('${src}','image/jpeg')">
+      <img class="media-thumb" src="${thumbUrl}" onclick="window.open('${url}','_blank')" style="cursor:pointer" title="Click to open">
       <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
     </div>`;
+    // Store URL in a hidden input for saving
+    let hiddenUrl = preview.querySelector('.cloudinary-url');
+    if (!hiddenUrl) {
+      hiddenUrl = document.createElement('input');
+      hiddenUrl.type = 'hidden';
+      hiddenUrl.className = 'cloudinary-url';
+      preview.appendChild(hiddenUrl);
+    }
+    hiddenUrl.value = url;
     scheduleSave();
-  };
-  reader.readAsDataURL(file);
+    showToast('Uploaded successfully!', 'success');
+  } catch(e) {
+    preview.innerHTML = `<button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+        <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>Image/Video</button>`;
+    showToast('Upload failed. Try again.', 'error');
+  }
+  input.value = '';
 }
 
-function openMedia(dataUrl, mimeType) {
-  const b = atob(dataUrl.split(',')[1]), ab = new ArrayBuffer(b.length), ia = new Uint8Array(ab);
-  for (let i = 0; i < b.length; i++) ia[i] = b.charCodeAt(i);
-  window.open(URL.createObjectURL(new Blob([ab], { type: mimeType })), '_blank');
+function openMedia(url) {
+  window.open(url, '_blank');
 }
 
 function removeMedia(uid, previewId) {
@@ -871,7 +976,7 @@ function removeMedia(uid, previewId) {
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
         <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>Upload</button>`;
+      </svg>Image/Video</button>`;
     scheduleSave();
   }
 }
@@ -883,6 +988,10 @@ const BADGE_LABELS = {
   '': '— select —',
   // Traffic Channel
   'meta': 'Meta', 'tiktok': 'TikTok', 'google': 'Google', 'native': 'Native',
+  'youtube': 'YouTube', 'pinterest': 'Pinterest', 'snapchat': 'Snapchat',
+  'twitter': 'Twitter/X', 'linkedin': 'LinkedIn', 'reddit': 'Reddit',
+  'email': 'Email', 'sms': 'SMS', 'push': 'Push Notifications',
+  'in-app-dsp': 'In-App DSP', 'native-dsp': 'Native DSP', 'programmatic': 'Programmatic/DSP',
   // Format
   'static': 'Static Image', 'video': 'Video', 'carousel': 'Carousel',
   'text': 'Text / Search', 'native-article': 'Native Teaser', 'email': 'Email', 'playable': 'Playable',
@@ -906,9 +1015,7 @@ function updateBadge(sel) {
 
 // ── Link chips ──
 function handleChipClick(e, chip) {
-  if (e.ctrlKey || e.metaKey || e.button === 1) return; // allow Ctrl+click to open
-  e.preventDefault();
-  startLinkEdit(chip);
+  // chips now open directly — this function kept for compatibility
 }
 
 function startLinkEdit(el) {
@@ -926,7 +1033,9 @@ function saveLinkChip(btn) {
   const wrap = btn.closest('.link-chip-wrap');
   const input = wrap.querySelector('.link-input-field');
   let val = input.value.trim();
-  if (val && !val.startsWith('http://') && !val.startsWith('https://') && val.includes('.')) val = 'https://' + val;
+  if (val && !val.startsWith('http://') && !val.startsWith('https://') && val.includes('.')) {
+    val = 'https://' + val;
+  }
   setLinkChipValue(wrap, val);
   wrap.querySelector('.link-chip-wrap-display').style.display = 'flex';
   wrap.querySelector('.link-input-wrap').classList.remove('editing');
@@ -941,16 +1050,19 @@ function setLinkChipValue(wrap, val) {
   const chip = wrap.querySelector('.link-chip');
   const empty = wrap.querySelector('.link-chip-empty');
   const text = wrap.querySelector('.link-chip-text');
+  const editBtn = wrap.querySelector('.link-chip-edit-btn');
   if (!chip || !empty || !text) return;
   if (val) {
     chip.href = val;
     chip.style.display = 'flex';
     text.textContent = val.replace(/^https?:\/\//, '').substring(0, 28) + (val.replace(/^https?:\/\//, '').length > 28 ? '…' : '');
     empty.style.display = 'none';
+    if (editBtn) editBtn.style.display = 'inline-block';
   } else {
     chip.href = '#';
     chip.style.display = 'none';
     empty.style.display = '';
+    if (editBtn) editBtn.style.display = 'none';
   }
 }
 function getLinkChipValue(wrap) {
@@ -970,26 +1082,32 @@ document.addEventListener('keydown', function(e) {
 
 // ── Auto color coding for offer, source, advertiser columns ──
 const COLOR_PALETTES = [
-  { bg: '#FEF3C7', color: '#92400E' },
-  { bg: '#FCE7F3', color: '#9D174D' },
-  { bg: '#FEE2E2', color: '#991B1B' },
-  { bg: '#FFF7ED', color: '#9A3412' },
-  { bg: '#FDF4FF', color: '#7E22CE' },
-  { bg: '#FFF1F2', color: '#BE123C' },
-  { bg: '#FFFBEB', color: '#B45309' },
-  { bg: '#FEF9C3', color: '#854D0E' },
-  { bg: '#FFF0F0', color: '#B91C1C' },
-  { bg: '#FDF2F8', color: '#9D174D' },
+  { bg: '#DBEAFE', color: '#1E40AF' },  // blue
+  { bg: '#FCE7F3', color: '#9D174D' },  // pink
+  { bg: '#D1FAE5', color: '#065F46' },  // green
+  { bg: '#EDE9FE', color: '#5B21B6' },  // purple
+  { bg: '#FEE2E2', color: '#991B1B' },  // red
+  { bg: '#E0F2FE', color: '#0369A1' },  // sky
+  { bg: '#FDF4FF', color: '#7E22CE' },  // violet
+  { bg: '#DCFCE7', color: '#166534' },  // mint
+  { bg: '#FEF3C7', color: '#92400E' },  // amber
+  { bg: '#FFE4E6', color: '#9F1239' },  // rose
 ];
-const colorMaps = { offer: {}, source: {}, advertiser: {} };
-let colorCounters = { offer: 0, source: 0, advertiser: 0 };
+const colorMaps = { offer: {}, source: {}, advertiser: {}, geo: {}, lifecycle: {} };
 
 function getColorForValue(type, val) {
   if (!val || !val.trim()) return null;
   const key = val.trim().toLowerCase();
   if (!colorMaps[type][key]) {
-    colorMaps[type][key] = COLOR_PALETTES[colorCounters[type] % COLOR_PALETTES.length];
-    colorCounters[type]++;
+    // Better hash — more sensitive to character differences
+    let hash = 5381;
+    for (let i = 0; i < key.length; i++) {
+      hash = ((hash << 5) + hash) ^ key.charCodeAt(i);
+      hash = hash & 0x7fffffff;
+    }
+    // Use prime offset per type to avoid same colors across columns
+    const typeOffset = type === 'offer' ? 0 : type === 'source' ? 3 : 6;
+    colorMaps[type][key] = COLOR_PALETTES[(Math.abs(hash) + typeOffset) % COLOR_PALETTES.length];
   }
   return colorMaps[type][key];
 }
@@ -1214,10 +1332,15 @@ function collectData() {
   return {
     v: 2, savedAt: new Date().toISOString(),
     meta: { analyst: document.getElementById('meta-analyst').value, date: document.getElementById('meta-date').value, period: document.getElementById('meta-period').value },
-    notes: { takeaways: document.getElementById('notes-takeaways').value, actions: document.getElementById('notes-actions').value },
-    traffic: collectTable('traffic-body', ['num','source','qty','type','notes']),
-    ads: collectTable('ads-body', ['num','offer','channel','format','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']),
-    funnels: collectTable('funnels-body', ['num','link','advertiser','type','obs']),
+    notes: {
+      takeaways: document.getElementById('notes-takeaways').value,
+      actions: document.getElementById('notes-actions').value,
+      takeawaysH: document.getElementById('notes-takeaways').style.height || '',
+      actionsH: document.getElementById('notes-actions').style.height || '',
+    },
+    traffic: collectTable('traffic-body', ['num','source','geo','lifecycle','qty','type','notes']),
+    ads: collectTable('ads-body', ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']),
+    funnels: collectTable('funnels-body', ['num','link','advertiser','geo','lifecycle','type','obs']),
   };
 }
 
@@ -1228,9 +1351,10 @@ function collectTable(id, keys) {
     cells.forEach((cell, i) => {
       const k = keys[i]||'c'+i;
       if (k === 'creative') {
-        const img = cell.querySelector('.media-preview img'), vid = cell.querySelector('.media-video-thumb'), fname = cell.querySelector('.media-filename');
-        if (img) obj[k] = { t:'img', src: img.src, name: fname?.title||'' };
-        else if (vid) obj[k] = { t:'vid', name: fname?.title||'' };
+        const img = cell.querySelector('.media-preview img');
+        const urlInput = cell.querySelector('.cloudinary-url');
+        if (urlInput && urlInput.value) obj[k] = { t: 'cloudinary', url: urlInput.value, thumb: img?.src || '' };
+        else if (img) obj[k] = { t: 'img', src: img.src };
         else obj[k] = null;
       } else if (cell.querySelector('.text-badge-wrap')) {
         const badge = cell.querySelector('.text-badge');
@@ -1253,9 +1377,11 @@ function restoreData(data) {
   document.getElementById('meta-period').value = data.meta?.period||'';
   document.getElementById('notes-takeaways').value = data.notes?.takeaways||'';
   document.getElementById('notes-actions').value = data.notes?.actions||'';
-  restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','qty','type','notes']);
-  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']);
-  restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','type','obs']);
+  if (data.notes?.takeawaysH) document.getElementById('notes-takeaways').style.height = data.notes.takeawaysH;
+  if (data.notes?.actionsH) document.getElementById('notes-actions').style.height = data.notes.actionsH;
+  restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','lifecycle','qty','type','notes']);
+  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']);
+  restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','lifecycle','type','obs']);
   setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); }, 0);
   return true;
 }
@@ -1271,12 +1397,17 @@ function restoreTable(id, rows, fn, keys) {
     cells.forEach((cell, i) => {
       const k = keys[i]||'c'+i, v = rd[k];
       if (k === 'creative' && v) {
-        if (v.t === 'img' && v.src) {
-          const fi = cell.querySelector('input[type="file"]'), pd = cell.querySelector('[id$="-preview"]');
-          if (pd && fi) {
-            const sn = (v.name||'').length > 16 ? (v.name||'').slice(0,14)+'…' : (v.name||'');
+        const fi = cell.querySelector('input[type="file"]'), pd = cell.querySelector('[id$="-preview"]');
+        if (pd && fi) {
+          if (v.t === 'cloudinary' && v.url) {
+            const thumb = v.thumb || v.url.replace('/upload/', '/upload/w_80,h_60,c_fill/');
             pd.innerHTML = `<div class="media-preview">
-              <img class="media-thumb" src="${v.src}" onclick="openMedia('${v.src}','image/jpeg')">
+              <img class="media-thumb" src="${thumb}" onclick="window.open('${v.url}','_blank')" style="cursor:pointer" title="Click to open">
+              <button class="media-remove" onclick="removeMedia('${fi.id}','${pd.id}')">×</button>
+            </div><input type="hidden" class="cloudinary-url" value="${v.url}">`;
+          } else if (v.t === 'img' && v.src) {
+            pd.innerHTML = `<div class="media-preview">
+              <img class="media-thumb" src="${v.src}" onclick="window.open('${v.src}','_blank')" style="cursor:pointer">
               <button class="media-remove" onclick="removeMedia('${fi.id}','${pd.id}')">×</button>
             </div>`;
           }
@@ -1478,7 +1609,7 @@ function showToast(msg, type) {
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
   setStatus('', 'Auto-save on');
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); }, 0);
   initAllColResize();
 })();
 </script>
