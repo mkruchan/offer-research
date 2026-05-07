@@ -1476,8 +1476,21 @@ function toggleAutosave() {
   document.getElementById('autosaveLabel').textContent = autosaveEnabled ? 'On' : 'Off';
   document.getElementById('autosaveToggle').style.color = autosaveEnabled ? '#22a05a' : '';
   document.getElementById('autosaveToggle').style.borderColor = autosaveEnabled ? '#22a05a' : '';
+  localStorage.setItem('ecoverage_autosave', autosaveEnabled ? '1' : '0');
   showToast('Auto-save ' + (autosaveEnabled ? 'enabled' : 'disabled'), autosaveEnabled ? 'success' : '');
 }
+
+// Restore auto-save preference on load
+(function() {
+  const saved = localStorage.getItem('ecoverage_autosave');
+  if (saved === '1') {
+    autosaveEnabled = true;
+    const lbl = document.getElementById('autosaveLabel');
+    const btn = document.getElementById('autosaveToggle');
+    if (lbl) lbl.textContent = 'On';
+    if (btn) { btn.style.color = '#22a05a'; btn.style.borderColor = '#22a05a'; }
+  }
+})();
 
 function setStatus(state, text) {
   document.getElementById('autosaveDot').className = 'autosave-dot '+(state||'');
@@ -1612,3 +1625,4 @@ function showToast(msg, type) {
 </script>
 </body>
 </html>
+
