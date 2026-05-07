@@ -145,23 +145,34 @@
     tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: top; overflow: hidden; }
     tbody td input, tbody td select, tbody td textarea { padding: 6px 8px; font-size: 12px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.5; display: block; width: 100%; }
     tbody td textarea { min-height: 30px; white-space: pre-wrap; word-break: break-word; }
-    tbody td textarea.link-field { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #4A90D9; text-decoration: underline; cursor: pointer; }
-    tbody td textarea.link-field:focus { white-space: nowrap; }
-    .link-open-btn { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #4A90D9; font-size: 12px; padding: 2px 4px; opacity: 0; transition: opacity 0.15s; z-index: 3; text-decoration: none; }
-    .link-cell { position: relative; }
-    .link-cell:hover .link-open-btn { opacity: 1; }
+    /* ── Link chips ── */
+    .link-cell { position: relative; padding: 6px 8px !important; vertical-align: middle !important; }
+    .link-chip-wrap { display: flex; align-items: center; gap: 6px; min-height: 30px; }
+    .link-chip { display: flex; align-items: center; gap: 6px; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 20px; padding: 4px 10px 4px 8px; font-size: 12px; color: #4A90D9; max-width: 100%; overflow: hidden; white-space: nowrap; flex: 1; min-width: 0; cursor: pointer; transition: background 0.15s, border-color 0.15s; text-decoration: none; }
+    .link-chip:hover { background: var(--blue-bg); border-color: #4A90D9; }
+    .link-chip svg { flex-shrink: 0; }
+    .link-chip-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+    .link-chip-empty { font-size: 12px; color: var(--text-secondary); font-style: italic; cursor: pointer; padding: 4px 2px; flex: 1; }
+    .link-chip-empty:hover { color: var(--text-primary); }
+    .link-chip-wrap-display { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
+    .link-input-wrap { display: none; align-items: center; gap: 4px; flex: 1; }
+    .link-input-wrap.editing { display: flex; }
+    .link-chip-wrap.editing .link-chip-wrap-display { display: none; }
+    .link-input-field { flex: 1; font-size: 12px; font-family: inherit; border: 1px solid var(--border-mid); border-radius: var(--radius-md); padding: 4px 8px; background: var(--bg-primary); color: var(--text-primary); outline: none; min-width: 0; }
+    .link-save-btn { flex-shrink: 0; background: #185FA5; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 10px; padding: 3px 8px; font-family: inherit; }
+    .link-cancel-btn { flex-shrink: 0; background: none; border: 1px solid var(--border-light); border-radius: 4px; cursor: pointer; color: var(--text-secondary); font-size: 10px; padding: 3px 6px; font-family: inherit; }
     tbody td select { cursor: pointer; height: 30px; }
     tbody td:has(select) { vertical-align: middle; }
 
     /* Custom colored select */
-    .sel-wrap { position: relative; width: 100%; height: 30px; overflow: hidden; }
+    .sel-wrap { position: relative; width: 100%; height: 30px; overflow: hidden; display: flex; align-items: center; }
     .sel-wrap select { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
-    .sel-display { display: flex; align-items: center; gap: 7px; padding: 0 10px; height: 30px; font-size: 12px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; }
+    .sel-display { display: flex; align-items: center; gap: 7px; padding: 0 10px; height: 30px; font-size: 12px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; width: 100%; }
     .sel-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; flex-shrink: 0; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis; }
     .sel-arrow { margin-left: 4px; color: var(--text-secondary); font-size: 10px; flex-shrink: 0; }
-    tbody td:has(.sel-wrap) { vertical-align: middle; overflow: hidden; }
+    tbody td:has(.sel-wrap) { vertical-align: middle !important; overflow: hidden; padding: 0 !important; }
 
-    /* Traffic Channel colors */
+    /* Traffic Source colors */
     .badge-meta    { background: #E8F0FE; color: #1A56DB; }
     .badge-tiktok  { background: #FEE2E2; color: #991B1B; }
     .badge-google  { background: #FEF3C7; color: #92400E; }
@@ -199,8 +210,13 @@
     
     .row-num input { padding: 2px 0 !important; width: 28px !important; min-width: 28px !important; max-width: 28px !important; text-align: center; border-right: none !important; }
     tbody td.remove-col { width: 30px !important; min-width: 30px !important; max-width: 30px !important; vertical-align: middle !important; }
-    .remove-row-btn { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin: auto; background: none; border: none; cursor: pointer; color: var(--text-secondary); border-radius: 4px; font-size: 16px; line-height: 1; }
+    .comment-cell { position: relative; }
+    .cell-actions { display: flex; align-items: center; justify-content: center; gap: 2px; padding: 2px; }
+    .remove-row-btn { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: none; border: none; cursor: pointer; color: var(--text-secondary); border-radius: 4px; font-size: 14px; line-height: 1; flex-shrink: 0; }
     .remove-row-btn:hover { background: var(--bg-secondary); color: #A32D2D; }
+    .comment-btn { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: none; border: none; cursor: pointer; font-size: 11px; opacity: 0; transition: opacity 0.15s; color: var(--text-secondary); z-index: 2; padding: 0; border-radius: 4px; flex-shrink: 0; }
+    tr:hover .comment-btn { opacity: 1; }
+    .comment-btn.has-comment { opacity: 1; color: var(--blue-text); }
     .add-row { padding: 8px 12px; border-top: 1px solid var(--border-light); }
     .add-btn { width: 100%; padding: 6px 12px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; }
     .add-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
@@ -225,6 +241,63 @@
     .export-menu button:hover { background: var(--bg-secondary); }
 
     @media print { body { background: white; padding: 0; } .add-row, .save-bar, .modal-overlay { display: none; } }
+
+    /* ── Column grouping ── */
+    thead th.col-group-creative { background: color-mix(in srgb, var(--amber-bg) 50%, var(--bg-secondary)) !important; }
+    thead th.col-group-links { background: color-mix(in srgb, var(--blue-bg) 50%, var(--bg-secondary)) !important; }
+    thead th.col-group-copy { background: color-mix(in srgb, var(--purple-bg) 50%, var(--bg-secondary)) !important; }
+    thead th.col-group-offer { background: color-mix(in srgb, var(--blue-bg) 50%, var(--bg-secondary)) !important; }
+    thead th.col-group-source { background: color-mix(in srgb, var(--teal-bg) 50%, var(--bg-secondary)) !important; }
+    thead th.col-group-advertiser { background: color-mix(in srgb, var(--purple-bg) 50%, var(--bg-secondary)) !important; }
+
+    /* ── Row striping ── */
+    #ads-table tbody tr:nth-child(even) td,
+    #traffic-table tbody tr:nth-child(even) td,
+    #funnels-table tbody tr:nth-child(even) td { background: var(--bg-secondary); }
+    #ads-table tbody tr:nth-child(even) td.frozen-num,
+    #ads-table tbody tr:nth-child(even) td.frozen-offer,
+    #traffic-table tbody tr:nth-child(even) td.frozen-num,
+    #funnels-table tbody tr:nth-child(even) td.frozen-num { background: var(--bg-secondary); }
+    #ads-table tbody tr:hover td,
+    #traffic-table tbody tr:hover td,
+    #funnels-table tbody tr:hover td { background: color-mix(in srgb, var(--blue-bg) 15%, var(--bg-secondary)); }
+
+    /* ── Sticky thead ── */
+    #ads-table thead tr th,
+    #traffic-table thead tr th,
+    #funnels-table thead tr th { position: sticky; top: 0; z-index: 6; }
+    #ads-table thead tr th.frozen-num,
+    #traffic-table thead tr th.frozen-num,
+    #funnels-table thead tr th.frozen-num { z-index: 22; }
+    #ads-table thead tr th.frozen-offer { z-index: 21; }
+
+    /* ── Cell color coding for text columns ── */
+    tbody td.offer-col, tbody td.source-col, tbody td.advertiser-col { vertical-align: middle !important; overflow: hidden; padding: 4px 6px !important; }
+    tbody td.offer-col textarea, tbody td.source-col textarea, tbody td.advertiser-col textarea { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; overflow: hidden; }
+    .text-badge-wrap { display: flex; align-items: center; justify-content: center; width: 100%; cursor: text; }
+    .text-badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; cursor: text; }
+    .text-badge-empty { font-size: 11px; color: var(--text-secondary); font-style: italic; }
+    .text-badge-input { display: none; width: 100%; font-size: 11px; font-family: inherit; border: 1px solid var(--border-mid); border-radius: 20px; padding: 2px 10px; background: var(--bg-primary); color: var(--text-primary); outline: none; text-align: center; }
+    .text-badge-input.editing { display: block; }
+
+    /* ── Row comments ── */
+    .comment-btn { position: absolute; top: 4px; right: 4px; background: none; border: none; cursor: pointer; font-size: 11px; opacity: 0; transition: opacity 0.15s; color: var(--text-secondary); z-index: 2; padding: 2px 4px; border-radius: 4px; }
+    tr:hover .comment-btn { opacity: 1; }
+    .comment-btn.has-comment { opacity: 1; color: var(--blue-text); }
+    .comment-cell { position: relative; }
+    .comment-popup { position: absolute; top: 0; right: 100%; margin-right: 6px; z-index: 200; background: var(--bg-primary); border: 1px solid var(--border-mid); border-radius: var(--radius-md); padding: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); min-width: 240px; display: none; }
+    .comment-popup.open { display: block; }
+    .comment-popup textarea { width: 100%; min-height: 70px; font-size: 12px; font-family: inherit; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 6px 8px; background: var(--bg-secondary); color: var(--text-primary); resize: vertical; outline: none; }
+    .comment-popup-footer { display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px; }
+    .comment-popup-footer button { font-size: 11px; font-family: inherit; padding: 4px 10px; border-radius: var(--radius-md); border: 1px solid var(--border-light); cursor: pointer; background: var(--bg-secondary); color: var(--text-primary); }
+    .comment-popup-footer button.primary { background: #185FA5; color: #fff; border-color: transparent; }
+
+    /* ── Undo toast ── */
+    .undo-toast { display: flex; align-items: center; gap: 10px; }
+    .undo-toast button { font-size: 12px; font-family: inherit; padding: 3px 10px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.15); color: inherit; cursor: pointer; }
+
+    /* ── Last edited indicator ── */
+    .last-edited { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; white-space: nowrap; }
   </style>
 </head>
 <body>
@@ -262,6 +335,7 @@
         <h1>OBD Fuel Saver - SynGas Multi-Platform Creative Research</h1>
       </div>
       <div class="save-bar">
+        <div class="last-edited" id="lastEditedBar" style="display:none"><span>✏️</span><span id="lastEditedText"></span></div>
         <div class="autosave-status">
           <div class="autosave-dot" id="autosaveDot"></div>
           <span id="autosaveText">Loading…</span>
@@ -270,7 +344,7 @@
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M13 13H3a1 1 0 0 1-1-1V4l3-3h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1z" stroke="currentColor" stroke-width="1.4"/><path d="M5 13V9h6v4M5 1v4h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
           Save
         </button>
-        <button class="toolbar-btn" id="autosaveToggle" onclick="toggleAutosave()" title="Toggle auto-save">
+        <button class="toolbar-btn" id="autosaveToggle" onclick="toggleAutosave()" title="When ON, saves automatically as you type. When OFF, only saves when you click Save.">
           Auto-save: <span id="autosaveLabel">Off</span>
         </button>
         <div class="export-wrap" id="exportWrap">
@@ -305,7 +379,7 @@
         </div>
         <span class="section-title">Key takeaways</span>
       </div>
-      <div class="notes-body"><textarea id="notes-takeaways" placeholder="Summarize the main findings, patterns, and strategic insights from this analysis..."></textarea></div>
+      <div class="notes-body"><textarea id="notes-takeaways" placeholder="Summarize the main findings, patterns, and strategic insights from this analysis..." oninput="scheduleCloudSave()"></textarea></div>
     </div>
     <div class="section">
       <div class="section-header">
@@ -314,7 +388,7 @@
         </div>
         <span class="section-title">Recommended actions</span>
       </div>
-      <div class="notes-body"><textarea id="notes-actions" placeholder="List specific actions to test, replicate, or counter based on these findings..."></textarea></div>
+      <div class="notes-body"><textarea id="notes-actions" placeholder="List specific actions to test, replicate, or counter based on these findings..." oninput="scheduleCloudSave()"></textarea></div>
     </div>
   </div>
 
@@ -336,7 +410,7 @@
           <th class="remove-col"></th>
         </tr></thead><tbody id="traffic-body"></tbody></table>
       </div>
-      <div class="add-row"><button class="add-btn" onclick="addRow('traffic-body',trafficRow)">+ Add row</button></div>
+      <div class="add-row"><button class="add-btn" onclick="addRow('traffic-body',trafficRow)" title="Ctrl+Enter to add row from last cell">+ Add row</button></div>
     </div>
   </div>
 
@@ -351,16 +425,17 @@
       <div class="table-scroll">
         <table id="ads-table"><thead><tr>
           <th class="num-col frozen-num">#</th>
-          <th class="frozen-offer">Offer</th><th>Traffic Channel</th><th>Format</th>
-          <th>Creative Preview</th><th>Creative Link</th>
-          <th>Angle / Hook</th><th>Headline</th><th>CTA</th><th>Title</th>
+          <th class="frozen-offer col-group-offer">Offer</th><th>Traffic Source</th><th>Format</th>
+          <th class="col-group-links">Landing Page Link</th>
+          <th class="col-group-links">Spy Tool Link</th><th class="col-group-links">Fan Page Link</th>
+          <th class="col-group-creative">Creative Preview</th><th class="col-group-creative">Creative Link</th>
+          <th class="col-group-copy">Angle / Hook</th><th class="col-group-copy">Headline</th><th class="col-group-copy">CTA</th><th class="col-group-copy">Title</th>
           <th>Imp. Estimate</th>
-          <th>Landing Page Link</th>
-          <th>Spy Tool Link</th><th>Fan Page Link</th><th>Notes</th>
+          <th>Notes</th>
           <th class="remove-col"></th>
         </tr></thead><tbody id="ads-body"></tbody></table>
       </div>
-      <div class="add-row"><button class="add-btn" onclick="addRow('ads-body',adsRow)">+ Add row</button></div>
+      <div class="add-row"><button class="add-btn" onclick="addRow('ads-body',adsRow)" title="Ctrl+Enter to add row from last cell">+ Add row</button></div>
     </div>
   </div>
 
@@ -380,7 +455,7 @@
           <th class="remove-col"></th>
         </tr></thead><tbody id="funnels-body"></tbody></table>
       </div>
-      <div class="add-row"><button class="add-btn" onclick="addRow('funnels-body',funnelRow)">+ Add row</button></div>
+      <div class="add-row"><button class="add-btn" onclick="addRow('funnels-body',funnelRow)" title="Ctrl+Enter to add row from last cell">+ Add row</button></div>
     </div>
   </div>
 
@@ -437,6 +512,110 @@ function toggleTheme() {
   }
 })();
 
+// ── Keyboard shortcuts ──
+document.addEventListener('keydown', function(e) {
+  // Tab inside table cell moves to next cell
+  if (e.key === 'Tab' && e.target.matches('tbody td textarea, tbody td input:not([type="file"])')) {
+    const td = e.target.closest('td');
+    const tr = td.closest('tr');
+    const tds = Array.from(tr.querySelectorAll('td:not(.remove-col)'));
+    const idx = tds.indexOf(td);
+    e.preventDefault();
+    const next = e.shiftKey ? tds[idx - 1] : tds[idx + 1];
+    if (next) {
+      const el = next.querySelector('textarea, select, input:not([type="file"])');
+      if (el) el.focus();
+    } else if (!e.shiftKey) {
+      // Move to next row first cell
+      const nextRow = tr.nextElementSibling;
+      if (nextRow) {
+        const el = nextRow.querySelector('textarea, select, input:not([type="file"])');
+        if (el) el.focus();
+      }
+    }
+  }
+  // Enter on last cell of row adds new row
+  if (e.key === 'Enter' && e.ctrlKey && e.target.matches('tbody td textarea')) {
+    e.preventDefault();
+    const tbody = e.target.closest('tbody');
+    if (tbody) {
+      const id = tbody.id;
+      const fn = id === 'traffic-body' ? trafficRow : id === 'ads-body' ? adsRow : funnelRow;
+      addRow(id, fn);
+      setTimeout(() => {
+        const rows = tbody.querySelectorAll('tr');
+        const lastRow = rows[rows.length - 1];
+        if (lastRow) {
+          const el = lastRow.querySelector('textarea, input:not([type="file"])');
+          if (el) el.focus();
+        }
+      }, 50);
+    }
+  }
+});
+
+// ── URL auto-format handled in saveLinkChip ──
+
+// ── Comments ──
+function toggleComment(btn) {
+  const popup = btn.closest('.comment-cell').querySelector('.comment-popup');
+  const isOpen = popup.classList.contains('open');
+  document.querySelectorAll('.comment-popup.open').forEach(p => p.classList.remove('open'));
+  if (!isOpen) { popup.classList.add('open'); popup.querySelector('textarea').focus(); }
+}
+function closeComment(btn) {
+  btn.closest('.comment-popup').classList.remove('open');
+}
+function saveComment(btn) {
+  const popup = btn.closest('.comment-popup');
+  const val = popup.querySelector('textarea').value.trim();
+  const commentBtn = popup.closest('.comment-cell').querySelector('.comment-btn');
+  commentBtn.classList.toggle('has-comment', !!val);
+  commentBtn.title = val || 'Add comment';
+  popup.classList.remove('open');
+  scheduleSave();
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.comment-cell')) {
+    document.querySelectorAll('.comment-popup.open').forEach(p => p.classList.remove('open'));
+  }
+});
+
+// ── Undo toast ──
+let undoTimer = null;
+function showUndoToast(msg, undoFn) {
+  const container = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast show';
+  t.innerHTML = `<div class="undo-toast"><span>${msg}</span><button onclick="this.closest('.toast').undoFn()">Undo</button></div>`;
+  t.undoFn = () => { undoFn(); t.classList.remove('show'); setTimeout(() => t.remove(), 250); };
+  container.appendChild(t);
+  const timer = setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 250); }, 5000);
+  t.dataset.timer = timer;
+}
+
+// ── Last edited tracking ──
+function updateLastEdited(analyst) {
+  const name = analyst || document.getElementById('meta-analyst')?.value || 'Someone';
+  const time = new Date().toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  const bar = document.getElementById('lastEditedBar');
+  const text = document.getElementById('lastEditedText');
+  if (bar && text) {
+    text.textContent = `Last edited by ${name} at ${time}`;
+    bar.style.display = 'flex';
+  }
+}
+
+// ── Export size warning ──
+function getExportSizeWarning() {
+  const data = collectData();
+  const json = JSON.stringify(data);
+  const kb = Math.round(json.length / 1024);
+  if (kb > 4000) return `⚠️ Data is ${kb}KB — close to JSONBin's 5MB limit. Consider removing some images.`;
+  if (kb > 2000) return `ℹ️ Data is ${kb}KB. Consider compressing images to stay within limits.`;
+  return null;
+}
+
 function loadSettings() {
   try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}'); BIN_ID = s.binId||BIN_ID; API_KEY = s.apiKey||API_KEY; } catch(e){}
 }
@@ -487,7 +666,13 @@ function opt(v, l) { return `<option value="${v}">${l}</option>`; }
 function trafficRow(n) {
   return `<tr>
     <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
-    <td><textarea placeholder="e.g. Google Organic, Meta Paid" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td class="source-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
+      <span class="text-badge-empty">e.g. Google Organic</span>
+      <span class="text-badge" style="display:none"></span>
+      <input class="text-badge-input" type="text" placeholder="e.g. Google Organic" data-badge-type="source"
+        onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
+    </div>
+    <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. 120" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><div class="sel-wrap">
       <select onchange="updateBadge(this);scheduleSave()">
@@ -499,7 +684,7 @@ function trafficRow(n) {
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
     <td><textarea placeholder="Observations..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')">×</button></td>
+    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')">×</button><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
   </tr>`;
 }
 
@@ -507,7 +692,13 @@ function adsRow(n) {
   const uid = 'media-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
   return `<tr>
     <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
-    <td class="frozen-offer"><textarea placeholder="Offer name or description" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td class="frozen-offer offer-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
+      <span class="text-badge-empty">Offer name</span>
+      <span class="text-badge" style="display:none"></span>
+      <input class="text-badge-input" type="text" placeholder="Offer name" data-badge-type="offer"
+        onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
+    </div>
+    <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
     <td><div class="sel-wrap">
       <select onchange="updateBadge(this);scheduleSave()">
         ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}
@@ -521,6 +712,48 @@ function adsRow(n) {
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
+    <td class="link-cell"><div class="link-chip-wrap">
+      <div class="link-chip-wrap-display">
+        <a class="link-chip" href="#" target="_blank" style="display:none" onclick="handleChipClick(event, this)">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="link-chip-text"></span>
+        </a>
+        <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
+      </div>
+      <div class="link-input-wrap">
+        <input class="link-input-field" type="url" placeholder="https://...">
+        <button class="link-save-btn" onclick="saveLinkChip(this)">Save</button>
+        <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
+      </div>
+    </div></td>
+    <td class="link-cell"><div class="link-chip-wrap">
+      <div class="link-chip-wrap-display">
+        <a class="link-chip" href="#" target="_blank" style="display:none" onclick="handleChipClick(event, this)">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="link-chip-text"></span>
+        </a>
+        <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
+      </div>
+      <div class="link-input-wrap">
+        <input class="link-input-field" type="url" placeholder="https://...">
+        <button class="link-save-btn" onclick="saveLinkChip(this)">Save</button>
+        <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
+      </div>
+    </div></td>
+    <td class="link-cell"><div class="link-chip-wrap">
+      <div class="link-chip-wrap-display">
+        <a class="link-chip" href="#" target="_blank" style="display:none" onclick="handleChipClick(event, this)">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="link-chip-text"></span>
+        </a>
+        <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
+      </div>
+      <div class="link-input-wrap">
+        <input class="link-input-field" type="url" placeholder="https://...">
+        <button class="link-save-btn" onclick="saveLinkChip(this)">Save</button>
+        <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
+      </div>
+    </div></td>
     <td class="media-cell">
       <input type="file" id="${uid}" class="hidden-input" accept="image/*" onchange="handleMediaUpload(this,'${uid}-preview')">
       <div id="${uid}-preview">
@@ -532,25 +765,54 @@ function adsRow(n) {
         </button>
       </div>
     </td>
-    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
+    <td class="link-cell"><div class="link-chip-wrap">
+      <div class="link-chip-wrap-display">
+        <a class="link-chip" href="#" target="_blank" style="display:none" onclick="handleChipClick(event, this)">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="link-chip-text"></span>
+        </a>
+        <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
+      </div>
+      <div class="link-input-wrap">
+        <input class="link-input-field" type="url" placeholder="https://...">
+        <button class="link-save-btn" onclick="saveLinkChip(this)">Save</button>
+        <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
+      </div>
+    </div></td>
     <td><textarea placeholder="Angle / hook description" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="Ad headline text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. Get a Free Quote" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="Ad title text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. 500K" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
-    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
-    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
     <td><textarea placeholder="Additional notes..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'ads-body')">×</button></td>
+    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'ads-body')">×</button><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
   </tr>`;
 }
 
 function funnelRow(n) {
   return `<tr>
     <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
-    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
-    <td><textarea placeholder="Advertiser name" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td class="link-cell"><div class="link-chip-wrap">
+      <div class="link-chip-wrap-display">
+        <a class="link-chip" href="#" target="_blank" style="display:none" onclick="handleChipClick(event, this)">
+          <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="link-chip-text"></span>
+        </a>
+        <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
+      </div>
+      <div class="link-input-wrap">
+        <input class="link-input-field" type="url" placeholder="https://...">
+        <button class="link-save-btn" onclick="saveLinkChip(this)">Save</button>
+        <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
+      </div>
+    </div></td>
+    <td class="advertiser-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
+      <span class="text-badge-empty">Advertiser name</span>
+      <span class="text-badge" style="display:none"></span>
+      <input class="text-badge-input" type="text" placeholder="Advertiser name" data-badge-type="advertiser"
+        onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
+    </div>
+    <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
     <td><div class="sel-wrap">
       <select onchange="updateBadge(this);scheduleSave()">
         ${opt('','— select —')}${opt('quiz','Quiz / Survey')}${opt('landing-page','Direct Landing Page')}
@@ -560,7 +822,7 @@ function funnelRow(n) {
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
     <td><textarea placeholder="Structure, copy, offer details..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')">×</button></td>
+    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')">×</button><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
   </tr>`;
 }
 
@@ -642,12 +904,160 @@ function updateBadge(sel) {
   badge.className = 'sel-badge' + (val ? ' badge-' + val : '');
 }
 
-function syncAllLinks() {
-  document.querySelectorAll('tbody td textarea.link-field').forEach(ta => {
-    const btn = ta.closest('.link-cell')?.querySelector('.link-open-btn');
-    if (btn) btn.href = ta.value.trim() || '#';
+// ── Link chips ──
+function handleChipClick(e, chip) {
+  if (e.ctrlKey || e.metaKey || e.button === 1) return; // allow Ctrl+click to open
+  e.preventDefault();
+  startLinkEdit(chip);
+}
+
+function startLinkEdit(el) {
+  const wrap = el.closest('.link-chip-wrap');
+  wrap.querySelector('.link-chip-wrap-display').style.display = 'none';
+  const inputWrap = wrap.querySelector('.link-input-wrap');
+  inputWrap.classList.add('editing');
+  const chip = wrap.querySelector('.link-chip');
+  const input = inputWrap.querySelector('.link-input-field');
+  input.value = (chip && chip.style.display !== 'none' && chip.href !== window.location.href) ? chip.href : '';
+  input.focus();
+  input.select();
+}
+function saveLinkChip(btn) {
+  const wrap = btn.closest('.link-chip-wrap');
+  const input = wrap.querySelector('.link-input-field');
+  let val = input.value.trim();
+  if (val && !val.startsWith('http://') && !val.startsWith('https://') && val.includes('.')) val = 'https://' + val;
+  setLinkChipValue(wrap, val);
+  wrap.querySelector('.link-chip-wrap-display').style.display = 'flex';
+  wrap.querySelector('.link-input-wrap').classList.remove('editing');
+  scheduleSave();
+}
+function cancelLinkEdit(btn) {
+  const wrap = btn.closest('.link-chip-wrap');
+  wrap.querySelector('.link-chip-wrap-display').style.display = 'flex';
+  wrap.querySelector('.link-input-wrap').classList.remove('editing');
+}
+function setLinkChipValue(wrap, val) {
+  const chip = wrap.querySelector('.link-chip');
+  const empty = wrap.querySelector('.link-chip-empty');
+  const text = wrap.querySelector('.link-chip-text');
+  if (!chip || !empty || !text) return;
+  if (val) {
+    chip.href = val;
+    chip.style.display = 'flex';
+    text.textContent = val.replace(/^https?:\/\//, '').substring(0, 28) + (val.replace(/^https?:\/\//, '').length > 28 ? '…' : '');
+    empty.style.display = 'none';
+  } else {
+    chip.href = '#';
+    chip.style.display = 'none';
+    empty.style.display = '';
+  }
+}
+function getLinkChipValue(wrap) {
+  const chip = wrap.querySelector('.link-chip');
+  if (!chip || chip.style.display === 'none') return '';
+  return chip.href === window.location.href ? '' : chip.href;
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && e.target.classList.contains('link-input-field')) {
+    e.preventDefault();
+    saveLinkChip(e.target.closest('.link-input-wrap').querySelector('.link-save-btn'));
+  }
+  if (e.key === 'Escape' && e.target.classList.contains('link-input-field')) {
+    cancelLinkEdit(e.target.closest('.link-input-wrap').querySelector('.link-cancel-btn'));
+  }
+});
+
+// ── Auto color coding for offer, source, advertiser columns ──
+const COLOR_PALETTES = [
+  { bg: '#FEF3C7', color: '#92400E' },
+  { bg: '#FCE7F3', color: '#9D174D' },
+  { bg: '#FEE2E2', color: '#991B1B' },
+  { bg: '#FFF7ED', color: '#9A3412' },
+  { bg: '#FDF4FF', color: '#7E22CE' },
+  { bg: '#FFF1F2', color: '#BE123C' },
+  { bg: '#FFFBEB', color: '#B45309' },
+  { bg: '#FEF9C3', color: '#854D0E' },
+  { bg: '#FFF0F0', color: '#B91C1C' },
+  { bg: '#FDF2F8', color: '#9D174D' },
+];
+const colorMaps = { offer: {}, source: {}, advertiser: {} };
+let colorCounters = { offer: 0, source: 0, advertiser: 0 };
+
+function getColorForValue(type, val) {
+  if (!val || !val.trim()) return null;
+  const key = val.trim().toLowerCase();
+  if (!colorMaps[type][key]) {
+    colorMaps[type][key] = COLOR_PALETTES[colorCounters[type] % COLOR_PALETTES.length];
+    colorCounters[type]++;
+  }
+  return colorMaps[type][key];
+}
+
+function startBadgeEdit(wrap) {
+  const input = wrap.querySelector('.text-badge-input');
+  const badge = wrap.querySelector('.text-badge');
+  const empty = wrap.querySelector('.text-badge-empty');
+  input.value = badge.style.display !== 'none' ? badge.textContent : '';
+  input.classList.add('editing');
+  badge.style.display = 'none';
+  empty.style.display = 'none';
+  input.focus();
+  input.select();
+}
+
+function saveBadge(input) {
+  const wrap = input.closest('.text-badge-wrap');
+  const badge = wrap.querySelector('.text-badge');
+  const empty = wrap.querySelector('.text-badge-empty');
+  const type = input.dataset.badgeType;
+  const val = input.value.trim();
+  input.classList.remove('editing');
+  if (val) {
+    badge.textContent = val;
+    badge.style.display = 'inline-block';
+    empty.style.display = 'none';
+    const c = getColorForValue(type, val);
+    badge.style.background = c.bg;
+    badge.style.color = c.color;
+  } else {
+    badge.style.display = 'none';
+    empty.style.display = '';
+  }
+  // sync hidden textarea
+  const ta = input.closest('td').querySelector('textarea');
+  if (ta) ta.value = val;
+  scheduleSave();
+}
+
+function applyTextColors() {
+  // Now handled by badge components - just restore badges on load
+  document.querySelectorAll('.text-badge-input').forEach(input => {
+    const ta = input.closest('td')?.querySelector('textarea');
+    if (ta && ta.value) {
+      const wrap = input.closest('.text-badge-wrap');
+      const badge = wrap?.querySelector('.text-badge');
+      const empty = wrap?.querySelector('.text-badge-empty');
+      const type = input.dataset.badgeType;
+      if (badge && empty && type) {
+        badge.textContent = ta.value;
+        badge.style.display = 'inline-block';
+        empty.style.display = 'none';
+        const c = getColorForValue(type, ta.value);
+        badge.style.background = c.bg;
+        badge.style.color = c.color;
+      }
+    }
   });
 }
+
+document.addEventListener('input', function(e) {
+  if (e.target.closest('td.offer-col, td.source-col, td.advertiser-col')) {
+    applyTextColors();
+  }
+});
+
+function syncAllLinks() { /* chips manage own state */ }
 
 function updateAllBadges() {
   document.querySelectorAll('.sel-wrap select').forEach(updateBadge);
@@ -723,23 +1133,81 @@ function renumberTable(id) {
     const inp = r.querySelector('.row-num input'); if (inp) inp.value = i+1;
   });
 }
-function removeRow(btn, id) { btn.closest('tr').remove(); renumberTable(id); scheduleSave(); }
+// ── Undo / Redo for row deletions ──
+const undoStack = [];
+const redoStack = [];
+
+function removeRow(btn, id) {
+  const tr = btn.closest('tr');
+  const html = tr.outerHTML;
+  const idx = Array.from(tr.parentElement.children).indexOf(tr);
+  tr.remove();
+  renumberTable(id);
+  scheduleSave();
+  undoStack.push({ type: 'delete', id, html, idx });
+  redoStack.length = 0; // clear redo on new action
+  showUndoToast('Row deleted — Ctrl+Z to undo', () => undoLast());
+}
+
+function undoLast() {
+  const action = undoStack.pop();
+  if (!action) return;
+  if (action.type === 'delete') {
+    const tbody = document.getElementById(action.id);
+    const rows = tbody.querySelectorAll('tr');
+    if (action.idx >= rows.length) tbody.insertAdjacentHTML('beforeend', action.html);
+    else rows[action.idx].insertAdjacentHTML('beforebegin', action.html);
+    renumberTable(action.id);
+    setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); updateFrozenOffsets(); applyTextColors(); }, 0);
+    scheduleSave();
+    redoStack.push(action);
+    showToast('Undo successful', 'success');
+  }
+}
+
+function redoLast() {
+  const action = redoStack.pop();
+  if (!action) return;
+  if (action.type === 'delete') {
+    const tbody = document.getElementById(action.id);
+    const rows = tbody.querySelectorAll('tr');
+    if (rows[action.idx]) rows[action.idx].remove();
+    renumberTable(action.id);
+    scheduleSave();
+    undoStack.push(action);
+    showToast('Redo successful', 'success');
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  // Ctrl+Z — undo
+  if (e.key === 'z' && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
+    // Only intercept if not in a text field
+    if (!e.target.matches('textarea, input[type="text"], input[type="date"]')) {
+      e.preventDefault();
+      undoLast();
+    }
+  }
+  // Ctrl+Shift+Z — redo
+  if (e.key === 'z' && (e.ctrlKey || e.metaKey) && e.shiftKey) {
+    if (!e.target.matches('textarea, input[type="text"], input[type="date"]')) {
+      e.preventDefault();
+      redoLast();
+    }
+  }
+});
 function addRow(id, fn) {
   const tbody = document.getElementById(id);
   const tmp = document.createElement('tbody');
   tmp.innerHTML = fn(tbody.querySelectorAll('tr').length + 1);
   tbody.appendChild(tmp.firstChild);
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); }, 0);
   scheduleSave();
 }
 
 document.addEventListener('input', function(e) {
   if (e.target.matches('tbody td textarea')) autoGrow(e.target);
-  if (e.target.matches('tbody td textarea.link-field')) {
-    const btn = e.target.closest('.link-cell')?.querySelector('.link-open-btn');
-    if (btn) btn.href = e.target.value.trim() || '#';
-  }
-  if (e.target.matches('#meta-analyst,#meta-date,#meta-period,#notes-takeaways,#notes-actions')) scheduleSave();
+  if (e.target.matches('#meta-analyst,#meta-date,#meta-period')) scheduleSave();
 });
 
 function collectData() {
@@ -748,7 +1216,7 @@ function collectData() {
     meta: { analyst: document.getElementById('meta-analyst').value, date: document.getElementById('meta-date').value, period: document.getElementById('meta-period').value },
     notes: { takeaways: document.getElementById('notes-takeaways').value, actions: document.getElementById('notes-actions').value },
     traffic: collectTable('traffic-body', ['num','source','qty','type','notes']),
-    ads: collectTable('ads-body', ['num','offer','channel','format','creative','creativeLink','angle','headline','cta','title','imp','landingPage','spyLink','fanPage','notes']),
+    ads: collectTable('ads-body', ['num','offer','channel','format','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']),
     funnels: collectTable('funnels-body', ['num','link','advertiser','type','obs']),
   };
 }
@@ -764,6 +1232,11 @@ function collectTable(id, keys) {
         if (img) obj[k] = { t:'img', src: img.src, name: fname?.title||'' };
         else if (vid) obj[k] = { t:'vid', name: fname?.title||'' };
         else obj[k] = null;
+      } else if (cell.querySelector('.text-badge-wrap')) {
+        const badge = cell.querySelector('.text-badge');
+        obj[k] = badge && badge.style.display !== 'none' ? badge.textContent : '';
+      } else if (cell.querySelector('.link-chip-wrap')) {
+        obj[k] = getLinkChipValue(cell.querySelector('.link-chip-wrap'));
       } else {
         const s = cell.querySelector('select'), ta = cell.querySelector('textarea'), inp = cell.querySelector('input:not([type="file"])');
         obj[k] = s ? s.value : ta ? ta.value : inp ? inp.value : '';
@@ -781,9 +1254,9 @@ function restoreData(data) {
   document.getElementById('notes-takeaways').value = data.notes?.takeaways||'';
   document.getElementById('notes-actions').value = data.notes?.actions||'';
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','qty','type','notes']);
-  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','creative','creativeLink','angle','headline','cta','title','imp','landingPage','spyLink','fanPage','notes']);
+  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','type','obs']);
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); }, 0);
   return true;
 }
 
@@ -809,8 +1282,26 @@ function restoreTable(id, rows, fn, keys) {
           }
         }
       } else if (v !== undefined && v !== null) {
-        const s = cell.querySelector('select'), ta = cell.querySelector('textarea'), inp = cell.querySelector('input:not([type="file"])');
-        if (s) s.value = v;
+        const badgeWrap = cell.querySelector('.text-badge-wrap');
+        const chipWrap = cell.querySelector('.link-chip-wrap');
+        const s = cell.querySelector('select'), ta = cell.querySelector('textarea:not(.link-input-field):not(.comment-popup textarea)'), inp = cell.querySelector('input:not([type="file"]):not(.text-badge-input):not(.link-input-field)');
+        if (badgeWrap && v) {
+          const badge = badgeWrap.querySelector('.text-badge');
+          const empty = badgeWrap.querySelector('.text-badge-empty');
+          const input = badgeWrap.querySelector('.text-badge-input');
+          const type = input?.dataset.badgeType;
+          if (badge && empty && type) {
+            badge.textContent = v;
+            badge.style.display = 'inline-block';
+            empty.style.display = 'none';
+            const c = getColorForValue(type, v);
+            badge.style.background = c.bg;
+            badge.style.color = c.color;
+          }
+          const hiddenTa = cell.querySelector('textarea');
+          if (hiddenTa) hiddenTa.value = v;
+        } else if (chipWrap) setLinkChipValue(chipWrap, v);
+        else if (s) s.value = v;
         else if (ta) { ta.value = v; autoGrow(ta); }
         else if (inp) inp.value = v;
       }
@@ -864,6 +1355,13 @@ function setStatus(state, text) {
   document.getElementById('autosaveDot').className = 'autosave-dot '+(state||'');
   document.getElementById('autosaveText').textContent = text;
 }
+let cloudSaveTimer = null;
+function scheduleCloudSave() {
+  setStatus('saving', 'Saving…');
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer = setTimeout(doSave, 1200);
+}
+
 function scheduleSave() {
   if (!autosaveEnabled) return;
   setStatus('saving','Saving…');
@@ -871,6 +1369,7 @@ function scheduleSave() {
   saveTimer = setTimeout(doSave, 1200);
 }
 async function doSave() {
+  updateLastEdited();
   const data = collectData();
   try { localStorage.setItem(LS_LOCAL, JSON.stringify(data)); } catch(e){}
   if (BIN_ID && API_KEY) {
@@ -929,6 +1428,8 @@ function exportPDF() {
 }
 
 function exportJSON() {
+  const warn = getExportSizeWarning();
+  if (warn) showToast(warn, 'error');
   const data = collectData();
   const name = ('ecoverage-'+(document.getElementById('meta-period').value||'report')).replace(/[^a-z0-9\-]/gi,'-').toLowerCase();
   const a = document.createElement('a');
@@ -977,7 +1478,7 @@ function showToast(msg, type) {
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
   setStatus('', 'Auto-save on');
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); }, 0);
   initAllColResize();
 })();
 </script>
