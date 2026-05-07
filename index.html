@@ -121,6 +121,7 @@
     .badge-carousel      { background: #DBEAFE; color: #1E40AF; }
     .badge-text          { background: #F3F4F6; color: #374151; }
     .badge-native-article{ background: #D1FAE5; color: #065F46; }
+    .badge-playable      { background: #FFF0F0; color: #B91C1C; }
     .badge-email         { background: #FEF3C7; color: #92400E; }
 
     /* Traffic Type colors */
@@ -410,7 +411,7 @@ function adsRow(n) {
     <td><div class="sel-wrap">
       <select onchange="updateBadge(this);scheduleSave()">
         ${opt('','— select —')}${opt('static','Static Image')}${opt('video','Video')}${opt('carousel','Carousel')}
-        ${opt('text','Text / Search')}${opt('native-article','Native Article')}${opt('email','Email')}
+        ${opt('text','Text / Search')}${opt('native-article','Native Teaser')}${opt('email','Email')}${opt('playable','Playable')}
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
@@ -513,7 +514,7 @@ const BADGE_LABELS = {
   'meta': 'Meta', 'tiktok': 'TikTok', 'google': 'Google', 'native': 'Native',
   // Format
   'static': 'Static Image', 'video': 'Video', 'carousel': 'Carousel',
-  'text': 'Text / Search', 'native-article': 'Native Article', 'email': 'Email',
+  'text': 'Text / Search', 'native-article': 'Native Teaser', 'email': 'Email', 'playable': 'Playable',
   // Traffic Type
   'paid-search': 'Paid Search', 'organic-search': 'Organic Search',
   'paid-social': 'Paid Social', 'organic-social': 'Organic Social',
