@@ -291,7 +291,7 @@
         <table><thead><tr>
           <th class="num-col">#</th>
           <th>Offer</th><th>Traffic Channel</th><th>Format</th>
-          <th>Creative</th><th>Creative Link</th>
+          <th>Creative Preview</th><th>Creative Link</th>
           <th>Angle / Hook</th><th>Headline</th><th>CTA</th><th>Title</th>
           <th>Imp. Estimate</th>
           <th>Landing Page Link</th>
@@ -472,8 +472,8 @@ function handleMediaUpload(input, previewId) {
     return;
   }
 
-  if (file.size > 400 * 1024) {
-    showToast('Image too large (max 400KB). Please compress it first.', 'error');
+  if (file.size > 1024 * 1024) {
+    showToast('Image too large (max 1MB). Please compress it first.', 'error');
     input.value = '';
     return;
   }
@@ -484,7 +484,6 @@ function handleMediaUpload(input, previewId) {
     const preview = document.getElementById(previewId); if (!preview) return;
     preview.innerHTML = `<div class="media-preview">
       <img class="media-thumb" src="${src}" onclick="openMedia('${src}','image/jpeg')">
-      <span class="media-filename" title="${file.name}">${shortName}</span>
       <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
     </div>`;
     scheduleSave();
@@ -688,7 +687,6 @@ function restoreTable(id, rows, fn, keys) {
             const sn = (v.name||'').length > 16 ? (v.name||'').slice(0,14)+'…' : (v.name||'');
             pd.innerHTML = `<div class="media-preview">
               <img class="media-thumb" src="${v.src}" onclick="openMedia('${v.src}','image/jpeg')">
-              <span class="media-filename" title="${v.name||''}">${sn}</span>
               <button class="media-remove" onclick="removeMedia('${fi.id}','${pd.id}')">×</button>
             </div>`;
           }
