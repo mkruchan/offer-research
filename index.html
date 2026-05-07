@@ -727,9 +727,7 @@ function setStatus(state, text) {
   document.getElementById('autosaveText').textContent = text;
 }
 function scheduleSave() {
-  setStatus('saving','Saving…');
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(doSave, 1200);
+  // Auto-save disabled — use Save button
 }
 async function doSave() {
   const data = collectData();
@@ -743,7 +741,7 @@ async function doSave() {
     setStatus('saved','Saved locally · '+t);
   }
 }
-async function manualSave() { clearTimeout(saveTimer); await doSave(); showToast('Saved!','success'); }
+async function manualSave() { await doSave(); showToast('Saved!','success'); }
 
 function exportJSON() {
   const data = collectData();
