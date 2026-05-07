@@ -115,7 +115,7 @@
     #ads-table tbody td:last-child { border-right: none; }
     th.frozen-num, td.frozen-num { position: sticky; left: 0; z-index: 20; background: var(--bg-primary); overflow: hidden; }
     th.frozen-num { background: var(--bg-secondary); z-index: 20; }
-    td.frozen-num { vertical-align: middle !important; }
+    #traffic-table td.frozen-num, #funnels-table td.frozen-num { vertical-align: middle !important; }
     th.frozen-offer, td.frozen-offer { position: sticky; left: 28px; z-index: 19; background: var(--bg-primary); vertical-align: top !important; box-shadow: 2px 0 0 var(--border-mid); overflow: hidden; }
     th.frozen-offer { background: var(--bg-secondary); z-index: 19; }
     tbody tr:hover td.frozen-offer, tbody tr:hover td.frozen-num { background: var(--bg-secondary); }
@@ -127,7 +127,9 @@
     thead th { position: relative; text-align: left; padding: 5px 8px; font-size: 10px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; user-select: none; width: 110px; }
     .row-num { width: 28px !important; min-width: 28px !important; max-width: 28px !important; text-align: center; color: var(--text-secondary); vertical-align: middle !important; padding: 0 !important; }
     .row-num input { padding: 2px 0 !important; width: 28px !important; min-width: 28px !important; max-width: 28px !important; text-align: center; border-right: none !important; }
-    #ads-table td.frozen-num .row-num input, #ads-table td.row-num input { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    #ads-table td.frozen-num .row-num input, #ads-table td.row-num input,
+    #traffic-table td.frozen-num .row-num input, #traffic-table td.row-num input,
+    #funnels-table td.frozen-num .row-num input, #funnels-table td.row-num input { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
     .col-resizer { position: absolute; right: 0; top: 0; bottom: 0; width: 6px; cursor: col-resize; z-index: 5; display: flex; align-items: center; justify-content: center; }
     .col-resizer::after { content: ''; display: block; width: 2px; height: 60%; background: var(--border-light); border-radius: 2px; transition: background 0.15s; }
     .col-resizer:hover::after, .col-resizer.dragging::after { background: var(--border-mid); }
