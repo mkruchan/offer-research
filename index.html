@@ -211,6 +211,9 @@
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M13 13H3a1 1 0 0 1-1-1V4l3-3h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1z" stroke="currentColor" stroke-width="1.4"/><path d="M5 13V9h6v4M5 1v4h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
           Save
         </button>
+        <button class="toolbar-btn" id="autosaveToggle" onclick="toggleAutosave()" title="Toggle auto-save">
+          Auto-save: <span id="autosaveLabel">Off</span>
+        </button>
         <button class="toolbar-btn" onclick="exportJSON()">
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Export
@@ -722,12 +725,25 @@ async function cloudLoad() {
 }
 
 let saveTimer = null;
+let autosaveEnabled = false;
+
+function toggleAutosave() {
+  autosaveEnabled = !autosaveEnabled;
+  document.getElementById('autosaveLabel').textContent = autosaveEnabled ? 'On' : 'Off';
+  document.getElementById('autosaveToggle').style.color = autosaveEnabled ? '#22a05a' : '';
+  document.getElementById('autosaveToggle').style.borderColor = autosaveEnabled ? '#22a05a' : '';
+  showToast('Auto-save ' + (autosaveEnabled ? 'enabled' : 'disabled'), autosaveEnabled ? 'success' : '');
+}
+
 function setStatus(state, text) {
   document.getElementById('autosaveDot').className = 'autosave-dot '+(state||'');
   document.getElementById('autosaveText').textContent = text;
 }
 function scheduleSave() {
-  // Auto-save disabled — use Save button
+  if (!autosaveEnabled) return;
+  setStatus('saving','Saving…');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 1200);
 }
 async function doSave() {
   const data = collectData();
