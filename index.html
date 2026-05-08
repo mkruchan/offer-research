@@ -122,35 +122,36 @@
     #traffic-table thead th:last-child, #traffic-table tbody td:last-child,
     #funnels-table thead th:last-child, #funnels-table tbody td:last-child { border-right: none; }
     #traffic-table td.frozen-num, #funnels-table td.frozen-num { vertical-align: middle !important; }
-    th.frozen-offer, td.frozen-offer { position: sticky; left: 28px; z-index: 19; background: var(--bg-primary); vertical-align: top !important; box-shadow: 2px 0 0 var(--border-mid); overflow: hidden; }
+    th.frozen-offer, td.frozen-offer { position: sticky; left: 28px; z-index: 19; background: var(--bg-primary); vertical-align: middle !important; box-shadow: 2px 0 0 var(--border-mid); overflow: hidden; }
     th.frozen-offer { background: var(--bg-secondary); z-index: 19; }
     tbody tr:hover td.frozen-offer, tbody tr:hover td.frozen-num { background: var(--bg-secondary); }
-    td.frozen-offer textarea { width: 100%; }
+    td.frozen-offer textarea, td.frozen-offer input { width: 100%; }
+    
     tbody tr:hover td.frozen-num { background: var(--bg-secondary); }
 
     .table-scroll { overflow-x: auto; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
     table { border-collapse: collapse; font-size: 10px; table-layout: fixed; width: max-content; min-width: 100%; }
     thead th { position: relative; text-align: left; padding: 3px 6px; font-size: 9px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; user-select: none; width: 90px; }
-    .row-num { width: 28px !important; min-width: 28px !important; max-width: 28px !important; text-align: center; color: var(--text-secondary); vertical-align: middle !important; padding: 0 !important; }
-    .row-num input { padding: 2px 0 !important; width: 28px !important; min-width: 28px !important; max-width: 28px !important; text-align: center; border-right: none !important; }
+    .row-num { width: 28px; text-align: center; color: var(--text-secondary); vertical-align: middle; padding: 0; }
+    .row-num input { padding: 2px 0; width: 100%; text-align: center; border-right: none; }
     #ads-table td.frozen-num .row-num input, #ads-table td.row-num input,
     #traffic-table td.frozen-num .row-num input, #traffic-table td.row-num input,
     #funnels-table td.frozen-num .row-num input, #funnels-table td.row-num input { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
     .col-resizer { position: absolute; right: 0; top: 0; bottom: 0; width: 6px; cursor: col-resize; z-index: 5; display: flex; align-items: center; justify-content: center; }
     .col-resizer::after { content: ''; display: block; width: 2px; height: 60%; background: var(--border-light); border-radius: 2px; transition: background 0.15s; }
     .col-resizer:hover::after, .col-resizer.dragging::after { background: var(--border-mid); }
-    th.frozen-offer .col-resizer::after, th.frozen-num .col-resizer::after { display: none; }
+    th.frozen-offer .col-resizer::after { display: none; }
     tbody tr { position: relative; }
     .row-resizer { position: absolute; bottom: 0; left: -9999px; right: 0; height: 4px; cursor: row-resize; z-index: 5; }
     .row-resizer:hover, .row-resizer:active { background: var(--border-mid); }
-    th.remove-col { width: 30px !important; } th.num-col { width: 28px !important; }
+    th.remove-col { width: 76px; } th.num-col { width: 28px; }
     #ads-table thead th:last-child, #ads-table tbody td:last-child,
     #traffic-table thead th:last-child, #traffic-table tbody td:last-child,
     #funnels-table thead th:last-child, #funnels-table tbody td:last-child { border-right: none !important; }
     table { border-collapse: separate; border-spacing: 0; font-size: 10px; table-layout: fixed; width: max-content; min-width: 100%; }
     tbody tr:last-child td { border-bottom: none; }
     tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: middle; overflow: hidden; }
-    tbody td input, tbody td select, tbody td textarea { padding: 3px 5px; font-size: 10px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.4; display: block; width: 100%; }
+    tbody td input, tbody td select, tbody td textarea { padding: 3px 5px; font-size: 10px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.4; display: block; width: 100%; align-self: center; }
     tbody td textarea { white-space: pre-wrap; word-break: break-word; }
     tbody td textarea:focus { position: relative; z-index: 10; }
     /* ── Link chips ── */
@@ -236,12 +237,18 @@
     tbody td:last-child input, tbody td:last-child select, tbody td:last-child textarea { border-right: none; }
     tbody td input:focus, tbody td select:focus, tbody td textarea:focus { background: var(--bg-secondary); }
     
-    .row-num input { padding: 2px 0 !important; width: 28px !important; min-width: 28px !important; max-width: 28px !important; text-align: center; border-right: none !important; }
-    tbody td.remove-col { width: 30px !important; min-width: 30px !important; max-width: 30px !important; vertical-align: middle !important; }
+    .row-num input { padding: 2px 0; width: 100%; text-align: center; border-right: none; }
+    tbody td.remove-col { width: 76px; vertical-align: middle !important; }
     .comment-cell { position: relative; }
     .cell-actions { display: flex; align-items: center; justify-content: center; gap: 2px; padding: 2px; }
     .remove-row-btn { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: none; border: none; cursor: pointer; color: var(--text-secondary); border-radius: 4px; font-size: 14px; line-height: 1; flex-shrink: 0; }
     .remove-row-btn:hover { background: var(--bg-secondary); color: #A32D2D; }
+    .dup-row-btn { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: none; border: none; cursor: pointer; color: var(--text-secondary); border-radius: 4px; font-size: 13px; line-height: 1; flex-shrink: 0; }
+    .dup-row-btn:hover { background: var(--bg-secondary); color: var(--accent); }
+    .drag-handle { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; cursor: grab; color: var(--border-mid); font-size: 14px; flex-shrink: 0; user-select: none; }
+    .drag-handle:active { cursor: grabbing; }
+    tr.drag-over { outline: 2px solid var(--accent); outline-offset: -2px; }
+    tr.dragging-row { opacity: 0.4; }
     .comment-btn { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: none; border: none; cursor: pointer; font-size: 11px; opacity: 0; transition: opacity 0.15s; color: var(--text-secondary); z-index: 2; padding: 0; border-radius: 4px; flex-shrink: 0; }
     tr:hover .comment-btn { opacity: 1; }
     .comment-btn.has-comment { opacity: 1; color: var(--blue-text); }
@@ -250,7 +257,7 @@
     .add-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
     .notes-body textarea { width: 100%; min-height: 90px; padding: 12px 16px; font-size: 13px; font-family: inherit; color: var(--text-primary); background: transparent; border: none; resize: vertical; outline: none; line-height: 1.6; box-sizing: border-box; overflow-y: auto; display: block; }
     .notes-body textarea:focus { background: var(--bg-secondary); }
-    .notes-body { overflow: visible; }
+    .notes-body { overflow: hidden; }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
 
@@ -503,50 +510,45 @@ let BIN_ID  = '69fb9158adc21f119a6273c4';
 let API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6WvXt6';
 
 function toggleTheme() {
-  const body = document.body;
-  const btn = document.getElementById('themeToggle');
-  const label = document.getElementById('themeLabel');
-  const isDark = body.classList.contains('force-dark') ||
-    (!body.classList.contains('force-light') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const isDark = document.body.classList.contains('force-dark');
   if (isDark) {
-    body.classList.remove('force-dark');
-    body.classList.add('force-light');
-    btn.childNodes[0].textContent = '☀️ ';
-    if (label) label.textContent = 'Light mode';
+    document.body.classList.remove('force-dark');
+    document.body.classList.add('force-light');
     localStorage.setItem('ecoverage_theme', 'light');
   } else {
-    body.classList.remove('force-light');
-    body.classList.add('force-dark');
-    btn.childNodes[0].textContent = '🌙 ';
-    if (label) label.textContent = 'Dark mode';
+    document.body.classList.remove('force-light');
+    document.body.classList.add('force-dark');
     localStorage.setItem('ecoverage_theme', 'dark');
+  }
+  applyThemeUI();
+}
+
+function applyThemeUI() {
+  const isDark = document.body.classList.contains('force-dark');
+  const btn = document.getElementById('themeToggle');
+  const label = document.getElementById('themeLabel');
+  if (isDark) {
+    if (btn) btn.childNodes[0].textContent = '☀️ ';
+    if (label) label.textContent = 'Light mode';
+  } else {
+    if (btn) btn.childNodes[0].textContent = '🌙 ';
+    if (label) label.textContent = 'Dark mode';
   }
 }
 
 // Apply saved theme on load
 (function() {
   const saved = localStorage.getItem('ecoverage_theme');
-  const btn = document.getElementById('themeToggle');
-  const label = document.getElementById('themeLabel');
-  if (saved === 'dark') {
-    document.body.classList.add('force-dark');
-    if (btn) btn.childNodes[0].textContent = '🌙 ';
-    if (label) label.textContent = 'Dark mode';
-  } else if (saved === 'light') {
-    document.body.classList.add('force-light');
-    if (btn) btn.childNodes[0].textContent = '☀️ ';
-    if (label) label.textContent = 'Light mode';
-  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    if (btn) btn.childNodes[0].textContent = '🌙 ';
-    if (label) label.textContent = 'Dark mode';
-  } else {
-    if (btn) btn.childNodes[0].textContent = '☀️ ';
-    if (label) label.textContent = 'Light mode';
-  }
+  if (saved === 'dark') document.body.classList.add('force-dark');
+  else document.body.classList.add('force-light');
+  applyThemeUI();
 })();
 
 // ── Keyboard shortcuts ──
 document.addEventListener('keydown', function(e) {
+  const mod = e.ctrlKey || e.metaKey;
+  if (mod && e.key === 'z' && !e.shiftKey) { e.preventDefault(); applyUndo(undoStack, redoStack); return; }
+  if (mod && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); applyUndo(redoStack, undoStack); return; }
   // Tab inside table cell moves to next cell
   if (e.key === 'Tab' && e.target.matches('tbody td textarea, tbody td input:not([type="file"])')) {
     const td = e.target.closest('td');
@@ -735,7 +737,7 @@ function trafficRow(n) {
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
     <td><textarea placeholder="Observations..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')">×</button><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
+    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'traffic-body')">⧉</button><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
   </tr>`;
 }
 
@@ -844,7 +846,7 @@ function adsRow(n) {
     <td><textarea placeholder="Ad title text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. 500K" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="Additional notes..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'ads-body')">×</button><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
+    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'ads-body')">⧉</button><button class="remove-row-btn" onclick="removeRow(this,'ads-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
   </tr>`;
 }
 
@@ -879,7 +881,7 @@ function funnelRow(n) {
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
     <td><textarea placeholder="Structure, copy, offer details..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')">×</button><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
+    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'funnels-body')">⧉</button><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
   </tr>`;
 }
 
@@ -1223,7 +1225,6 @@ function restoreRowHeights(cloudData) {
 function initColResize(table) {
   const ths = table.querySelectorAll('thead th');
   ths.forEach(th => {
-    if (th.classList.contains('remove-col')) return;
     if (th.querySelector('.col-resizer')) return;
     const resizer = document.createElement('div');
     resizer.className = 'col-resizer';
@@ -1241,9 +1242,11 @@ function initColResize(table) {
 
       const onMove = e => {
         const delta = e.clientX - startX;
-        const newW = Math.max(40, startW + delta);
+        const newW = Math.max(1, startW + delta);
         th.style.width = newW + 'px';
-        table.style.width = '';
+        // expand table if needed, never shrink — keeps other columns unaffected
+        const newTableW = startTableW + (newW - startW);
+        if (newTableW > 0) table.style.width = Math.max(startTableW, newTableW) + 'px';
         updateFrozenOffsets();
         const colIdx = Array.from(th.parentElement.children).indexOf(th);
         table.querySelectorAll('tbody tr').forEach(row => {
@@ -1284,15 +1287,17 @@ function initRowResize(table) {
       document.body.style.userSelect = 'none';
 
       const onMove = e => {
-        const newH = Math.max(1, startH + (e.clientY - startY));
+        const newH = Math.max(0, startH + (e.clientY - startY));
         tr.style.height = newH + 'px';
         tr.style.maxHeight = newH + 'px';
         tr.querySelectorAll('td').forEach(td => {
           td.style.maxHeight = newH + 'px';
           td.style.overflow = 'hidden';
         });
-        tr.querySelectorAll('textarea').forEach(ta => { ta.style.height = newH + 'px'; });
+        tr.querySelectorAll('textarea').forEach(ta => { ta.style.height = newH + 'px'; ta.style.marginTop = ''; });
+        centerTextareas();
         tr.querySelectorAll('img.media-thumb').forEach(img => { img.style.maxHeight = newH + 'px'; });
+        centerTextareas();
       };
       const onUp = () => {
         document.body.style.cursor = '';
@@ -1331,7 +1336,27 @@ function autoGrow(el) {
 
 function _growOne(el) { autoGrow(el); }
 
-function resizeAllInputs() { document.querySelectorAll('tbody td textarea').forEach(autoGrow); }
+function centerTextareas() {
+  const selectors = [
+    '#traffic-body td:nth-child(3) textarea',
+    '#ads-body td.frozen-offer textarea',
+    '#ads-body td:nth-child(5) textarea',
+    '#ads-body td:nth-child(6) textarea',
+    '#funnels-body td:nth-child(4) textarea'
+  ];
+  document.querySelectorAll(selectors.join(',')).forEach(ta => {
+    const rowH = ta.closest('tr').offsetHeight;
+    ta.style.height = 'auto';
+    const contentH = ta.scrollHeight;
+    ta.style.height = contentH + 'px';
+    if (rowH > contentH) {
+      ta.style.marginTop = Math.floor((rowH - contentH) / 2) + 'px';
+    } else {
+      ta.style.marginTop = '';
+    }
+  });
+}
+function resizeAllInputs() { document.querySelectorAll('tbody td textarea').forEach(autoGrow); centerTextareas(); }
 function renumberTable(id) {
   document.getElementById(id).querySelectorAll('tr').forEach((r,i) => {
     const inp = r.querySelector('.row-num input'); if (inp) inp.value = i+1;
@@ -1353,7 +1378,78 @@ function removeRow(btn, id) {
   showUndoToast('Row deleted — Ctrl+Z to undo', () => undoLast());
 }
 
-function undoLast() {
+function dupRow(btn, id) {
+  snapForUndo();
+  const tr = btn.closest('tr');
+  const clone = tr.cloneNode(true);
+  tr.after(clone);
+  renumberTable(id);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); updateFrozenOffsets(); applyTextColors(); initRowResize(clone.closest('table')); initDragReorder(clone.closest('tbody')); }, 0);
+  scheduleSave();
+}
+
+// ── Drag to reorder rows ──
+function initDragReorder(tbody) {
+  if (!tbody || tbody._dragInit) return;
+  tbody._dragInit = true;
+  let dragSrc = null;
+
+  tbody.addEventListener('mousedown', e => {
+    const handle = e.target.closest('.drag-handle');
+    if (!handle) return;
+    const tr = handle.closest('tr');
+    tr.draggable = true;
+  });
+
+  tbody.addEventListener('dragstart', e => {
+    const tr = e.target.closest('tr');
+    if (!tr) return;
+    dragSrc = tr;
+    tr.classList.add('dragging-row');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+
+  tbody.addEventListener('dragover', e => {
+    e.preventDefault();
+    const tr = e.target.closest('tr');
+    if (!tr || tr === dragSrc) return;
+    tbody.querySelectorAll('tr').forEach(r => r.classList.remove('drag-over'));
+    tr.classList.add('drag-over');
+  });
+
+  tbody.addEventListener('dragleave', e => {
+    const tr = e.target.closest('tr');
+    if (tr) tr.classList.remove('drag-over');
+  });
+
+  tbody.addEventListener('drop', e => {
+    e.preventDefault();
+    const tr = e.target.closest('tr');
+    if (!tr || tr === dragSrc) return;
+    tbody.querySelectorAll('tr').forEach(r => r.classList.remove('drag-over'));
+    const allRows = Array.from(tbody.querySelectorAll('tr'));
+    const srcIdx = allRows.indexOf(dragSrc);
+    const tgtIdx = allRows.indexOf(tr);
+    snapForUndo();
+    if (srcIdx < tgtIdx) tr.after(dragSrc);
+    else tr.before(dragSrc);
+    const id = tbody.id;
+    renumberTable(id);
+    scheduleSave();
+  });
+
+  tbody.addEventListener('dragend', e => {
+    tbody.querySelectorAll('tr').forEach(r => {
+      r.classList.remove('dragging-row', 'drag-over');
+      r.draggable = false;
+    });
+    dragSrc = null;
+  });
+}
+
+function initAllDragReorder() {
+  document.querySelectorAll('tbody').forEach(initDragReorder);
+}
   const action = undoStack.pop();
   if (!action) return;
   if (action.type === 'delete') {
@@ -1474,7 +1570,7 @@ function restoreData(data) {
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','qty','type','notes']);
   restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','type','obs']);
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(data.colWidths); restoreRowHeights(data.rowHeights); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(data.colWidths); restoreRowHeights(data.rowHeights); centerTextareas(); initAllDragReorder(); }, 0);
   return true;
 }
 
@@ -1598,7 +1694,38 @@ function scheduleCloudSave() {
   cloudSaveTimer = setTimeout(doSave, 1200);
 }
 
+// ── Undo/Redo ──
+const undoStack = [];
+const redoStack = [];
+let undoSnapTimer = null;
+let lastSnap = null;
+
+function snapForUndo() {
+  const snap = JSON.stringify(collectData());
+  if (snap === lastSnap) return;
+  undoStack.push(snap);
+  if (undoStack.length > 50) undoStack.shift();
+  redoStack.length = 0;
+  lastSnap = snap;
+}
+
+function scheduleSnap() {
+  clearTimeout(undoSnapTimer);
+  undoSnapTimer = setTimeout(snapForUndo, 600);
+}
+
+function applyUndo(stack, otherStack) {
+  if (stack.length === 0) return;
+  const current = JSON.stringify(collectData());
+  otherStack.push(current);
+  const snap = stack.pop();
+  lastSnap = snap;
+  restoreData(JSON.parse(snap));
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); updateFrozenOffsets(); centerTextareas(); }, 0);
+}
+
 function scheduleSave() {
+  scheduleSnap();
   if (!autosaveEnabled) return;
   setStatus('saving','Saving…');
   clearTimeout(saveTimer);
@@ -1715,7 +1842,7 @@ function showToast(msg, type) {
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
   setStatus('', 'Auto-save on');
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); }, 0);
   initAllColResize();
 })();
 </script>
