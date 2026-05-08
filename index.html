@@ -140,7 +140,7 @@
     .col-resizer::after { content: ''; display: block; width: 2px; height: 60%; background: var(--border-light); border-radius: 2px; transition: background 0.15s; }
     .col-resizer:hover::after, .col-resizer.dragging::after { background: var(--border-mid); }
     th.frozen-offer .col-resizer::after, th.frozen-num .col-resizer::after { display: none; }
-    tbody tr { min-height: 36px; position: relative; }
+    tbody tr { position: relative; }
     .row-resizer { position: absolute; bottom: 0; left: -9999px; right: 0; height: 4px; cursor: row-resize; z-index: 5; }
     .row-resizer:hover, .row-resizer:active { background: var(--border-mid); }
     th.remove-col { width: 30px !important; } th.num-col { width: 28px !important; }
@@ -151,7 +151,7 @@
     tbody tr:last-child td { border-bottom: none; }
     tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: middle; overflow: hidden; }
     tbody td input, tbody td select, tbody td textarea { padding: 5px 7px; font-size: 12px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.4; display: block; width: 100%; }
-    tbody td textarea { min-height: 28px; white-space: pre-wrap; word-break: break-word; }
+    tbody td textarea { white-space: pre-wrap; word-break: break-word; }
     tbody td textarea:focus { position: relative; z-index: 10; }
     /* ── Link chips ── */
     .link-cell { position: relative; padding: 4px 6px !important; vertical-align: middle !important; }
@@ -1207,7 +1207,6 @@ function restoreRowHeights(cloudData) {
       table.querySelectorAll('tbody tr').forEach((tr, i) => {
         if (data[id][i]) {
           tr.style.height = data[id][i];
-          tr.style.minHeight = data[id][i];
         }
       });
     });
@@ -1280,9 +1279,11 @@ function initRowResize(table) {
       document.body.style.userSelect = 'none';
 
       const onMove = e => {
-        const newH = Math.max(28, startH + (e.clientY - startY));
+        const newH = Math.max(1, startH + (e.clientY - startY));
         tr.style.height = newH + 'px';
-        tr.style.minHeight = newH + 'px';
+        tr.querySelectorAll('textarea').forEach(ta => {
+          ta.style.height = newH + 'px';
+        });
       };
       const onUp = () => {
         document.body.style.cursor = '';
@@ -1315,7 +1316,13 @@ function initAllColResize() {
 
 function autoGrow(el) {
   el.style.height = 'auto';
-  el.style.height = Math.max(el.scrollHeight, 28) + 'px';
+  const contentH = el.scrollHeight;
+  el.style.height = contentH + 'px';
+  const tr = el.closest('tr');
+  if (tr && tr.style.height) {
+    const rowH = parseInt(tr.style.height);
+    if (contentH < rowH) tr.style.height = '';
+  }
 }
 
 function _growOne(el) { autoGrow(el); }
