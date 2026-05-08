@@ -147,7 +147,7 @@
     #ads-table thead th:last-child, #ads-table tbody td:last-child,
     #traffic-table thead th:last-child, #traffic-table tbody td:last-child,
     #funnels-table thead th:last-child, #funnels-table tbody td:last-child { border-right: none !important; }
-    table { border-collapse: separate; border-spacing: 0; font-size: 10px; table-layout: fixed; width: 100%; min-width: max-content; }
+    table { border-collapse: separate; border-spacing: 0; font-size: 10px; table-layout: fixed; width: max-content; min-width: 100%; }
     tbody tr:last-child td { border-bottom: none; }
     tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: middle; overflow: hidden; }
     tbody td input, tbody td select, tbody td textarea { padding: 3px 5px; font-size: 10px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.4; display: block; width: 100%; }
@@ -256,7 +256,7 @@
 
     .media-cell { padding: 4px !important; border-right: 1px solid var(--border-light); overflow: hidden; position: relative; vertical-align: middle !important; }
     .media-preview { display: flex; align-items: center; justify-content: center; width: 100%; }
-    .media-thumb { width: 100%; height: auto; max-height: 160px; object-fit: cover; object-position: center; border-radius: 4px; border: 1px solid var(--border-light); cursor: pointer; display: block; }
+    .media-thumb { width: 100%; height: auto; object-fit: cover; object-position: center; border-radius: 4px; border: 1px solid var(--border-light); cursor: pointer; display: block; }
     .media-thumb:hover { opacity: 0.85; }
     .media-remove { flex-shrink: 0; margin-left: 4px; background: var(--bg-secondary); border: 1px solid var(--border-light); cursor: pointer; color: var(--text-secondary); padding: 2px 5px; border-radius: 4px; font-size: 11px; line-height: 1; }
     .media-remove:hover { background: #FEE2E2; color: #991B1B; border-color: #FCA5A5; }
@@ -1213,6 +1213,7 @@ function restoreRowHeights(cloudData) {
             td.style.overflow = 'hidden';
           });
           tr.querySelectorAll('textarea').forEach(ta => { ta.style.height = data[id][i]; });
+          tr.querySelectorAll('img.media-thumb').forEach(img => { img.style.maxHeight = data[id][i]; });
         }
       });
     });
@@ -1240,12 +1241,9 @@ function initColResize(table) {
 
       const onMove = e => {
         const delta = e.clientX - startX;
-        const newW = Math.max(60, startW + delta);
+        const newW = Math.max(40, startW + delta);
         th.style.width = newW + 'px';
-        const newTableW = Math.max(startTableW, startTableW + delta);
-        if (newTableW > table.parentElement.offsetWidth) {
-          table.style.width = newTableW + 'px';
-        }
+        table.style.width = '';
         updateFrozenOffsets();
         const colIdx = Array.from(th.parentElement.children).indexOf(th);
         table.querySelectorAll('tbody tr').forEach(row => {
@@ -1294,6 +1292,7 @@ function initRowResize(table) {
           td.style.overflow = 'hidden';
         });
         tr.querySelectorAll('textarea').forEach(ta => { ta.style.height = newH + 'px'; });
+        tr.querySelectorAll('img.media-thumb').forEach(img => { img.style.maxHeight = newH + 'px'; });
       };
       const onUp = () => {
         document.body.style.cursor = '';
