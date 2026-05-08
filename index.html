@@ -97,7 +97,7 @@
     .meta-field input { width: 100%; padding: 8px 12px; font-size: 13px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-primary); color: var(--text-primary); outline: none; }
     .meta-field input:focus { border-color: var(--border-mid); }
 
-    .section { margin-bottom: 1.25rem; border: 1px solid var(--border-light); border-radius: var(--radius-lg); overflow: visible; background: var(--bg-primary); }
+    .section { margin-bottom: 1.25rem; border: 1px solid var(--border-light); border-radius: var(--radius-lg); overflow: visible; background: var(--bg-primary); position: relative; }
     .section-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-light); }
     .section-icon { width: 30px; height: 30px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .icon-blue { background: var(--blue-bg); } .icon-teal { background: var(--teal-bg); }
@@ -247,17 +247,18 @@
     .dup-row-btn:hover { background: var(--bg-secondary); color: var(--accent); }
     .drag-handle { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; cursor: grab; color: var(--border-mid); font-size: 14px; flex-shrink: 0; user-select: none; }
     .drag-handle:active { cursor: grabbing; }
-    tr.drag-over { outline: 2px solid var(--accent); outline-offset: -2px; }
-    tr.dragging-row { opacity: 0.4; }
+    tr.drag-over td { background: var(--blue-bg) !important; transition: background 0.1s; }
+    tr.dragging-row { opacity: 0.3; }
+    #drag-ghost { position: fixed; top: -1000px; left: -1000px; pointer-events: none; z-index: 9999; background: var(--bg-primary); border: 1.5px solid var(--accent, #4A90D9); border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); padding: 6px 10px; font-size: 10px; font-family: inherit; color: var(--text-primary); white-space: nowrap; max-width: 320px; overflow: hidden; opacity: 0.95; }
     .comment-btn { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: none; border: none; cursor: pointer; font-size: 11px; opacity: 0; transition: opacity 0.15s; color: var(--text-secondary); z-index: 2; padding: 0; border-radius: 4px; flex-shrink: 0; }
     tr:hover .comment-btn { opacity: 1; }
     .comment-btn.has-comment { opacity: 1; color: var(--blue-text); }
     .add-row { padding: 8px 12px; border-top: 1px solid var(--border-light); }
     .add-btn { width: 100%; padding: 6px 12px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; }
     .add-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    .notes-body { position: relative; }
     .notes-body textarea { width: 100%; min-height: 90px; padding: 12px 16px; font-size: 13px; font-family: inherit; color: var(--text-primary); background: transparent; border: none; resize: vertical; outline: none; line-height: 1.6; box-sizing: border-box; overflow-y: auto; display: block; }
     .notes-body textarea:focus { background: var(--bg-secondary); }
-    .notes-body { overflow: hidden; }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
 
@@ -656,19 +657,16 @@ function initNotesResize() {
   ['notes-takeaways', 'notes-actions'].forEach(id => {
     const ta = document.getElementById(id);
     if (!ta) return;
-    // Restore saved height
-    const savedH = localStorage.getItem('notes-height-' + id);
-    if (savedH) ta.style.height = savedH;
-    // Save height on mouseup (after drag resize)
+    const saved = localStorage.getItem('notes-height-' + id);
+    if (saved) ta.style.height = saved;
     ta.addEventListener('mouseup', () => {
       if (ta.style.height) {
         localStorage.setItem('notes-height-' + id, ta.style.height);
-        scheduleCloudSave();
+        doSave();
       }
     });
   });
 }
-
 function loadSettings() {
   try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}'); BIN_ID = s.binId||BIN_ID; API_KEY = s.apiKey||API_KEY; } catch(e){}
 }
@@ -1223,6 +1221,8 @@ function restoreRowHeights(cloudData) {
 }
 
 function initColResize(table) {
+  if (table._colResizeInit) return;
+  table._colResizeInit = true;
   const ths = table.querySelectorAll('thead th');
   ths.forEach(th => {
     if (th.querySelector('.col-resizer')) return;
@@ -1362,9 +1362,7 @@ function renumberTable(id) {
     const inp = r.querySelector('.row-num input'); if (inp) inp.value = i+1;
   });
 }
-// ── Undo / Redo for row deletions ──
-const undoStack = [];
-const redoStack = [];
+// ── Row actions ──
 
 function removeRow(btn, id) {
   const tr = btn.closest('tr');
@@ -1398,15 +1396,34 @@ function initDragReorder(tbody) {
     const handle = e.target.closest('.drag-handle');
     if (!handle) return;
     const tr = handle.closest('tr');
-    tr.draggable = true;
+    tr.setAttribute('draggable', 'true');
+  });
+
+  tbody.addEventListener('mouseup', e => {
+    tbody.querySelectorAll('tr[draggable="true"]').forEach(tr => tr.setAttribute('draggable', 'false'));
   });
 
   tbody.addEventListener('dragstart', e => {
-    const tr = e.target.closest('tr');
-    if (!tr) return;
+    const tr = e.target.closest('tr[draggable="true"]');
+    if (!tr) { e.preventDefault(); return; }
     dragSrc = tr;
     tr.classList.add('dragging-row');
     e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', '');
+
+    // Build custom ghost from row text content
+    let ghost = document.getElementById('drag-ghost');
+    if (!ghost) { ghost = document.createElement('div'); ghost.id = 'drag-ghost'; document.body.appendChild(ghost); }
+    const texts = Array.from(tr.querySelectorAll('td')).map(td => {
+      const ta = td.querySelector('textarea, input:not([type=file])');
+      const badge = td.querySelector('.sel-badge');
+      return (badge ? badge.textContent : ta ? ta.value : '').trim();
+    }).filter(Boolean).slice(0, 5);
+    ghost.textContent = texts.join('  ·  ') || 'Row';
+    ghost.style.top = '-1000px';
+    ghost.style.left = '-1000px';
+    document.body.appendChild(ghost);
+    e.dataTransfer.setDragImage(ghost, 0, 0);
   });
 
   tbody.addEventListener('dragover', e => {
@@ -1441,8 +1458,10 @@ function initDragReorder(tbody) {
   tbody.addEventListener('dragend', e => {
     tbody.querySelectorAll('tr').forEach(r => {
       r.classList.remove('dragging-row', 'drag-over');
-      r.draggable = false;
+      r.setAttribute('draggable', 'false');
     });
+    const ghost = document.getElementById('drag-ghost');
+    if (ghost) ghost.remove();
     dragSrc = null;
   });
 }
@@ -1450,6 +1469,8 @@ function initDragReorder(tbody) {
 function initAllDragReorder() {
   document.querySelectorAll('tbody').forEach(initDragReorder);
 }
+
+function undoLast() {
   const action = undoStack.pop();
   if (!action) return;
   if (action.type === 'delete') {
@@ -1843,7 +1864,6 @@ function showToast(msg, type) {
   }
   setStatus('', 'Auto-save on');
   setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); }, 0);
-  initAllColResize();
 })();
 </script>
 </body>
