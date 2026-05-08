@@ -177,9 +177,9 @@
     tbody td:has(select) { vertical-align: middle; }
 
     /* Custom colored select */
-    .sel-wrap { position: relative; width: 100%; height: 22px; overflow: hidden; display: flex; align-items: center; }
+    .sel-wrap { position: relative; width: 100%; height: 100%; min-height: 22px; overflow: hidden; display: flex; align-items: center; }
     .sel-wrap select { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
-    .sel-display { display: flex; align-items: center; gap: 5px; padding: 0 7px; height: 22px; font-size: 10px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; width: 100%; }
+    .sel-display { display: flex; align-items: center; gap: 5px; padding: 0 7px; min-height: 22px; font-size: 10px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; width: 100%; }
     .sel-badge { display: inline-block; padding: 1px 6px; border-radius: 20px; font-size: 9px; font-weight: 500; white-space: nowrap; flex-shrink: 0; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis; }
     .sel-arrow { margin-left: 4px; color: var(--text-secondary); font-size: 10px; flex-shrink: 0; }
     tbody td:has(.sel-wrap) { vertical-align: middle !important; overflow: hidden; padding: 0 !important; }
@@ -256,7 +256,7 @@
 
     .media-cell { padding: 4px !important; border-right: 1px solid var(--border-light); overflow: hidden; position: relative; vertical-align: middle !important; }
     .media-preview { display: flex; align-items: center; justify-content: center; width: 100%; }
-    .media-thumb { width: 72px; height: 54px; object-fit: cover; object-position: center; border-radius: 4px; border: 1px solid var(--border-light); cursor: pointer; display: block; flex-shrink: 0; }
+    .media-thumb { width: 100%; height: auto; max-height: 160px; object-fit: cover; object-position: center; border-radius: 4px; border: 1px solid var(--border-light); cursor: pointer; display: block; }
     .media-thumb:hover { opacity: 0.85; }
     .media-remove { flex-shrink: 0; margin-left: 4px; background: var(--bg-secondary); border: 1px solid var(--border-light); cursor: pointer; color: var(--text-secondary); padding: 2px 5px; border-radius: 4px; font-size: 11px; line-height: 1; }
     .media-remove:hover { background: #FEE2E2; color: #991B1B; border-color: #FCA5A5; }
@@ -1207,7 +1207,12 @@ function restoreRowHeights(cloudData) {
       table.querySelectorAll('tbody tr').forEach((tr, i) => {
         if (data[id][i]) {
           tr.style.height = data[id][i];
-          
+          tr.style.maxHeight = data[id][i];
+          tr.querySelectorAll('td').forEach(td => {
+            td.style.maxHeight = data[id][i];
+            td.style.overflow = 'hidden';
+          });
+          tr.querySelectorAll('textarea').forEach(ta => { ta.style.height = data[id][i]; });
         }
       });
     });
@@ -1281,9 +1286,14 @@ function initRowResize(table) {
       document.body.style.userSelect = 'none';
 
       const onMove = e => {
-        const newH = Math.max(28, startH + (e.clientY - startY));
+        const newH = Math.max(1, startH + (e.clientY - startY));
         tr.style.height = newH + 'px';
-        tr.style.minHeight = newH + 'px';
+        tr.style.maxHeight = newH + 'px';
+        tr.querySelectorAll('td').forEach(td => {
+          td.style.maxHeight = newH + 'px';
+          td.style.overflow = 'hidden';
+        });
+        tr.querySelectorAll('textarea').forEach(ta => { ta.style.height = newH + 'px'; });
       };
       const onUp = () => {
         document.body.style.cursor = '';
@@ -1291,6 +1301,7 @@ function initRowResize(table) {
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onUp);
         saveRowHeights();
+        doSave();
       };
       document.addEventListener('mousemove', onMove);
       document.addEventListener('mouseup', onUp);
@@ -1316,13 +1327,7 @@ function initAllColResize() {
 
 function autoGrow(el) {
   el.style.height = 'auto';
-  const contentH = el.scrollHeight;
-  el.style.height = contentH + 'px';
-  const tr = el.closest('tr');
-  if (tr && tr.style.height) {
-    const rowH = parseInt(tr.style.height);
-    if (contentH < rowH) tr.style.height = '';
-  }
+  el.style.height = el.scrollHeight + 'px';
 }
 
 function _growOne(el) { autoGrow(el); }
