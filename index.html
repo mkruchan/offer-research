@@ -126,11 +126,16 @@
     th.frozen-offer { background: var(--bg-secondary); z-index: 19; }
     tbody tr:hover td.frozen-offer, tbody tr:hover td.frozen-num { background: var(--bg-secondary); }
     td.frozen-offer textarea, td.frozen-offer input { width: 100%; }
+    #ads-table td:nth-child(5), #ads-table td:nth-child(6),
+    #traffic-table td:nth-child(3), #funnels-table td:nth-child(4) { vertical-align: middle !important; }
+    #ads-table td:nth-child(5) textarea, #ads-table td:nth-child(6) textarea,
+    #traffic-table td:nth-child(3) textarea, #funnels-table td:nth-child(4) textarea,
+    td.frozen-offer textarea { display: inline-block; vertical-align: middle; width: 100%; }
     
     tbody tr:hover td.frozen-num { background: var(--bg-secondary); }
 
     .table-scroll { overflow-x: auto; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
-    table { border-collapse: collapse; font-size: 10px; table-layout: fixed; width: max-content; min-width: 100%; }
+    table { border-collapse: collapse; font-size: 10px; table-layout: fixed; width: max-content; }
     thead th { position: relative; text-align: left; padding: 3px 6px; font-size: 9px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; user-select: none; width: 90px; }
     .row-num { width: 28px; text-align: center; color: var(--text-secondary); vertical-align: middle; padding: 0; }
     .row-num input { padding: 2px 0; width: 100%; text-align: center; border-right: none; }
@@ -148,7 +153,7 @@
     #ads-table thead th:last-child, #ads-table tbody td:last-child,
     #traffic-table thead th:last-child, #traffic-table tbody td:last-child,
     #funnels-table thead th:last-child, #funnels-table tbody td:last-child { border-right: none !important; }
-    table { border-collapse: separate; border-spacing: 0; font-size: 10px; table-layout: fixed; width: max-content; min-width: 100%; }
+    table { border-collapse: separate; border-spacing: 0; font-size: 10px; table-layout: fixed; width: max-content; }
     tbody tr:last-child td { border-bottom: none; }
     tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: middle; overflow: hidden; }
     tbody td input, tbody td select, tbody td textarea { padding: 3px 5px; font-size: 10px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.4; display: block; width: 100%; align-self: center; }
@@ -443,11 +448,11 @@
       <div class="table-scroll">
         <table id="traffic-table"><thead><tr>
           <th class="num-col frozen-num">#</th>
-          <th style="width:150px">Traffic Source</th>
-          <th style="width:90px">Geo</th>
-          <th style="width:100px">Est. Ads Quantity</th>
-          <th style="width:120px">Traffic Type</th>
-          <th style="width:150px">Notes</th>
+          <th>Traffic Source</th>
+          <th>Geo</th>
+          <th>Est. Ads Quantity</th>
+          <th>Traffic Type</th>
+          <th>Notes</th>
           <th class="remove-col"></th>
         </tr></thead><tbody id="traffic-body"></tbody></table>
       </div>
@@ -490,9 +495,9 @@
     <div class="section-body">
       <div class="table-scroll">
         <table id="funnels-table"><thead><tr>
-          <th class="num-col frozen-num">#</th><th style="width:140px">Link</th>
-          <th style="width:130px">Advertiser</th><th style="width:90px">Geo</th><th style="width:130px">Funnel Type</th>
-          <th style="width:180px">Key Observations</th>
+          <th class="num-col frozen-num">#</th><th>Link</th>
+          <th>Advertiser</th><th>Geo</th><th>Funnel Type</th>
+          <th>Key Observations</th>
           <th class="remove-col"></th>
         </tr></thead><tbody id="funnels-body"></tbody></table>
       </div>
@@ -657,17 +662,16 @@ function initNotesResize() {
   ['notes-takeaways', 'notes-actions'].forEach(id => {
     const ta = document.getElementById(id);
     if (!ta) return;
-    const saved = localStorage.getItem('notes-height-' + id);
+    const saved = localStorage.getItem('notes-h-' + id);
     if (saved) ta.style.height = saved;
     ta.addEventListener('mouseup', () => {
       if (ta.style.height) {
-        localStorage.setItem('notes-height-' + id, ta.style.height);
+        localStorage.setItem('notes-h-' + id, ta.style.height);
         doSave();
       }
     });
   });
-}
-function loadSettings() {
+}function loadSettings() {
   try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}'); BIN_ID = s.binId||BIN_ID; API_KEY = s.apiKey||API_KEY; } catch(e){}
 }
 function saveSettings() { localStorage.setItem(LS_SETTINGS, JSON.stringify({ binId: BIN_ID, apiKey: API_KEY })); }
@@ -1223,6 +1227,11 @@ function restoreRowHeights(cloudData) {
 function initColResize(table) {
   if (table._colResizeInit) return;
   table._colResizeInit = true;
+  // Lock current pixel widths on all th so table-layout:fixed doesn't redistribute
+  table.querySelectorAll('thead th').forEach(th => {
+    if (!th.style.width) th.style.width = th.offsetWidth + 'px';
+  });
+  if (!table.style.width) table.style.width = table.offsetWidth + 'px';
   const ths = table.querySelectorAll('thead th');
   ths.forEach(th => {
     if (th.querySelector('.col-resizer')) return;
@@ -1236,6 +1245,9 @@ function initColResize(table) {
       startX = e.clientX;
       startW = th.offsetWidth;
       startTableW = table.offsetWidth;
+      // Lock ALL column widths as explicit pixels before drag so none can redistribute
+      table.querySelectorAll('thead th').forEach(t => { t.style.width = t.offsetWidth + 'px'; });
+      table.style.width = table.offsetWidth + 'px';
       resizer.classList.add('dragging');
       document.body.style.cursor = 'col-resize';
       document.body.style.userSelect = 'none';
@@ -1244,9 +1256,8 @@ function initColResize(table) {
         const delta = e.clientX - startX;
         const newW = Math.max(1, startW + delta);
         th.style.width = newW + 'px';
-        // expand table if needed, never shrink — keeps other columns unaffected
-        const newTableW = startTableW + (newW - startW);
-        if (newTableW > 0) table.style.width = Math.max(startTableW, newTableW) + 'px';
+        // adjust table width by the delta only
+        table.style.width = (startTableW + (newW - startW)) + 'px';
         updateFrozenOffsets();
         const colIdx = Array.from(th.parentElement.children).indexOf(th);
         table.querySelectorAll('tbody tr').forEach(row => {
@@ -1336,27 +1347,9 @@ function autoGrow(el) {
 
 function _growOne(el) { autoGrow(el); }
 
-function centerTextareas() {
-  const selectors = [
-    '#traffic-body td:nth-child(3) textarea',
-    '#ads-body td.frozen-offer textarea',
-    '#ads-body td:nth-child(5) textarea',
-    '#ads-body td:nth-child(6) textarea',
-    '#funnels-body td:nth-child(4) textarea'
-  ];
-  document.querySelectorAll(selectors.join(',')).forEach(ta => {
-    const rowH = ta.closest('tr').offsetHeight;
-    ta.style.height = 'auto';
-    const contentH = ta.scrollHeight;
-    ta.style.height = contentH + 'px';
-    if (rowH > contentH) {
-      ta.style.marginTop = Math.floor((rowH - contentH) / 2) + 'px';
-    } else {
-      ta.style.marginTop = '';
-    }
-  });
-}
-function resizeAllInputs() { document.querySelectorAll('tbody td textarea').forEach(autoGrow); centerTextareas(); }
+function centerTextareas() {}
+
+function resizeAllInputs() { document.querySelectorAll('tbody td textarea').forEach(ta => { autoGrow(ta); ta.style.marginTop = ''; }); }
 function renumberTable(id) {
   document.getElementById(id).querySelectorAll('tr').forEach((r,i) => {
     const inp = r.querySelector('.row-num input'); if (inp) inp.value = i+1;
