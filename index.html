@@ -351,9 +351,9 @@
     .grid-card-img-empty { width:100%; aspect-ratio:4/3; background:var(--bg-primary); display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:10px; }
     .grid-card-body { padding:8px; display:flex; flex-direction:column; gap:4px; flex:1; user-select:text; -webkit-user-select:text; }
     .grid-card-body * { user-select:text; -webkit-user-select:text; }
-    .grid-card-offer { font-size:11px; font-weight:600; color:var(--text-primary); line-height:1.3; }
-    .grid-card-meta { font-size:10px; color:var(--text-secondary); display:flex; flex-wrap:wrap; gap:3px; }
-    .grid-card-badge { background:var(--bg-primary); border:1px solid var(--border-light); border-radius:10px; padding:1px 6px; font-size:9px; }
+    .grid-card-offer { font-size:14px; font-weight:600; color:var(--text-primary); line-height:1.3; }
+    .grid-card-meta { font-size:13px; color:var(--text-secondary); display:flex; flex-wrap:wrap; gap:3px; }
+    .grid-card-badge { background:var(--bg-primary); border:1px solid var(--border-light); border-radius:10px; padding:1px 6px; font-size:11px; }
     .grid-card-link { margin-top:auto; padding-top:6px; }
     .grid-card-link a { font-size:10px; color:var(--accent,#4A90D9); text-decoration:none; display:flex; align-items:center; gap:3px; }
     .grid-card-link a:hover { text-decoration:underline; }
@@ -747,7 +747,7 @@ function buildTrafficGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
       <span style="opacity:0.6;">${label}:</span>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
@@ -760,7 +760,7 @@ function buildTrafficGrid() {
   };
 
   const getText = td => td?.querySelector('textarea')?.value || '';
-  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
+  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
     <span style="opacity:0.6;">${label}:</span>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
@@ -769,7 +769,7 @@ function buildTrafficGrid() {
       onblur="this.style.background='';this.style.padding='';gcCollapse(this)"
     >${val||''}</div>
   </div>`;
-  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
+  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
     <span style="opacity:0.6;">${label}:</span>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
@@ -822,7 +822,7 @@ function buildFunnelsGrid() {
   const getText = td => td?.querySelector('textarea')?.value || '';
   const getLinkHref = td => { const a = td?.querySelector('a.link-chip'); const h = a?.href||''; return (h && h.startsWith('http')) ? h : ''; };
   const mkLink = (url, label) => url ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
-  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
+  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
     <span style="opacity:0.6;">${label}:</span>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
@@ -831,7 +831,7 @@ function buildFunnelsGrid() {
       onblur="this.style.background='';this.style.padding='';gcCollapse(this)"
     >${val||''}</div>
   </div>`;
-  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
+  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
     <span style="opacity:0.6;">${label}:</span>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
@@ -859,7 +859,7 @@ function buildFunnelsGrid() {
     const ft = fv ? (funnelSel.options[funnelSel.selectedIndex]?.text || fv) : '';
     const fc = FUNNEL_CHIP_COLORS[fv] || {bg:'#E5E7EB',color:'#374151'};
     const funnelChipHtml = fv ? `<span style="background:${fc.bg};color:${fc.color};border-radius:20px;padding:1px 8px;font-size:9px;font-weight:500;white-space:nowrap;">${ft}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
-    const typeChip = funnelSel ? `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+    const typeChip = funnelSel ? `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
       <span style="opacity:0.6;">Funnel type:</span>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${funnelChipHtml}
@@ -886,7 +886,7 @@ function buildFunnelsGrid() {
         <div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;display:flex;align-items:center;gap:4px;" onclick="event.stopPropagation()">
           ${linkUrl
             ? `<a href="${linkUrl}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>Funnel link</a>`
-            : `<span style="font-size:10px;color:var(--text-secondary);opacity:0.5;flex:1;">Funnel link</span>`
+            : `<span style="font-size:12px;color:var(--text-secondary);opacity:0.5;flex:1;">Funnel link</span>`
           }
           <button onclick="gridEditLink(this,${idx},'funnels-body',2)" title="Edit URL" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.5;padding:1px;line-height:1;flex-shrink:0;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg></button>
         </div>
@@ -908,7 +908,7 @@ function buildAdsGrid() {
 
   const mkLink = (url, label) => url && url !== '#' && !url.endsWith('#')
     ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
-  const field = (label, val, taSelector, rowIdx) => `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
+  const field = (label, val, taSelector, rowIdx) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
     <span style="opacity:0.6;">${label}:</span>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
       style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
@@ -974,7 +974,7 @@ function buildAdsGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
       <span style="opacity:0.6;">${label}:</span>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
