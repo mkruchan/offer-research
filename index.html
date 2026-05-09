@@ -57,9 +57,9 @@
     .container { max-width: 1400px; margin: 0 auto; }
     .header { margin-bottom: 2rem; }
     .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-    .header-left { flex: 1; min-width: 0; }
+    .header-left { flex: 1; min-width: 0; display: flex; align-items: center; gap: 24px; }
     .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: var(--blue-bg); color: var(--blue-text); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px; }
-    .header h1 { font-size: 24px; font-weight: 600; margin-bottom: 4px; }
+    .header h1 { font-size: 24px; font-weight: 600; margin-bottom: 4px; color: var(--text-primary); }
     .header p { font-size: 14px; color: var(--text-secondary); }
     .save-bar { display: flex; align-items: center; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
     .autosave-status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
@@ -126,11 +126,9 @@
     th.frozen-offer { background: var(--bg-secondary); z-index: 19; }
     tbody tr:hover td.frozen-offer, tbody tr:hover td.frozen-num { background: var(--bg-secondary); }
     td.frozen-offer textarea, td.frozen-offer input { width: 100%; }
-    #ads-table td:nth-child(5), #ads-table td:nth-child(6),
-    #traffic-table td:nth-child(3), #funnels-table td:nth-child(4) { vertical-align: middle !important; }
+    #ads-table td:nth-child(5), #ads-table td:nth-child(6) { position: relative; }
     #ads-table td:nth-child(5) textarea, #ads-table td:nth-child(6) textarea,
-    #traffic-table td:nth-child(3) textarea, #funnels-table td:nth-child(4) textarea,
-    td.frozen-offer textarea { display: inline-block; vertical-align: middle; width: 100%; }
+    #ads-table td.frozen-offer textarea { position: absolute; inset: 0; width: 100%; height: 100% !important; border-right: none !important; }
     
     tbody tr:hover td.frozen-num { background: var(--bg-secondary); }
 
@@ -376,8 +374,25 @@
   <div class="header">
     <div class="header-top">
       <div class="header-left">
-        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTc4IiBoZWlnaHQ9IjI2MiIgdmlld0JveD0iMCAwIDk3OCAyNjIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yMjAuMDA4IDIxNi4yMkwxMTguODk5IDBWMTM3LjMzOEMxMTguODk5IDE4MC45MDMgMTU0LjYwMyAyMTYuMjIgMTk4LjY0NyAyMTYuMjJIMjIwLjAwOFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTAgMjE2LjIyTDEwMS4xMDkgMFYxMzcuMzM4QzEwMS4xMDkgMTgwLjkwMyA2NS40MDQyIDIxNi4yMiAyMS4zNjEgMjE2LjIySDBaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik0xMDguOTQgMTgxLjcxTDExNi4xNjYgMTk0LjM4MUMxMjEuMDE0IDIwMi44ODQgMTI4LjEyIDIwOS45MTIgMTM2LjcxNSAyMTQuNzA4TDE0OS41MjYgMjIxLjg1NUwxMzYuNzE1IDIyOS4wMDJDMTI4LjEyIDIzMy43OTggMTIxLjAxNCAyNDAuODI2IDExNi4xNjYgMjQ5LjMyOEwxMDguOTQgMjYyTDEwMS43MTUgMjQ5LjMyOEM5Ni44NjY0IDI0MC44MjYgODkuNzYwNyAyMzMuNzk4IDgxLjE2NTMgMjI5LjAwMkw2OC4zNTQyIDIyMS44NTVMODEuMTY1MyAyMTQuNzA4Qzg5Ljc2MDcgMjA5LjkxMiA5Ni44NjY0IDIwMi44ODQgMTAxLjcxNSAxOTQuMzgxTDEwOC45NCAxODEuNzFaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik0zMDUuNDg0IDE5My4xNzRIMzcwLjkwMVYyMjQuNDAySDI2NS42NjVWMjguMDMyN0gzMDUuNDg0VjE5My4xNzRaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik00MTYuNDAyIDQ5Ljk3NjRDNDA5LjM4NSA0OS45NzY0IDQwMy41MDcgNDcuODE5MyAzOTguNzY2IDQzLjUwNTVDMzk0LjIxOCAzOS4wMDQ1IDM5MS45NDIgMzMuNDcxNiAzOTEuOTQyIDI2LjkwNzJDMzkxLjk0MiAyMC4zNDI4IDM5NC4yMTggMTQuOTAzNyAzOTguNzY2IDEwLjU5QzQwMy41MDcgNi4wODg2NyA0MDkuMzg1IDMuODM4MDQgNDE2LjQwMiAzLjgzODA0QzQyMy40MTggMy44MzgwNCA0MjkuMiA2LjA4ODY3IDQzMy43NTIgMTAuNTlDNDM4LjQ5MyAxNC45MDM3IDQ0MC44NjEgMjAuMzQyOCA0NDAuODYxIDI2LjkwNzJDNDQwLjg2MSAzMy40NzE2IDQzOC40OTMgMzkuMDA0NSA0MzMuNzUyIDQzLjUwNTVDNDI5LjIgNDcuODE5MyA0MjMuNDE4IDQ5Ljk3NjQgNDE2LjQwMiA0OS45NzY0Wk00MzYuMDI4IDY4LjU0NDRWMjI0LjQwMkgzOTYuMjA5VjY4LjU0NDRINDM2LjAyOFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTU0Ny42MTMgMTAwLjg5OEg1MjAuMDI0VjIyNC40MDJINDc5LjYzNlYxMDAuODk4SDQ2MS43MTZWNjguNTQ0Nkg0NzkuNjM2VjYwLjY2NzNDNDc5LjYzNiA0MS41MzY2IDQ4NS4xMzcgMjcuNDcwMSA0OTYuMTMzIDE4LjQ2NzVDNTA3LjEyOSA5LjQ2NDkgNTIzLjcxOSA1LjI0NDkyIDU0NS45MDYgNS44MDc1OFYzOS4wMDQ3QzUzNi4yMzMgMzguODE3MSA1MjkuNTA0IDQwLjQxMTQgNTI1LjcxIDQzLjc4NzNDNTIxLjkxOSA0Ny4xNjM1IDUyMC4wMjQgNTMuMjU4OCA1MjAuMDI0IDYyLjA3NFY2OC41NDQ2SDU0Ny42MTNWMTAwLjg5OFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTYxOS43NzUgMTAwLjg5N1YxNzYuMjk0QzYxOS43NzUgMTgxLjU0NiA2MjEuMDA5IDE4NS4zOSA2MjMuNDczIDE4Ny44MjhDNjI2LjEyNiAxOTAuMDc5IDYzMC40OSAxOTEuMjA0IDYzNi41NTcgMTkxLjIwNEg2NTUuMDQ1VjIyNC40MDJINjMwLjAxM0M1OTYuNDU2IDIyNC40MDIgNTc5LjY3MSAyMDguMjcyIDU3OS42NzEgMTc2LjAxM1YxMDAuODk3SDU2MC45MDFWNjguNTQ0Mkg1NzkuNjcxVjMwLjAwMTdINjE5Ljc3NVY2OC41NDQySDY1NS4wNDVWMTAwLjg5N0g2MTkuNzc1WiIgZmlsbD0iIzAxNkFDOSIvPgo8cGF0aCBkPSJNNzQxLjY3IDI2LjkwNzNWMjI0LjQwMkg2OTMuMDMyVjI2LjkwNzNINzQxLjY3WiIgZmlsbD0iIzAxNkFDOSIvPgo8cGF0aCBkPSJNOTE5LjEyMyAyNTguMTYxTDg5My41MjYgMjI0LjEyQzg4NS45NDQgMjI1LjYyIDg3OC41NDcgMjI2LjM3MSA4NzEuMzQyIDIyNi4zNzFDODUyLjU3MiAyMjYuMzcxIDgzNS4zMTQgMjIyLjA1NyA4MTkuNTc3IDIxMy40M0M4MDQuMDMgMjA0LjgwMiA3OTEuNjA4IDE5Mi43OTkgNzgyLjMxOSAxNzcuNDJDNzczLjIxNSAxNjEuODUyIDc2OC42NjcgMTQ0LjQxIDc2OC42NjcgMTI1LjA5MkM3NjguNjY3IDEwNS43NzQgNzczLjIxNSA4OC40MjQ4IDc4Mi4zMTkgNzMuMDQ1OEM3OTEuNjA4IDU3LjY2NjEgODA0LjAzIDQ1LjY2MjcgODE5LjU3NyAzNy4wMzUxQzgzNS4zMTQgMjguNDA3NiA4NTIuNTcyIDI0LjA5MzkgODcxLjM0MiAyNC4wOTM5Qzg5MC4xMTIgMjQuMDkzOSA5MDcuMjc0IDI4LjQwNzYgOTIyLjgyNSAzNy4wMzUxQzkzOC41NTggNDUuNjYyNyA5NTAuODg3IDU3LjY2NjEgOTU5Ljc5NiA3My4wNDU4Qzk2OC44OTYgODguNDI0OCA5NzMuNDQ4IDEwNS43NzQgOTczLjQ0OCAxMjUuMDkyQzk3My40NDggMTQxLjk3MiA5NjkuOTM4IDE1Ny40NDUgOTYyLjkyNSAxNzEuNTEyQzk1Ni4xMDEgMTg1LjM5IDk0Ni41MjQgMTk2LjkyNSA5MzQuMTk4IDIwNi4xMTVMOTc4IDI1OC4xNjFIOTE5LjEyM1pNODE4LjQzOSAxMjUuMDkyQzgxOC40MzkgMTQyLjUzNCA4MjMuMTc3IDE1Ni41MDcgODMyLjY2MSAxNjcuMDFDODQyLjMzIDE3Ny4zMjYgODU1LjIyNSAxODIuNDgzIDg3MS4zNDIgMTgyLjQ4M0M4ODcuMjcgMTgyLjQ4MyA4OTkuOTczIDE3Ny4yMzIgOTA5LjQ1NCAxNjYuNzI5QzkxOS4xMjMgMTU2LjIyNiA5MjMuOTYgMTQyLjM0NyA5MjMuOTYgMTI1LjA5MkM5MjMuOTYgMTA3LjY0OSA5MTkuMTIzIDkzLjc3MDIgOTA5LjQ1NCA4My40NTQ3Qzg5OS45NzMgNzIuOTUxOSA4ODcuMjcgNjcuNzAwMSA4NzEuMzQyIDY3LjcwMDFDODU1LjIyNSA2Ny43MDAxIDg0Mi4zMyA3Mi44NTc5IDgzMi42NjEgODMuMTczNEM4MjMuMTc3IDkzLjQ4OSA4MTguNDM5IDEwNy40NjIgODE4LjQzOSAxMjUuMDkyWiIgZmlsbD0iIzAxNkFDOSIvPgo8L3N2Zz4K" style="height:32px;object-fit:contain;margin-bottom:10px;display:block;">
-        <h1>OBD Fuel Saver - SynGas Multi-Platform Creative Research</h1>
+        <div>
+          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTc4IiBoZWlnaHQ9IjI2MiIgdmlld0JveD0iMCAwIDk3OCAyNjIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yMjAuMDA4IDIxNi4yMkwxMTguODk5IDBWMTM3LjMzOEMxMTguODk5IDE4MC45MDMgMTU0LjYwMyAyMTYuMjIgMTk4LjY0NyAyMTYuMjJIMjIwLjAwOFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTAgMjE2LjIyTDEwMS4xMDkgMFYxMzcuMzM4QzEwMS4xMDkgMTgwLjkwMyA2NS40MDQyIDIxNi4yMiAyMS4zNjEgMjE2LjIySDBaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik0xMDguOTQgMTgxLjcxTDExNi4xNjYgMTk0LjM4MUMxMjEuMDE0IDIwMi44ODQgMTI4LjEyIDIwOS45MTIgMTM2LjcxNSAyMTQuNzA4TDE0OS41MjYgMjIxLjg1NUwxMzYuNzE1IDIyOS4wMDJDMTI4LjEyIDIzMy43OTggMTIxLjAxNCAyNDAuODI2IDExNi4xNjYgMjQ5LjMyOEwxMDguOTQgMjYyTDEwMS43MTUgMjQ5LjMyOEM5Ni44NjY0IDI0MC44MjYgODkuNzYwNyAyMzMuNzk4IDgxLjE2NTMgMjI5LjAwMkw2OC4zNTQyIDIyMS44NTVMODEuMTY1MyAyMTQuNzA4Qzg5Ljc2MDcgMjA5LjkxMiA5Ni44NjY0IDIwMi44ODQgMTAxLjcxNSAxOTQuMzgxTDEwOC45NCAxODEuNzFaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik0zMDUuNDg0IDE5My4xNzRIMzcwLjkwMVYyMjQuNDAySDI2NS42NjVWMjguMDMyN0gzMDUuNDg0VjE5My4xNzRaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik00MTYuNDAyIDQ5Ljk3NjRDNDA5LjM4NSA0OS45NzY0IDQwMy41MDcgNDcuODE5MyAzOTguNzY2IDQzLjUwNTVDMzk0LjIxOCAzOS4wMDQ1IDM5MS45NDIgMzMuNDcxNiAzOTEuOTQyIDI2LjkwNzJDMzkxLjk0MiAyMC4zNDI4IDM5NC4yMTggMTQuOTAzNyAzOTguNzY2IDEwLjU5QzQwMy41MDcgNi4wODg2NyA0MDkuMzg1IDMuODM4MDQgNDE2LjQwMiAzLjgzODA0QzQyMy40MTggMy44MzgwNCA0MjkuMiA2LjA4ODY3IDQzMy43NTIgMTAuNTlDNDM4LjQ5MyAxNC45MDM3IDQ0MC44NjEgMjAuMzQyOCA0NDAuODYxIDI2LjkwNzJDNDQwLjg2MSAzMy40NzE2IDQzOC40OTMgMzkuMDA0NSA0MzMuNzUyIDQzLjUwNTVDNDI5LjIgNDcuODE5MyA0MjMuNDE4IDQ5Ljk3NjQgNDE2LjQwMiA0OS45NzY0Wk00MzYuMDI4IDY4LjU0NDRWMjI0LjQwMkgzOTYuMjA5VjY4LjU0NDRINDM2LjAyOFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTU0Ny42MTMgMTAwLjg5OEg1MjAuMDI0VjIyNC40MDJINDc5LjYzNlYxMDAuODk4SDQ2MS43MTZWNjguNTQ0Nkg0NzkuNjM2VjYwLjY2NzNDNDc5LjYzNiA0MS41MzY2IDQ4NS4xMzcgMjcuNDcwMSA0OTYuMTMzIDE4LjQ2NzVDNTA3LjEyOSA5LjQ2NDkgNTIzLjcxOSA1LjI0NDkyIDU0NS45MDYgNS44MDc1OFYzOS4wMDQ3QzUzNi4yMzMgMzguODE3MSA1MjkuNTA0IDQwLjQxMTQgNTI1LjcxIDQzLjc4NzNDNTIxLjkxOSA0Ny4xNjM1IDUyMC4wMjQgNTMuMjU4OCA1MjAuMDI0IDYyLjA3NFY2OC41NDQ2SDU0Ny42MTNWMTAwLjg5OFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTYxOS43NzUgMTAwLjg5N1YxNzYuMjk0QzYxOS43NzUgMTgxLjU0NiA2MjEuMDA5IDE4NS4zOSA2MjMuNDczIDE4Ny44MjhDNjI2LjEyNiAxOTAuMDc5IDYzMC40OSAxOTEuMjA0IDYzNi41NTcgMTkxLjIwNEg2NTUuMDQ1VjIyNC40MDJINjMwLjAxM0M1OTYuNDU2IDIyNC40MDIgNTc5LjY3MSAyMDguMjcyIDU3OS42NzEgMTc2LjAxM1YxMDAuODk3SDU2MC45MDFWNjguNTQ0Mkg1NzkuNjcxVjMwLjAwMTdINjE5Ljc3NVY2OC41NDQySDY1NS4wNDVWMTAwLjg5N0g2MTkuNzc1WiIgZmlsbD0iIzAxNkFDOSIvPgo8cGF0aCBkPSJNNzQxLjY3IDI2LjkwNzNWMjI0LjQwMkg2OTMuMDMyVjI2LjkwNzNINzQxLjY3WiIgZmlsbD0iIzAxNkFDOSIvPgo8cGF0aCBkPSJNOTE5LjEyMyAyNTguMTYxTDg5My41MjYgMjI0LjEyQzg4NS45NDQgMjI1LjYyIDg3OC41NDcgMjI2LjM3MSA4NzEuMzQyIDIyNi4zNzFDODUyLjU3MiAyMjYuMzcxIDgzNS4zMTQgMjIyLjA1NyA4MTkuNTc3IDIxMy40M0M4MDQuMDMgMjA0LjgwMiA3OTEuNjA4IDE5Mi43OTkgNzgyLjMxOSAxNzcuNDJDNzczLjIxNSAxNjEuODUyIDc2OC42NjcgMTQ0LjQxIDc2OC42NjcgMTI1LjA5MkM3NjguNjY3IDEwNS43NzQgNzczLjIxNSA4OC40MjQ4IDc4Mi4zMTkgNzMuMDQ1OEM3OTEuNjA4IDU3LjY2NjEgODA0LjAzIDQ1LjY2MjcgODE5LjU3NyAzNy4wMzUxQzgzNS4zMTQgMjguNDA3NiA4NTIuNTcyIDI0LjA5MzkgODcxLjM0MiAyNC4wOTM5Qzg5MC4xMTIgMjQuMDkzOSA5MDcuMjc0IDI4LjQwNzYgOTIyLjgyNSAzNy4wMzUxQzkzOC41NTggNDUuNjYyNyA5NTAuODg3IDU3LjY2NjEgOTU5Ljc5NiA3My4wNDU4Qzk2OC44OTYgODguNDI0OCA5NzMuNDQ4IDEwNS43NzQgOTczLjQ0OCAxMjUuMDkyQzk3My40NDggMTQxLjk3MiA5NjkuOTM4IDE1Ny40NDUgOTYyLjkyNSAxNzEuNTEyQzk1Ni4xMDEgMTg1LjM5IDk0Ni41MjQgMTk2LjkyNSA5MzQuMTk4IDIwNi4xMTVMOTc4IDI1OC4xNjFIOTE5LjEyM1pNODE4LjQzOSAxMjUuMDkyQzgxOC40MzkgMTQyLjUzNCA4MjMuMTc3IDE1Ni41MDcgODMyLjY2MSAxNjcuMDFDODQyLjMzIDE3Ny4zMjYgODU1LjIyNSAxODIuNDgzIDg3MS4zNDIgMTgyLjQ4M0M4ODcuMjcgMTgyLjQ4MyA4OTkuOTczIDE3Ny4yMzIgOTA5LjQ1NCAxNjYuNzI5QzkxOS4xMjMgMTU2LjIyNiA5MjMuOTYgMTQyLjM0NyA5MjMuOTYgMTI1LjA5MkM5MjMuOTYgMTA3LjY0OSA5MTkuMTIzIDkzLjc3MDIgOTA5LjQ1NCA4My40NTQ3Qzg5OS45NzMgNzIuOTUxOSA4ODcuMjcgNjcuNzAwMSA4NzEuMzQyIDY3LjcwMDFDODU1LjIyNSA2Ny43MDAxIDg0Mi4zMyA3Mi44NTc5IDgzMi42NjEgODMuMTczNEM4MjMuMTc3IDkzLjQ4OSA4MTguNDM5IDEwNy40NjIgODE4LjQzOSAxMjUuMDkyWiIgZmlsbD0iIzAxNkFDOSIvPgo8L3N2Zz4K" style="height:32px;object-fit:contain;margin-bottom:6px;display:block;">
+          <div style="font-size:24px;color:var(--text-primary);font-weight:600;margin-bottom:4px;">Multi-Platform Creative Research</div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <h1 id="main-title" style="color:var(--text-primary);margin:0;">OBD Fuel Saver - SynGas</h1>
+            <button onclick="editTitle()" title="Edit title" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.7;padding:2px;line-height:1;flex-shrink:0;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
+            </button>
+            <a id="title-link-btn" href="#" target="_blank" rel="noopener" title="Open link" onclick="return openTitleLink(event)" style="display:none;color:var(--text-secondary);opacity:0.7;flex-shrink:0;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+        <div id="header-img-box" onclick="document.getElementById('header-img-input').click()" title="Click to upload image" style="width:160px;height:80px;border:2px dashed var(--border-mid);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;overflow:hidden;background:var(--bg-secondary);align-self:center;position:relative;">
+          <span id="header-img-label" style="color:var(--text-secondary);font-size:11px;pointer-events:none;">+ Add image</span>
+          <img id="header-img-bg" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(8px) brightness(0.7);transform:scale(1.1);">
+          <img id="header-img-preview" style="display:none;position:relative;max-width:100%;max-height:100%;object-fit:contain;z-index:1;">
+        </div>
+        <input type="file" id="header-img-input" accept="image/*" style="display:none;" onchange="loadHeaderImg(this)">
       </div>
       <div class="save-bar">
         <div class="last-edited" id="lastEditedBar" style="display:none"><span>✏️</span><span id="lastEditedText"></span></div>
@@ -514,6 +529,87 @@ const LS_SETTINGS = 'ecoverage_settings_v1';
 const LS_LOCAL    = 'ecoverage_local_v2';
 let BIN_ID  = '69fb9158adc21f119a6273c4';
 let API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6WvXt6';
+
+function editTitle() {
+  const h1 = document.getElementById('main-title');
+  const current = h1.dataset.text || h1.textContent;
+  const currentUrl = h1.dataset.url || '';
+
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'display:flex;flex-direction:column;gap:4px;';
+
+  const textIn = document.createElement('input');
+  textIn.type = 'text'; textIn.value = current; textIn.placeholder = 'Title text';
+  textIn.style.cssText = 'font-size:24px;font-weight:600;border:none;border-bottom:2px solid var(--accent,#4A90D9);background:transparent;color:var(--text-primary);outline:none;width:100%;font-family:inherit;';
+
+  const urlIn = document.createElement('input');
+  urlIn.type = 'text'; urlIn.value = currentUrl; urlIn.placeholder = 'Link URL (optional)';
+  urlIn.style.cssText = 'font-size:12px;border:none;border-bottom:1px solid var(--border-mid);background:transparent;color:var(--text-secondary);outline:none;width:100%;font-family:inherit;';
+
+  wrap.appendChild(textIn); wrap.appendChild(urlIn);
+  h1.replaceWith(wrap); textIn.focus(); textIn.select();
+
+  const save = () => {
+    const newText = textIn.value.trim() || current;
+    const newUrl = urlIn.value.trim();
+    const newH1 = document.createElement('h1');
+    newH1.id = 'main-title';
+    newH1.title = ''; newH1.style.cursor = 'default'; newH1.style.color = 'var(--text-primary)';
+    newH1.dataset.text = newText; newH1.dataset.url = newUrl;
+    if (newUrl) {
+      const a = document.createElement('a');
+      a.href = newUrl; a.target = '_blank'; a.rel = 'noopener';
+      a.textContent = newText; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;';
+      newH1.appendChild(a);
+    } else {
+      newH1.textContent = newText;
+    }
+    wrap.replaceWith(newH1);
+    localStorage.setItem('ecoverage_title', newText);
+    localStorage.setItem('ecoverage_title_url', newUrl);
+    updateTitleLinkBtn(newUrl);
+    doSave();
+  };
+
+  let saved = false;
+  const guardedSave = () => { if (!saved) { saved = true; save(); } };
+  textIn.addEventListener('blur', () => { setTimeout(() => { if (document.activeElement !== urlIn) guardedSave(); }, 100); });
+  urlIn.addEventListener('blur', () => { setTimeout(guardedSave, 100); });
+  textIn.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); urlIn.focus(); } if (e.key === 'Escape') { wrap.replaceWith(document.getElementById('main-title') || wrap); } });
+  urlIn.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); urlIn.blur(); } if (e.key === 'Escape') { urlIn.blur(); } });
+}
+
+function loadHeaderImg(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const label = document.getElementById('header-img-label');
+    const preview = document.getElementById('header-img-preview');
+    const bg = document.getElementById('header-img-bg');
+    const box = document.getElementById('header-img-box');
+    preview.src = bg.src = e.target.result;
+    preview.style.display = 'block';
+    bg.style.display = 'block';
+    label.style.display = 'none';
+    box.style.border = 'none';
+    localStorage.setItem('ecoverage_header_img', e.target.result);
+    doSave();
+  };
+  reader.readAsDataURL(file);
+}
+
+function openTitleLink(e) {
+  const btn = document.getElementById('title-link-btn');
+  if (!btn || !btn.href || btn.href === '#' || btn.href === location.href + '#') return false;
+  return true; // let browser open it
+}
+
+function updateTitleLinkBtn(url) {
+  const btn = document.getElementById('title-link-btn');
+  if (!btn) return;
+  if (url) { btn.href = url; btn.style.display = 'inline-flex'; }
+  else { btn.href = '#'; btn.style.display = 'none'; }
+}
 
 function toggleTheme() {
   const isDark = document.body.classList.contains('force-dark');
@@ -1305,7 +1401,7 @@ function initRowResize(table) {
           td.style.maxHeight = newH + 'px';
           td.style.overflow = 'hidden';
         });
-        tr.querySelectorAll('textarea').forEach(ta => { ta.style.height = newH + 'px'; ta.style.marginTop = ''; });
+        tr.querySelectorAll('textarea').forEach(ta => { if (getComputedStyle(ta).position !== 'absolute') { ta.style.height = newH + 'px'; } ta.style.marginTop = ''; });
         centerTextareas();
         tr.querySelectorAll('img.media-thumb').forEach(img => { img.style.maxHeight = newH + 'px'; });
         centerTextareas();
@@ -1341,13 +1437,26 @@ function initAllColResize() {
 }
 
 function autoGrow(el) {
+  if (!el || el.tagName !== 'TEXTAREA') return;
+  if (getComputedStyle(el).position === 'absolute') return;
   el.style.height = 'auto';
   el.style.height = el.scrollHeight + 'px';
 }
 
 function _growOne(el) { autoGrow(el); }
 
-function centerTextareas() {}
+function centerTextareas() {
+  const sel = '#ads-body td.frozen-offer textarea, #ads-body td:nth-child(5) textarea, #ads-body td:nth-child(6) textarea';
+  document.querySelectorAll(sel).forEach(ta => {
+    ta.style.paddingTop = '';
+    const tdH = ta.closest('td').offsetHeight;
+    const lineH = parseInt(getComputedStyle(ta).lineHeight) || 14;
+    const lines = ta.value ? ta.value.split('\n').length : 1;
+    const contentH = lines * lineH;
+    const pad = Math.max(3, Math.floor((tdH - contentH) / 2));
+    ta.style.paddingTop = pad + 'px';
+  });
+}
 
 function resizeAllInputs() { document.querySelectorAll('tbody td textarea').forEach(ta => { autoGrow(ta); ta.style.marginTop = ''; }); }
 function renumberTable(id) {
@@ -1856,7 +1965,7 @@ function showToast(msg, type) {
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
   setStatus('', 'Auto-save on');
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); setTimeout(centerTextareas, 300); const t = localStorage.getItem('ecoverage_title'); const tu = localStorage.getItem('ecoverage_title_url') || ''; if (t) { const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } } updateTitleLinkBtn(tu); const img = localStorage.getItem('ecoverage_header_img'); if (img) { const p = document.getElementById('header-img-preview'); const l = document.getElementById('header-img-label'); const bg = document.getElementById('header-img-bg'); const box = document.getElementById('header-img-box'); if (p) { p.src = img; p.style.display = 'block'; if(bg){bg.src=img;bg.style.display='block';} if(l) l.style.display = 'none'; if(box) box.style.border='none'; } } }, 0);
 })();
 </script>
 </body>
