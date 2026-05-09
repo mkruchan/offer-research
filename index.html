@@ -188,7 +188,7 @@
     .sel-wrap { position: relative; width: 100%; height: 100%; min-height: 22px; overflow: hidden; display: flex; align-items: center; }
     .sel-wrap select { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
     .sel-display { display: flex; align-items: center; gap: 5px; padding: 0 7px; min-height: 22px; font-size: 10px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; width: 100%; }
-    .sel-badge { display: inline-block; padding: 1px 6px; border-radius: 20px; font-size: 9px; font-weight: 500; white-space: nowrap; flex-shrink: 0; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis; }
+    .sel-badge { display: inline-block; padding: 1px 6px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; flex-shrink: 0; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis; }
     .sel-arrow { margin-left: 4px; color: var(--text-secondary); font-size: 10px; flex-shrink: 0; }
     tbody td:has(.sel-wrap) { vertical-align: middle !important; overflow: hidden; padding: 0 !important; }
 
@@ -263,7 +263,8 @@
     .add-row { padding: 8px 12px; border-top: 1px solid var(--border-light); }
     .add-btn { width: 100%; padding: 6px 12px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; }
     .add-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
-    .notes-body { position: relative; }
+    .notes-body { position: relative; display: flex; flex-direction: column; min-height: 120px; }
+    .notes-body textarea { flex: 1; min-height: 80px; }
     .notes-body textarea { width: 100%; min-height: 90px; padding: 12px 16px; font-size: 13px; font-family: inherit; color: var(--text-primary); background: transparent; border: none; resize: none; outline: none; line-height: 1.6; box-sizing: border-box; overflow-y: auto; display: block; cursor: text; }
     .notes-body textarea:hover { cursor: text; }
     .notes-resize-handle { height: 12px; cursor: row-resize; background: transparent; display: flex; align-items: center; justify-content: center; }
@@ -745,7 +746,7 @@ function buildTrafficGrid() {
     };
     const clr = CHIP_COLORS[val] || {bg:'#E5E7EB',color:'#374151'};
     const chipHtml = hasVal
-      ? `<span style="background:${clr.bg};color:${clr.color};border-radius:20px;padding:2px 10px;font-size:13px;font-weight:500;white-space:nowrap;">${text}</span>`
+      ? `<span style="background:${clr.bg};color:${clr.color};border-radius:20px;padding:1px 8px;font-size:11px;font-weight:500;white-space:nowrap;">${text}</span>`
       : `<span style="opacity:0.4;font-size:10px;">— none —</span>`;
     const tdIdx = Array.from(td.parentElement.children).indexOf(td) + 1;
     const opts = Array.from(sel.options).map(o =>
@@ -862,7 +863,7 @@ function buildFunnelsGrid() {
     const fv = funnelSel?.value || '';
     const ft = fv ? (funnelSel.options[funnelSel.selectedIndex]?.text || fv) : '';
     const fc = FUNNEL_CHIP_COLORS[fv] || {bg:'#E5E7EB',color:'#374151'};
-    const funnelChipHtml = fv ? `<span style="background:${fc.bg};color:${fc.color};border-radius:20px;padding:2px 10px;font-size:13px;font-weight:500;white-space:nowrap;">${ft}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
+    const funnelChipHtml = fv ? `<span style="background:${fc.bg};color:${fc.color};border-radius:20px;padding:1px 8px;font-size:11px;font-weight:500;white-space:nowrap;">${ft}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
     const typeChip = funnelSel ? `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
       <span style="opacity:0.6;">Funnel type:</span>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
@@ -972,7 +973,7 @@ function buildAdsGrid() {
     };
     const clr = CHIP_COLORS[val] || {bg:'#E5E7EB',color:'#374151'};
     const chipHtml = hasVal
-      ? `<span style="background:${clr.bg};color:${clr.color};border-radius:20px;padding:2px 10px;font-size:13px;font-weight:500;white-space:nowrap;">${text}</span>`
+      ? `<span style="background:${clr.bg};color:${clr.color};border-radius:20px;padding:1px 8px;font-size:11px;font-weight:500;white-space:nowrap;">${text}</span>`
       : `<span style="opacity:0.4;font-size:10px;">— none —</span>`;
     const tdIdx = Array.from(td.parentElement.children).indexOf(td) + 1;
     const opts = Array.from(sel.options).map(o =>
@@ -1545,8 +1546,9 @@ let _notesResizeState = null;
 function notesResizeStart(e, handle) {
   const id = handle.dataset.for;
   const ta = document.getElementById(id);
-  if (!ta) return;
-  _notesResizeState = { ta, id, startY: e.clientY, startH: ta.offsetHeight };
+  const body = ta ? ta.closest('.notes-body') : null;
+  if (!ta || !body) return;
+  _notesResizeState = { ta, body, id, startY: e.clientY, startH: body.offsetHeight };
   document.body.style.userSelect = 'none';
   document.body.style.cursor = 'row-resize';
   e.preventDefault();
@@ -1554,12 +1556,13 @@ function notesResizeStart(e, handle) {
 
 document.addEventListener('mousemove', (e) => {
   if (!_notesResizeState) return;
-  _notesResizeState.ta.style.height = Math.max(60, _notesResizeState.startH + (e.clientY - _notesResizeState.startY)) + 'px';
+  const h = Math.max(80, _notesResizeState.startH + (e.clientY - _notesResizeState.startY));
+  _notesResizeState.body.style.height = h + 'px';
 });
 
 document.addEventListener('mouseup', () => {
   if (!_notesResizeState) return;
-  localStorage.setItem('notes-h-' + _notesResizeState.id, _notesResizeState.ta.style.height);
+  localStorage.setItem('notes-h-' + _notesResizeState.id, _notesResizeState.body.style.height);
   try { doSave(); } catch(e) {}
   document.body.style.userSelect = '';
   document.body.style.cursor = '';
@@ -1570,8 +1573,9 @@ function initNotesResize() {
   ['notes-takeaways', 'notes-actions'].forEach(id => {
     const ta = document.getElementById(id);
     if (!ta) return;
+    const body = ta.closest('.notes-body');
     const saved = localStorage.getItem('notes-h-' + id);
-    if (saved) ta.style.height = saved;
+    if (saved && body) body.style.height = saved;
   });
 }function loadSettings() {
   try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}'); BIN_ID = s.binId||BIN_ID; API_KEY = s.apiKey||API_KEY; } catch(e){}
