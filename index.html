@@ -357,7 +357,11 @@
     .grid-card-link { margin-top:auto; padding-top:6px; }
     .grid-card-link a { font-size:10px; color:var(--accent,#4A90D9); text-decoration:none; display:flex; align-items:center; gap:3px; }
     .grid-card-link a:hover { text-decoration:underline; }
-    .grid-card-empty { color:var(--text-secondary); font-size:11px; text-align:center; padding:40px; grid-column:1/-1; }
+    .grid-card.dragging { opacity: 0.4; transform: scale(0.97); }
+    .grid-card.drag-over { outline: 2px solid var(--accent,#4A90D9); outline-offset: 2px; }
+    .grid-card { cursor: default; transition: transform 0.1s, opacity 0.1s; }
+    .grid-card[draggable="true"] { cursor: grab; }
+    .grid-card[draggable="true"]:active { cursor: grabbing; }
     /* Lightbox */
     #lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; cursor:zoom-out; }
     #lightbox.open { display:flex; }
@@ -484,8 +488,8 @@
       </div>
       <span class="section-title">Top traffic sources</span>
       <div style="display:flex;gap:6px;margin-left:12px;">
-        <button id="traffic-view-grid" onclick="setTrafficView('grid')" title="Grid view" style="background:transparent;border:1px solid var(--border-mid);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--text-secondary);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Grid</button>
-        <button id="traffic-view-table" onclick="setTrafficView('table')" title="Table view" style="background:var(--accent-muted,rgba(74,144,217,0.2));border:1px solid var(--accent,#4A90D9);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--accent,#4A90D9);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="14" rx="1"/><path d="M1 5h14M1 9h14M5 5v9"/></svg>Table</button>
+        <button id="traffic-view-grid" onclick="setTrafficView('grid')" title="Grid view" style="background:var(--accent-muted,rgba(74,144,217,0.2));border:1px solid var(--accent,#4A90D9);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--text-secondary);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Grid</button>
+        <button id="traffic-view-table" onclick="setTrafficView('table')" title="Table view" style="background:transparent;border:1px solid var(--border-mid);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--text-secondary);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="14" rx="1"/><path d="M1 5h14M1 9h14M5 5v9"/></svg>Table</button>
       </div>
     </div>
     <div class="section-body">
@@ -512,10 +516,10 @@
       </div>
       <span class="section-title">Top ads</span>
       <div style="display:flex;gap:6px;margin-left:12px;">
-        <button id="ads-view-grid" onclick="setAdsView('grid')" title="Grid view" style="background:transparent;border:1px solid var(--border-mid);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--text-secondary);font-size:11px;display:flex;align-items:center;gap:5px;">
+        <button id="ads-view-grid" onclick="setAdsView('grid')" title="Grid view" style="background:var(--accent-muted,rgba(74,144,217,0.2));border:1px solid var(--accent,#4A90D9);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--text-secondary);font-size:11px;display:flex;align-items:center;gap:5px;">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Grid
         </button>
-        <button id="ads-view-table" onclick="setAdsView('table')" title="Table view" style="background:var(--accent-muted,rgba(74,144,217,0.2));border:1px solid var(--accent,#4A90D9);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--accent,#4A90D9);font-size:11px;display:flex;align-items:center;gap:5px;">
+        <button id="ads-view-table" onclick="setAdsView('table')" title="Table view" style="background:transparent;border:1px solid var(--border-mid);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--accent,#4A90D9);font-size:11px;display:flex;align-items:center;gap:5px;">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="14" rx="1"/><path d="M1 5h14M1 9h14M5 5v9"/></svg>Table
         </button>
       </div>
@@ -627,23 +631,33 @@ function editTitle() {
   urlIn.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); urlIn.blur(); } if (e.key === 'Escape') { urlIn.blur(); } });
 }
 
-function loadHeaderImg(input) {
+async function loadHeaderImg(input) {
   const file = input.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const label = document.getElementById('header-img-label');
-    const preview = document.getElementById('header-img-preview');
-    const bg = document.getElementById('header-img-bg');
-    const box = document.getElementById('header-img-box');
-    preview.src = bg.src = e.target.result;
+  const box = document.getElementById('header-img-box');
+  const label = document.getElementById('header-img-label');
+  const preview = document.getElementById('header-img-preview');
+  const bg = document.getElementById('header-img-bg');
+  if (label) label.textContent = 'Uploading…';
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+  try {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method: 'POST', body: formData });
+    if (!res.ok) throw new Error('Upload failed');
+    const data = await res.json();
+    const url = data.secure_url;
+    preview.src = bg.src = url;
     preview.style.display = 'block';
     bg.style.display = 'block';
-    label.style.display = 'none';
-    box.style.border = 'none';
-    localStorage.setItem('ecoverage_header_img', e.target.result);
+    if (label) label.style.display = 'none';
+    if (box) box.style.border = 'none';
+    localStorage.setItem('ecoverage_header_img', url);
     doSave();
-  };
-  reader.readAsDataURL(file);
+  } catch(e) {
+    if (label) label.textContent = '+ Add image';
+    console.error('Header img upload error:', e);
+  }
 }
 
 function setViewMode(tableId, gridId, tableBtnId, gridBtnId, buildFn, storageKey, mode) {
@@ -748,20 +762,20 @@ function buildTrafficGrid() {
   const getText = td => td?.querySelector('textarea')?.value || '';
   const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
     <span style="opacity:0.6;">${label}:</span>
-    <div contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:var(--text-primary);outline:none;display:inline;cursor:text;white-space:pre-wrap;word-break:break-word;"
+    <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
+      style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
+      onclick="gcExpand(this)"
       oninput="gridInlineEdit(this)"
-      onfocus="this.style.background='var(--bg-primary)';this.style.borderRadius='3px';this.style.padding='1px 3px';"
-      onblur="this.style.background='';this.style.padding=''"
+      onblur="this.style.background='';this.style.padding='';gcCollapse(this)"
     >${val||''}</div>
   </div>`;
   const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
     <span style="opacity:0.6;">${label}:</span>
-    <div contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:var(--text-primary);outline:none;display:inline;cursor:text;white-space:pre-wrap;word-break:break-word;"
+    <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
+      style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
+      onclick="gcExpand(this)"
       oninput="gridInlineEdit(this)"
-      onfocus="this.style.background='var(--bg-primary)';this.style.borderRadius='3px';this.style.padding='1px 3px';"
-      onblur="this.style.background='';this.style.padding=''"
+      onblur="this.style.background='';this.style.padding='';gcCollapse(this)"
     >${val||''}</div>
   </div>`;
 
@@ -776,6 +790,10 @@ function buildTrafficGrid() {
       <div class="grid-card-body">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:9px;color:var(--text-secondary);background:var(--bg-primary);border-radius:4px;padding:1px 5px;">#${idx+1}</span>
+          <div style="display:flex;align-items:center;gap:6px;" onclick="event.stopPropagation()">
+          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:var(--text-secondary);opacity:0.6;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.6;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">⧉</button>
+          <button title="Delete" onclick="gridRemoveRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.6;padding:2px;font-size:14px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">×</button>
+        </div>
         </div>
         ${renderChip(tds[1], 'Traffic source', idx, 'traffic-body')}
         ${renderChip(tds[4], 'Traffic type', idx, 'traffic-body')}
@@ -786,6 +804,7 @@ function buildTrafficGrid() {
     </div>`;
   }).join('');
   grid.innerHTML = `<div class="ads-grid-inner">${cards}</div>`;
+  initGridDrag('traffic-grid', 'traffic-body');
 }
 
 function buildFunnelsGrid() {
@@ -805,20 +824,20 @@ function buildFunnelsGrid() {
   const mkLink = (url, label) => url ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
   const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
     <span style="opacity:0.6;">${label}:</span>
-    <div contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:var(--text-primary);outline:none;display:inline;cursor:text;white-space:pre-wrap;word-break:break-word;"
+    <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
+      style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
+      onclick="gcExpand(this)"
       oninput="gridInlineEdit(this)"
-      onfocus="this.style.background='var(--bg-primary)';this.style.borderRadius='3px';this.style.padding='1px 3px';"
-      onblur="this.style.background='';this.style.padding=''"
+      onblur="this.style.background='';this.style.padding='';gcCollapse(this)"
     >${val||''}</div>
   </div>`;
   const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
     <span style="opacity:0.6;">${label}:</span>
-    <div contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:var(--text-primary);outline:none;display:inline;cursor:text;white-space:pre-wrap;word-break:break-word;"
+    <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
+      style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
+      onclick="gcExpand(this)"
       oninput="gridInlineEdit(this)"
-      onfocus="this.style.background='var(--bg-primary)';this.style.borderRadius='3px';this.style.padding='1px 3px';"
-      onblur="this.style.background='';this.style.padding=''"
+      onblur="this.style.background='';this.style.padding='';gcCollapse(this)"
     >${val||''}</div>
   </div>`;
 
@@ -855,42 +874,30 @@ function buildFunnelsGrid() {
       <div class="grid-card-body">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:9px;color:var(--text-secondary);background:var(--bg-primary);border-radius:4px;padding:1px 5px;">#${idx+1}</span>
+          <div style="display:flex;align-items:center;gap:6px;" onclick="event.stopPropagation()">
+          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:var(--text-secondary);opacity:0.6;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.6;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">⧉</button>
+          <button title="Delete" onclick="gridRemoveRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.6;padding:2px;font-size:14px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">×</button>
+        </div>
         </div>
         <div class="grid-card-offer">${advertiser || '<span style="opacity:0.4">No advertiser</span>'}</div>
         ${typeChip}
         ${gfField('Geo', geo, 'td:nth-child(4)', idx, 'funnels-body')}
         ${gfField('Observations', obs, 'td:nth-child(6)', idx, 'funnels-body')}
-        ${linkUrl ? `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">${mkLink(linkUrl,'Funnel link')}</div>` : ''}
+        <div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;display:flex;align-items:center;gap:4px;" onclick="event.stopPropagation()">
+          ${linkUrl
+            ? `<a href="${linkUrl}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>Funnel link</a>`
+            : `<span style="font-size:10px;color:var(--text-secondary);opacity:0.5;flex:1;">Funnel link</span>`
+          }
+          <button onclick="gridEditLink(this,${idx},'funnels-body',2)" title="Edit URL" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.5;padding:1px;line-height:1;flex-shrink:0;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg></button>
+        </div>
       </div>
     </div>`;
   }).join('');
   grid.innerHTML = `<div class="ads-grid-inner">${cards}</div>`;
+  initGridDrag('funnels-grid', 'funnels-body');
 }
 
-function setAdsView(mode) {
-  const tableWrap = document.querySelector('#ads-table').closest('.table-scroll');
-  const grid = document.getElementById('ads-grid');
-  const btnTable = document.getElementById('ads-view-table');
-  const btnGrid = document.getElementById('ads-view-grid');
-  const accent = 'var(--accent,#4A90D9)';
-  const accentMuted = 'var(--accent-muted,rgba(74,144,217,0.2))';
-  const addBtn = grid.nextElementSibling?.querySelector('.add-btn');
-  if (mode === 'grid') {
-    tableWrap.style.display = 'none';
-    grid.style.display = 'block';
-    buildAdsGrid();
-    btnGrid.style.background = accentMuted; btnGrid.style.borderColor = accent; btnGrid.style.color = accent;
-    btnTable.style.background = 'transparent'; btnTable.style.borderColor = 'var(--border-mid)'; btnTable.style.color = 'var(--text-secondary)';
-    if (addBtn) addBtn.textContent = '+ Add card';
-  } else {
-    tableWrap.style.display = '';
-    grid.style.display = 'none';
-    btnTable.style.background = accentMuted; btnTable.style.borderColor = accent; btnTable.style.color = accent;
-    btnGrid.style.background = 'transparent'; btnGrid.style.borderColor = 'var(--border-mid)'; btnGrid.style.color = 'var(--text-secondary)';
-    if (addBtn) addBtn.textContent = '+ Add row';
-  }
-  localStorage.setItem('ads_view_mode', mode);
-}
+function setAdsView(mode) { setViewMode('ads-table','ads-grid','ads-view-table','ads-view-grid', buildAdsGrid,'ads_view_mode',mode); }
 
 function buildAdsGrid() {
   const grid = document.getElementById('ads-grid');
@@ -903,11 +910,11 @@ function buildAdsGrid() {
     ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
   const field = (label, val, taSelector, rowIdx) => `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
     <span style="opacity:0.6;">${label}:</span>
-    <div contenteditable="true" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
-      style="color:var(--text-primary);outline:none;display:inline;cursor:text;min-width:20px;white-space:pre-wrap;word-break:break-word;"
+    <div class="gce" contenteditable="true" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
+      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
+      onclick="gcExpand(this)"
       oninput="gridInlineEdit(this)"
-      onfocus="this.style.background='var(--bg-primary)';this.style.borderRadius='3px';this.style.padding='1px 3px';"
-      onblur="this.style.background='';this.style.padding=''"
+      onblur="this.style.background='';this.style.padding='';gcCollapse(this)"
     >${val||''}</div>
   </div>`;
 
@@ -1009,13 +1016,33 @@ function buildAdsGrid() {
           <input type="file" id="grid-upload-${idx}" accept="image/*,video/*" style="display:none;" onchange="gridUploadMedia(this,${idx})">
         </div>`;
 
-    const leftLinks = [mkLink(creativeUrl,'Creative'), mkLink(landingUrl,'Landing')].filter(Boolean).join('');
-    const rightLinks = [mkLink(spyUrl,'Spy tool'), mkLink(fanUrl,'Fan page')].filter(Boolean).join('');
-    const linkBlock = (leftLinks || rightLinks)
-      ? `<div style="display:flex;gap:12px;justify-content:space-between;padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;"><div style="display:flex;flex-direction:column;gap:3px;">${leftLinks}</div><div style="display:flex;flex-direction:column;gap:3px;text-align:right;">${rightLinks}</div></div>` : '';
+    const mkEditableLink = (url, label, tdIdx) => {
+      const hasUrl = url && url.startsWith('http');
+      return `<div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;" onclick="event.stopPropagation()">
+        ${hasUrl
+          ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
+          : `<span style="font-size:10px;color:var(--text-secondary);opacity:0.5;flex:1;">${label}</span>`
+        }
+        <button onclick="gridEditLink(this,${idx},'ads-body',${tdIdx})" title="Edit URL" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.5;padding:1px;line-height:1;flex-shrink:0;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg></button>
+      </div>`;
+    };
+    const linkBlock = `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">
+      <div style="display:flex;gap:8px;justify-content:space-between;">
+        <div style="flex:1;">${mkEditableLink(landingUrl,'Landing',7)}${mkEditableLink(creativeUrl,'Creative',11)}</div>
+        <div style="flex:1;">${mkEditableLink(spyUrl,'Spy tool',8)}${mkEditableLink(fanUrl,'Fan page',9)}</div>
+      </div>
+    </div>`;
 
     return `<div class="grid-card" >
-      <div style="position:relative;overflow:hidden;border-radius:8px 8px 0 0;">${imgHtml}<div style="position:absolute;top:4px;left:4px;background:var(--bg-secondary);border-radius:4px;padding:1px 5px;font-size:9px;color:var(--text-secondary);">#${num}</div></div>
+      <div style="position:relative;overflow:hidden;border-radius:8px 8px 0 0;">${imgHtml}
+        <div style="position:absolute;top:4px;left:4px;right:4px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="background:var(--bg-secondary);border-radius:4px;padding:1px 5px;font-size:9px;color:var(--text-secondary);">#${num}</span>
+          <div style="display:flex;align-items:center;gap:6px;" onclick="event.stopPropagation()">
+          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:var(--text-secondary);opacity:0.6;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.6;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">⧉</button>
+          <button title="Delete" onclick="gridRemoveRow(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.6;padding:2px;font-size:14px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">×</button>
+        </div>
+        </div>
+      </div>
       <div class="grid-card-body">
         <div class="grid-card-offer">${offer || '<span style="opacity:0.4">No offer</span>'}</div>
         ${renderChip(tds[2], 'Traffic source', idx, 'ads-body')}
@@ -1033,6 +1060,7 @@ function buildAdsGrid() {
     </div>`;
   }).join('');
   grid.innerHTML = `<div class="ads-grid-inner">${cards}</div>`;
+  initGridDrag('ads-grid', 'ads-body');
   }, 0);
 }
 
@@ -1051,6 +1079,7 @@ function gridChipEdit(sel) {
     tableSel.value = sel.value;
     updateBadge(tableSel);
     scheduleSave();
+    scheduleSnap();
     rebuildGridForTable(tableId);
   }
 }
@@ -1100,6 +1129,99 @@ async function gridUploadMedia(input, rowIdx) {
   }
 }
 
+function initGridDrag(gridId, tableId) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
+  const inner = grid.querySelector('.ads-grid-inner');
+  if (!inner) return;
+
+  let dragSrc = null;
+
+  inner.querySelectorAll('.grid-card').forEach(card => {
+    const handle = card.querySelector('.grid-drag-handle');
+    if (!handle) return;
+
+    // Enable drag only when handle is pressed
+    handle.addEventListener('mousedown', () => { card.draggable = true; });
+    handle.addEventListener('touchstart', () => { card.draggable = true; }, { passive: true });
+    document.addEventListener('mouseup', () => { if (!dragSrc) card.draggable = false; }, { once: false });
+
+    card.addEventListener('dragstart', (e) => {
+      dragSrc = card;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', '');
+    });
+
+    card.addEventListener('dragend', () => {
+      card.draggable = false;
+      card.classList.remove('dragging');
+      inner.querySelectorAll('.grid-card').forEach(c => c.classList.remove('drag-over'));
+      dragSrc = null;
+    });
+
+    card.addEventListener('dragover', (e) => {
+      if (!dragSrc || dragSrc === card) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      inner.querySelectorAll('.grid-card').forEach(c => c.classList.remove('drag-over'));
+      card.classList.add('drag-over');
+    });
+
+    card.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (!dragSrc || dragSrc === card) return;
+      const cards = Array.from(inner.querySelectorAll('.grid-card'));
+      const srcIdx = cards.indexOf(dragSrc);
+      const tgtIdx = cards.indexOf(card);
+      if (srcIdx === -1 || tgtIdx === -1) return;
+      const tbody = document.getElementById(tableId);
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const srcRow = rows[srcIdx], tgtRow = rows[tgtIdx];
+      if (!srcRow || !tgtRow) return;
+      if (srcIdx < tgtIdx) tgtRow.after(srcRow);
+      else tgtRow.before(srcRow);
+      renumberTable(tableId);
+      scheduleSave();
+      setTimeout(() => rebuildGridForTable(tableId), 50);
+    });
+  });
+}
+
+function gcExpand(el) {
+  el.style.display = 'block';
+  el.style.webkitLineClamp = '';
+  el.style.overflow = 'visible';
+  el.style.cursor = 'text';
+  el.style.background = 'var(--bg-primary)';
+  el.style.borderRadius = '3px';
+  el.style.padding = '1px 3px';
+  el.focus();
+  // place cursor at end
+  const range = document.createRange();
+  const sel = window.getSelection();
+  range.selectNodeContents(el);
+  range.collapse(false);
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+function gcCollapse(el) {
+  el.style.display = '-webkit-box';
+  el.style.webkitLineClamp = '2';
+  el.style.overflow = 'hidden';
+  el.style.cursor = 'pointer';
+}
+
+// Collapse all expanded grid fields when clicking outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('.gce')) {
+    document.querySelectorAll('.gce').forEach(el => {
+      if (el.style.overflow === 'visible') gcCollapse(el);
+    });
+  }
+});
+
 function gridInlineEdit(el) {
   const selector = el.dataset.ta;
   const rowIdx = parseInt(el.dataset.row);
@@ -1108,13 +1230,94 @@ function gridInlineEdit(el) {
   if (!tbody) return;
   const tr = tbody.querySelectorAll('tr')[rowIdx];
   if (!tr) return;
-  const ta = tr.querySelector(selector + ' textarea') || tr.querySelector(selector)?.querySelector('textarea');
+  const td = tr.querySelector(selector);
+  const ta = td ? td.querySelector('textarea') : null;
   if (ta) {
-    ta.value = el.innerText;
+    ta.value = el.innerText.replace(/\n$/, '');
     autoGrow(ta);
     centerTextareas();
   }
   scheduleSave();
+  scheduleSnap();
+}
+
+// Snap on blur of any contenteditable grid field
+document.addEventListener('focusout', function(e) {
+  if (e.target.contentEditable === 'true' && e.target.dataset.ta) {
+    snapForUndo();
+  }
+});
+
+function gridEditLink(btn, rowIdx, tableId, tdIdx) {
+  const wrap = btn.closest('div[onclick]');
+  if (!wrap) return;
+
+  const tbody = document.getElementById(tableId);
+  const tr = tbody.querySelectorAll('tr')[rowIdx];
+  if (!tr) return;
+  const td = tr.querySelectorAll('td')[tdIdx - 1];
+  if (!td) return;
+  const a = td.querySelector('a.link-chip');
+  const currentUrl = (a && a.href && a.href.startsWith('http')) ? a.href : '';
+
+  // Replace wrap content with inline input
+  const label = wrap.querySelector('a, span')?.textContent?.trim() || 'URL';
+  wrap.innerHTML = `<input type="url" value="${currentUrl}" placeholder="https://..." autocomplete="off"
+    style="flex:1;font-size:10px;padding:2px 4px;background:var(--bg-primary);border:1px solid var(--accent,#4A90D9);border-radius:4px;color:var(--text-primary);outline:none;width:100%;"
+    onkeydown="if(event.key==='Enter'){event.preventDefault();gridSaveLink(this,${rowIdx},'${tableId}',${tdIdx},'${label}')}if(event.key==='Escape'){rebuildGridForTable('${tableId}')}"
+    onblur="gridSaveLink(this,${rowIdx},'${tableId}',${tdIdx},'${label}')"
+  >`;
+  const input = wrap.querySelector('input');
+  input.focus(); input.select();
+}
+
+function gridSaveLink(input, rowIdx, tableId, tdIdx, label) {
+  if (input._saved) return; input._saved = true;
+  const tbody = document.getElementById(tableId);
+  const tr = tbody.querySelectorAll('tr')[rowIdx];
+  if (!tr) return;
+  const td = tr.querySelectorAll('td')[tdIdx - 1];
+  if (!td) return;
+  syncLinkCell(td, input.value.trim());
+  scheduleSave();
+  rebuildGridForTable(tableId);
+}
+
+function syncLinkCell(td, url) {
+  const a = td.querySelector('a.link-chip');
+  const empty = td.querySelector('.link-chip-empty, .link-add-btn');
+  const chipText = td.querySelector('.link-chip-text');
+  if (url && a) {
+    a.href = url;
+    if (chipText) chipText.textContent = url.replace(/^https?:\/\//, '').slice(0, 30);
+    a.style.display = '';
+    if (empty) empty.style.display = 'none';
+  } else if (a) {
+    a.href = '#';
+    a.style.display = 'none';
+    if (empty) empty.style.display = '';
+  }
+}
+
+function gridRemoveRow(idx, tableId) {
+  const tbody = document.getElementById(tableId);
+  const rows = tbody.querySelectorAll('tr');
+  if (rows[idx]) rows[idx].remove();
+  renumberTable(tableId);
+  scheduleSave();
+  rebuildGridForTable(tableId);
+}
+
+function gridDupRow(idx, tableId) {
+  const tbody = document.getElementById(tableId);
+  const rows = tbody.querySelectorAll('tr');
+  if (!rows[idx]) return;
+  const clone = rows[idx].cloneNode(true);
+  rows[idx].after(clone);
+  renumberTable(tableId);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); }, 0);
+  scheduleSave();
+  rebuildGridForTable(tableId);
 }
 
 function rebuildGridForTable(tableId) {
@@ -1212,8 +1415,23 @@ function applyThemeUI() {
 // ── Keyboard shortcuts ──
 document.addEventListener('keydown', function(e) {
   const mod = e.ctrlKey || e.metaKey;
-  if (mod && e.key === 'z' && !e.shiftKey) { e.preventDefault(); applyUndo(undoStack, redoStack); return; }
-  if (mod && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); applyUndo(redoStack, undoStack); return; }
+  if (mod && e.key === 'z' && !e.shiftKey) {
+    // If focus is in a contenteditable grid field, flush it first then undo
+    const ce = document.activeElement;
+    if (ce && ce.contentEditable === 'true' && ce.dataset.ta) {
+      ce.blur(); // flush gridInlineEdit via blur
+    }
+    e.preventDefault();
+    applyUndo(undoStack, redoStack);
+    return;
+  }
+  if (mod && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+    const ce = document.activeElement;
+    if (ce && ce.contentEditable === 'true' && ce.dataset.ta) ce.blur();
+    e.preventDefault();
+    applyUndo(redoStack, undoStack);
+    return;
+  }
   // Tab inside table cell moves to next cell
   if (e.key === 'Tab' && e.target.matches('tbody td textarea, tbody td input:not([type="file"])')) {
     const td = e.target.closest('td');
@@ -2286,7 +2504,11 @@ function restoreData(data) {
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','qty','type','notes']);
   restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','type','obs']);
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(data.colWidths); restoreRowHeights(data.rowHeights); centerTextareas(); initAllDragReorder(); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(data.colWidths); restoreRowHeights(data.rowHeights); centerTextareas(); initAllDragReorder();
+    const vm = localStorage.getItem('ads_view_mode'); setAdsView(vm === 'table' ? 'table' : 'grid');
+    const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'table' ? 'table' : 'grid');
+    const fvm = localStorage.getItem('funnels_view_mode'); setFunnelsView(fvm === 'grid' ? 'grid' : 'table');
+  }, 0);
   return true;
 }
 
@@ -2437,7 +2659,12 @@ function applyUndo(stack, otherStack) {
   const snap = stack.pop();
   lastSnap = snap;
   restoreData(JSON.parse(snap));
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); updateFrozenOffsets(); centerTextareas(); }, 0);
+  setTimeout(() => {
+    resizeAllInputs(); updateAllBadges(); syncAllLinks(); updateFrozenOffsets(); centerTextareas();
+    if (document.getElementById('ads-grid').style.display !== 'none') buildAdsGrid();
+    if (document.getElementById('traffic-grid').style.display !== 'none') buildTrafficGrid();
+    if (document.getElementById('funnels-grid').style.display !== 'none') buildFunnelsGrid();
+  }, 0);
 }
 
 function scheduleSave() {
