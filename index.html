@@ -345,6 +345,19 @@
 
     /* ── Last edited indicator ── */
     .last-edited { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+    .ads-grid-inner { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; }
+    .grid-card { background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:8px; display:flex; flex-direction:column; }
+    .grid-card-img { width:100%; aspect-ratio:4/3; object-fit:cover; background:var(--bg-primary); display:block; cursor:pointer; }
+    .grid-card-img-empty { width:100%; aspect-ratio:4/3; background:var(--bg-primary); display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:10px; }
+    .grid-card-body { padding:8px; display:flex; flex-direction:column; gap:4px; flex:1; user-select:text; -webkit-user-select:text; }
+    .grid-card-body * { user-select:text; -webkit-user-select:text; }
+    .grid-card-offer { font-size:11px; font-weight:600; color:var(--text-primary); line-height:1.3; }
+    .grid-card-meta { font-size:10px; color:var(--text-secondary); display:flex; flex-wrap:wrap; gap:3px; }
+    .grid-card-badge { background:var(--bg-primary); border:1px solid var(--border-light); border-radius:10px; padding:1px 6px; font-size:9px; }
+    .grid-card-link { margin-top:auto; padding-top:6px; }
+    .grid-card-link a { font-size:10px; color:var(--accent,#4A90D9); text-decoration:none; display:flex; align-items:center; gap:3px; }
+    .grid-card-link a:hover { text-decoration:underline; }
+    .grid-card-empty { color:var(--text-secondary); font-size:11px; text-align:center; padding:40px; grid-column:1/-1; }
   </style>
 </head>
 <body>
@@ -462,6 +475,10 @@
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 12 L5 8 L8 10 L11 5 L14 7" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <span class="section-title">Top traffic sources</span>
+      <div style="display:flex;gap:6px;margin-left:12px;">
+        <button id="traffic-view-grid" onclick="setTrafficView('grid')" title="Grid view" style="background:transparent;border:1px solid var(--border-mid);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--text-secondary);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Grid</button>
+        <button id="traffic-view-table" onclick="setTrafficView('table')" title="Table view" style="background:var(--accent-muted,rgba(74,144,217,0.2));border:1px solid var(--accent,#4A90D9);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--accent,#4A90D9);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="14" rx="1"/><path d="M1 5h14M1 9h14M5 5v9"/></svg>Table</button>
+      </div>
     </div>
     <div class="section-body">
       <div class="table-scroll">
@@ -475,6 +492,7 @@
           <th class="remove-col"></th>
         </tr></thead><tbody id="traffic-body"></tbody></table>
       </div>
+      <div id="traffic-grid" style="display:none;padding:16px;"></div>
       <div class="add-row"><button class="add-btn" onclick="addRow('traffic-body',trafficRow)" title="Ctrl+Enter to add row from last cell">+ Add row</button></div>
     </div>
   </div>
@@ -485,6 +503,14 @@
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8" rx="1.5" stroke="#854F0B" stroke-width="1.5"/><path d="M5 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1" stroke="#854F0B" stroke-width="1.5"/></svg>
       </div>
       <span class="section-title">Top ads</span>
+      <div style="display:flex;gap:6px;margin-left:12px;">
+        <button id="ads-view-grid" onclick="setAdsView('grid')" title="Grid view" style="background:transparent;border:1px solid var(--border-mid);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--text-secondary);font-size:11px;display:flex;align-items:center;gap:5px;">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Grid
+        </button>
+        <button id="ads-view-table" onclick="setAdsView('table')" title="Table view" style="background:var(--accent-muted,rgba(74,144,217,0.2));border:1px solid var(--accent,#4A90D9);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--accent,#4A90D9);font-size:11px;display:flex;align-items:center;gap:5px;">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="14" rx="1"/><path d="M1 5h14M1 9h14M5 5v9"/></svg>Table
+        </button>
+      </div>
     </div>
     <div class="section-body">
       <div class="table-scroll">
@@ -500,6 +526,7 @@
           <th class="remove-col"></th>
         </tr></thead><tbody id="ads-body"></tbody></table>
       </div>
+      <div id="ads-grid" style="display:none;padding:16px;"></div>
       <div class="add-row"><button class="add-btn" onclick="addRow('ads-body',adsRow)" title="Ctrl+Enter to add row from last cell">+ Add row</button></div>
     </div>
   </div>
@@ -510,6 +537,10 @@
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 13 L3 8 M7 13 L7 5 M11 13 L11 10 M13 4 L11 2 L9 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <span class="section-title">Top funnels used by advertisers</span>
+      <div style="display:flex;gap:6px;margin-left:12px;">
+        <button id="funnels-view-grid" onclick="setFunnelsView('grid')" title="Grid view" style="background:transparent;border:1px solid var(--border-mid);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--text-secondary);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Grid</button>
+        <button id="funnels-view-table" onclick="setFunnelsView('table')" title="Table view" style="background:var(--accent-muted,rgba(74,144,217,0.2));border:1px solid var(--accent,#4A90D9);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--accent,#4A90D9);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="14" rx="1"/><path d="M1 5h14M1 9h14M5 5v9"/></svg>Table</button>
+      </div>
     </div>
     <div class="section-body">
       <div class="table-scroll">
@@ -520,6 +551,7 @@
           <th class="remove-col"></th>
         </tr></thead><tbody id="funnels-body"></tbody></table>
       </div>
+      <div id="funnels-grid" style="display:none;padding:16px;"></div>
       <div class="add-row"><button class="add-btn" onclick="addRow('funnels-body',funnelRow)" title="Ctrl+Enter to add row from last cell">+ Add row</button></div>
     </div>
   </div>
@@ -602,9 +634,284 @@ function loadHeaderImg(input) {
   reader.readAsDataURL(file);
 }
 
+function setViewMode(tableId, gridId, tableBtnId, gridBtnId, buildFn, storageKey, mode) {
+  const tableWrap = document.querySelector('#'+tableId).closest('.table-scroll');
+  const grid = document.getElementById(gridId);
+  const btnTable = document.getElementById(tableBtnId);
+  const btnGrid = document.getElementById(gridBtnId);
+  const accent = 'var(--accent,#4A90D9)', accentMuted = 'var(--accent-muted,rgba(74,144,217,0.2))';
+  // Find the add-row button in the same section
+  const addBtn = grid.nextElementSibling?.querySelector('.add-btn');
+  if (mode === 'grid') {
+    tableWrap.style.display = 'none'; grid.style.display = 'block'; buildFn();
+    btnGrid.style.background = accentMuted; btnGrid.style.borderColor = accent; btnGrid.style.color = accent;
+    btnTable.style.background = 'transparent'; btnTable.style.borderColor = 'var(--border-mid)'; btnTable.style.color = 'var(--text-secondary)';
+    if (addBtn) addBtn.textContent = '+ Add card';
+  } else {
+    tableWrap.style.display = ''; grid.style.display = 'none';
+    btnTable.style.background = accentMuted; btnTable.style.borderColor = accent; btnTable.style.color = accent;
+    btnGrid.style.background = 'transparent'; btnGrid.style.borderColor = 'var(--border-mid)'; btnGrid.style.color = 'var(--text-secondary)';
+    if (addBtn) addBtn.textContent = '+ Add row';
+  }
+  localStorage.setItem(storageKey, mode);
+}
+
+function setTrafficView(mode) { setViewMode('traffic-table','traffic-grid','traffic-view-table','traffic-view-grid', buildTrafficGrid,'traffic_view_mode',mode); }
+function setFunnelsView(mode) { setViewMode('funnels-table','funnels-grid','funnels-view-table','funnels-view-grid', buildFunnelsGrid,'funnels_view_mode',mode); }
+
+function buildTrafficGrid() {
+  const grid = document.getElementById('traffic-grid');
+  const rows = document.querySelectorAll('#traffic-body tr');
+  if (!rows.length) { grid.innerHTML = '<div class="ads-grid-inner"><div class="grid-card-empty">No rows yet.</div></div>'; return; }
+  const BADGE_COLORS = {
+    'meta':{'bg':'#DBEAFE','color':'#1D4ED8'},'tiktok':{'bg':'#F3F4F6','color':'#111827'},
+    'google':{'bg':'#FEF9C3','color':'#854D0E'},'native':{'bg':'#D1FAE5','color':'#065F46'},
+    'youtube':{'bg':'#FEE2E2','color':'#B91C1C'},'pinterest':{'bg':'#FFE4E6','color':'#9F1239'},
+    'snapchat':{'bg':'#FEFCE8','color':'#854D0E'},'twitter':{'bg':'#E0F2FE','color':'#0369A1'},
+    'linkedin':{'bg':'#DBEAFE','color':'#1E40AF'},'reddit':{'bg':'#FEF3C7','color':'#92400E'},
+    'email':{'bg':'#FCE7F3','color':'#9D174D'},'sms':{'bg':'#D1FAE5','color':'#065F46'},
+    'push':{'bg':'#EDE9FE','color':'#6D28D9'},'paid-social':{'bg':'#DBEAFE','color':'#1D4ED8'},
+    'organic':{'bg':'#D1FAE5','color':'#065F46'},'search':{'bg':'#FEF9C3','color':'#854D0E'},
+    'display':{'bg':'#EDE9FE','color':'#6D28D9'},'video':{'bg':'#FEE2E2','color':'#B91C1C'},
+    'paid-search':{'bg':'#FEF9C3','color':'#854D0E'},'organic-search':{'bg':'#D1FAE5','color':'#065F46'},
+    'organic-social':{'bg':'#D1FAE5','color':'#065F46'},'direct':{'bg':'#F3F4F6','color':'#374151'},
+    'referral':{'bg':'#EDE9FE','color':'#6D28D9'},'native-dsp':{'bg':'#DCFCE7','color':'#166534'},
+    'in-app-dsp':{'bg':'#FDF4FF','color':'#7E22CE'},'programmatic':{'bg':'#F0F9FF','color':'#0C4A6E'},
+    'outbrain':{'bg':'#FEF3C7','color':'#92400E'},'mgid':{'bg':'#D1FAE5','color':'#065F46'},
+    'taboola':{'bg':'#DBEAFE','color':'#1E40AF'},'revcontent':{'bg':'#EDE9FE','color':'#6D28D9'},
+  };
+  const getBadgeStyle = td => {
+    const sel = td?.querySelector('select');
+    if (!sel || !sel.value) return null;
+    const text = td.querySelector('.sel-badge')?.textContent.trim() || sel.options[sel.selectedIndex]?.text || sel.value;
+    if (!text || text.includes('select')) return null;
+    const key = sel.value.toLowerCase().replace(/\s+/g,'-');
+    const clr = BADGE_COLORS[key] || { bg: '#E5E7EB', color: '#374151' };
+    return { text, bg: clr.bg, color: clr.color };
+  };
+  const renderChip = (td, label) => {
+    const badge = td?.querySelector('.sel-badge');
+    if (!badge || badge.textContent.includes('select')) return '';
+    return `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <span style="font-size:10px;color:var(--text-secondary);opacity:0.7;">${label}</span>
+      ${badge.outerHTML}
+    </div>`;
+  };
+
+  const getText = td => td?.querySelector('textarea')?.value || '';
+  const gfField = (label, val) => val ? `<div class="gf-wrap" style="font-size:10px;color:var(--text-secondary);line-height:1.4;"><span style="opacity:0.6;">${label}:</span> <div class="gf-clip" style="color:var(--text-primary);max-height:2.8em;overflow:hidden;cursor:pointer;" onclick="gfExpand(this)">${val}</div><div class="gf-full" style="display:none;color:var(--text-primary);white-space:pre-wrap;word-break:break-word;overflow-wrap:break-word;user-select:text;border-top:1px solid var(--border-light);margin-top:2px;padding-top:2px;">${val}</div></div>` : '';
+  const simpleField = (label, val) => val ? `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;"><span style="opacity:0.6;">${label}:</span> <span style="color:var(--text-primary);">${val}</span></div>` : '';
+
+  // cols: 0=#, 1=source, 2=geo, 3=qty, 4=type, 5=notes
+  const cards = Array.from(rows).map((tr, idx) => {
+    const tds = tr.querySelectorAll('td');
+    const geo = getText(tds[2]);
+    const qty = getText(tds[3]);
+    const notes = getText(tds[5]);
+
+    return `<div class="grid-card">
+      <div class="grid-card-body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:9px;color:var(--text-secondary);background:var(--bg-primary);border-radius:4px;padding:1px 5px;">#${idx+1}</span>
+        </div>
+        ${renderChip(tds[1], 'Traffic source')}
+        ${renderChip(tds[4], 'Traffic type')}
+        ${simpleField('Est. Qty', qty)}
+        ${gfField('Geo', geo)}
+        ${gfField('Notes', notes)}
+      </div>
+    </div>`;
+  }).join('');
+  grid.innerHTML = `<div class="ads-grid-inner">${cards}</div>`;
+}
+
+function buildFunnelsGrid() {
+  const grid = document.getElementById('funnels-grid');
+  const rows = document.querySelectorAll('#funnels-body tr');
+  if (!rows.length) { grid.innerHTML = '<div class="ads-grid-inner"><div class="grid-card-empty">No rows yet.</div></div>'; return; }
+
+  const FUNNEL_COLORS = {
+    'quiz':{'bg':'#EDE9FE','color':'#6D28D9'},'landing-page':{'bg':'#DBEAFE','color':'#1D4ED8'},
+    'vsl':{'bg':'#FEE2E2','color':'#B91C1C'},'lead-gen':{'bg':'#D1FAE5','color':'#065F46'},
+    'multi-step':{'bg':'#FEF3C7','color':'#92400E'},'advertorial':{'bg':'#FCE7F3','color':'#9D174D'},
+    'comparison':{'bg':'#F0F9FF','color':'#0C4A6E'},
+  };
+
+  const getText = td => td?.querySelector('textarea')?.value || '';
+  const getLinkHref = td => { const a = td?.querySelector('a.link-chip'); const h = a?.href||''; return (h && h.startsWith('http')) ? h : ''; };
+  const mkLink = (url, label) => url ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
+  const gfField = (label, val) => val ? `<div class="gf-wrap" style="font-size:10px;color:var(--text-secondary);line-height:1.4;"><span style="opacity:0.6;">${label}:</span> <div class="gf-clip" style="color:var(--text-primary);max-height:2.8em;overflow:hidden;cursor:pointer;" onclick="gfExpand(this)">${val}</div><div class="gf-full" style="display:none;color:var(--text-primary);white-space:pre-wrap;word-break:break-word;overflow-wrap:break-word;user-select:text;border-top:1px solid var(--border-light);margin-top:2px;padding-top:2px;">${val}</div></div>` : '';
+  const simpleField = (label, val) => val ? `<div style="font-size:10px;color:var(--text-secondary);line-height:1.4;"><span style="opacity:0.6;">${label}:</span> <span style="color:var(--text-primary);">${val}</span></div>` : '';
+
+  const cards = Array.from(rows).map((tr, idx) => {
+    const tds = tr.querySelectorAll('td');
+    const linkUrl = getLinkHref(tds[1]);
+    const advertiser = getText(tds[2]);
+    const geo = getText(tds[3]);
+    const funnelBadge = tds[4]?.querySelector('.sel-badge');
+    const obs = getText(tds[5]);
+    const typeChip = (funnelBadge && !funnelBadge.textContent.includes('select')) ? `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <span style="font-size:10px;color:var(--text-secondary);opacity:0.7;">Funnel type</span>
+      ${funnelBadge.outerHTML}
+    </div>` : '';
+
+    return `<div class="grid-card">
+      <div class="grid-card-body">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:9px;color:var(--text-secondary);background:var(--bg-primary);border-radius:4px;padding:1px 5px;">#${idx+1}</span>
+        </div>
+        <div class="grid-card-offer">${advertiser || '<span style="opacity:0.4">No advertiser</span>'}</div>
+        ${typeChip}
+        ${simpleField('Geo', geo)}
+        ${gfField('Observations', obs)}
+        ${linkUrl ? `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">${mkLink(linkUrl,'Funnel link')}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  grid.innerHTML = `<div class="ads-grid-inner">${cards}</div>`;
+}
+
+function setAdsView(mode) {
+  const tableWrap = document.querySelector('#ads-table').closest('.table-scroll');
+  const grid = document.getElementById('ads-grid');
+  const btnTable = document.getElementById('ads-view-table');
+  const btnGrid = document.getElementById('ads-view-grid');
+  const accent = 'var(--accent,#4A90D9)';
+  const accentMuted = 'var(--accent-muted,rgba(74,144,217,0.2))';
+  const addBtn = grid.nextElementSibling?.querySelector('.add-btn');
+  if (mode === 'grid') {
+    tableWrap.style.display = 'none';
+    grid.style.display = 'block';
+    buildAdsGrid();
+    btnGrid.style.background = accentMuted; btnGrid.style.borderColor = accent; btnGrid.style.color = accent;
+    btnTable.style.background = 'transparent'; btnTable.style.borderColor = 'var(--border-mid)'; btnTable.style.color = 'var(--text-secondary)';
+    if (addBtn) addBtn.textContent = '+ Add card';
+  } else {
+    tableWrap.style.display = '';
+    grid.style.display = 'none';
+    btnTable.style.background = accentMuted; btnTable.style.borderColor = accent; btnTable.style.color = accent;
+    btnGrid.style.background = 'transparent'; btnGrid.style.borderColor = 'var(--border-mid)'; btnGrid.style.color = 'var(--text-secondary)';
+    if (addBtn) addBtn.textContent = '+ Add row';
+  }
+  localStorage.setItem('ads_view_mode', mode);
+}
+
+function buildAdsGrid() {
+  const grid = document.getElementById('ads-grid');
+  const rows = document.querySelectorAll('#ads-body tr');
+  if (!rows.length) { grid.innerHTML = '<div class="ads-grid-inner"><div class="grid-card-empty">No rows yet — add some in Table view.</div></div>'; return; }
+
+  const mkLink = (url, label) => url && url !== '#' && !url.endsWith('#')
+    ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
+  const field = (label, val) => val ? `<div class="gf-wrap" style="font-size:10px;color:var(--text-secondary);line-height:1.4;">
+    <span style="opacity:0.6;">${label}:</span>
+    <div class="gf-clip" style="color:var(--text-primary);max-height:2.8em;overflow:hidden;cursor:pointer;" onclick="gfExpand(this)">${val}</div>
+    <div class="gf-full" style="display:none;color:var(--text-primary);white-space:pre-wrap;word-break:break-word;overflow-wrap:break-word;user-select:text;-webkit-user-select:text;border-top:1px solid var(--border-light);margin-top:2px;padding-top:2px;">${val}</div>
+  </div>` : '';
+  const getLinkHref = td => { const a = td?.querySelector('a.link-chip'); const h = a?.href || ''; return (h && h !== '#' && !h.endsWith('#') && h !== location.href && !h.endsWith(location.pathname) && h.startsWith('http')) ? h : ''; };
+  const getText = td => td?.querySelector('textarea')?.value || '';
+  const ADS_COLORS = {
+    'meta':{'bg':'#DBEAFE','color':'#1D4ED8'},'tiktok':{'bg':'#F3F4F6','color':'#111827'},
+    'google':{'bg':'#FEF9C3','color':'#854D0E'},'native':{'bg':'#D1FAE5','color':'#065F46'},
+    'youtube':{'bg':'#FEE2E2','color':'#B91C1C'},'pinterest':{'bg':'#FFE4E6','color':'#9F1239'},
+    'snapchat':{'bg':'#FEFCE8','color':'#854D0E'},'twitter':{'bg':'#E0F2FE','color':'#0369A1'},
+    'linkedin':{'bg':'#DBEAFE','color':'#1E40AF'},'reddit':{'bg':'#FEF3C7','color':'#92400E'},
+    'email':{'bg':'#FCE7F3','color':'#9D174D'},'push':{'bg':'#EDE9FE','color':'#6D28D9'},
+    'in-app-dsp':{'bg':'#FDF4FF','color':'#7E22CE'},'programmatic':{'bg':'#F0F9FF','color':'#0C4A6E'},
+    'outbrain':{'bg':'#FEF3C7','color':'#92400E'},'mgid':{'bg':'#D1FAE5','color':'#065F46'},
+    'taboola':{'bg':'#DBEAFE','color':'#1E40AF'},'revcontent':{'bg':'#EDE9FE','color':'#6D28D9'},
+    'image':{'bg':'#DBEAFE','color':'#1D4ED8'},'video':{'bg':'#FEE2E2','color':'#B91C1C'},
+    'carousel':{'bg':'#D1FAE5','color':'#065F46'},'story':{'bg':'#FCE7F3','color':'#9D174D'},
+    'reel':{'bg':'#EDE9FE','color':'#6D28D9'},'ugc':{'bg':'#FEF3C7','color':'#92400E'},
+  };
+  const getChipStyle = td => {
+    const sel = td?.querySelector('select');
+    if (!sel || !sel.value) return null;
+    const text = sel.options[sel.selectedIndex]?.text || sel.value;
+    if (!text || text.includes('select')) return null;
+    const clr = ADS_COLORS[sel.value.toLowerCase()] || { bg: '#E5E7EB', color: '#374151' };
+    return { text, bg: clr.bg, color: clr.color };
+  };
+  const renderChip = (td, label) => {
+    const badge = td?.querySelector('.sel-badge');
+    if (!badge || badge.textContent.includes('select')) return '';
+    return `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <span style="font-size:10px;color:var(--text-secondary);opacity:0.7;">${label}</span>
+      ${badge.outerHTML}
+    </div>`;
+  };
+
+  const cards = Array.from(rows).map((tr, idx) => {
+    const tds = tr.querySelectorAll('td');
+    const num      = idx + 1;
+    const offer    = getText(tds[1]) || tds[1]?.querySelector('.text-badge')?.textContent.trim() || '';
+    const geo      = getText(tds[4]);
+    const lifecycle = getText(tds[5]);
+    const landingUrl = getLinkHref(tds[6]);
+    const spyUrl   = getLinkHref(tds[7]);
+    const fanUrl   = getLinkHref(tds[8]);
+    const thumbImg = tr.querySelector('img.media-thumb');
+    const thumbSrc = thumbImg ? thumbImg.src : '';
+    const thumbUrl = thumbImg ? (thumbImg.getAttribute('onclick')?.match(/window\.open\('([^']+)'/)?.[1] || thumbSrc) : '';
+    const creativeUrl = getLinkHref(tds[10]);
+    const angle    = getText(tds[11]);
+    const headline = getText(tds[12]);
+    const cta      = getText(tds[13]);
+    const title    = getText(tds[14]);
+    const imp      = getText(tds[15]);
+    const notes    = getText(tds[16]);
+
+    const imgHtml = thumbSrc
+      ? `<img class="grid-card-img" src="${thumbSrc}" onclick="window.open('${thumbUrl}','_blank')" title="Click to open">`
+      : `<div class="grid-card-img-empty">No preview</div>`;
+
+    const leftLinks = [mkLink(creativeUrl,'Creative'), mkLink(landingUrl,'Landing')].filter(Boolean).join('');
+    const rightLinks = [mkLink(spyUrl,'Spy tool'), mkLink(fanUrl,'Fan page')].filter(Boolean).join('');
+    const linkBlock = (leftLinks || rightLinks)
+      ? `<div style="display:flex;gap:12px;justify-content:space-between;padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;"><div style="display:flex;flex-direction:column;gap:3px;">${leftLinks}</div><div style="display:flex;flex-direction:column;gap:3px;text-align:right;">${rightLinks}</div></div>` : '';
+
+    return `<div class="grid-card">
+      <div style="position:relative;overflow:hidden;border-radius:8px 8px 0 0;">${imgHtml}<div style="position:absolute;top:4px;left:4px;background:var(--bg-secondary);border-radius:4px;padding:1px 5px;font-size:9px;color:var(--text-secondary);">#${num}</div></div>
+      <div class="grid-card-body">
+        <div class="grid-card-offer">${offer || '<span style="opacity:0.4">No offer</span>'}</div>
+        ${renderChip(tds[1], 'Traffic source')}
+        ${renderChip(tds[3], 'Format')}
+        ${field('Geo', geo)}
+        ${field('Lifecycle', lifecycle)}
+        ${field('Angle / Hook', angle)}
+        ${field('Headline', headline)}
+        ${field('CTA', cta)}
+        ${field('Title', title)}
+        ${field('Imp. Estimate', imp)}
+        ${field('Notes', notes)}
+        ${linkBlock}
+      </div>
+    </div>`;
+  }).join('');
+  grid.innerHTML = `<div class="ads-grid-inner">${cards}</div>`;
+}
+
+function gfExpand(clip) {
+  document.querySelectorAll('.gf-full').forEach(f => {
+    f.style.display = 'none';
+    f.closest('.gf-wrap').querySelector('.gf-clip').style.display = 'block';
+  });
+  clip.style.display = 'none';
+  clip.closest('.gf-wrap').querySelector('.gf-full').style.display = 'block';
+}
+
+document.addEventListener('click', e => {
+  if (e.target.closest('.gf-full') || e.target.closest('.gf-clip')) return;
+  document.querySelectorAll('.gf-full').forEach(f => {
+    if (f.style.display === 'block') {
+      f.style.display = 'none';
+      f.closest('.gf-wrap').querySelector('.gf-clip').style.display = 'block';
+    }
+  });
+});
+
 function openTitleLink(e) {
   const btn = document.getElementById('title-link-btn');
-  if (!btn || !btn.href || btn.href === '#' || btn.href === location.href + '#') return false;
   return true; // let browser open it
 }
 
@@ -1632,6 +1939,10 @@ function addRow(id, fn) {
     resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors();
     const table = tbody.closest('table');
     if (table) initRowResize(table);
+    // Rebuild grid if in grid view
+    if (id === 'ads-body' && document.getElementById('ads-grid').style.display !== 'none') buildAdsGrid();
+    if (id === 'traffic-body' && document.getElementById('traffic-grid').style.display !== 'none') buildTrafficGrid();
+    if (id === 'funnels-body' && document.getElementById('funnels-grid').style.display !== 'none') buildFunnelsGrid();
   }, 0);
   scheduleSave();
 }
@@ -1642,8 +1953,20 @@ document.addEventListener('input', function(e) {
 });
 
 function collectData() {
+  const h1 = document.getElementById('main-title');
+  const headerImg = document.getElementById('header-img-preview');
   return {
     v: 2, savedAt: new Date().toISOString(),
+    header: {
+      title: h1 ? (h1.dataset.text || h1.textContent) : '',
+      titleUrl: h1 ? (h1.dataset.url || '') : '',
+      img: headerImg && headerImg.style.display !== 'none' ? headerImg.src : '',
+    },
+    viewModes: {
+      ads: localStorage.getItem('ads_view_mode') || 'grid',
+      traffic: localStorage.getItem('traffic_view_mode') || 'grid',
+      funnels: localStorage.getItem('funnels_view_mode') || 'grid',
+    },
     meta: { analyst: document.getElementById('meta-analyst').value, date: document.getElementById('meta-date').value, period: document.getElementById('meta-period').value },
     notes: {
       takeaways: document.getElementById('notes-takeaways').value,
@@ -1687,6 +2010,20 @@ function collectTable(id, keys) {
 
 function restoreData(data) {
   if (!data) return false;
+  if (data.header) {
+    const h1 = document.getElementById('main-title');
+    const t = data.header.title || ''; const tu = data.header.titleUrl || '';
+    if (h1 && t) {
+      h1.dataset.text = t; h1.dataset.url = tu;
+      if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h1.innerHTML = ''; h1.appendChild(a); } else { h1.textContent = t; }
+      updateTitleLinkBtn(tu);
+    }
+    if (data.header.img) {
+      const p = document.getElementById('header-img-preview'); const bg = document.getElementById('header-img-bg');
+      const l = document.getElementById('header-img-label'); const box = document.getElementById('header-img-box');
+      if (p) { p.src = data.header.img; p.style.display = 'block'; if(bg){bg.src=data.header.img;bg.style.display='block';} if(l)l.style.display='none'; if(box)box.style.border='none'; }
+    }
+  }
   document.getElementById('meta-analyst').value = data.meta?.analyst||'';
   document.getElementById('meta-date').value = data.meta?.date||'';
   document.getElementById('meta-period').value = data.meta?.period||'';
@@ -1969,7 +2306,7 @@ function showToast(msg, type) {
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
   setStatus('', 'Auto-save on');
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); setTimeout(centerTextareas, 300); const t = localStorage.getItem('ecoverage_title'); const tu = localStorage.getItem('ecoverage_title_url') || ''; if (t) { const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } } updateTitleLinkBtn(tu); const img = localStorage.getItem('ecoverage_header_img'); if (img) { const p = document.getElementById('header-img-preview'); const l = document.getElementById('header-img-label'); const bg = document.getElementById('header-img-bg'); const box = document.getElementById('header-img-box'); if (p) { p.src = img; p.style.display = 'block'; if(bg){bg.src=img;bg.style.display='block';} if(l) l.style.display = 'none'; if(box) box.style.border='none'; } } }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); setTimeout(centerTextareas, 300); const vm = localStorage.getItem('ads_view_mode'); if (vm !== 'table') setAdsView('grid'); const tvm = localStorage.getItem('traffic_view_mode'); if (tvm !== 'table') setTrafficView('grid'); const fvm = localStorage.getItem('funnels_view_mode'); if (fvm !== 'table') setFunnelsView('grid'); const t = localStorage.getItem('ecoverage_title'); const tu = localStorage.getItem('ecoverage_title_url') || ''; if (t) { const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } } updateTitleLinkBtn(tu); const img = localStorage.getItem('ecoverage_header_img'); if (img) { const p = document.getElementById('header-img-preview'); const l = document.getElementById('header-img-label'); const bg = document.getElementById('header-img-bg'); const box = document.getElementById('header-img-box'); if (p) { p.src = img; p.style.display = 'block'; if(bg){bg.src=img;bg.style.display='block';} if(l) l.style.display = 'none'; if(box) box.style.border='none'; } } }, 0);
 })();
 </script>
 </body>
