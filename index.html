@@ -478,7 +478,6 @@
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2.5 1.5" stroke-linecap="round"/></svg>
           History
         </button>
-        <button class="toolbar-btn" id="readonlyToggleBtn" onclick="toggleGlobalReadOnly()" style="display:none;font-size:15px;padding:4px 8px;" title="Toggle edit access for others">🔒</button>
         <button class="toolbar-btn" onclick="showSetupModal()" title="Cloud sync settings">☁️</button>
         <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(this)">
       </div>
@@ -1596,86 +1595,10 @@ function initNotesResize() {
   });
 }function loadSettings() {
   try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}'); BIN_ID = s.binId||BIN_ID; API_KEY = s.apiKey||API_KEY; } catch(e){}
-
-// ── Access control ──
-const HARDCODED_API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6WvXt6';
-const _localSettings = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}');
-// Editor = has API key in localStorage (matches hardcoded or custom)
-// OR has BIN_ID in localStorage (means they've set up cloud sync)
-const IS_EDITOR = !!(_localSettings.apiKey && _localSettings.apiKey.length > 10) ||
-                  !!(_localSettings.binId && _localSettings.binId.length > 5) ||
-                  (API_KEY === HARDCODED_API_KEY && BIN_ID.length > 5);
-
-// Show lock button immediately for editors
-if (IS_EDITOR) {
-  document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('readonlyToggleBtn');
-    if (btn) { btn.style.display = ''; updateReadOnlyBtn(); }
-  });
 }
 
-function toggleGlobalReadOnly() {
-  if (!IS_EDITOR) return;
-  const current = localStorage.getItem('ecoverage_global_readonly') === '1';
-  const next = !current;
-  localStorage.setItem('ecoverage_global_readonly', next ? '1' : '0');
-  // Save to cloud so others see it
-  doSave();
-  updateReadOnlyBtn();
-  showToast(next ? 'Page locked — others can only view' : 'Page unlocked — others can edit', next ? 'info' : 'success');
-}
+function applyReadOnlyMode() {}
 
-function updateReadOnlyBtn() {
-  const btn = document.getElementById('readonlyToggleBtn');
-  if (!btn) return;
-  const locked = localStorage.getItem('ecoverage_global_readonly') === '1';
-  btn.textContent = locked ? '🔒' : '🔓';
-  btn.title = locked ? 'Others are in view-only mode — click to allow editing' : 'Others can edit — click to lock';
-  btn.style.background = '';
-  btn.style.borderColor = '';
-  btn.style.color = '';
-}
-
-function applyReadOnlyMode() {
-  const btn = document.getElementById('readonlyToggleBtn');
-  if (btn) { btn.style.display = IS_EDITOR ? '' : 'none'; updateReadOnlyBtn(); }
-
-  const globalLocked = localStorage.getItem('ecoverage_global_readonly') === '1';
-  const shouldLock = !IS_EDITOR || globalLocked;
-  if (!shouldLock) return;
-
-  // Only block actual data entry — not UI controls like resize, view toggle, theme
-  document.querySelectorAll('tbody textarea, tbody select, tbody input[type="text"]').forEach(el => {
-    el.disabled = true; el.style.pointerEvents = 'none';
-  });
-  document.querySelectorAll('#meta-analyst, #meta-date, #meta-period, #notes-takeaways, #notes-actions').forEach(el => {
-    el.disabled = true; el.style.pointerEvents = 'none';
-  });
-  document.querySelectorAll('.add-btn, .remove-row-btn, .dup-row-btn').forEach(el => {
-    el.disabled = true; el.style.pointerEvents = 'none'; el.style.opacity = '0.3';
-  });
-  document.querySelectorAll('.save-bar button:not(#themeToggle):not(#readonlyToggleBtn):not([onclick*="showHistory"])').forEach(el => {
-    el.disabled = true; el.style.pointerEvents = 'none'; el.style.opacity = '0.4';
-  });
-  document.querySelectorAll('[contenteditable]').forEach(el => {
-    el.contentEditable = 'false'; el.style.cursor = 'default';
-  });
-  // Hide drag handles (can't reorder) but keep resize handles
-  document.querySelectorAll('.drag-handle, .grid-drag-handle').forEach(el => {
-    el.style.pointerEvents = 'none'; el.style.opacity = '0';
-  });
-
-  if (!IS_EDITOR && !document.getElementById('readonly-badge')) {
-    const badge = document.createElement('div');
-    badge.id = 'readonly-badge';
-    badge.innerHTML = globalLocked
-      ? '🔒 View only — editing disabled by owner'
-      : '👁 View only — <a href="#" onclick="showSetupModal();return false;" style="color:var(--accent,#4A90D9);">connect cloud to edit</a>';
-    badge.style.cssText = 'position:fixed;bottom:16px;right:16px;background:var(--bg-secondary);border:1px solid var(--border-mid);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--text-secondary);z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.15);';
-    document.body.appendChild(badge);
-  }
-}
-}
 function saveSettings() { localStorage.setItem(LS_SETTINGS, JSON.stringify({ binId: BIN_ID, apiKey: API_KEY })); }
 
 function unlockCloudSettings() {
@@ -2560,7 +2483,6 @@ function collectData() {
       ads: localStorage.getItem('ads_view_mode') || 'grid',
       traffic: localStorage.getItem('traffic_view_mode') || 'grid',
       funnels: localStorage.getItem('funnels_view_mode') || 'table',
-    globalReadOnly: IS_EDITOR ? (localStorage.getItem('ecoverage_global_readonly') === '1') : undefined,
     },
     meta: { analyst: document.getElementById('meta-analyst').value, date: document.getElementById('meta-date').value, period: document.getElementById('meta-period').value },
     notes: {
@@ -2605,10 +2527,6 @@ function collectTable(id, keys) {
 
 function restoreData(data) {
   if (!data) return false;
-  // Sync global read-only state for non-editors
-  if (!IS_EDITOR && data.globalReadOnly !== undefined) {
-    localStorage.setItem('ecoverage_global_readonly', data.globalReadOnly ? '1' : '0');
-  }
   if (data.header) {
     const h1 = document.getElementById('main-title');
     const t = data.header.title || ''; const tu = data.header.titleUrl || '';
@@ -2689,6 +2607,7 @@ function restoreTable(id, rows, fn, keys) {
       }
     });
   });
+  
 }
 
 async function cloudSave(data) {
@@ -2964,7 +2883,7 @@ function showToast(msg, type) {
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
   setStatus('', 'Auto-save on');
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); setTimeout(centerTextareas, 300); const vm = localStorage.getItem('ads_view_mode'); setAdsView(vm === 'table' ? 'table' : 'grid'); const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'grid' ? 'grid' : 'table'); const fvm = localStorage.getItem('funnels_view_mode'); setFunnelsView(fvm === 'grid' ? 'grid' : 'table'); const t = localStorage.getItem('ecoverage_title'); const tu = localStorage.getItem('ecoverage_title_url') || ''; if (t) { document.title = t; const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } } updateTitleLinkBtn(tu); setTimeout(applyReadOnlyMode, 100); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); setTimeout(centerTextareas, 300); const vm = localStorage.getItem('ads_view_mode'); setAdsView(vm === 'table' ? 'table' : 'grid'); const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'grid' ? 'grid' : 'table'); const fvm = localStorage.getItem('funnels_view_mode'); setFunnelsView(fvm === 'grid' ? 'grid' : 'table'); const t = localStorage.getItem('ecoverage_title'); const tu = localStorage.getItem('ecoverage_title_url') || ''; if (t) { document.title = t; const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } } updateTitleLinkBtn(tu);  }, 0);
 })();
 </script>
 </body>
