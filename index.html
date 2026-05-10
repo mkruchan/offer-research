@@ -695,6 +695,8 @@ function setViewMode(tableId, gridId, tableBtnId, gridBtnId, buildFn, storageKey
     if (addBtn) addBtn.textContent = '+ Add row';
   }
   localStorage.setItem(storageKey, mode);
+  // Always save view preference locally regardless of editor status
+  try { localStorage.setItem(storageKey, mode); } catch(e) {}
 }
 
 function setTrafficView(mode) { setViewMode('traffic-table','traffic-grid','traffic-view-table','traffic-view-grid', buildTrafficGrid,'traffic_view_mode',mode); }
@@ -1596,11 +1598,13 @@ function initNotesResize() {
   try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}'); BIN_ID = s.binId||BIN_ID; API_KEY = s.apiKey||API_KEY; } catch(e){}
 
 // ── Access control ──
-// Editor = has the API key saved in localStorage (set up cloud sync themselves)
-// Viewer = no localStorage key, using hardcoded default
 const HARDCODED_API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6WvXt6';
 const _localSettings = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}');
-const IS_EDITOR = !!(_localSettings.apiKey && _localSettings.apiKey.length > 10);
+// Editor = has API key in localStorage (matches hardcoded or custom)
+// OR has BIN_ID in localStorage (means they've set up cloud sync)
+const IS_EDITOR = !!(_localSettings.apiKey && _localSettings.apiKey.length > 10) ||
+                  !!(_localSettings.binId && _localSettings.binId.length > 5) ||
+                  (API_KEY === HARDCODED_API_KEY && BIN_ID.length > 5);
 
 // Show lock button immediately for editors
 if (IS_EDITOR) {
@@ -1640,27 +1644,25 @@ function applyReadOnlyMode() {
   const shouldLock = !IS_EDITOR || globalLocked;
   if (!shouldLock) return;
 
-  // Lock table textareas and selects (not setup modal inputs)
+  // Only block actual data entry — not UI controls like resize, view toggle, theme
   document.querySelectorAll('tbody textarea, tbody select, tbody input[type="text"]').forEach(el => {
     el.disabled = true; el.style.pointerEvents = 'none';
   });
-  document.querySelectorAll('#meta-analyst, #meta-date, #meta-period').forEach(el => {
+  document.querySelectorAll('#meta-analyst, #meta-date, #meta-period, #notes-takeaways, #notes-actions').forEach(el => {
     el.disabled = true; el.style.pointerEvents = 'none';
   });
-  document.querySelectorAll('.add-btn, .remove-row-btn, .dup-row-btn, .link-edit-btn').forEach(el => {
-    el.disabled = true; el.style.pointerEvents = 'none'; el.style.opacity = '0.4';
+  document.querySelectorAll('.add-btn, .remove-row-btn, .dup-row-btn').forEach(el => {
+    el.disabled = true; el.style.pointerEvents = 'none'; el.style.opacity = '0.3';
   });
-  document.querySelectorAll('.save-bar button:not(#themeToggle):not(#readonlyToggleBtn)').forEach(el => {
+  document.querySelectorAll('.save-bar button:not(#themeToggle):not(#readonlyToggleBtn):not([onclick*="showHistory"])').forEach(el => {
     el.disabled = true; el.style.pointerEvents = 'none'; el.style.opacity = '0.4';
   });
   document.querySelectorAll('[contenteditable]').forEach(el => {
     el.contentEditable = 'false'; el.style.cursor = 'default';
   });
-  document.querySelectorAll('.drag-handle, .grid-drag-handle, .row-resizer, .notes-resize-handle').forEach(el => {
-    el.style.pointerEvents = 'none'; el.style.display = 'none';
-  });
-  document.querySelectorAll('#notes-takeaways, #notes-actions').forEach(el => {
-    el.disabled = true; el.style.pointerEvents = 'none';
+  // Hide drag handles (can't reorder) but keep resize handles
+  document.querySelectorAll('.drag-handle, .grid-drag-handle').forEach(el => {
+    el.style.pointerEvents = 'none'; el.style.opacity = '0';
   });
 
   if (!IS_EDITOR && !document.getElementById('readonly-badge')) {
