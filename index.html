@@ -1633,18 +1633,24 @@ function updateReadOnlyBtn() {
 }
 
 function applyReadOnlyMode() {
-  const globalLocked = localStorage.getItem('ecoverage_global_readonly') === '1';
-  const shouldLock = !IS_EDITOR || globalLocked;
-  // Owner always sees the lock button
   const btn = document.getElementById('readonlyToggleBtn');
   if (btn) { btn.style.display = IS_EDITOR ? '' : 'none'; updateReadOnlyBtn(); }
 
-  if (!shouldLock) return; // editor + not globally locked = full access
+  const globalLocked = localStorage.getItem('ecoverage_global_readonly') === '1';
+  const shouldLock = !IS_EDITOR || globalLocked;
+  if (!shouldLock) return;
 
-  document.querySelectorAll('textarea, input:not(#header-img-input), select').forEach(el => {
+  // Lock table textareas and selects (not setup modal inputs)
+  document.querySelectorAll('tbody textarea, tbody select, tbody input[type="text"]').forEach(el => {
     el.disabled = true; el.style.pointerEvents = 'none';
   });
-  document.querySelectorAll('button:not(#themeToggle):not(#readonlyToggleBtn), .add-btn, .remove-row-btn, .dup-row-btn').forEach(el => {
+  document.querySelectorAll('#meta-analyst, #meta-date, #meta-period').forEach(el => {
+    el.disabled = true; el.style.pointerEvents = 'none';
+  });
+  document.querySelectorAll('.add-btn, .remove-row-btn, .dup-row-btn, .link-edit-btn').forEach(el => {
+    el.disabled = true; el.style.pointerEvents = 'none'; el.style.opacity = '0.4';
+  });
+  document.querySelectorAll('.save-bar button:not(#themeToggle):not(#readonlyToggleBtn)').forEach(el => {
     el.disabled = true; el.style.pointerEvents = 'none'; el.style.opacity = '0.4';
   });
   document.querySelectorAll('[contenteditable]').forEach(el => {
@@ -1653,8 +1659,10 @@ function applyReadOnlyMode() {
   document.querySelectorAll('.drag-handle, .grid-drag-handle, .row-resizer, .notes-resize-handle').forEach(el => {
     el.style.pointerEvents = 'none'; el.style.display = 'none';
   });
+  document.querySelectorAll('#notes-takeaways, #notes-actions').forEach(el => {
+    el.disabled = true; el.style.pointerEvents = 'none';
+  });
 
-  // Show read-only badge (only for non-editors)
   if (!IS_EDITOR && !document.getElementById('readonly-badge')) {
     const badge = document.createElement('div');
     badge.id = 'readonly-badge';
