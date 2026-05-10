@@ -619,12 +619,20 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
-const _pageKey = btoa(location.pathname + location.search).replace(/=/g,'').slice(-12);
+
+// Site-specific default BIN IDs
+const _SITE_BINS = {
+  'mkruchan.github.io/fuelsaver-research': '69fb9158adc21f119a6273c4',
+};
+const _hostPath = (location.hostname + location.pathname).replace(/\/index\.html$/, '').replace(/\/$/, '');
+const _siteBinId = _SITE_BINS[_hostPath] || _SITE_BINS[Object.keys(_SITE_BINS).find(k => _hostPath.startsWith(k))] || '';
+// Per-file key — all storage is isolated per page URL
+const _pageKey = btoa(location.hostname + location.pathname.replace(/\/index\.html$/, '')).replace(/[^a-zA-Z0-9]/g,'').slice(-16);
 const LS_SETTINGS = 'ecoverage_settings_v1_' + _pageKey;
 const LS_LOCAL    = 'ecoverage_local_v2_' + _pageKey;
 const LS_HISTORY  = 'ecoverage_history_v1_' + _pageKey;
 const LS_VER_CTR  = 'ecoverage_version_counter_' + _pageKey;
-let BIN_ID  = '';
+let BIN_ID  = _siteBinId;
 let API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6WvXt6';
 
 function editTitle() {
