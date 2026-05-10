@@ -451,7 +451,6 @@
         <input type="file" id="header-img-input" accept="image/*" style="display:none;" onchange="loadHeaderImg(this)">
       </div>
       <div class="save-bar">
-        <div class="last-edited" id="lastEditedBar" style="display:none"><span>✏️</span><span id="lastEditedText"></span></div>
         <div class="autosave-status">
           <div class="autosave-dot" id="autosaveDot"></div>
           <span id="autosaveText">Loading…</span>
@@ -479,6 +478,7 @@
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2.5 1.5" stroke-linecap="round"/></svg>
           History
         </button>
+        <button class="toolbar-btn" id="readonlyToggleBtn" onclick="toggleGlobalReadOnly()" style="display:none;font-size:15px;padding:4px 8px;" title="Toggle edit access for others">🔒</button>
         <button class="toolbar-btn" onclick="showSetupModal()" title="Cloud sync settings">☁️</button>
         <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(this)">
       </div>
@@ -762,8 +762,8 @@ function buildTrafficGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
-      <span style="opacity:0.6;">${label}:</span>
+    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:6px;">
+      <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
         <select data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
@@ -776,7 +776,7 @@ function buildTrafficGrid() {
 
   const getText = td => td?.querySelector('textarea')?.value || '';
   const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
-    <span style="opacity:0.6;">${label}:</span>
+    <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -785,7 +785,7 @@ function buildTrafficGrid() {
     >${val||''}</div>
   </div>`;
   const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
-    <span style="opacity:0.6;">${label}:</span>
+    <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -838,7 +838,7 @@ function buildFunnelsGrid() {
   const getLinkHref = td => { const a = td?.querySelector('a.link-chip'); const h = a?.href||''; return (h && h.startsWith('http')) ? h : ''; };
   const mkLink = (url, label) => url ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
   const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
-    <span style="opacity:0.6;">${label}:</span>
+    <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -847,7 +847,7 @@ function buildFunnelsGrid() {
     >${val||''}</div>
   </div>`;
   const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
-    <span style="opacity:0.6;">${label}:</span>
+    <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -874,8 +874,8 @@ function buildFunnelsGrid() {
     const ft = fv ? (funnelSel.options[funnelSel.selectedIndex]?.text || fv) : '';
     const fc = FUNNEL_CHIP_COLORS[fv] || {bg:'#E5E7EB',color:'#374151'};
     const funnelChipHtml = fv ? `<span style="background:${fc.bg};color:${fc.color};border-radius:20px;padding:1px 8px;font-size:11px;font-weight:500;white-space:nowrap;">${ft}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
-    const typeChip = funnelSel ? `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
-      <span style="opacity:0.6;">Funnel type:</span>
+    const typeChip = funnelSel ? `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:6px;">
+      <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">Funnel type</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${funnelChipHtml}
         <select data-row="${idx}" data-table="funnels-body" data-tdidx="5"
@@ -924,7 +924,7 @@ function buildAdsGrid() {
   const mkLink = (url, label) => url && url !== '#' && !url.endsWith('#')
     ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
   const field = (label, val, taSelector, rowIdx) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
-    <span style="opacity:0.6;">${label}:</span>
+    <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
       style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -989,8 +989,8 @@ function buildAdsGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
-      <span style="opacity:0.6;">${label}:</span>
+    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:6px;">
+      <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
         <select data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
@@ -1594,6 +1594,77 @@ function initNotesResize() {
   });
 }function loadSettings() {
   try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}'); BIN_ID = s.binId||BIN_ID; API_KEY = s.apiKey||API_KEY; } catch(e){}
+
+// ── Access control ──
+// Editor = has the API key saved in localStorage (set up cloud sync themselves)
+// Viewer = no localStorage key, using hardcoded default
+const HARDCODED_API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6WvXt6';
+const _localSettings = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}');
+const IS_EDITOR = !!(_localSettings.apiKey && _localSettings.apiKey.length > 10);
+
+// Show lock button immediately for editors
+if (IS_EDITOR) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('readonlyToggleBtn');
+    if (btn) { btn.style.display = ''; updateReadOnlyBtn(); }
+  });
+}
+
+function toggleGlobalReadOnly() {
+  if (!IS_EDITOR) return;
+  const current = localStorage.getItem('ecoverage_global_readonly') === '1';
+  const next = !current;
+  localStorage.setItem('ecoverage_global_readonly', next ? '1' : '0');
+  // Save to cloud so others see it
+  doSave();
+  updateReadOnlyBtn();
+  showToast(next ? 'Page locked — others can only view' : 'Page unlocked — others can edit', next ? 'info' : 'success');
+}
+
+function updateReadOnlyBtn() {
+  const btn = document.getElementById('readonlyToggleBtn');
+  if (!btn) return;
+  const locked = localStorage.getItem('ecoverage_global_readonly') === '1';
+  btn.textContent = locked ? '🔒' : '🔓';
+  btn.title = locked ? 'Others are in view-only mode — click to allow editing' : 'Others can edit — click to lock';
+  btn.style.background = '';
+  btn.style.borderColor = '';
+  btn.style.color = '';
+}
+
+function applyReadOnlyMode() {
+  const globalLocked = localStorage.getItem('ecoverage_global_readonly') === '1';
+  const shouldLock = !IS_EDITOR || globalLocked;
+  // Owner always sees the lock button
+  const btn = document.getElementById('readonlyToggleBtn');
+  if (btn) { btn.style.display = IS_EDITOR ? '' : 'none'; updateReadOnlyBtn(); }
+
+  if (!shouldLock) return; // editor + not globally locked = full access
+
+  document.querySelectorAll('textarea, input:not(#header-img-input), select').forEach(el => {
+    el.disabled = true; el.style.pointerEvents = 'none';
+  });
+  document.querySelectorAll('button:not(#themeToggle):not(#readonlyToggleBtn), .add-btn, .remove-row-btn, .dup-row-btn').forEach(el => {
+    el.disabled = true; el.style.pointerEvents = 'none'; el.style.opacity = '0.4';
+  });
+  document.querySelectorAll('[contenteditable]').forEach(el => {
+    el.contentEditable = 'false'; el.style.cursor = 'default';
+  });
+  document.querySelectorAll('.drag-handle, .grid-drag-handle, .row-resizer, .notes-resize-handle').forEach(el => {
+    el.style.pointerEvents = 'none'; el.style.display = 'none';
+  });
+
+  // Show read-only badge (only for non-editors)
+  if (!IS_EDITOR && !document.getElementById('readonly-badge')) {
+    const badge = document.createElement('div');
+    badge.id = 'readonly-badge';
+    badge.innerHTML = globalLocked
+      ? '🔒 View only — editing disabled by owner'
+      : '👁 View only — <a href="#" onclick="showSetupModal();return false;" style="color:var(--accent,#4A90D9);">connect cloud to edit</a>';
+    badge.style.cssText = 'position:fixed;bottom:16px;right:16px;background:var(--bg-secondary);border:1px solid var(--border-mid);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--text-secondary);z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.15);';
+    document.body.appendChild(badge);
+  }
+}
 }
 function saveSettings() { localStorage.setItem(LS_SETTINGS, JSON.stringify({ binId: BIN_ID, apiKey: API_KEY })); }
 
@@ -2479,6 +2550,7 @@ function collectData() {
       ads: localStorage.getItem('ads_view_mode') || 'grid',
       traffic: localStorage.getItem('traffic_view_mode') || 'grid',
       funnels: localStorage.getItem('funnels_view_mode') || 'table',
+    globalReadOnly: IS_EDITOR ? (localStorage.getItem('ecoverage_global_readonly') === '1') : undefined,
     },
     meta: { analyst: document.getElementById('meta-analyst').value, date: document.getElementById('meta-date').value, period: document.getElementById('meta-period').value },
     notes: {
@@ -2523,6 +2595,10 @@ function collectTable(id, keys) {
 
 function restoreData(data) {
   if (!data) return false;
+  // Sync global read-only state for non-editors
+  if (!IS_EDITOR && data.globalReadOnly !== undefined) {
+    localStorage.setItem('ecoverage_global_readonly', data.globalReadOnly ? '1' : '0');
+  }
   if (data.header) {
     const h1 = document.getElementById('main-title');
     const t = data.header.title || ''; const tu = data.header.titleUrl || '';
@@ -2679,10 +2755,11 @@ let lastSnap = null;
 
 function snapForUndo() {
   const data = collectData();
-  data.savedAt = new Date().toISOString();
   const snap = JSON.stringify(data);
   if (snap === lastSnap) return;
-  undoStack.push(snap);
+  // Store with timestamp separately so lastSnap comparison works
+  const entry = JSON.stringify({ ...data, _snapAt: new Date().toISOString() });
+  undoStack.push(entry);
   if (undoStack.length > 50) undoStack.shift();
   redoStack.length = 0;
   lastSnap = snap;
@@ -2698,8 +2775,10 @@ function applyUndo(stack, otherStack) {
   const current = JSON.stringify(collectData());
   otherStack.push(current);
   const snap = stack.pop();
-  lastSnap = snap;
-  restoreData(JSON.parse(snap));
+  const parsed = JSON.parse(snap);
+  delete parsed._snapAt;
+  lastSnap = JSON.stringify(collectData());
+  restoreData(parsed);
   setTimeout(() => {
     resizeAllInputs(); updateAllBadges(); syncAllLinks(); updateFrozenOffsets(); centerTextareas();
     if (document.getElementById('ads-grid').style.display !== 'none') buildAdsGrid();
@@ -2811,8 +2890,8 @@ function showHistory() {
     list.innerHTML = allSnaps.map((snap, i) => {
       const data = JSON.parse(snap);
       const title = data.header?.title || data.meta?.analyst || 'Version';
-      const time = data.savedAt ? new Date(data.savedAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}) : 'Unknown time';
-      const date = data.savedAt ? new Date(data.savedAt).toLocaleDateString([], {month:'short',day:'numeric'}) : '';
+      const time = data._snapAt ? new Date(data._snapAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}) : 'Unknown time';
+      const date = data._snapAt ? new Date(data._snapAt).toLocaleDateString([], {month:'short',day:'numeric'}) : '';
       const rowCount = (data.ads?.length||0) + (data.traffic?.length||0) + (data.funnels?.length||0);
       return `<div style="background:var(--bg-primary);border:1px solid var(--border-light);border-radius:8px;padding:10px 12px;cursor:pointer;" onmouseover="this.style.borderColor='var(--accent,#4A90D9)'" onmouseout="this.style.borderColor='var(--border-light)'" onclick="restoreVersion(${undoStack.length - 1 - i})">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
@@ -2875,7 +2954,7 @@ function showToast(msg, type) {
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
   setStatus('', 'Auto-save on');
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); setTimeout(centerTextareas, 300); const vm = localStorage.getItem('ads_view_mode'); setAdsView(vm === 'table' ? 'table' : 'grid'); const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'grid' ? 'grid' : 'table'); const fvm = localStorage.getItem('funnels_view_mode'); setFunnelsView(fvm === 'grid' ? 'grid' : 'table'); const t = localStorage.getItem('ecoverage_title'); const tu = localStorage.getItem('ecoverage_title_url') || ''; if (t) { document.title = t; const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } } updateTitleLinkBtn(tu); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); setTimeout(centerTextareas, 300); const vm = localStorage.getItem('ads_view_mode'); setAdsView(vm === 'table' ? 'table' : 'grid'); const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'grid' ? 'grid' : 'table'); const fvm = localStorage.getItem('funnels_view_mode'); setFunnelsView(fvm === 'grid' ? 'grid' : 'table'); const t = localStorage.getItem('ecoverage_title'); const tu = localStorage.getItem('ecoverage_title_url') || ''; if (t) { document.title = t; const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } } updateTitleLinkBtn(tu); setTimeout(applyReadOnlyMode, 100); }, 0);
 })();
 </script>
 </body>
