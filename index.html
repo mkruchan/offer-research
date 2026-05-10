@@ -763,8 +763,8 @@ function buildTrafficGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:6px;">
-      <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
+    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+      <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
         <select data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
@@ -776,8 +776,8 @@ function buildTrafficGrid() {
   };
 
   const getText = td => td?.querySelector('textarea')?.value || '';
-  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
-    <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
+  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+    <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -785,8 +785,8 @@ function buildTrafficGrid() {
       onblur="this.style.background='';this.style.padding='';gcCollapse(this)"
     >${val||''}</div>
   </div>`;
-  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
-    <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
+  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+    <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -838,8 +838,8 @@ function buildFunnelsGrid() {
   const getText = td => td?.querySelector('textarea')?.value || '';
   const getLinkHref = td => { const a = td?.querySelector('a.link-chip'); const h = a?.href||''; return (h && h.startsWith('http')) ? h : ''; };
   const mkLink = (url, label) => url ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
-  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
-    <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
+  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+    <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -847,8 +847,8 @@ function buildFunnelsGrid() {
       onblur="this.style.background='';this.style.padding='';gcCollapse(this)"
     >${val||''}</div>
   </div>`;
-  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
-    <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
+  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+    <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -875,8 +875,8 @@ function buildFunnelsGrid() {
     const ft = fv ? (funnelSel.options[funnelSel.selectedIndex]?.text || fv) : '';
     const fc = FUNNEL_CHIP_COLORS[fv] || {bg:'#E5E7EB',color:'#374151'};
     const funnelChipHtml = fv ? `<span style="background:${fc.bg};color:${fc.color};border-radius:20px;padding:1px 8px;font-size:11px;font-weight:500;white-space:nowrap;">${ft}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
-    const typeChip = funnelSel ? `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:6px;">
-      <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">Funnel type</div>
+    const typeChip = funnelSel ? `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+      <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">Funnel type</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${funnelChipHtml}
         <select data-row="${idx}" data-table="funnels-body" data-tdidx="5"
@@ -924,8 +924,8 @@ function buildAdsGrid() {
 
   const mkLink = (url, label) => url && url !== '#' && !url.endsWith('#')
     ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
-  const field = (label, val, taSelector, rowIdx) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:2px;">
-    <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
+  const field = (label, val, taSelector, rowIdx, h=52) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:${h}px;overflow:hidden;">
+    <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
       style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -990,8 +990,8 @@ function buildAdsGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:6px;">
-      <div style="opacity:0.6;font-size:11px;margin-bottom:1px;">${label}</div>
+    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+      <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
         <select data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
@@ -1071,12 +1071,12 @@ function buildAdsGrid() {
         ${renderChip(tds[3], 'Format', idx, 'ads-body')}
         ${field('Geo', geo, 'td:nth-child(5)', idx)}
         ${field('Lifecycle', lifecycle, 'td:nth-child(6)', idx)}
-        ${field('Angle / Hook', angle, 'td:nth-child(12)', idx)}
-        ${field('Headline', headline, 'td:nth-child(13)', idx)}
+        ${field('Angle / Hook', angle, 'td:nth-child(12)', idx, 70)}
+        ${field('Headline', headline, 'td:nth-child(13)', idx, 80)}
         ${field('CTA', cta, 'td:nth-child(14)', idx)}
-        ${field('Title', title, 'td:nth-child(15)', idx)}
+        ${field('Title', title, 'td:nth-child(15)', idx, 70)}
         ${field('Imp. Estimate', imp, 'td:nth-child(16)', idx)}
-        ${field('Notes', notes, 'td:nth-child(17)', idx)}
+        ${field('Notes', notes, 'td:nth-child(17)', idx, 80)}
       </div>
     </div>`;
   }).join('');
@@ -1210,6 +1210,9 @@ function initGridDrag(gridId, tableId) {
 }
 
 function gcExpand(el) {
+  // Expand the parent wrapper to auto height so content is visible
+  const wrapper = el.closest('div[style*="height:"]');
+  if (wrapper) { wrapper.style.height = 'auto'; wrapper.style.overflow = 'visible'; }
   el.style.display = 'block';
   el.style.webkitLineClamp = '';
   el.style.overflow = 'visible';
@@ -1226,6 +1229,21 @@ function gcExpand(el) {
   range.collapse(false);
   sel.removeAllRanges();
   sel.addRange(range);
+}
+
+function gcCollapse(el) {
+  // Restore fixed height on parent
+  const wrapper = el.closest('div[style*="overflow:"]');
+  if (wrapper) { 
+    const origH = wrapper.dataset.origH;
+    if (origH) { wrapper.style.height = origH + 'px'; wrapper.style.overflow = 'hidden'; }
+  }
+  el.style.display = '-webkit-box';
+  el.style.webkitLineClamp = '2';
+  el.style.overflow = 'hidden';
+  el.style.cursor = 'pointer';
+  el.style.background = '';
+  el.style.padding = '';
 }
 
 function gcCollapse(el) {
@@ -2302,7 +2320,7 @@ function removeRow(btn, id) {
   tr.remove();
   renumberTable(id);
   scheduleSave();
-  undoStack.push({ type: 'delete', id, html, idx });
+  snapForUndo();
   redoStack.length = 0; // clear redo on new action
   showUndoToast('Row deleted — Ctrl+Z to undo', () => undoLast());
 }
@@ -2686,10 +2704,9 @@ function snapForUndo() {
   const data = collectData();
   const snap = JSON.stringify(data);
   if (snap === lastSnap) return;
-  // Store with timestamp separately so lastSnap comparison works
   const entry = JSON.stringify({ ...data, _snapAt: new Date().toISOString() });
   undoStack.push(entry);
-  if (undoStack.length > 50) undoStack.shift();
+  if (undoStack.length > 100) undoStack.shift();
   redoStack.length = 0;
   lastSnap = snap;
 }
@@ -2701,12 +2718,15 @@ function scheduleSnap() {
 
 function applyUndo(stack, otherStack) {
   if (stack.length === 0) return;
-  const current = JSON.stringify(collectData());
-  otherStack.push(current);
+  // Only operate on string snaps (skip legacy object entries)
+  while (stack.length > 0 && typeof stack[stack.length-1] !== 'string') stack.pop();
+  if (stack.length === 0) return;
+  const currentSnap = JSON.stringify({ ...collectData(), _snapAt: new Date().toISOString() });
+  otherStack.push(currentSnap);
   const snap = stack.pop();
   const parsed = JSON.parse(snap);
   delete parsed._snapAt;
-  lastSnap = JSON.stringify(collectData());
+  lastSnap = JSON.stringify(parsed);
   restoreData(parsed);
   setTimeout(() => {
     resizeAllInputs(); updateAllBadges(); syncAllLinks(); updateFrozenOffsets(); centerTextareas();
@@ -2723,9 +2743,17 @@ function scheduleSave() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(doSave, 1200);
 }
+
 async function doSave() {
   updateLastEdited();
   const data = collectData();
+  // Add to history on every save
+  const entry = JSON.stringify({ ...data, _snapAt: new Date().toISOString() });
+  if (entry !== lastSnap) {
+    undoStack.push(entry);
+    if (undoStack.length > 100) undoStack.shift();
+    lastSnap = JSON.stringify(data);
+  }
   try { localStorage.setItem(LS_LOCAL, JSON.stringify(data)); } catch(e){}
   if (BIN_ID && API_KEY) {
     const ok = await cloudSave(data);
@@ -2736,6 +2764,7 @@ async function doSave() {
     setStatus('saved','Saved locally · '+t);
   }
 }
+
 async function manualSave() { await doSave(); showToast('Saved!','success'); }
 
 function toggleExportMenu() {
@@ -2868,8 +2897,9 @@ function showToast(msg, type) {
     if (cloudData && cloudData.v) {
       restoreData(cloudData);
       setTimeout(() => restoreColWidths(), 50);
-      const ts = new Date(cloudData.savedAt).toLocaleString(undefined,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      const ts = new Date(cloudData.savedAt||Date.now()).toLocaleString(undefined,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
       setStatus('saved','☁️ Synced · '+ts);
+      snapForUndo();
       return;
     }
   }
