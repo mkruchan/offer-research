@@ -1037,19 +1037,22 @@ async function saveDirectory(dir) {
 
 function editTitle() {
   const h1 = document.getElementById('main-title');
-  const current = h1.dataset.text || h1.textContent;
+  if (!h1) return;
+  const current = h1.dataset.text || h1.textContent.trim();
   const currentUrl = h1.dataset.url || '';
 
+  // Build inline edit wrap that fits inside the flex row
   const wrap = document.createElement('div');
-  wrap.style.cssText = 'display:flex;flex-direction:column;gap:4px;';
+  wrap.id = 'main-title';
+  wrap.style.cssText = 'display:flex;flex-direction:column;gap:3px;flex:1;min-width:0;';
 
   const textIn = document.createElement('input');
   textIn.type = 'text'; textIn.value = current; textIn.placeholder = 'Title text';
-  textIn.style.cssText = 'font-size:24px;font-weight:600;border:none;border-bottom:2px solid var(--accent,#4A90D9);background:transparent;color:var(--text-primary);outline:none;width:100%;font-family:inherit;';
+  textIn.style.cssText = 'font-size:inherit;font-weight:700;border:none;border-bottom:2px solid var(--accent,#4A90D9);background:transparent;color:var(--text-primary);outline:none;width:100%;font-family:inherit;line-height:1.3;padding:0;margin:0;';
 
   const urlIn = document.createElement('input');
   urlIn.type = 'text'; urlIn.value = currentUrl; urlIn.placeholder = 'Link URL (optional)';
-  urlIn.style.cssText = 'font-size:12px;border:none;border-bottom:1px solid var(--border-mid);background:transparent;color:var(--text-secondary);outline:none;width:100%;font-family:inherit;';
+  urlIn.style.cssText = 'font-size:11px;border:none;border-bottom:1px solid var(--border-mid);background:transparent;color:var(--text-secondary);outline:none;width:100%;font-family:inherit;padding:0;margin:0;';
 
   wrap.appendChild(textIn); wrap.appendChild(urlIn);
   h1.replaceWith(wrap); textIn.focus(); textIn.select();
@@ -1059,7 +1062,7 @@ function editTitle() {
     const newUrl = urlIn.value.trim();
     const newH1 = document.createElement('h1');
     newH1.id = 'main-title';
-    newH1.title = ''; newH1.style.cursor = 'default'; newH1.style.color = 'var(--text-primary)';
+    newH1.style.cssText = 'color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;';
     newH1.dataset.text = newText; newH1.dataset.url = newUrl;
     if (newUrl) {
       const a = document.createElement('a');
@@ -1074,15 +1077,23 @@ function editTitle() {
     localStorage.setItem('ecoverage_title_url', newUrl);
     document.title = newText;
     updateTitleLinkBtn(newUrl);
-    doSave();
+    scheduleCloudSave();
+    // Sync offer select with new name
+    offerRebuildSelect();
   };
 
   let saved = false;
   const guardedSave = () => { if (!saved) { saved = true; save(); } };
-  textIn.addEventListener('blur', () => { setTimeout(() => { if (document.activeElement !== urlIn) guardedSave(); }, 100); });
-  urlIn.addEventListener('blur', () => { setTimeout(guardedSave, 100); });
-  textIn.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); urlIn.focus(); } if (e.key === 'Escape') { wrap.replaceWith(document.getElementById('main-title') || wrap); } });
-  urlIn.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); urlIn.blur(); } if (e.key === 'Escape') { urlIn.blur(); } });
+  textIn.addEventListener('blur', () => { setTimeout(() => { if (document.activeElement !== urlIn) guardedSave(); }, 120); });
+  urlIn.addEventListener('blur', () => { setTimeout(guardedSave, 120); });
+  textIn.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); urlIn.focus(); }
+    if (e.key === 'Escape') { saved = true; wrap.replaceWith(h1); }
+  });
+  urlIn.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); urlIn.blur(); }
+    if (e.key === 'Escape') { saved = true; wrap.replaceWith(h1); }
+  });
 }
 
 function setViewMode(tableId, gridId, tableBtnId, gridBtnId, buildFn, storageKey, mode) {
