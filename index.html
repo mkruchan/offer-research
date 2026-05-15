@@ -3778,6 +3778,7 @@ function setStatus(state, text) {
   document.getElementById('autosaveText').textContent = text;
 }
 let cloudSaveTimer = null;
+let _offerSwitching = false;
 function scheduleCloudSave() {
   if (_restoring || _offerSwitching) return;
   setStatus('saving', 'Saving…');
@@ -4130,7 +4131,6 @@ const SB_OFFER_KEY = 'ecoverage_current_offer_id';
 
 let _sbClient      = null;
 let _currentOfferId = null;
-let _offerSwitching = false;
 let _allOffers     = [];
 
 /* ── Client ── */
