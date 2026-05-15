@@ -4281,30 +4281,32 @@ async function offerLoad(id, showMsg) {
   if (error || !data) { showToast('Failed to load offer', 'error'); return; }
   _currentOfferId = id;
   localStorage.setItem(SB_OFFER_KEY, id);
-  // Sync select
   const sel = document.getElementById('offer-select');
   if (sel) sel.value = id;
-  // Update title immediately to offer name
-  const h1 = document.getElementById('main-title');
-  if (h1) {
-    h1.dataset.text = data.name;
-    h1.dataset.url = data.data?.header?.titleUrl || '';
-    h1.textContent = data.name;
-    document.title = data.name;
-    localStorage.setItem('ecoverage_title', data.name);
-  }
-  // Restore page data (or clear for new empty offers)
-  if (data.data && data.data.v) {
+
+  const offerName = data.name || '';
+  const hasData = data.data && data.data.v;
+
+  if (hasData) {
+    // Make sure the stored data has the correct offer name as title
+    if (offerName) {
+      data.data.header = data.data.header || {};
+      if (!data.data.header.title) data.data.header.title = offerName;
+    }
+    // Persist title to localStorage BEFORE restoreData/runPostInit
+    localStorage.setItem('ecoverage_title', data.data.header?.title || offerName);
+    localStorage.setItem('ecoverage_title_url', data.data.header?.titleUrl || '');
     const prev = _restoring;
     _restoring = true;
     restoreData(data.data);
     _restoring = prev;
     setTimeout(() => runPostInit(data.data), 0);
   } else {
-    // New offer with no data — clear the page
-    clearPageData(data.name);
+    // New/empty offer — clear page and set name
+    clearPageData(offerName);
   }
-  if (showMsg) showToast('Loaded: ' + data.name, 'success');
+
+  if (showMsg) showToast('Loaded: ' + offerName, 'success');
 }
 
 /* ── Native select change ── */
@@ -4420,10 +4422,13 @@ async function offerNewConfirm() {
 }
 
 function clearPageData(title) {
-  // Clear all table rows except the first empty one
+  // Clear all table rows — replace with 3 empty starter rows
   ['ads-body','traffic-body','funnels-body'].forEach(id => {
     const tbody = document.getElementById(id);
-    if (tbody) tbody.innerHTML = '';
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    const fn = id === 'ads-body' ? adsRow : id === 'traffic-body' ? trafficRow : funnelRow;
+    for (let i = 1; i <= 3; i++) tbody.insertAdjacentHTML('beforeend', fn(i));
   });
   // Clear meta fields
   ['meta-analyst','meta-date','meta-period'].forEach(id => {
@@ -4433,13 +4438,18 @@ function clearPageData(title) {
   ['notes-takeaways','notes-actions'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
   });
-  // Set title
+  // Set title in DOM and localStorage
+  localStorage.setItem('ecoverage_title', title);
+  localStorage.setItem('ecoverage_title_url', '');
   const h1 = document.getElementById('main-title');
-  if (h1) { h1.dataset.text = title; h1.dataset.url = ''; h1.textContent = title; document.title = title; localStorage.setItem('ecoverage_title', title); localStorage.removeItem('ecoverage_title_url'); }
-  // Rebuild grids
-  if (typeof buildAdsGrid === 'function') buildAdsGrid();
-  if (typeof buildTrafficGrid === 'function') buildTrafficGrid();
-  if (typeof buildFunnelsGrid === 'function') buildFunnelsGrid();
+  if (h1) { h1.dataset.text = title; h1.dataset.url = ''; h1.textContent = title; document.title = title; }
+  // Rebuild grids and UI
+  setTimeout(() => {
+    resizeAllInputs(); updateAllBadges(); syncAllLinks(); updateFrozenOffsets(); centerTextareas();
+    if (document.getElementById('ads-grid').style.display !== 'none') buildAdsGrid();
+    if (document.getElementById('traffic-grid').style.display !== 'none') buildTrafficGrid();
+    if (document.getElementById('funnels-grid').style.display !== 'none') buildFunnelsGrid();
+  }, 0);
   offerRebuildSelect();
 }
 
