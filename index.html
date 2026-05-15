@@ -60,7 +60,7 @@
     .header-left { flex: 1; min-width: 0; display: flex; align-items: center; gap: 24px; overflow: hidden; }
     h1#main-title { word-break: break-word; overflow-wrap: break-word; min-width: 0; background:none !important; border:none !important; padding:0 !important; box-shadow:none !important; }
     .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: var(--blue-bg); color: var(--blue-text); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px; }
-    .header h1 { font-size: 24px; font-weight: 600; margin-bottom: 4px; color: var(--text-primary); }
+    .header h1 { font-size: 34px; font-weight: 600; margin-bottom: 4px; color: var(--text-primary); }
     .header p { font-size: 14px; color: var(--text-secondary); }
     .save-bar { display: flex; align-items: center; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
     .autosave-status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
@@ -299,7 +299,7 @@
       .header-top { flex-direction: column; gap: 8px; }
       .save-bar { flex-wrap: wrap; gap: 6px; }
       .toolbar-btn { font-size: 10px; padding: 4px 8px; }
-      h1#main-title { font-size: 20px !important; }
+      h1#main-title { font-size: 26px !important; }
       .header-left > div { gap: 12px !important; }
     }
     @media (max-width: 700px) {
@@ -309,7 +309,7 @@
       .save-bar .toolbar-btn span, .save-bar .toolbar-btn #themeLabel, .save-bar .toolbar-btn #autosaveLabel { display: none; }
       .two-col { grid-template-columns: 1fr; }
       .ads-grid-inner { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important; }
-      h1#main-title { font-size: 18px !important; }
+      h1#main-title { font-size: 22px !important; }
       .section-header { flex-wrap: wrap; gap: 6px; }
     }
     @media (max-width: 480px) {
@@ -709,7 +709,7 @@
             <div style="font-size:20px;color:var(--text-primary);font-weight:600;">Multi-Platform Creative Research</div>
           </div>
           <!-- Title + Offer picker -->
-          <div style="display:flex;flex-direction:column;gap:6px;margin-top:2px;">
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:2px;">
             <!-- h1 shown normally -->
             <div style="display:flex;align-items:center;gap:5px;flex-wrap:nowrap;">
               <h1 id="main-title" style="color:var(--text-primary);margin:0;font-weight:700;background:none;border:none;padding:0;" data-text="" data-url=""></h1>
@@ -4294,6 +4294,9 @@ async function offerLoad(id, showMsg) {
   const sel = document.getElementById('offer-select');
   if (sel) sel.value = id;
   const offerName = data.name || '';
+  // Persist offer name locally so it shows instantly on next reload
+  localStorage.setItem('ecoverage_last_offer_name', offerName);
+  localStorage.setItem('ecoverage_last_offer_id', id);
   const hasData = data.data && data.data.v;
   if (hasData) {
     data.data.header = data.data.header || {};
@@ -4396,9 +4399,20 @@ function offerSearchFilter(q) {
   results.innerHTML = filtered.map(o => {
     const active = o.id === _currentOfferId;
     const metaDate = o.data?.meta?.date;
-    const date = metaDate
-      ? new Date(metaDate).toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'})
-      : new Date(o.updated_at).toLocaleDateString(undefined, {month:'short', day:'numeric'});
+    let date = '';
+    if (metaDate) {
+      // Handle dd.mm.yyyy format
+      const parts = metaDate.split('.');
+      let d;
+      if (parts.length === 3 && parts[0].length <= 2) {
+        d = new Date(+parts[2], +parts[1]-1, +parts[0]);
+      } else {
+        d = new Date(metaDate);
+      }
+      date = isNaN(d) ? metaDate : d.toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'});
+    } else {
+      date = new Date(o.updated_at).toLocaleDateString(undefined, {month:'short', day:'numeric'});
+    }
     return `<div onclick="offerLoadFromSearch('${o.id}')"
       style="display:flex;align-items:center;justify-content:space-between;gap:10px;
              padding:9px 14px;cursor:pointer;border-bottom:1px solid var(--border-light);
@@ -4513,10 +4527,19 @@ function offerRename() {
 
 /* ── Init ── */
 (async function sbInit() {
+  // Show last known offer name instantly before Supabase loads
+  const lastName = localStorage.getItem('ecoverage_last_offer_name');
+  if (lastName) {
+    const h1 = document.getElementById('main-title');
+    if (h1 && !h1.textContent.trim()) {
+      h1.textContent = lastName;
+      document.title = lastName;
+      _offerSyncNamePill(lastName);
+    }
+  }
   const url = localStorage.getItem(SB_URL_KEY);
   const key = localStorage.getItem(SB_KEY_KEY);
   if (!url || !key) return;
-  // Pre-fill modal
   document.getElementById('sb-url-input').value = url;
   document.getElementById('sb-key-input').value = key;
   await offerLoadAll();
