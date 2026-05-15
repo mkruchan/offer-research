@@ -567,6 +567,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
     /* ── Offer picker (inline header) ── */
+    /* title icon buttons (edit + open link) */
+    .title-icon-btn { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:6px; border:1px solid var(--border-light); background:var(--bg-secondary); color:var(--text-secondary); cursor:pointer; transition:all 0.13s; padding:0; flex-shrink:0; text-decoration:none; }
+    .title-icon-btn:hover { color:var(--text-primary); border-color:var(--border-mid); background:var(--bg-tertiary,var(--bg-secondary)); }
     /* offer picker */
     #offer-select option { font-size:14px; font-weight:500; }
     .offer-pill-btn { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; font-size:12px; font-weight:500; font-family:inherit; border-radius:20px; border:1px solid var(--border-light); background:var(--bg-secondary); color:var(--text-secondary); cursor:pointer; white-space:nowrap; transition:all 0.13s; }
@@ -598,20 +601,39 @@
 <!-- Supabase Setup Modal -->
 <div id="sb-modal-overlay" class="hidden">
   <div id="sb-modal">
-    <h2>🗄️ Supabase Setup</h2>
-    <p>Connect your Supabase project to store and manage all your offers. You only need to do this once.</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <h2 style="margin:0;cursor:default;user-select:none;" onclick="sbUnlockClick()">🗄️ Supabase Database</h2>
+      <button onclick="sbModalClose()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text-secondary);line-height:1;padding:0 4px;">×</button>
+    </div>
+    <p>Primary storage for all offers. Syncs automatically on every save.</p>
     <div class="sb-field">
-      <label>Supabase Project URL</label>
-      <input type="text" id="sb-url-input" placeholder="https://xxxx.supabase.co">
+      <label>Project URL</label>
+      <input type="text" id="sb-url-input" placeholder="https://xxxx.supabase.co" autocomplete="off" disabled style="opacity:0.5;cursor:default;">
     </div>
     <div class="sb-field">
-      <label>Publishable Key (API Keys → Publishable key)</label>
-      <input type="text" id="sb-key-input" placeholder="sb_publishable_...">
+      <label>Publishable Key</label>
+      <div style="position:relative;">
+        <input type="password" id="sb-key-input" placeholder="sb_publishable_..." autocomplete="off" disabled
+          style="width:100%;padding:8px 12px;font-size:13px;font-family:inherit;border:1px solid var(--border-light);border-radius:8px;background:var(--bg-secondary);color:var(--text-primary);outline:none;opacity:0.5;cursor:default;">
+      </div>
+      <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">Settings → API Keys → Publishable key.</div>
     </div>
-    <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">Find Project URL under Settings → General. Find the key under Settings → API Keys → Publishable key.</div>
-    <div class="sb-actions">
-      <button class="offer-bar-btn" onclick="document.getElementById('sb-modal-overlay').classList.add('hidden')">Cancel</button>
-      <button class="offer-bar-btn primary" onclick="sbSaveConfig()">Connect & Save</button>
+    <div class="sb-actions" style="margin-bottom:16px;">
+      <button class="offer-bar-btn" onclick="sbModalClose()">Cancel</button>
+      <button class="offer-bar-btn primary" id="sb-connect-btn" onclick="sbSaveConfig()" disabled style="opacity:0.5;cursor:default;">Connect & Save</button>
+    </div>
+
+    <!-- JSONBin backup section -->
+    <div style="border-top:1px solid var(--border-light);padding-top:14px;">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+        <span style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;">☁️ JSONBin Backup</span>
+        <span style="font-size:10px;padding:2px 7px;border-radius:20px;background:var(--amber-bg,#fef3c7);color:var(--amber-text,#92400e);font-weight:600;">BACKUP</span>
+      </div>
+      <p style="font-size:12px;color:var(--text-secondary);margin:0 0 10px;">Fallback cloud storage. Data saves here automatically if Supabase is unavailable.</p>
+      <button onclick="showSetupModal();document.getElementById('sb-modal-overlay').classList.add('hidden');"
+        style="font-size:12px;font-family:inherit;padding:6px 12px;border-radius:7px;border:1px solid var(--border-light);background:var(--bg-secondary);color:var(--text-secondary);cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
+        Configure JSONBin →
+      </button>
     </div>
   </div>
 </div>
@@ -622,7 +644,13 @@
   <div class="modal">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
       <h2 style="margin:0;cursor:default;user-select:none;" id="cloud-modal-title" onclick="cloudTitleClick()">☁️ Cloud setup</h2>
-      <button onclick="skipSetup()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text-secondary);line-height:1;padding:0 4px;">×</button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button onclick="skipSetup();sbModalOpen();" style="background:none;border:none;cursor:pointer;font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:6px;border:1px solid var(--border-light);" title="Back to Supabase">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3L5 8l5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+        <button onclick="skipSetup()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--text-secondary);line-height:1;padding:0 4px;">×</button>
+      </div>
     </div>
 
     <label style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-secondary);display:block;margin-bottom:5px;">Bin ID</label>
@@ -681,51 +709,73 @@
           <!-- Title + Offer picker -->
           <div style="display:flex;flex-direction:column;gap:6px;margin-top:2px;">
             <!-- h1 shown normally -->
-            <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;">
+            <div style="display:flex;align-items:center;gap:5px;flex-wrap:nowrap;">
               <h1 id="main-title" style="color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;" data-text="" data-url=""></h1>
-              <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
-                <button onclick="editTitle()" title="Edit title & link" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.6;padding:2px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
-                </button>
-                <a id="title-link-btn" href="#" target="_blank" rel="noopener" title="Open link" onclick="return openTitleLink(event)" style="display:none;color:var(--text-secondary);opacity:0.6;flex-shrink:0;line-height:1;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
-              </div>
+              <button onclick="editTitle()" title="Edit title & link" class="title-icon-btn">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
+              </button>
+              <a id="title-link-btn" href="#" target="_blank" rel="noopener" title="Open link" onclick="return openTitleLink(event)" class="title-icon-btn" style="display:none;text-decoration:none;">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
             </div>
 
             <!-- Offer picker row -->
-            <div id="offer-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <div id="offer-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;position:relative;">
 
-              <!-- Native select -->
+              <!-- Current offer select -->
               <select id="offer-select" onchange="offerLoadFromSelect(this.value)"
                 style="font-size:13px;font-weight:500;font-family:inherit;color:var(--text-primary);
                        background:var(--bg-secondary);border:1px solid var(--border-light);
                        border-radius:8px;outline:none;cursor:pointer;padding:5px 10px;
-                       max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                       max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                 <option value="">— select offer —</option>
               </select>
 
-              <!-- Search -->
-              <button onclick="offerSearchPrompt()" title="Search offers" class="offer-pill-btn">
-                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3" stroke-linecap="round"/></svg>
-                Search
-              </button>
+              <!-- Search dropdown -->
+              <div style="position:relative;">
+                <button onclick="offerSearchToggle()" id="offer-search-trigger" class="offer-pill-btn">
+                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3" stroke-linecap="round"/></svg>
+                  Search
+                </button>
+                <div id="offer-search-panel" style="display:none;position:absolute;top:calc(100% + 6px);left:0;
+                     width:300px;background:var(--bg-primary);border:1px solid var(--border-light);
+                     border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.18);z-index:600;overflow:hidden;">
+                  <div style="padding:10px 10px 6px;">
+                    <input id="offer-search-input" type="text" placeholder="Type to search offers…"
+                      oninput="offerSearchFilter(this.value)"
+                      style="width:100%;padding:7px 10px;font-size:13px;font-family:inherit;
+                             border:1px solid var(--border-light);border-radius:7px;
+                             background:var(--bg-secondary);color:var(--text-primary);outline:none;box-sizing:border-box;">
+                  </div>
+                  <div id="offer-search-results" style="max-height:240px;overflow-y:auto;padding-bottom:4px;"></div>
+                </div>
+              </div>
 
-              <!-- New -->
-              <button onclick="offerNew()" title="New offer" class="offer-pill-btn offer-pill-btn--accent">
-                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>
-                New offer
-              </button>
-
-              <!-- Rename -->
-              <button onclick="offerRename()" title="Rename offer" class="offer-icon-btn">
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
-              </button>
-
-              <!-- Supabase -->
-              <button onclick="document.getElementById('sb-modal-overlay').classList.remove('hidden')" title="Supabase database" class="offer-icon-btn offer-icon-btn--db" id="sb-status-btn">
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="8" cy="4.5" rx="6" ry="2"/><path d="M2 4.5v7c0 1.1 2.69 2 6 2s6-.9 6-2v-7"/><path d="M2 8c0 1.1 2.69 2 6 2s6-.9 6-2"/></svg>
-              </button>
+              <!-- New offer dropdown -->
+              <div style="position:relative;">
+                <button onclick="offerNewToggle()" id="offer-new-trigger" class="offer-pill-btn offer-pill-btn--accent">
+                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>
+                  New offer
+                </button>
+                <div id="offer-new-panel" style="display:none;position:absolute;top:calc(100% + 6px);left:0;
+                     width:300px;background:var(--bg-primary);border:1px solid var(--border-light);
+                     border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.18);z-index:600;overflow:hidden;">
+                  <div style="padding:14px;">
+                    <div style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">New offer</div>
+                    <input id="offer-new-name" type="text" placeholder="Offer name…"
+                      onkeydown="if(event.key==='Enter')offerNewConfirm()"
+                      style="width:100%;padding:8px 10px;font-size:13px;font-family:inherit;
+                             border:1px solid var(--border-light);border-radius:7px;
+                             background:var(--bg-secondary);color:var(--text-primary);outline:none;
+                             box-sizing:border-box;margin-bottom:10px;">
+                    <div style="font-size:11px;color:var(--text-secondary);margin-bottom:10px;">Current page data will be saved as this offer.</div>
+                    <div style="display:flex;gap:6px;justify-content:flex-end;">
+                      <button onclick="offerNewCancel()" class="offer-pill-btn" style="font-size:12px;">Cancel</button>
+                      <button onclick="offerNewConfirm()" class="offer-pill-btn offer-pill-btn--accent" style="font-size:12px;">Create offer</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
             </div>
           </div>
@@ -760,7 +810,7 @@
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2.5 1.5" stroke-linecap="round"/></svg>
           History
         </button>
-        <button class="toolbar-btn" onclick="document.getElementById('sb-modal-overlay').classList.remove('hidden')" title="Supabase database" id="sb-toolbar-btn">🗄️ DB</button>
+        <button class="toolbar-btn" onclick="sbModalOpen()" title="Supabase database" id="sb-toolbar-btn">🗄️ DB</button>
         <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(this)">
       </div>
     </div>
@@ -4149,12 +4199,58 @@ async function sbSaveConfig() {
   localStorage.setItem(SB_URL_KEY, url);
   localStorage.setItem(SB_KEY_KEY, key);
   _sbClient = null;
-  document.getElementById('sb-modal-overlay').classList.add('hidden');
+  sbModalClose();
   showToast('Supabase connected!', 'success');
   await offerLoadAll();
 }
 
-/* ── Rebuild native select ── */
+/* ── Open Supabase modal (pre-fill, locked) ── */
+function sbModalOpen() {
+  const url = localStorage.getItem(SB_URL_KEY) || '';
+  const key = localStorage.getItem(SB_KEY_KEY) || '';
+  const urlEl = document.getElementById('sb-url-input');
+  const keyEl = document.getElementById('sb-key-input');
+  const btn   = document.getElementById('sb-connect-btn');
+  if (urlEl) { urlEl.value = url; urlEl.disabled = true; urlEl.style.opacity = '0.5'; urlEl.style.cursor = 'default'; }
+  if (keyEl) { keyEl.value = key; keyEl.disabled = true; keyEl.type = 'password'; keyEl.style.opacity = '0.5'; keyEl.style.cursor = 'default'; }
+  if (btn)   { btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'default'; }
+  document.getElementById('sb-modal-overlay').classList.remove('hidden');
+}
+
+/* ── Triple-click to unlock editing ── */
+let _sbClickCount = 0, _sbClickTimer = null;
+function sbUnlockClick() {
+  _sbClickCount++;
+  clearTimeout(_sbClickTimer);
+  _sbClickTimer = setTimeout(() => { _sbClickCount = 0; }, 600);
+  if (_sbClickCount >= 3) {
+    _sbClickCount = 0;
+    const url = document.getElementById('sb-url-input');
+    const key = document.getElementById('sb-key-input');
+    const btn = document.getElementById('sb-connect-btn');
+    const locked = url.disabled;
+    [url, key].forEach(el => {
+      el.disabled = !locked;
+      el.style.opacity = locked ? '1' : '0.5';
+      el.style.cursor = locked ? 'text' : 'default';
+    });
+    key.type = locked ? 'text' : 'password';
+    btn.disabled = !locked;
+    btn.style.opacity = locked ? '1' : '0.5';
+    btn.style.cursor = locked ? 'pointer' : 'default';
+  }
+}
+// Re-lock when modal closes
+function sbModalClose() {
+  document.getElementById('sb-modal-overlay').classList.add('hidden');
+  // Re-lock fields
+  const url = document.getElementById('sb-url-input');
+  const key = document.getElementById('sb-key-input');
+  const btn = document.getElementById('sb-connect-btn');
+  if (url) { url.disabled = true; url.style.opacity = '0.5'; url.style.cursor = 'default'; }
+  if (key) { key.disabled = true; key.type = 'password'; key.style.opacity = '0.5'; key.style.cursor = 'default'; }
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'default'; }
+}
 function offerRebuildSelect() {
   const sel = document.getElementById('offer-select');
   if (!sel) return;
@@ -4238,28 +4334,83 @@ function offerLoadFromSelect(id) {
   offerLoad(id, true);
 }
 
-/* ── Search ── */
-function offerSearchPrompt() {
-  if (!_allOffers.length) { showToast('No offers saved yet. Connect Supabase first.', 'error'); return; }
-  const q = prompt('Search offers (type part of name):');
-  if (q === null || q.trim() === '') return;
-  const matches = _allOffers.filter(o => o.name.toLowerCase().includes(q.toLowerCase()));
-  if (!matches.length) { showToast('No offers match "' + q + '"', 'error'); return; }
-  offerLoad(matches[0].id, true);
+/* ── Search dropdown ── */
+function offerSearchToggle() {
+  const panel = document.getElementById('offer-search-panel');
+  const newPanel = document.getElementById('offer-new-panel');
+  const isOpen = panel.style.display === 'block';
+  newPanel.style.display = 'none';
+  panel.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) {
+    const inp = document.getElementById('offer-search-input');
+    inp.value = '';
+    offerSearchFilter('');
+    setTimeout(() => inp.focus(), 50);
+  }
 }
 
-/* ── New offer ── */
-async function offerNew() {
-  const defaultName = (document.getElementById('main-title')?.dataset?.text || '').trim() || 'New Offer';
-  const name = prompt('New offer name:', defaultName);
-  if (!name) return;
+function offerSearchFilter(q) {
+  const results = document.getElementById('offer-search-results');
+  if (!results) return;
+  const filtered = q.trim()
+    ? _allOffers.filter(o => o.name.toLowerCase().includes(q.toLowerCase()))
+    : _allOffers;
+  if (!filtered.length) {
+    results.innerHTML = `<div style="padding:12px 14px;font-size:13px;color:var(--text-secondary);font-style:italic;">${q ? 'No matches for "' + q + '"' : 'No offers yet'}</div>`;
+    return;
+  }
+  results.innerHTML = filtered.map(o => {
+    const active = o.id === _currentOfferId;
+    const date = new Date(o.updated_at).toLocaleDateString(undefined, {month:'short', day:'numeric'});
+    return `<div onclick="offerLoadFromSearch('${o.id}')"
+      style="display:flex;align-items:center;justify-content:space-between;gap:10px;
+             padding:9px 14px;cursor:pointer;border-bottom:1px solid var(--border-light);
+             ${active ? 'background:var(--blue-bg,#dbeafe);' : ''}
+             transition:background 0.1s;"
+      onmouseover="if(!${active})this.style.background='var(--bg-secondary)'"
+      onmouseout="this.style.background='${active ? 'var(--blue-bg,#dbeafe)' : 'transparent'}'">
+      <span style="font-size:13px;font-weight:${active?'600':'400'};color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.name}</span>
+      <span style="font-size:11px;color:var(--text-secondary);flex-shrink:0;">${date}</span>
+    </div>`;
+  }).join('');
+}
+
+function offerLoadFromSearch(id) {
+  document.getElementById('offer-search-panel').style.display = 'none';
+  document.getElementById('offer-search-input').value = '';
+  offerLoad(id, true);
+}
+
+/* ── New offer dropdown ── */
+function offerNewToggle() {
+  const panel = document.getElementById('offer-new-panel');
+  const searchPanel = document.getElementById('offer-search-panel');
+  const isOpen = panel.style.display === 'block';
+  searchPanel.style.display = 'none';
+  panel.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) {
+    const inp = document.getElementById('offer-new-name');
+    const title = (document.getElementById('main-title')?.dataset?.text || '').trim();
+    inp.value = title || '';
+    setTimeout(() => { inp.focus(); inp.select(); }, 50);
+  }
+}
+
+function offerNewCancel() {
+  document.getElementById('offer-new-panel').style.display = 'none';
+  document.getElementById('offer-new-name').value = '';
+}
+
+async function offerNewConfirm() {
+  const name = document.getElementById('offer-new-name').value.trim();
+  if (!name) { document.getElementById('offer-new-name').focus(); return; }
+  offerNewCancel();
   const sb = sbGetClient();
   if (!sb) {
-    // No Supabase — just update the title
     const h1 = document.getElementById('main-title');
     if (h1) { h1.dataset.text = name; h1.textContent = name; document.title = name; localStorage.setItem('ecoverage_title', name); }
     offerRebuildSelect();
-    showToast('Title updated to "' + name + '" (connect Supabase to save offers)', 'success');
+    showToast('Title updated to "' + name + '"', 'success');
     return;
   }
   const pageData = collectData();
@@ -4273,7 +4424,21 @@ async function offerNew() {
   if (sel) sel.value = row.id;
 }
 
-/* ── Save current ── */
+/* ── Close panels on outside click ── */
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#offer-search-panel') && !e.target.closest('#offer-search-trigger')) {
+    const p = document.getElementById('offer-search-panel');
+    if (p) p.style.display = 'none';
+  }
+  if (!e.target.closest('#offer-new-panel') && !e.target.closest('#offer-new-trigger')) {
+    const p = document.getElementById('offer-new-panel');
+    if (p) p.style.display = 'none';
+  }
+});
+
+function offerSearchPrompt() { offerSearchToggle(); } // compat
+
+async function offerNew() { offerNewToggle(); }
 async function offerSaveCurrent() {
   const sb = sbGetClient();
   if (!sb) { manualSave(); return; }
