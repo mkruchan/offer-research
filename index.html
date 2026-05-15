@@ -3878,20 +3878,21 @@ async function doSave() {
   });
   const cloudData = { ...dataWithoutAds, ads: adsNoImages, savedAt: new Date().toISOString(), history: last5 };
   try { localStorage.setItem(LS_LOCAL, JSON.stringify(cloudData)); } catch(e){}
-  if (BIN_ID && API_KEY) {
+  // JSONBin is backup only — skip if Supabase is connected
+  const _sbClient = sbGetClient();
+  if (!_sbClient && BIN_ID && API_KEY) {
     const ok = await cloudSave(cloudData);
     const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
     if (ok) {
-      setStatus('saved', '☁️ Saved · ' + t);
+      setStatus('saved', '☁️ Saved (backup) · ' + t);
     } else {
-      setStatus('error', '⚠️ Cloud failed — check console');
-      console.error('doSave: cloudSave returned false. BIN_ID:', BIN_ID, 'API_KEY length:', API_KEY?.length);
+      setStatus('error', '⚠️ Backup failed');
     }
-  } else {
+  } else if (!_sbClient) {
     const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
     setStatus('saved','Saved locally · '+t);
-    console.warn('doSave: no BIN_ID or API_KEY, saved locally only');
   }
+  // Supabase status is set by window.doSave wrapper
 }
 
 async function manualSave() { await doSave(); showToast('Saved!','success'); }
@@ -4099,17 +4100,22 @@ function runPostInit(cloudData) {
     setTimeout(() => runPostInit(null), 0);
   }
 
-  // 2. Load from cloud in background — update silently when ready
+  // 2. Load from cloud in background — only if JSONBin is configured
   if (!BIN_ID) {
-    const dir = await loadDirectory();
-    const matched = dir[_hostPath] || dir[Object.keys(dir).find(k => _hostPath.startsWith(k))] || '';
-    if (matched) BIN_ID = matched;
+    // No JSONBin — check master directory but don't block
+    try {
+      const dir = await Promise.race([
+        loadDirectory(),
+        new Promise(r => setTimeout(() => r({}), 3000)) // 3s timeout
+      ]);
+      const matched = dir[_hostPath] || dir[Object.keys(dir).find(k => _hostPath.startsWith(k))] || '';
+      if (matched) BIN_ID = matched;
+    } catch(e) {}
   }
   if (BIN_ID && API_KEY) {
     setStatus('saving', '☁️ Syncing…');
     const cloudData = await cloudLoad();
     if (cloudData && cloudData.v) {
-      // Only update if cloud data is newer than what we showed
       const localTs = (() => { try { return new Date(JSON.parse(localStorage.getItem(LS_LOCAL)||'{}').savedAt||0); } catch { return new Date(0); } })();
       const cloudTs = new Date(cloudData.savedAt||0);
       if (cloudTs > localTs || !loadedFromLocal) {
@@ -4121,6 +4127,9 @@ function runPostInit(cloudData) {
     } else {
       setStatus('saved', loadedFromLocal ? 'Local data' : '');
     }
+  } else {
+    // No JSONBin — status will be updated by Supabase sync
+    setStatus('saved', loadedFromLocal ? 'Restored locally' : '');
   }
 })();
 
@@ -4520,7 +4529,20 @@ function offerRename() {
       try {
         const pageData = collectData();
         await sb.from('offers').update({ data: pageData, updated_at: new Date().toISOString() }).eq('id', _currentOfferId);
-      } catch(e) { console.warn('Supabase auto-push failed:', e); }
+        const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
+        setStatus('saved', '☁️ Saved · ' + t);
+      } catch(e) {
+        console.warn('Supabase save failed, trying JSONBin backup:', e);
+        // Fallback to JSONBin
+        if (BIN_ID && API_KEY) {
+          const pageData = collectData();
+          const ok = await cloudSave(pageData);
+          const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
+          setStatus(ok ? 'saved' : 'error', ok ? '☁️ Backup saved · ' + t : '⚠️ Save failed');
+        } else {
+          setStatus('error', '⚠️ Supabase failed — check connection');
+        }
+      }
     }
   };
 })();
