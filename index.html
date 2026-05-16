@@ -3789,12 +3789,39 @@
       white-space: nowrap !important;
     }
 
-    /* Frozen offer col */
+    /* Frozen num — sticky for ads and funnels */
+    #ads-table td.frozen-num,
+    #funnels-table td.frozen-num {
+      position: sticky !important;
+      left: 0 !important;
+      z-index: 20 !important;
+      background: #ffffff !important;
+    }
+    #ads-table th.frozen-num,
+    #funnels-table th.frozen-num {
+      position: sticky !important;
+      left: 0 !important;
+      z-index: 22 !important;
+      background: #f9fafb !important;
+    }
+    #ads-table th.frozen-offer,
+    #funnels-table th.frozen-offer {
+      position: sticky !important;
+      left: 28px !important;
+      z-index: 21 !important;
+      background: #f9fafb !important;
+    }
+
+    /* Frozen offer col — sticky preserved + text centered */
     #ads-table td.frozen-offer,
     #funnels-table td.frozen-offer {
-      position: relative !important;
+      position: sticky !important;
+      left: 28px !important;
+      z-index: 19 !important;
+      background: #ffffff !important;
       height: 52px !important;
       overflow: hidden !important;
+      vertical-align: middle !important;
     }
     #ads-table td.frozen-offer textarea,
     #funnels-table td.frozen-offer textarea {
@@ -3819,7 +3846,6 @@
     /* Ads absolute cols (GEO=5, LIFECYCLE=6) */
     #ads-table td:nth-child(5),
     #ads-table td:nth-child(6) {
-      position: relative !important;
       height: 52px !important;
       overflow: hidden !important;
     }
@@ -3846,7 +3872,6 @@
     #funnels-table td:nth-child(3),
     #funnels-table td:nth-child(4),
     #funnels-table td:nth-child(6) {
-      position: relative !important;
       height: 52px !important;
       overflow: hidden !important;
     }
@@ -3920,6 +3945,14 @@
     body.force-dark #ads-table tbody td > input,
     body.force-dark #funnels-table tbody td > textarea,
     body.force-dark #funnels-table tbody td > input { color: #d4d4d8 !important; }
+
+    /* Frozen col dark backgrounds */
+    body.force-dark #ads-table td.frozen-offer,
+    body.force-dark #funnels-table td.frozen-offer { background: #18181b !important; }
+    body.force-dark #ads-table tbody tr:hover td.frozen-offer,
+    body.force-dark #funnels-table tbody tr:hover td.frozen-offer,
+    body.force-dark #ads-table tbody tr:hover td.frozen-num,
+    body.force-dark #funnels-table tbody tr:hover td.frozen-num { background: #27272a !important; }
 
 
 
@@ -5058,18 +5091,18 @@ function editTitle() {
   const current = h1.dataset.text || h1.textContent.trim();
   const currentUrl = h1.dataset.url || '';
 
-  // Build inline edit wrap that fits inside the flex row
+  // Build a clean modal-style inline editor
   const wrap = document.createElement('div');
   wrap.id = 'main-title';
-  wrap.style.cssText = 'display:flex;flex-direction:column;gap:3px;flex:1;min-width:0;';
+  wrap.style.cssText = 'display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;max-width:600px;';
 
   const textIn = document.createElement('input');
-  textIn.type = 'text'; textIn.value = current; textIn.placeholder = 'Title text';
-  textIn.style.cssText = 'font-size:inherit;font-weight:700;border:none;border-bottom:2px solid var(--accent,#4A90D9);background:transparent;color:var(--text-primary);outline:none;width:100%;font-family:inherit;line-height:1.3;padding:0;margin:0;';
+  textIn.type = 'text'; textIn.value = current; textIn.placeholder = 'Offer title';
+  textIn.style.cssText = 'font-size:20px;font-weight:700;border:none;border-bottom:2px solid #2563eb;background:transparent;color:#111827;outline:none;width:100%;font-family:inherit;line-height:1.3;padding:2px 0;margin:0;letter-spacing:-0.3px;';
 
   const urlIn = document.createElement('input');
-  urlIn.type = 'text'; urlIn.value = currentUrl; urlIn.placeholder = 'Link URL (optional)';
-  urlIn.style.cssText = 'font-size:11px;border:none;border-bottom:1px solid var(--border-mid);background:transparent;color:var(--text-secondary);outline:none;width:100%;font-family:inherit;padding:0;margin:0;';
+  urlIn.type = 'url'; urlIn.value = currentUrl; urlIn.placeholder = 'Link URL (optional)';
+  urlIn.style.cssText = 'font-size:12px;border:none;border-bottom:1px solid #e5e7eb;background:transparent;color:#6b7280;outline:none;width:100%;font-family:inherit;padding:2px 0;margin:0;';
 
   wrap.appendChild(textIn); wrap.appendChild(urlIn);
   h1.replaceWith(wrap); textIn.focus(); textIn.select();
@@ -5079,12 +5112,12 @@ function editTitle() {
     const newUrl = urlIn.value.trim();
     const newH1 = document.createElement('h1');
     newH1.id = 'main-title';
-    newH1.style.cssText = 'color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:8px;padding:4px 14px;font-size:inherit;';
+    newH1.style.cssText = '';
     newH1.dataset.text = newText; newH1.dataset.url = newUrl;
     if (newUrl) {
       const a = document.createElement('a');
       a.href = newUrl; a.target = '_blank'; a.rel = 'noopener';
-      a.textContent = newText; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;';
+      a.textContent = newText; a.style.cssText = 'color:inherit;text-decoration:none;';
       newH1.appendChild(a);
     } else {
       newH1.textContent = newText;
@@ -5095,7 +5128,6 @@ function editTitle() {
     document.title = newText;
     updateTitleLinkBtn(newUrl);
     scheduleCloudSave();
-    // Sync offer select with new name
     offerRebuildSelect();
   };
 
@@ -5253,7 +5285,7 @@ function buildTrafficGrid() {
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${idx+1}</span>
           <div style="display:flex;align-items:center;gap:4px;background:rgba(0,0,0,0.55);border-radius:6px;padding:3px 5px;backdrop-filter:blur(4px);" onclick="event.stopPropagation()">
-          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">⧉</button>
+          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
           <button title="Delete" onclick="gridRemoveRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">×</button>
         </div>
         </div>
@@ -5337,7 +5369,7 @@ function buildFunnelsGrid() {
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${idx+1}</span>
           <div style="display:flex;align-items:center;gap:4px;background:rgba(0,0,0,0.55);border-radius:6px;padding:3px 5px;backdrop-filter:blur(4px);" onclick="event.stopPropagation()">
-          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">⧉</button>
+          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
           <button title="Delete" onclick="gridRemoveRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">×</button>
         </div>
         </div>
@@ -5505,7 +5537,7 @@ function buildAdsGrid() {
         <div style="position:absolute;top:4px;left:4px;right:4px;display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${num}</span>
           <div style="display:flex;align-items:center;gap:4px;background:rgba(0,0,0,0.55);border-radius:6px;padding:3px 5px;backdrop-filter:blur(4px);" onclick="event.stopPropagation()">
-          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">⧉</button>
+          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
           <button title="Delete" onclick="gridRemoveRow(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">×</button>
         </div>
         </div>
@@ -6958,7 +6990,7 @@ function trafficRow(n) {
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
     <td><textarea placeholder="Observations..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'traffic-body')">⧉</button><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
+    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'traffic-body')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
   </tr>`;
 }
 
@@ -7067,7 +7099,7 @@ function adsRow(n) {
     <td><textarea placeholder="Ad title text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. 500K" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="Additional notes..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'ads-body')">⧉</button><button class="remove-row-btn" onclick="removeRow(this,'ads-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
+    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'ads-body')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button><button class="remove-row-btn" onclick="removeRow(this,'ads-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
   </tr>`;
 }
 
@@ -7102,7 +7134,7 @@ function funnelRow(n) {
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
     <td><textarea placeholder="Structure, copy, offer details..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'funnels-body')">⧉</button><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
+    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'funnels-body')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
   </tr>`;
 }
 
