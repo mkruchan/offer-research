@@ -943,6 +943,7 @@
 // Master directory bin — stores {_directory: {url: binId}} for all sites
 const MASTER_BIN_ID = '69fb9158adc21f119a6273c4';
 const MASTER_API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6WvXt6';
+
 const _hostPath = (location.hostname + location.pathname).replace(/\/index\.html$/, '').replace(/\/$/, '');
 const _urlBin = new URLSearchParams(location.search).get('bin') || '';
 // Per-file key — all storage is isolated per page URL
@@ -987,6 +988,32 @@ async function saveDirectory(dir) {
     });
     try { localStorage.setItem(LS_DIR_CACHE, JSON.stringify(dir)); } catch(e) {}
   } catch(e) { console.error('saveDirectory error:', e); }
+}
+
+async function loadSbCreds() {
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${MASTER_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': MASTER_API_KEY }
+    });
+    if (!res.ok) return null;
+    const d = await res.json();
+    return d?.record?._sb || null;
+  } catch(e) { return null; }
+}
+
+async function saveSbCreds(url, key) {
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${MASTER_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': MASTER_API_KEY }
+    });
+    const current = res.ok ? (await res.json())?.record || {} : {};
+    current._sb = { url, key };
+    await fetch(`https://api.jsonbin.io/v3/b/${MASTER_BIN_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_API_KEY, 'X-Bin-Versioning': 'false' },
+      body: JSON.stringify(current)
+    });
+  } catch(e) { console.error('saveSbCreds error:', e); }
 }
 
 function editTitle() {
@@ -4165,6 +4192,7 @@ async function sbSaveConfig() {
   _sbClient = null;
   sbModalClose();
   showToast('Supabase connected!', 'success');
+  saveSbCreds(url, key); // persist to master bin so any browser auto-connects
   await offerLoadAll();
 }
 
@@ -4559,8 +4587,21 @@ function offerRename() {
       _offerSyncNamePill(lastName);
     }
   }
-  const url = localStorage.getItem(SB_URL_KEY);
-  const key = localStorage.getItem(SB_KEY_KEY);
+  // Try localStorage first, then fetch from master bin (works on any browser)
+  let url = localStorage.getItem(SB_URL_KEY);
+  let key = localStorage.getItem(SB_KEY_KEY);
+  if (!url || !key) {
+    const creds = await Promise.race([
+      loadSbCreds(),
+      new Promise(r => setTimeout(() => r(null), 4000))
+    ]);
+    if (creds?.url && creds?.key) {
+      url = creds.url;
+      key = creds.key;
+      localStorage.setItem(SB_URL_KEY, url);
+      localStorage.setItem(SB_KEY_KEY, key);
+    }
+  }
   if (!url || !key) return;
   document.getElementById('sb-url-input').value = url;
   document.getElementById('sb-key-input').value = key;
