@@ -970,9 +970,17 @@
     .adp-img-upload-overlay span { color: #fff; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
 
     /* Section */
-    .adp-section { margin-bottom: 14px; }
+    .adp-section { margin-bottom: 20px; }
     .adp-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .adp-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); }
+    .adp-section-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      color: #111827;
+      background: none;
+      padding: 0;
+    }
 
     /* Info card */
     .adp-card { background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; }
@@ -980,7 +988,7 @@
     /* Detail rows */
     .adp-row { display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-bottom: 1px solid var(--border-light); }
     .adp-row:last-child { border-bottom: none; }
-    .adp-row-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); width: 90px; flex-shrink: 0; }
+    .adp-row-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; width: 90px; flex-shrink: 0; }
     .adp-row-val { flex: 1; min-width: 0; font-size: 14px; color: var(--text-primary); }
     .adp-row-edit { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
     .adp-row-input {
@@ -1023,7 +1031,7 @@
     /* Copy fields */
     .adp-copy-item { margin-bottom: 10px; }
     .adp-copy-item:last-child { margin-bottom: 0; }
-    .adp-copy-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 6px; }
+    .adp-copy-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.10em; color: #111827; margin-bottom: 6px; }
     .adp-copy-block {
       background: var(--bg-secondary);
       border: 1px solid var(--border-light);
@@ -2734,7 +2742,10 @@
     }
     tbody tr { border-bottom: 1px solid #f3f4f6 !important; transition: background .1s !important; }
     tbody tr:hover { background: #f9fafb !important; }
-    tbody td { padding: 12px 14px !important; font-size: 13px !important; color: #374151 !important; vertical-align: middle !important; }
+    /* Only apply generous padding to traffic table — ads/funnels use position:absolute cells */
+    #traffic-table tbody td { padding: 0 !important; font-size: 13px !important; color: #374151 !important; vertical-align: middle !important; }
+    #ads-table tbody td,
+    #funnels-table tbody td { padding: 0 !important; font-size: 12px !important; color: #374151 !important; vertical-align: middle !important; }
 
     /* ── SPACING ── */
     .container {
@@ -2787,11 +2798,15 @@
     .ds-sidebar-logo-text,
     .ic-title,
     .tc-title,
-    .oc-label,
     .md-title,
     .adp-title,
     .section-title {
       font-family: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif !important;
+    }
+    /* Labels use Inter */
+    .oc-label,
+    .oc-meta-label {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif !important;
     }
     /* ═══════════════════════════════════════════════════════
        REFERENCE MATCH — CSS-only visual overrides
@@ -3614,6 +3629,424 @@
     @media (prefers-color-scheme: dark) {
       body:not(.force-light) .ds-sidebar-logo svg path { fill: #60a5fa !important; }
     }
+
+    /* ══ PROFESSIONAL UI/UX CONSISTENCY FIXES ══
+       Fixes: spacing rhythm, typography scale, card consistency,
+       border-radius uniformity, shadow depth, color palette,
+       interactive states, section icon alignment.
+    ══════════════════════════════════════════════ */
+
+    /* 1. Global design tokens consistency */
+    :root {
+      --card-radius: 12px;
+      --card-padding-h: 24px;
+      --card-padding-v: 20px;
+      --section-gap: 20px;
+      --card-border: 1px solid #e5e7eb;
+      --card-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+      --label-color: #9ca3af;
+      --label-size: 10.5px;
+      --label-weight: 600;
+      --label-spacing: 0.08em;
+    }
+
+    /* 2. Page background & container rhythm */
+    body { background: #f5f7fa !important; }
+    .container {
+      padding: 24px 28px 64px !important;
+      display: flex;
+      flex-direction: column;
+      gap: var(--section-gap);
+    }
+    /* Remove margin-bottom from cards since we use gap */
+    .ds-offer-card,
+    .ic-grid,
+    .tc-card { margin-bottom: 0 !important; }
+
+    /* 3. Offer card — unified, clean grid layout */
+    .ds-offer-card {
+      border-radius: var(--card-radius) !important;
+      border: var(--card-border) !important;
+      box-shadow: var(--card-shadow) !important;
+      background: #fff !important;
+    }
+    .oc-top {
+      padding: 22px var(--card-padding-h) 20px !important;
+      gap: 16px !important;
+    }
+    .oc-label {
+      font-size: var(--label-size) !important;
+      font-weight: var(--label-weight) !important;
+      letter-spacing: var(--label-spacing) !important;
+      color: var(--label-color) !important;
+      text-transform: uppercase !important;
+      margin-bottom: 6px !important;
+    }
+    h1#main-title {
+      font-size: 20px !important;
+      font-weight: 700 !important;
+      line-height: 1.25 !important;
+      letter-spacing: -0.3px !important;
+    }
+    .oc-meta {
+      border-top: 1px solid #f3f4f6 !important;
+      border-left: none !important;
+      border-radius: 0 0 var(--card-radius) var(--card-radius) !important;
+      background: #fafafa !important;
+      display: flex !important;
+      flex-direction: row !important;
+    }
+    .oc-meta-field {
+      padding: 14px var(--card-padding-h) !important;
+      flex: 1 !important;
+      min-width: 120px !important;
+    }
+    .oc-meta-field:not(:last-child) {
+      border-right: 1px solid #f0f0f0 !important;
+    }
+    .oc-meta-label {
+      font-size: var(--label-size) !important;
+      font-weight: var(--label-weight) !important;
+      letter-spacing: var(--label-spacing) !important;
+      color: var(--label-color) !important;
+      text-transform: uppercase !important;
+      display: block !important;
+      margin-bottom: 4px !important;
+    }
+    .oc-meta-input {
+      font-size: 13.5px !important;
+      font-weight: 500 !important;
+      color: #111827 !important;
+    }
+    .oc-divider { display: none !important; }
+    .oc-meta-sep { display: none !important; }
+
+    /* Offer action buttons — consistent sizing */
+    .oc-select-btn, .oc-new-btn {
+      height: 34px !important;
+      padding: 0 14px !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      border-radius: 8px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+    }
+
+    /* 4. Insight cards — consistent heights, typography */
+    .ic-grid {
+      grid-template-columns: minmax(0,1fr) minmax(0,1fr) !important;
+      gap: 16px !important;
+    }
+    .ic-card {
+      min-height: 240px !important;
+      border-radius: var(--card-radius) !important;
+      border: var(--card-border) !important;
+      box-shadow: var(--card-shadow) !important;
+    }
+    .ic-header {
+      padding: 14px 20px !important;
+      border-bottom: 1px solid transparent !important;
+    }
+    .ic-card--blue .ic-header {
+      background: #eff6ff !important;
+      border-bottom-color: #dbeafe !important;
+    }
+    .ic-card--green .ic-header {
+      background: #f0fdf4 !important;
+      border-bottom-color: #bbf7d0 !important;
+    }
+    .ic-title {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.1px !important;
+    }
+    .ic-textarea, .notes-body textarea {
+      padding: 16px 20px !important;
+      font-size: 13px !important;
+      line-height: 1.7 !important;
+      color: #374151 !important;
+    }
+    /* Resize handle — cleaner */
+    .notes-resize-handle {
+      height: 8px !important;
+      background: #f9fafb !important;
+      border-top: 1px solid #f0f0f0 !important;
+    }
+
+    /* 5. Table cards — consistent header, footer, spacing */
+    .tc-card {
+      border-radius: var(--card-radius) !important;
+      border: var(--card-border) !important;
+      box-shadow: var(--card-shadow) !important;
+      background: #fff !important;
+    }
+    .tc-header {
+      padding: 14px 20px !important;
+      border-bottom: 1px solid #f0f0f0 !important;
+      background: #fff !important;
+      min-height: 56px !important;
+    }
+    .tc-title {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      color: #111827 !important;
+      letter-spacing: -0.1px !important;
+    }
+    .tc-footer {
+      padding: 10px 20px !important;
+      border-top: 1px solid #f5f5f5 !important;
+      background: #fafafa !important;
+    }
+    .tc-add-btn {
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: #2563eb !important;
+      gap: 5px !important;
+      padding: 6px 10px !important;
+      border-radius: 6px !important;
+      transition: background .13s !important;
+    }
+    .tc-add-btn:hover { background: #eff6ff !important; }
+    .tc-add-btn svg { stroke: #2563eb !important; }
+
+    /* 6. Section icons — uniform size & radius */
+    .section-icon, .tc-header .section-icon {
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 8px !important;
+      flex-shrink: 0 !important;
+    }
+    .icon-blue  { background: #eff6ff !important; }
+    .icon-teal  { background: #f0fdf4 !important; }
+    .icon-amber { background: #fffbeb !important; }
+    .icon-purple { background: #f5f3ff !important; }
+
+    /* 7. Top header — tight, clean */
+    .ds-top-header {
+      min-height: 64px !important;
+      height: 64px !important;
+      padding: 0 24px !important;
+    }
+    .ds-top-header-title {
+      font-size: 17px !important;
+      font-weight: 700 !important;
+      letter-spacing: -0.3px !important;
+    }
+    .ds-top-header-subtitle {
+      font-size: 12.5px !important;
+      margin-top: 1px !important;
+    }
+    /* Status indicator — tighter */
+    .ds-top-status { margin-right: 4px !important; }
+    .ds-top-status-label {
+      font-size: 12px !important;
+      color: #6b7280 !important;
+    }
+    /* Header buttons — uniform */
+    .ds-hdr-btn {
+      height: 32px !important;
+      padding: 0 12px !important;
+      font-size: 12.5px !important;
+      border-radius: 7px !important;
+      gap: 5px !important;
+    }
+    .ds-hdr-collapse-btn {
+      width: 30px !important;
+      height: 30px !important;
+      border-radius: 7px !important;
+    }
+
+    /* 8. Sidebar — clean proportions */
+    .ds-sidebar-nav { padding: 8px !important; gap: 1px !important; }
+    .ds-nav-item {
+      padding: 9px 10px !important;
+      font-size: 13px !important;
+      border-radius: 8px !important;
+      gap: 9px !important;
+      font-weight: 500 !important;
+    }
+    .ds-nav-item svg { width: 15px !important; height: 15px !important; }
+    .ds-sidebar-footer { padding: 8px 8px 14px !important; gap: 3px !important; }
+    .ds-user-pill {
+      padding: 8px 10px !important;
+      border-radius: 8px !important;
+      margin-bottom: 2px !important;
+    }
+    .ds-user-avatar { width: 30px !important; height: 30px !important; font-size: 12px !important; }
+    .ds-user-name { font-size: 13px !important; }
+    .ds-user-role { font-size: 11px !important; }
+    .ds-darkmode-btn {
+      padding: 8px 10px !important;
+      font-size: 13px !important;
+      border-radius: 8px !important;
+      gap: 9px !important;
+    }
+
+    /* 9. Table header labels — consistent */
+    #traffic-table thead th,
+    #ads-table thead th,
+    #funnels-table thead th {
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.07em !important;
+      color: #9ca3af !important;
+      padding: 10px 14px !important;
+      background: #f9fafb !important;
+    }
+
+    /* 10. Export menu — clean */
+    .export-menu {
+      border-radius: 10px !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.06) !important;
+    }
+    .export-menu button {
+      font-size: 13px !important;
+      padding: 10px 16px !important;
+    }
+
+    /* 11. Dark mode consistency tokens */
+    body.force-dark .oc-meta { background: #1f1f23 !important; border-top-color: rgba(255,255,255,.06) !important; }
+    body.force-dark .oc-meta-field:not(:last-child) { border-right-color: rgba(255,255,255,.06) !important; }
+    body.force-dark .tc-header { border-bottom-color: rgba(255,255,255,.06) !important; background: #18181b !important; }
+    body.force-dark .tc-footer { background: #18181b !important; border-top-color: rgba(255,255,255,.04) !important; }
+
+    /* 12. Responsive fixes */
+    @media (max-width: 860px) {
+      .oc-meta {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        border-radius: 0 0 var(--card-radius) var(--card-radius) !important;
+      }
+      .oc-meta-field { min-width: 130px !important; padding: 12px 16px !important; }
+      .oc-meta-field:not(:last-child) { border-right: none !important; border-bottom: 1px solid #f0f0f0 !important; }
+      .container { padding: 16px 16px 48px !important; }
+    }
+    @media (max-width: 600px) {
+      .ic-grid { grid-template-columns: 1fr !important; }
+      .ds-top-header { height: auto !important; min-height: 56px !important; padding: 10px 16px !important; }
+    }
+    body.force-dark,
+    body.force-dark .ds-app { background: #111113 !important; }
+
+    /* Cards */
+    body.force-dark .ds-offer-card,
+    body.force-dark .oc-top { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .ic-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .tc-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
+
+    /* Offer card inner */
+    body.force-dark .oc-meta { background: #1f1f23 !important; border-left-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .oc-meta-field:not(:last-child) { border-right-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .oc-label,
+    body.force-dark .oc-meta-label { color: #52525b !important; }
+    body.force-dark h1#main-title { color: #f4f4f5 !important; }
+    body.force-dark .oc-meta-input { color: #f4f4f5 !important; }
+    body.force-dark .oc-meta-input::placeholder { color: #52525b !important; }
+    body.force-dark .oc-select-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #d4d4d8 !important; }
+    body.force-dark .oc-new-btn { background: #2563eb !important; color: #fff !important; }
+    body.force-dark .title-icon-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #a1a1aa !important; }
+
+    /* Insight cards headers */
+    body.force-dark .ic-card--blue .ic-header { background: rgba(37,99,235,.12) !important; border-bottom-color: rgba(37,99,235,.2) !important; }
+    body.force-dark .ic-card--green .ic-header { background: rgba(22,163,74,.08) !important; border-bottom-color: rgba(22,163,74,.18) !important; }
+    body.force-dark .ic-badge--blue { background: rgba(59,130,246,.2) !important; }
+    body.force-dark .ic-badge--green { background: rgba(34,197,94,.15) !important; }
+    body.force-dark .ic-title { color: #f4f4f5 !important; }
+    body.force-dark .ic-textarea,
+    body.force-dark .notes-body textarea { color: #d4d4d8 !important; }
+    body.force-dark .ic-textarea::placeholder,
+    body.force-dark .notes-body textarea::placeholder { color: #52525b !important; }
+    body.force-dark .notes-resize-handle { background: #1f1f23 !important; border-top-color: rgba(255,255,255,.06) !important; }
+
+    /* Table card chrome */
+    body.force-dark .tc-header { background: #18181b !important; border-bottom-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .tc-title { color: #f4f4f5 !important; }
+    body.force-dark .tc-footer { background: #18181b !important; border-top-color: rgba(255,255,255,.06) !important; }
+    body.force-dark .tc-add-btn { color: #60a5fa !important; }
+    body.force-dark .tc-add-btn svg { stroke: #60a5fa !important; }
+
+    /* Table toggles */
+    body.force-dark .tc-toggle { background: #27272a !important; color: #71717a !important; border-color: transparent !important; }
+    body.force-dark .tc-toggle:hover { background: #3f3f46 !important; color: #d4d4d8 !important; }
+    body.force-dark .tc-toggle--active { background: rgba(37,99,235,.2) !important; color: #93c5fd !important; }
+    body.force-dark .tc-toggle--active svg { stroke: #93c5fd !important; }
+
+    /* Table rows */
+    body.force-dark #traffic-table thead th,
+    body.force-dark #ads-table thead th,
+    body.force-dark #funnels-table thead th { background: #1f1f23 !important; color: #71717a !important; border-color: rgba(255,255,255,.06) !important; }
+    body.force-dark #traffic-table tbody tr,
+    body.force-dark #ads-table tbody tr,
+    body.force-dark #funnels-table tbody tr { background: #18181b !important; border-bottom-color: rgba(255,255,255,.05) !important; }
+    body.force-dark #traffic-table tbody tr:nth-child(even) td,
+    body.force-dark #ads-table tbody tr:nth-child(even) td,
+    body.force-dark #funnels-table tbody tr:nth-child(even) td { background: #1f1f23 !important; }
+    body.force-dark #traffic-table tbody tr:hover td,
+    body.force-dark #ads-table tbody tr:hover td,
+    body.force-dark #funnels-table tbody tr:hover td { background: rgba(37,99,235,.1) !important; }
+    body.force-dark #traffic-table tbody td,
+    body.force-dark #ads-table tbody td,
+    body.force-dark #funnels-table tbody td { color: #d4d4d8 !important; border-color: rgba(255,255,255,.04) !important; }
+    body.force-dark #traffic-table tbody td input,
+    body.force-dark #traffic-table tbody td textarea,
+    body.force-dark #ads-table tbody td input,
+    body.force-dark #ads-table tbody td textarea,
+    body.force-dark #funnels-table tbody td input,
+    body.force-dark #funnels-table tbody td textarea { color: #d4d4d8 !important; }
+    body.force-dark td.frozen-num { background: #18181b !important; color: #52525b !important; }
+    body.force-dark td.frozen-num input { color: #52525b !important; }
+    body.force-dark th.frozen-num { background: #1f1f23 !important; }
+    body.force-dark td.frozen-offer { background: #18181b !important; }
+    body.force-dark th.frozen-offer { background: #1f1f23 !important; }
+    body.force-dark #traffic-table .dup-row-btn { background: #27272a !important; border-color: rgba(255,255,255,.1) !important; color: #71717a !important; }
+    body.force-dark #traffic-table .remove-row-btn { color: #71717a !important; }
+
+    /* Top header */
+    body.force-dark .ds-top-header { background: #18181b !important; border-bottom-color: rgba(255,255,255,.08) !important; box-shadow: 0 1px 0 rgba(255,255,255,.04) !important; }
+    body.force-dark .ds-top-header-title { color: #f4f4f5 !important; }
+    body.force-dark .ds-top-header-subtitle { color: #71717a !important; }
+    body.force-dark .ds-top-status-label { color: #a1a1aa !important; }
+    body.force-dark .ds-hdr-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #d4d4d8 !important; }
+    body.force-dark .ds-hdr-btn:hover { background: #3f3f46 !important; color: #f4f4f5 !important; }
+    body.force-dark .ds-hdr-collapse-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #a1a1aa !important; }
+
+    /* Sidebar */
+    body.force-dark .ds-sidebar { background: #18181b !important; border-right-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .ds-sidebar-logo { border-bottom-color: rgba(255,255,255,.06) !important; }
+    body.force-dark .ds-nav-item { color: #71717a !important; background: transparent !important; }
+    body.force-dark .ds-nav-item:hover { background: rgba(255,255,255,.06) !important; color: #f4f4f5 !important; }
+    body.force-dark .ds-nav-item.active { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; }
+    body.force-dark .ds-sidebar-footer { border-top-color: rgba(255,255,255,.06) !important; }
+    body.force-dark .ds-user-pill { background: #27272a !important; border-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .ds-user-name { color: #f4f4f5 !important; }
+    body.force-dark .ds-user-role { color: #52525b !important; }
+    body.force-dark .ds-darkmode-btn,
+    body.force-dark .ds-collapse-btn { color: #71717a !important; }
+    body.force-dark .ds-darkmode-btn:hover,
+    body.force-dark .ds-collapse-btn:hover { background: rgba(255,255,255,.06) !important; color: #f4f4f5 !important; }
+
+    /* Section icons */
+    body.force-dark .icon-blue { background: rgba(37,99,235,.15) !important; }
+    body.force-dark .icon-teal { background: rgba(22,163,74,.12) !important; }
+    body.force-dark .icon-amber { background: rgba(133,79,11,.15) !important; }
+
+    body.force-dark .adp-section-title,
+    body.force-dark .adp-copy-label { color: #f4f4f5 !important; }
+    body.force-dark .adp-row-label { color: #71717a !important; }
+
+    /* Offers panel dark */
+    body.force-dark .offers-panel { background: #18181b !important; border-right-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .offers-panel-header { border-bottom-color: rgba(255,255,255,.06) !important; }
+    body.force-dark .offers-panel-title { color: #f4f4f5 !important; }
+    body.force-dark .offers-panel-search { border-bottom-color: rgba(255,255,255,.06) !important; }
+    body.force-dark .offers-panel-search input { color: #f4f4f5 !important; }
+    body.force-dark .offers-panel-item:hover { background: rgba(255,255,255,.05) !important; }
+    body.force-dark .offers-panel-item.active { background: rgba(37,99,235,.15) !important; border-color: rgba(37,99,235,.3) !important; }
+    body.force-dark .offers-panel-item-name { color: #f4f4f5 !important; }
+    body.force-dark .offers-panel-footer { border-top-color: rgba(255,255,255,.06) !important; }
+    body.force-dark .offers-panel-close { border-color: rgba(255,255,255,.1) !important; color: #71717a !important; }
+    body.force-dark .offers-panel-close:hover { background: #27272a !important; color: #f4f4f5 !important; }
   </style>
 </head>
 <body>
