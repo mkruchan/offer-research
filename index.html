@@ -3472,7 +3472,7 @@
     #traffic-table thead th.remove-col,
     #ads-table thead th.remove-col,
     #funnels-table thead th.remove-col {
-      text-align: center !important;
+      text-align: left !important;
       padding: 10px 14px !important;
     }
 
@@ -3758,7 +3758,125 @@
     }
     .media-upload-btn:hover { background: #f9fafb !important; color: #6b7280 !important; border-color: #d1d5db !important; }
 
-    /* ══ ADS & FUNNELS TABLE — text vertical centering ══ */
+    /* ══ AD DETAIL PANEL — design polish ══ */
+
+    /* Panel layout */
+    #ad-detail-panel { font-family: 'Inter', -apple-system, sans-serif; }
+
+    /* Header */
+    .adp-header-top { padding: 20px 24px 14px !important; }
+    .adp-title { font-size: 17px !important; font-weight: 700 !important; letter-spacing: -0.2px !important; line-height: 1.3 !important; }
+    .adp-subtitle { font-size: 12px !important; color: #9ca3af !important; margin-top: 3px !important; }
+
+    /* Tab bar */
+    .adp-tabs { border-top: 1px solid #f0f0f0 !important; }
+    .adp-tab { font-size: 12px !important; font-weight: 500 !important; padding: 10px 16px !important; color: #9ca3af !important; letter-spacing: 0 !important; }
+    .adp-tab.active { color: #2563eb !important; border-bottom-color: #2563eb !important; background: #f8faff !important; }
+    .adp-tab:hover { color: #374151 !important; background: #f9fafb !important; }
+
+    /* Body padding */
+    .adp-body { padding: 20px 24px !important; }
+
+    /* Image */
+    .adp-img-wrap { border-radius: 10px !important; margin-bottom: 20px !important; border-color: #e5e7eb !important; }
+    .adp-img { max-height: 200px !important; border-radius: 10px !important; }
+
+    /* Section spacing */
+    .adp-section { margin-bottom: 24px !important; }
+    .adp-section-header { margin-bottom: 8px !important; }
+    .adp-section-title {
+      font-size: 11.5px !important;
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.09em !important;
+      color: #111827 !important;
+    }
+
+    /* Links card */
+    .adp-lp-card { border-radius: 10px !important; border-color: #e5e7eb !important; background: #fafafa !important; }
+    .adp-lp-row { padding: 10px 14px !important; border-bottom-color: #f0f0f0 !important; gap: 12px !important; }
+    .adp-lp-icon {
+      width: 30px !important; height: 30px !important;
+      border-radius: 8px !important;
+      background: #f3f4f6 !important;
+    }
+    .adp-lp-type { font-size: 10px !important; font-weight: 600 !important; letter-spacing: 0.07em !important; color: #9ca3af !important; margin-bottom: 2px !important; }
+    .adp-lp-url { font-size: 12.5px !important; color: #2563eb !important; }
+
+    /* Ad details card */
+    .adp-card { border-radius: 10px !important; border-color: #e5e7eb !important; background: #fafafa !important; }
+    .adp-row { padding: 10px 14px !important; border-bottom-color: #f0f0f0 !important; gap: 12px !important; align-items: center !important; }
+    .adp-row-label {
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.08em !important;
+      color: #9ca3af !important;
+      width: 80px !important;
+      flex-shrink: 0 !important;
+      line-height: 1.3 !important;
+    }
+    .adp-row-val { font-size: 13.5px !important; color: #111827 !important; font-weight: 400 !important; }
+
+    /* Copy blocks (ANGLE/HOOK, HEADLINE etc) */
+    .adp-copy-item { margin-bottom: 12px !important; }
+    .adp-copy-item:last-child { margin-bottom: 0 !important; }
+    .adp-copy-label {
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.08em !important;
+      color: #9ca3af !important;
+      margin-bottom: 5px !important;
+      display: block !important;
+    }
+    .adp-copy-block {
+      background: #f9fafb !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 8px !important;
+      padding: 12px 14px !important;
+      font-size: 13.5px !important;
+      color: #111827 !important;
+      line-height: 1.6 !important;
+      min-height: 44px !important;
+    }
+    .adp-copy-block:empty::before,
+    .adp-copy-placeholder { color: #d1d5db !important; font-style: italic !important; font-size: 13px !important; }
+    .adp-copy-block[contenteditable="true"]:focus { border-color: #2563eb !important; box-shadow: 0 0 0 3px rgba(37,99,235,.08) !important; background: #fff !important; }
+
+    /* Notes textarea */
+    .adp-row-ta {
+      border-radius: 8px !important;
+      border-color: #e5e7eb !important;
+      font-size: 13.5px !important;
+      background: #fafafa !important;
+      padding: 10px 12px !important;
+      min-height: 72px !important;
+      line-height: 1.55 !important;
+    }
+    .adp-row-ta:focus { background: #fff !important; border-color: #2563eb !important; }
+
+    /* Edit btn */
+    .adp-edit-btn { font-size: 12px !important; padding: 5px 12px !important; border-radius: 7px !important; }
+
+    /* Close btn */
+    .adp-close { border-radius: 8px !important; }
+
+    /* Save bar */
+    .adp-save-bar { padding: 12px 24px !important; }
+
+    /* Dark mode */
+    body.force-dark .adp-lp-card,
+    body.force-dark .adp-card { background: #1f1f23 !important; border-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .adp-lp-row,
+    body.force-dark .adp-row { border-bottom-color: rgba(255,255,255,.06) !important; }
+    body.force-dark .adp-lp-icon { background: #27272a !important; }
+    body.force-dark .adp-row-val { color: #f4f4f5 !important; }
+    body.force-dark .adp-copy-block { background: #1f1f23 !important; border-color: rgba(255,255,255,.08) !important; color: #f4f4f5 !important; }
+    body.force-dark .adp-copy-block[contenteditable="true"]:focus { background: #27272a !important; }
+    body.force-dark .adp-section-title { color: #f4f4f5 !important; }
+    body.force-dark .adp-row-ta { background: #1f1f23 !important; border-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .adp-row-ta:focus { background: #27272a !important; }
 
     #ads-table tbody td,
     #funnels-table tbody td {
@@ -5148,8 +5266,8 @@ function setViewMode(tableId, gridId, tableBtnId, gridBtnId, buildFn, storageKey
   const grid = document.getElementById(gridId);
   const btnTable = document.getElementById(tableBtnId);
   const btnGrid = document.getElementById(gridBtnId);
-  // Find the add-row button in the same section
-  const addBtn = grid.nextElementSibling?.querySelector('.add-btn');
+  // Find the add-row button in the same tc-card section
+  const addBtn = grid.closest('.tc-card')?.querySelector('.add-btn');
   // Helper to update button label without removing SVG icon
   const setAddLabel = (btn, label) => {
     if (!btn) return;
