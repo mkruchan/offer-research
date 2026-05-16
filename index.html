@@ -3249,83 +3249,64 @@
     body.force-dark .tc-toggle--active { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; }
     body.force-dark .tc-toggle--active svg { stroke: #93c5fd !important; }
 
-    /* ══ TRAFFIC TABLE — reference match ══ */
+    /* ══ UNIFIED TABLE DESIGN — all three tables identical ══ */
 
-    /* Full-width table, no max-content */
-    #traffic-table {
-      width: 100% !important;
-      table-layout: fixed !important;
-      border-collapse: collapse !important;
-    }
-
-    /* Column widths matching reference */
-    #traffic-table thead th:nth-child(1) { width: 40px !important; }   /* # */
-    #traffic-table thead th:nth-child(2) { width: 160px !important; }  /* Traffic Source */
-    #traffic-table thead th:nth-child(3) { width: auto !important; }   /* Geo */
-    #traffic-table thead th:nth-child(4) { width: 160px !important; }  /* Est. Ads Qty */
-    #traffic-table thead th:nth-child(5) { width: 170px !important; }  /* Traffic Type */
-    #traffic-table thead th:nth-child(6) { width: auto !important; }   /* Notes */
-    #traffic-table thead th:nth-child(7) { width: 90px !important; }   /* Actions */
-
-    /* Header */
-    #traffic-table thead th {
+    /* Clean header — no dividers between columns */
+    #traffic-table thead th,
+    #ads-table thead th,
+    #funnels-table thead th {
       background: #f9fafb !important;
-      font-size: 11px !important;
+      font-size: 10.5px !important;
       font-weight: 600 !important;
       text-transform: uppercase !important;
-      letter-spacing: 0.06em !important;
+      letter-spacing: 0.07em !important;
       color: #9ca3af !important;
-      padding: 10px 16px !important;
+      padding: 10px 14px !important;
       border-bottom: 1px solid #e5e7eb !important;
       border-right: none !important;
       border-top: none !important;
       white-space: nowrap !important;
     }
-    #traffic-table thead th.frozen-num {
-      padding: 10px 0 !important;
-      text-align: center !important;
-      color: #9ca3af !important;
-    }
 
-    /* Last header = ACTIONS label */
-    #traffic-table thead th:last-child {
-      text-align: right !important;
-      padding-right: 20px !important;
-      color: #9ca3af !important;
-    }
-    /* Add ACTIONS text to the empty remove-col header */
-    #traffic-table thead th.remove-col::after {
-      content: 'Actions' !important;
-      font-size: 11px !important;
-      font-weight: 600 !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.06em !important;
-      color: #9ca3af !important;
-    }
-
-    /* Rows — clean, no striping */
-    #traffic-table tbody tr {
-      border-bottom: 1px solid #f3f4f6 !important;
+    /* Rows — white, clean dividers only */
+    #traffic-table tbody tr,
+    #ads-table tbody tr,
+    #funnels-table tbody tr {
       background: #ffffff !important;
+      border-bottom: 1px solid #f3f4f6 !important;
     }
-    #traffic-table tbody tr:nth-child(even) td { background: #ffffff !important; }
-    #traffic-table tbody tr:last-child { border-bottom: none !important; }
-    #traffic-table tbody tr:hover td { background: #f9fafb !important; }
-    #traffic-table tbody tr:hover td.frozen-num { background: #f9fafb !important; }
+    #traffic-table tbody tr:nth-child(even) td,
+    #ads-table tbody tr:nth-child(even) td,
+    #funnels-table tbody tr:nth-child(even) td { background: #ffffff !important; }
+    #traffic-table tbody tr:last-child,
+    #ads-table tbody tr:last-child,
+    #funnels-table tbody tr:last-child { border-bottom: none !important; }
+    #traffic-table tbody tr:hover td,
+    #ads-table tbody tr:hover td,
+    #funnels-table tbody tr:hover td { background: #f9fafb !important; }
+    #traffic-table tbody tr:hover td.frozen-num,
+    #ads-table tbody tr:hover td.frozen-num,
+    #funnels-table tbody tr:hover td.frozen-num,
+    #ads-table tbody tr:hover td.frozen-offer,
+    #funnels-table tbody tr:hover td.frozen-offer { background: #f9fafb !important; }
 
-    /* Cells */
-    #traffic-table tbody td {
+    /* All cells — no borders between columns, clean */
+    #traffic-table tbody td,
+    #ads-table tbody td,
+    #funnels-table tbody td {
       padding: 0 !important;
       border-bottom: none !important;
       border-right: none !important;
       vertical-align: middle !important;
-      font-size: 13px !important;
       color: #374151 !important;
       height: 52px !important;
+      min-height: 52px !important;
     }
 
-    /* Row number */
-    #traffic-table td.frozen-num {
+    /* Row number cells */
+    #traffic-table td.frozen-num,
+    #ads-table td.frozen-num,
+    #funnels-table td.frozen-num {
       text-align: center !important;
       color: #9ca3af !important;
       font-size: 13px !important;
@@ -3334,7 +3315,9 @@
       width: 40px !important;
       position: relative !important;
     }
-    #traffic-table td.frozen-num input {
+    #traffic-table td.frozen-num input,
+    #ads-table td.frozen-num input,
+    #funnels-table td.frozen-num input {
       position: absolute !important;
       top: 50% !important; left: 50% !important;
       transform: translate(-50%, -50%) !important;
@@ -3348,36 +3331,89 @@
       font-family: inherit !important;
     }
 
-    /* Text inputs inside cells */
+    /* Frozen offer column (ads/funnels) */
+    #ads-table td.frozen-offer,
+    #funnels-table td.frozen-offer {
+      background: #ffffff !important;
+      border-right: 1px solid #f3f4f6 !important;
+      box-shadow: 2px 0 0 #f3f4f6 !important;
+      font-size: 13px !important;
+      color: #374151 !important;
+    }
+
+    /* Text inputs & textareas — vertically centered in cell */
     #traffic-table tbody td input,
     #traffic-table tbody td textarea {
-      padding: 8px 16px !important;
+      padding: 0 14px !important;
       font-size: 13px !important;
       color: #374151 !important;
       border: none !important;
       border-right: none !important;
       background: transparent !important;
-      height: 100% !important;
+      height: 52px !important;
+      line-height: 52px !important;
+      display: block !important;
+      width: 100% !important;
+    }
+    #traffic-table tbody td textarea {
+      line-height: 1.5 !important;
+      padding-top: 16px !important;
+      padding-bottom: 16px !important;
+      height: 52px !important;
+      resize: none !important;
     }
 
-    /* Actions column — show dup + remove as icon buttons */
-    #traffic-table td.remove-col {
-      vertical-align: middle !important;
-      padding: 0 12px 0 0 !important;
+    /* Ads & funnels — position:absolute textareas already fill cell */
+    #ads-table tbody td input,
+    #ads-table tbody td textarea,
+    #funnels-table tbody td input,
+    #funnels-table tbody td textarea {
+      font-size: 12.5px !important;
+      color: #374151 !important;
+      border: none !important;
+      border-right: none !important;
+      background: transparent !important;
+      padding: 0 10px !important;
+      display: flex !important;
+      align-items: center !important;
     }
-    #traffic-table .cell-actions {
+    /* Absolute textareas — use flex centering via padding */
+    #ads-table td:nth-child(5) textarea,
+    #ads-table td:nth-child(6) textarea,
+    #ads-table td.frozen-offer textarea,
+    #funnels-table td:nth-child(3) textarea,
+    #funnels-table td:nth-child(4) textarea,
+    #funnels-table td:nth-child(6) textarea {
+      padding: 14px 10px !important;
+      line-height: 1.45 !important;
+    }
+
+    /* Actions column — consistent across all tables */
+    #traffic-table td.remove-col,
+    #ads-table td.remove-col,
+    #funnels-table td.remove-col {
+      vertical-align: middle !important;
+      padding: 0 8px 0 0 !important;
+      border-right: none !important;
+    }
+    #traffic-table .cell-actions,
+    #ads-table .cell-actions,
+    #funnels-table .cell-actions {
       display: flex !important;
       align-items: center !important;
       justify-content: flex-end !important;
       gap: 2px !important;
+      padding: 0 4px !important;
     }
-    /* Drag handle — restored, styled as dots icon */
-    #traffic-table .drag-handle {
+
+    /* Drag handle — fade in on hover */
+    #traffic-table .drag-handle,
+    #ads-table .drag-handle,
+    #funnels-table .drag-handle {
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      width: 24px !important;
-      height: 24px !important;
+      width: 24px !important; height: 24px !important;
       cursor: grab !important;
       color: #d1d5db !important;
       font-size: 14px !important;
@@ -3385,48 +3421,89 @@
       opacity: 0 !important;
       transition: opacity .15s !important;
     }
-    #traffic-table tr:hover .drag-handle { opacity: 1 !important; }
-    #traffic-table .drag-handle:active { cursor: grabbing !important; color: #9ca3af !important; }
+    #traffic-table tr:hover .drag-handle,
+    #ads-table tr:hover .drag-handle,
+    #funnels-table tr:hover .drag-handle { opacity: 1 !important; }
 
-    /* Dup button — clean icon */
-    #traffic-table .dup-row-btn {
-      width: 28px !important; height: 28px !important;
+    /* Dup button */
+    #traffic-table .dup-row-btn,
+    #ads-table .dup-row-btn,
+    #funnels-table .dup-row-btn {
+      width: 26px !important; height: 26px !important;
       border-radius: 6px !important;
       border: 1px solid #e5e7eb !important;
       background: #fff !important;
       color: #9ca3af !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
-    #traffic-table .dup-row-btn:hover { background: #f3f4f6 !important; color: #374151 !important; border-color: #d1d5db !important; }
+    #traffic-table .dup-row-btn:hover,
+    #ads-table .dup-row-btn:hover,
+    #funnels-table .dup-row-btn:hover { background: #f3f4f6 !important; color: #374151 !important; border-color: #d1d5db !important; }
 
-    /* Remove button — three-dot or X */
-    #traffic-table .remove-row-btn {
-      width: 28px !important; height: 28px !important;
+    /* Remove button */
+    #traffic-table .remove-row-btn,
+    #ads-table .remove-row-btn,
+    #funnels-table .remove-row-btn {
+      width: 26px !important; height: 26px !important;
       border-radius: 6px !important;
       border: 1px solid transparent !important;
       background: none !important;
       color: #9ca3af !important;
-      font-size: 16px !important;
+      font-size: 15px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
-    #traffic-table .remove-row-btn:hover { background: #fee2e2 !important; color: #991b1b !important; }
+    #traffic-table .remove-row-btn:hover,
+    #ads-table .remove-row-btn:hover,
+    #funnels-table .remove-row-btn:hover { background: #fee2e2 !important; color: #991b1b !important; }
 
-    /* Add row footer */
-    .tc-footer { padding: 14px 20px !important; }
-    .tc-add-btn {
-      color: #2563eb !important;
-      font-size: 13px !important;
-      font-weight: 500 !important;
-      gap: 6px !important;
+    /* ACTIONS header label */
+    #traffic-table thead th.remove-col::after,
+    #ads-table thead th.remove-col::after,
+    #funnels-table thead th.remove-col::after {
+      content: 'Actions' !important;
+      font-size: 10.5px !important;
+      font-weight: 600 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.07em !important;
+      color: #9ca3af !important;
     }
-    .tc-add-btn svg { stroke: #2563eb !important; }
-    .tc-add-btn:hover { color: #1d4ed8 !important; }
+    #traffic-table thead th.remove-col,
+    #ads-table thead th.remove-col,
+    #funnels-table thead th.remove-col {
+      text-align: right !important;
+      padding-right: 16px !important;
+    }
 
-    /* Dark mode rows */
-    body.force-dark #traffic-table tbody tr { background: #18181b !important; border-bottom-color: rgba(255,255,255,.04) !important; }
-    body.force-dark #traffic-table tbody tr:nth-child(even) td { background: #18181b !important; }
-    body.force-dark #traffic-table tbody tr:hover td { background: #27272a !important; }
-    body.force-dark #traffic-table td.frozen-num { background: #18181b !important; color: #52525b !important; }
-    body.force-dark #traffic-table thead th { background: #1f1f23 !important; border-bottom-color: rgba(255,255,255,.06) !important; }
-    body.force-dark #traffic-table .dup-row-btn { background: #27272a !important; border-color: rgba(255,255,255,.1) !important; color: #71717a !important; }
+    /* Dark mode — all three tables */
+    body.force-dark #traffic-table tbody tr,
+    body.force-dark #ads-table tbody tr,
+    body.force-dark #funnels-table tbody tr { background: #18181b !important; border-bottom-color: rgba(255,255,255,.04) !important; }
+    body.force-dark #traffic-table tbody tr:nth-child(even) td,
+    body.force-dark #ads-table tbody tr:nth-child(even) td,
+    body.force-dark #funnels-table tbody tr:nth-child(even) td { background: #18181b !important; }
+    body.force-dark #traffic-table tbody tr:hover td,
+    body.force-dark #ads-table tbody tr:hover td,
+    body.force-dark #funnels-table tbody tr:hover td { background: #27272a !important; }
+    body.force-dark #traffic-table td.frozen-num,
+    body.force-dark #ads-table td.frozen-num,
+    body.force-dark #funnels-table td.frozen-num { background: #18181b !important; color: #52525b !important; }
+    body.force-dark #ads-table td.frozen-offer,
+    body.force-dark #funnels-table td.frozen-offer { background: #18181b !important; border-right-color: rgba(255,255,255,.06) !important; }
+    body.force-dark #traffic-table thead th,
+    body.force-dark #ads-table thead th,
+    body.force-dark #funnels-table thead th { background: #1f1f23 !important; border-bottom-color: rgba(255,255,255,.06) !important; }
+    body.force-dark #traffic-table tbody td,
+    body.force-dark #ads-table tbody td,
+    body.force-dark #funnels-table tbody td { color: #d4d4d8 !important; }
+    body.force-dark #traffic-table .dup-row-btn,
+    body.force-dark #ads-table .dup-row-btn,
+    body.force-dark #funnels-table .dup-row-btn { background: #27272a !important; border-color: rgba(255,255,255,.1) !important; color: #71717a !important; }
+
+
 
     /* ── Sidebar collapse button in header ── */
     .ds-hdr-collapse-btn {
@@ -3626,6 +3703,76 @@
       body:not(.force-light) .ds-sidebar-logo svg path { fill: #60a5fa !important; }
     }
 
+    /* ══ ALIGNMENT FIXES ══ */
+
+    /* Sidebar logo — vertically centered, proper height */
+    .ds-sidebar-logo {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      padding: 0 18px !important;
+      height: 60px !important;
+      min-height: 60px !important;
+      border-bottom: 1px solid #f0f0f0 !important;
+      flex-shrink: 0 !important;
+    }
+    .ds-sidebar-logo svg { display: block !important; flex-shrink: 0 !important; }
+
+    /* Nav items — icons perfectly aligned with text */
+    .ds-nav-item {
+      display: flex !important; align-items: center !important;
+      gap: 9px !important; line-height: 1 !important;
+    }
+    .ds-nav-item svg { display: block !important; flex-shrink: 0 !important; }
+    .ds-darkmode-btn {
+      display: flex !important; align-items: center !important;
+      gap: 9px !important; line-height: 1 !important;
+    }
+    .ds-darkmode-btn svg { display: block !important; flex-shrink: 0 !important; }
+
+    /* Header */
+    .ds-top-header { display: flex !important; align-items: center !important; justify-content: space-between !important; }
+    .ds-top-header-left { display: flex !important; align-items: center !important; gap: 0 !important; flex-direction: row !important; }
+    .ds-top-header-mobile-row { display: flex !important; align-items: center !important; gap: 10px !important; flex-direction: row !important; }
+    .ds-top-header-mobile-row > div { display: flex !important; flex-direction: column !important; gap: 2px !important; justify-content: center !important; }
+    .ds-top-header-title { line-height: 1.2 !important; display: block !important; }
+    .ds-top-header-subtitle { line-height: 1.2 !important; display: block !important; margin: 0 !important; }
+    .ds-hdr-collapse-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; }
+    .ds-top-header-right { display: flex !important; align-items: center !important; gap: 8px !important; flex-shrink: 0 !important; }
+    .ds-hdr-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; line-height: 1 !important; }
+    .ds-hdr-btn svg, .ds-hdr-collapse-btn svg { display: block !important; flex-shrink: 0 !important; }
+    .ds-top-status { display: flex !important; align-items: center !important; gap: 6px !important; }
+    .autosave-dot { display: block !important; flex-shrink: 0 !important; }
+
+    /* Offer card */
+    .oc-title-group { display: flex !important; flex-direction: column !important; gap: 4px !important; }
+    .oc-title-row { display: flex !important; align-items: center !important; gap: 8px !important; }
+    .title-icon-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; }
+    .oc-actions { display: flex !important; align-items: center !important; gap: 8px !important; padding-top: 0 !important; }
+    .oc-meta { display: flex !important; align-items: stretch !important; }
+    .oc-meta-field { display: flex !important; flex-direction: column !important; justify-content: center !important; gap: 3px !important; }
+
+    /* Table section headers */
+    .tc-header { display: flex !important; align-items: center !important; }
+    .tc-header-left { display: flex !important; align-items: center !important; gap: 12px !important; flex: 1 !important; min-width: 0 !important; }
+    .section-icon { display: flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; }
+    .tc-title { line-height: 1 !important; }
+    .tc-toggle-group { display: flex !important; align-items: center !important; }
+    .tc-toggle { display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 5px !important; line-height: 1 !important; }
+    .tc-toggle svg { display: block !important; flex-shrink: 0 !important; }
+
+    /* Insight card headers */
+    .ic-header { display: flex !important; align-items: center !important; gap: 10px !important; }
+    .ic-badge { display: flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; }
+    .ic-title { line-height: 1 !important; }
+
+    /* Table cell alignment */
+    #traffic-table td.frozen-num, #ads-table td.frozen-num, #funnels-table td.frozen-num { text-align: center !important; vertical-align: middle !important; }
+    #traffic-table .cell-actions, #ads-table .cell-actions, #funnels-table .cell-actions { display: flex !important; align-items: center !important; justify-content: flex-end !important; gap: 3px !important; padding: 0 8px !important; }
+    .dup-row-btn, .remove-row-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+    .tc-footer { display: flex !important; align-items: center !important; justify-content: center !important; }
+    .tc-add-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+
     /* ══ PROFESSIONAL UI/UX CONSISTENCY FIXES ══
        Fixes: spacing rhythm, typography scale, card consistency,
        border-radius uniformity, shadow depth, color palette,
@@ -3670,14 +3817,7 @@
       padding: 22px var(--card-padding-h) 20px !important;
       gap: 16px !important;
     }
-    .oc-label {
-      font-size: var(--label-size) !important;
-      font-weight: var(--label-weight) !important;
-      letter-spacing: var(--label-spacing) !important;
-      color: var(--label-color) !important;
-      text-transform: uppercase !important;
-      margin-bottom: 6px !important;
-    }
+    .oc-label { display: none !important; }
     h1#main-title {
       font-size: 20px !important;
       font-weight: 700 !important;
