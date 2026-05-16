@@ -3474,8 +3474,8 @@
     #traffic-table thead th.remove-col,
     #ads-table thead th.remove-col,
     #funnels-table thead th.remove-col {
-      text-align: right !important;
-      padding-right: 16px !important;
+      text-align: center !important;
+      padding: 10px 14px !important;
     }
 
     /* Dark mode — all three tables */
@@ -3760,29 +3760,96 @@
     }
     .media-upload-btn:hover { background: #f9fafb !important; color: #6b7280 !important; border-color: #d1d5db !important; }
 
-    /* ══ TEXT VERTICAL CENTERING IN ALL TABLE CELLS ══ */
+    /* ══ ADS & FUNNELS TABLE — text vertical centering ══ */
 
-    /* Base: all cells vertically centered */
     #ads-table tbody td,
     #funnels-table tbody td {
       vertical-align: middle !important;
+      height: 52px !important;
     }
 
-    /* Textarea cells that use position:absolute — ensure parent has proper height */
-    #ads-table td:nth-child(5),
-    #ads-table td:nth-child(6),
+    /* Regular direct-child textareas/inputs (not absolute) */
+    #ads-table tbody td > textarea,
+    #ads-table tbody td > input:not([type="file"]),
+    #funnels-table tbody td > textarea,
+    #funnels-table tbody td > input:not([type="file"]) {
+      height: 52px !important;
+      min-height: 52px !important;
+      padding: 0 10px !important;
+      line-height: 52px !important;
+      font-size: 12.5px !important;
+      color: #374151 !important;
+      border: none !important;
+      background: transparent !important;
+      display: block !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      resize: none !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+    }
+
+    /* Frozen offer col */
     #ads-table td.frozen-offer,
+    #funnels-table td.frozen-offer {
+      position: relative !important;
+      height: 52px !important;
+      overflow: hidden !important;
+    }
+    #ads-table td.frozen-offer textarea,
+    #funnels-table td.frozen-offer textarea {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 0 10px !important;
+      line-height: 52px !important;
+      font-size: 12.5px !important;
+      font-weight: 500 !important;
+      color: #374151 !important;
+      border: none !important;
+      border-right: none !important;
+      background: transparent !important;
+      resize: none !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Ads absolute cols (GEO=5, LIFECYCLE=6) */
+    #ads-table td:nth-child(5),
+    #ads-table td:nth-child(6) {
+      position: relative !important;
+      height: 52px !important;
+      overflow: hidden !important;
+    }
+    #ads-table td:nth-child(5) textarea,
+    #ads-table td:nth-child(6) textarea {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 0 10px !important;
+      line-height: 52px !important;
+      font-size: 12.5px !important;
+      color: #374151 !important;
+      border: none !important;
+      border-right: none !important;
+      background: transparent !important;
+      resize: none !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Funnels absolute cols */
     #funnels-table td:nth-child(3),
     #funnels-table td:nth-child(4),
     #funnels-table td:nth-child(6) {
       position: relative !important;
       height: 52px !important;
+      overflow: hidden !important;
     }
-
-    /* Absolute textareas — vertically center text via padding */
-    #ads-table td:nth-child(5) textarea,
-    #ads-table td:nth-child(6) textarea,
-    #ads-table td.frozen-offer textarea,
     #funnels-table td:nth-child(3) textarea,
     #funnels-table td:nth-child(4) textarea,
     #funnels-table td:nth-child(6) textarea {
@@ -3790,59 +3857,69 @@
       inset: 0 !important;
       width: 100% !important;
       height: 100% !important;
-      padding: 16px 10px !important;
-      line-height: 1.4 !important;
+      padding: 0 10px !important;
+      line-height: 52px !important;
       font-size: 12.5px !important;
-      display: flex !important;
-      align-items: center !important;
+      color: #374151 !important;
+      border: none !important;
       border-right: none !important;
       background: transparent !important;
+      resize: none !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      box-sizing: border-box !important;
     }
 
-    /* Regular inputs in ads/funnels cells — center via line-height */
-    #ads-table tbody td input:not([type="file"]),
-    #funnels-table tbody td input:not([type="file"]) {
-      height: 52px !important;
-      padding: 0 10px !important;
-      font-size: 12.5px !important;
-      line-height: 52px !important;
-      display: block !important;
-      width: 100% !important;
-      border: none !important;
-      background: transparent !important;
-    }
-
-    /* sel-wrap cells (badge selectors) */
+    /* sel-wrap cells */
     #ads-table td:has(.sel-wrap),
     #funnels-table td:has(.sel-wrap) {
-      vertical-align: middle !important;
       padding: 0 !important;
-      height: 52px !important;
+      overflow: hidden !important;
+      vertical-align: middle !important;
     }
-    .sel-wrap { height: 52px !important; }
+    #ads-table .sel-wrap,
+    #funnels-table .sel-wrap {
+      height: 52px !important;
+      display: flex !important;
+      align-items: center !important;
+    }
 
     /* Link cells */
-    .link-cell {
+    #ads-table .link-cell,
+    #funnels-table .link-cell {
       vertical-align: middle !important;
-      padding: 4px 8px !important;
+      padding: 0 8px !important;
+      height: 52px !important;
+    }
+    #ads-table .link-chip-wrap,
+    #funnels-table .link-chip-wrap {
+      display: flex !important;
+      align-items: center !important;
+      height: 100% !important;
     }
 
-    /* offer-col / source-col */
-    #ads-table td.offer-col,
-    #ads-table td.source-col,
-    #funnels-table td.offer-col,
-    #funnels-table td.advertiser-col {
+    /* Media cell */
+    #ads-table .media-cell {
       vertical-align: middle !important;
-      padding: 4px 8px !important;
+      height: 52px !important;
+      padding: 4px 6px !important;
     }
-    .text-badge-wrap { height: 100% !important; align-items: center !important; }
 
     /* remove-col */
     #ads-table td.remove-col,
     #funnels-table td.remove-col {
       vertical-align: middle !important;
       height: 52px !important;
+      padding: 0 6px 0 0 !important;
     }
+
+    /* Dark mode */
+    body.force-dark #ads-table td.frozen-offer textarea,
+    body.force-dark #funnels-table td.frozen-offer textarea,
+    body.force-dark #ads-table tbody td > textarea,
+    body.force-dark #ads-table tbody td > input,
+    body.force-dark #funnels-table tbody td > textarea,
+    body.force-dark #funnels-table tbody td > input { color: #d4d4d8 !important; }
 
 
 
@@ -3887,7 +3964,7 @@
 
     /* Offer card */
     .oc-title-group { display: flex !important; flex-direction: column !important; gap: 4px !important; }
-    .oc-title-row { display: flex !important; align-items: center !important; gap: 8px !important; }
+    .oc-title-row { display: flex !important; align-items: center !important; gap: 8px !important; width: fit-content !important; max-width: 100% !important; flex-wrap: nowrap !important; }
     .title-icon-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; }
     .oc-actions { display: flex !important; align-items: center !important; gap: 8px !important; padding-top: 0 !important; }
     .oc-meta { display: flex !important; align-items: stretch !important; }
@@ -3957,7 +4034,22 @@
     .oc-top {
       padding: 22px var(--card-padding-h) 20px !important;
       gap: 16px !important;
+      align-items: flex-start !important;
     }
+    .oc-title-group { flex: 1 !important; min-width: 0 !important; }
+    .oc-title-row {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      flex-wrap: wrap !important;
+    }
+    /* Icon buttons sit right after title text, not pushed to far right */
+    .oc-edit-btn {
+      opacity: 0.45 !important;
+      transition: opacity .15s !important;
+      flex-shrink: 0 !important;
+    }
+    .oc-edit-btn:hover { opacity: 0.85 !important; }
     .oc-label { display: none !important; }
     h1#main-title {
       font-size: 20px !important;
@@ -3969,7 +4061,7 @@
       border-top: 1px solid #f3f4f6 !important;
       border-left: none !important;
       border-radius: 0 0 var(--card-radius) var(--card-radius) !important;
-      background: #fafafa !important;
+      background: #ffffff !important;
       display: flex !important;
       flex-direction: row !important;
     }
@@ -4548,7 +4640,7 @@
     <!-- Status pill (autosave indicator) -->
     <div class="ds-top-status autosave-status ds-status-group">
       <div class="autosave-dot saved" id="autosaveDot"></div>
-      <span id="autosaveText" class="ds-top-status-label">All systems operational</span>
+      <span id="autosaveText" class="ds-top-status-label">Cloud synced</span>
     </div>
 
     <!-- Export button + dropdown (IDs + logic preserved) -->
@@ -6340,7 +6432,17 @@ function renderOffersList(filter) {
   list.innerHTML = offers.map(o => {
     const initials = o.name.split(/\s+/).slice(0,2).map(w => w[0]).join('').toUpperCase() || 'O';
     const isActive = (typeof _currentOfferId !== 'undefined' && o.id === _currentOfferId) || o.id === '__local__';
-    const date = o.updated_at ? new Date(o.updated_at).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : 'Local';
+    const date = (() => {
+      // Prefer the analyst-set report date from meta
+      const metaDate = o.data?.meta?.date || o.data?.header?.date || '';
+      if (metaDate) {
+        const d = new Date(metaDate);
+        if (!isNaN(d)) return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        return metaDate;
+      }
+      if (o.updated_at) return new Date(o.updated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      return 'Local';
+    })();
     return `<div class="offers-panel-item${isActive ? ' active' : ''}" onclick="selectOfferFromPanel('${o.id}')">
       <div class="offers-panel-item-icon">${initials}</div>
       <div class="offers-panel-item-info">
@@ -7864,9 +7966,10 @@ function toggleAutosave() { /* no-op — always on */ }
 
 function setStatus(state, text) {
   document.getElementById('autosaveDot').className = 'autosave-dot '+(state||'');
-  // Match reference: show "All systems operational" when saved/idle
-  const displayText = (state === 'saved' && (text === '' || !text || text.match(/Local|Saved|Synced|Restored/))) 
-    ? 'All systems operational' 
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const displayText = (state === 'saved' && (text === '' || !text || text.match(/Local|Saved|Synced|Restored/)))
+    ? `Cloud synced · ${timeStr}`
     : text;
   document.getElementById('autosaveText').textContent = displayText;
 }
