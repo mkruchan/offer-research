@@ -2529,11 +2529,7 @@
     .ds-nav-item svg { width: 16px !important; height: 16px !important; flex-shrink: 0 !important; opacity: 0.6 !important; }
     .ds-nav-item:hover svg { opacity: 0.85 !important; }
     .ds-nav-item.active svg { opacity: 1 !important; color: #2563eb !important; }
-    .ds-sidebar-footer {
-      flex-shrink: 0 !important; padding: 10px 10px 16px !important;
-      border-top: 1px solid #efefef !important;
-      display: flex !important; flex-direction: column !important; gap: 2px !important;
-    }
+    .ds-sidebar-footer { padding: 0 !important; border-top: none !important; }
     .ds-user-pill {
       display: flex !important; align-items: center !important; gap: 10px !important;
       padding: 10px 12px !important; border-radius: 10px !important;
@@ -4088,14 +4084,9 @@
   </nav>
 
   <!-- Footer: user + dark mode -->
-  <div class="ds-sidebar-footer">
-    <div class="ds-user-pill">
-      <div class="ds-user-avatar" id="ds-user-avatar">M</div>
-      <div class="ds-user-info">
-        <div class="ds-user-name" id="ds-user-name">Analyst</div>
-        <div class="ds-user-role">Analyst</div>
-      </div>
-    </div>
+  <div class="ds-sidebar-footer" style="padding:8px 8px 12px;border-top:1px solid #f0f0f0;">
+    <!-- Hidden elements preserved for JS compatibility -->
+    <div style="display:none"><div id="ds-user-avatar">M</div><div id="ds-user-name">Analyst</div></div>
     <button class="ds-darkmode-btn" onclick="toggleTheme()">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12.3 10.3A6 6 0 0 1 5.7 3.7 6 6 0 1 0 12.3 10.3z" stroke-linecap="round"/></svg>
       Dark mode
