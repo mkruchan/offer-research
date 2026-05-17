@@ -2809,14 +2809,14 @@
     ═══════════════════════════════════════════════════════ */
 
     /* ── 1. SIDEBAR: narrower, cleaner ── */
-    :root { --sidebar-w: 192px; }
+    :root { --sidebar-w: 220px; }
 
     .ds-sidebar {
-      width: 192px !important;
+      width: 220px !important;
     }
     .ds-main {
-      margin-left: 192px !important;
-      width: calc(100% - 192px) !important;
+      margin-left: 220px !important;
+      width: calc(100% - 220px) !important;
     }
 
     /* Logo: triangle icon matching reference */
@@ -4688,6 +4688,282 @@
     .ds-main,
     .container { overflow-x: clip !important; }
 
+    /* ── TABLE GRIDLINES — thin column dividers like reference ── */
+    #traffic-table thead th,
+    #ads-table thead th,
+    #funnels-table thead th {
+      border-right: 1px solid #e5e7eb !important;
+    }
+    #traffic-table thead th:last-child,
+    #ads-table thead th:last-child,
+    #funnels-table thead th:last-child { border-right: none !important; }
+
+    #traffic-table tbody td,
+    #ads-table tbody td,
+    #funnels-table tbody td {
+      border-right: 1px solid #f0f0f0 !important;
+      border-bottom: 1px solid #f3f4f6 !important;
+    }
+    #traffic-table tbody td:last-child,
+    #ads-table tbody td:last-child,
+    #funnels-table tbody td:last-child { border-right: none !important; }
+
+    /* Dark mode gridlines */
+    body.force-dark #traffic-table thead th,
+    body.force-dark #ads-table thead th,
+    body.force-dark #funnels-table thead th { border-right-color: rgba(255,255,255,.08) !important; }
+    body.force-dark #traffic-table tbody td,
+    body.force-dark #ads-table tbody td,
+    body.force-dark #funnels-table tbody td {
+      border-right-color: rgba(255,255,255,.06) !important;
+      border-bottom-color: rgba(255,255,255,.04) !important;
+    }
+
+    /* ══ SIDEBAR REFERENCE STYLE ══ */
+
+    /* Logo area */
+    .ds-sidebar-logo {
+      height: 72px !important;
+      min-height: 72px !important;
+      padding: 0 20px !important;
+      border-bottom: 1px solid #f0f0f0 !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+    .ds-sidebar-logo svg { width: 120px !important; height: 32px !important; }
+
+    /* Nav */
+    .ds-sidebar-nav { padding: 12px 10px !important; gap: 2px !important; }
+    .ds-nav-item {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      padding: 11px 14px !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      border-radius: 10px !important;
+      color: #475569 !important;
+      min-height: 44px !important;
+      transition: all .13s !important;
+    }
+    .ds-nav-item:hover { background: #f5f7fa !important; color: #1e293b !important; }
+    .ds-nav-item.active {
+      background: #eff6ff !important;
+      color: #2563eb !important;
+      font-weight: 600 !important;
+    }
+    .ds-nav-item svg {
+      width: 18px !important;
+      height: 18px !important;
+      flex-shrink: 0 !important;
+      opacity: 1 !important;
+    }
+    .ds-nav-item.active svg { opacity: 1 !important; }
+
+    /* Sidebar footer */
+    .ds-sidebar-footer {
+      padding: 10px 10px 14px !important;
+      gap: 4px !important;
+      border-top: 1px solid #f0f0f0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    /* User pill */
+    .ds-user-pill {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      padding: 10px 12px !important;
+      background: #f8fafc !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 10px !important;
+      cursor: pointer !important;
+      transition: background .13s !important;
+    }
+    .ds-user-pill:hover { background: #f1f5f9 !important; }
+    .ds-user-avatar {
+      width: 36px !important;
+      height: 36px !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      flex-shrink: 0 !important;
+    }
+    .ds-user-name { font-size: 14px !important; font-weight: 600 !important; color: #0f172a !important; }
+    .ds-user-role { font-size: 12px !important; color: #64748b !important; }
+    .ds-user-chevron {
+      margin-left: auto !important;
+      color: #94a3b8 !important;
+      font-size: 16px !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+
+    /* Dark mode button */
+    .ds-darkmode-btn {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      padding: 11px 14px !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      color: #475569 !important;
+      border-radius: 10px !important;
+      background: none !important;
+      border: none !important;
+      width: 100% !important;
+      text-align: left !important;
+      cursor: pointer !important;
+      font-family: inherit !important;
+      min-height: 44px !important;
+      transition: background .13s !important;
+    }
+    .ds-darkmode-btn:hover { background: #f5f7fa !important; color: #1e293b !important; }
+    .ds-darkmode-btn svg { width: 18px !important; height: 18px !important; flex-shrink: 0 !important; }
+
+    /* Dark mode overrides */
+    body.force-dark .ds-sidebar-logo { border-bottom-color: rgba(255,255,255,.06) !important; }
+    body.force-dark .ds-nav-item { color: #94a3b8 !important; }
+    body.force-dark .ds-nav-item:hover { background: rgba(255,255,255,.06) !important; color: #f1f5f9 !important; }
+    body.force-dark .ds-nav-item.active { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; }
+    body.force-dark .ds-sidebar-footer { border-top-color: rgba(255,255,255,.06) !important; }
+    body.force-dark .ds-user-pill { background: #27272a !important; border-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .ds-user-pill:hover { background: #3f3f46 !important; }
+    body.force-dark .ds-user-name { color: #f1f5f9 !important; }
+    body.force-dark .ds-user-role { color: #64748b !important; }
+    body.force-dark .ds-user-chevron { color: #52525b !important; }
+    body.force-dark .ds-darkmode-btn { color: #94a3b8 !important; }
+    body.force-dark .ds-darkmode-btn:hover { background: rgba(255,255,255,.06) !important; color: #f1f5f9 !important; }
+       CSS-only, no JS/logic changes
+    ══════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+
+      /* ── Body & page ── */
+      body { overflow-x: hidden !important; }
+
+      /* ── Sidebar: slide-in on mobile ── */
+      .ds-sidebar {
+        width: 260px !important;
+        transform: translateX(-100%) !important;
+        z-index: 500 !important;
+      }
+      .ds-sidebar.open { transform: translateX(0) !important; }
+      body.sidebar-collapsed .ds-sidebar { transform: translateX(-100%) !important; }
+      .ds-main { margin-left: 0 !important; width: 100% !important; }
+
+      /* ── Top header ── */
+      .ds-top-header {
+        height: auto !important; min-height: 56px !important;
+        padding: 10px 14px !important; flex-wrap: wrap !important; gap: 8px !important;
+      }
+      .ds-top-header-title { font-size: 15px !important; }
+      .ds-top-header-subtitle { display: none !important; }
+      .ds-top-header-right { gap: 6px !important; flex-wrap: wrap !important; }
+      .ds-top-status { display: none !important; }
+      .ds-hdr-btn { height: 38px !important; padding: 0 10px !important; font-size: 12px !important; }
+      .ds-hdr-collapse-btn { display: none !important; }
+      .ds-hamburger { display: inline-flex !important; }
+
+      /* ── Container ── */
+      .container { padding: 14px 12px 48px !important; gap: 14px !important; }
+
+      /* ── Offer card ── */
+      .ds-offer-card {
+        display: flex !important; flex-direction: column !important;
+        grid-template-columns: unset !important;
+      }
+      .oc-top { padding: 16px 16px 14px !important; gap: 12px !important; }
+      h1#main-title { font-size: 16px !important; }
+      .oc-actions { flex-wrap: wrap !important; gap: 8px !important; }
+      .oc-select-btn, .oc-new-btn { height: 40px !important; font-size: 13px !important; }
+
+      /* Meta row: stack vertically */
+      .oc-meta {
+        flex-direction: column !important;
+        border-left: none !important;
+        border-top: 1px solid #e5e7eb !important;
+        border-radius: 0 0 12px 12px !important;
+      }
+      .oc-meta-field {
+        padding: 12px 16px !important; min-width: unset !important;
+        width: 100% !important; border-right: none !important;
+        border-bottom: 1px solid #f3f4f6 !important;
+      }
+      .oc-meta-field:last-child { border-bottom: none !important; }
+      .oc-meta-sep { display: none !important; }
+      .oc-meta-input { font-size: 14px !important; }
+      #custom-cal {
+        position: fixed !important; top: 50% !important; left: 50% !important;
+        transform: translate(-50%, -50%) !important; z-index: 10000 !important;
+        min-width: 280px !important; max-width: calc(100vw - 32px) !important;
+      }
+
+      /* ── Insight cards: single column ── */
+      .ic-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+      .ic-card { min-height: 160px !important; }
+      .ic-textarea, .notes-body textarea { padding: 14px 16px !important; font-size: 13px !important; }
+
+      /* ── Table cards ── */
+      .tc-card { border-radius: 10px !important; }
+      .tc-header { padding: 12px 14px !important; flex-wrap: wrap !important; gap: 8px !important; min-height: unset !important; }
+      .tc-header-left { flex-wrap: wrap !important; gap: 8px !important; }
+      .tc-title { font-size: 13px !important; }
+      .tc-toggle { height: 30px !important; padding: 0 10px !important; font-size: 12px !important; }
+
+      /* Horizontal scroll for tables */
+      .table-scroll { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
+      #traffic-table { min-width: 600px !important; }
+      #ads-table { min-width: 900px !important; }
+      #funnels-table { min-width: 700px !important; }
+
+      .tc-footer { padding: 10px 16px !important; }
+      .tc-add-btn { font-size: 13px !important; padding: 8px 12px !important; }
+
+      /* Grid cards: single column */
+      .ads-grid-inner, .traffic-grid-inner, .funnels-grid-inner { grid-template-columns: 1fr !important; }
+
+      /* ── Modals ── */
+      .md-card, .modal {
+        width: calc(100vw - 24px) !important; max-width: calc(100vw - 24px) !important;
+        max-height: calc(100vh - 48px) !important; border-radius: 14px !important; overflow-y: auto !important;
+      }
+      .md-header { padding: 14px 16px !important; }
+      .md-body { padding: 14px 16px !important; }
+      .md-footer { padding: 12px 16px !important; gap: 8px !important; flex-wrap: wrap !important; }
+      .md-btn { height: 40px !important; padding: 0 16px !important; font-size: 13px !important; min-width: unset !important; }
+      .md-input, .md-textarea { font-size: 14px !important; }
+
+      /* History panel */
+      .hp-panel { width: 100vw !important; max-width: 100vw !important; border-radius: 0 !important; }
+
+      /* Offers panel */
+      .offers-panel { left: 0 !important; width: 100vw !important; border-radius: 0 !important; }
+
+      /* Export menu */
+      .export-menu { right: 0 !important; min-width: 180px !important; }
+
+      /* Ad detail panel */
+      #ad-detail-panel { width: 100% !important; max-width: 100vw !important; border-radius: 0 !important; }
+      .adp-header-top { padding: 14px 16px !important; }
+      .adp-body { padding: 14px 16px !important; }
+    }
+
+    @media (max-width: 480px) {
+      .ds-top-header-title { font-size: 13px !important; }
+      .ds-hdr-btn span, #themeLabel { display: none !important; }
+      .ds-hdr-btn { width: 36px !important; padding: 0 !important; justify-content: center !important; }
+      h1#main-title { font-size: 14px !important; }
+      .oc-top { padding: 12px 12px 10px !important; }
+      .container { padding: 10px 10px 48px !important; }
+    }
+
+    @media (max-width: 360px) {
+      .oc-select-btn, .oc-new-btn { font-size: 12px !important; padding: 0 10px !important; }
+      h1#main-title { font-size: 13px !important; }
+      .tc-toggle { padding: 0 8px !important; font-size: 11px !important; }
+    }
+
     /* Allow custom calendar to overflow the meta section */
     .oc-meta { overflow: visible !important; }
     .oc-meta-field { overflow: visible !important; position: relative !important; }
@@ -4963,11 +5239,21 @@
   </nav>
 
   <!-- Footer: user + dark mode -->
-  <div class="ds-sidebar-footer" style="padding:8px 8px 12px;border-top:1px solid #f0f0f0;">
-    <!-- Hidden elements preserved for JS compatibility -->
-    <div style="display:none"><div id="ds-user-avatar">M</div><div id="ds-user-name">Analyst</div></div>
+  <div class="ds-sidebar-footer">
+    <!-- User pill -->
+    <div class="ds-user-pill">
+      <div class="ds-user-avatar" id="ds-user-avatar">M</div>
+      <div class="ds-user-info">
+        <div class="ds-user-name" id="ds-user-name">Analyst</div>
+        <div class="ds-user-role">Analyst</div>
+      </div>
+      <span class="ds-user-chevron">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>
+      </span>
+    </div>
+    <!-- Dark mode toggle -->
     <button class="ds-darkmode-btn" onclick="toggleTheme()">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12.3 10.3A6 6 0 0 1 5.7 3.7 6 6 0 1 0 12.3 10.3z" stroke-linecap="round"/></svg>
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12.3 10.3A6 6 0 0 1 5.7 3.7 6 6 0 1 0 12.3 10.3z" stroke-linecap="round"/></svg>
       Dark mode
     </button>
   </div>
