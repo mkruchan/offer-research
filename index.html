@@ -4702,7 +4702,7 @@
       justify-content: center !important;
       gap: 6px !important;
       height: 32px !important;
-      padding: 0 14px !important;
+      padding: 0 28px !important;
       font-size: 13px !important;
       font-weight: 500 !important;
       font-family: 'Inter', sans-serif !important;
@@ -5232,6 +5232,14 @@
     body.force-dark .md-link-btn:hover { background: #3f3f46 !important; color: #f4f4f5 !important; }
     body.force-dark #tc-expand-popover { background: #27272a !important; border-color: rgba(255,255,255,.1) !important; color: #f1f5f9 !important; box-shadow: 0 8px 24px rgba(0,0,0,.4) !important; }
 
+    /* Fix all card corner radius */
+    .ds-offer-card { border-radius: 16px !important; overflow: hidden !important; }
+    .oc-meta { border-radius: 0 0 16px 16px !important; }
+    .ic-card { border-radius: 16px !important; overflow: hidden !important; }
+    .tc-card { border-radius: 16px !important; }
+    .tc-header { border-radius: 16px 16px 0 0 !important; }
+    .tc-footer { border-radius: 0 0 16px 16px !important; }
+
     /* ── Card content text contrast ── */
     .ic-textarea, .notes-body textarea,
     #notes-takeaways, #notes-actions {
@@ -5270,7 +5278,7 @@
     #ads-table td.frozen-num,
     #ads-table td.frozen-num input,
     #funnels-table td.frozen-num,
-    #funnels-table td.frozen-num input { color: #64748b !important; }
+    #funnels-table td.frozen-num input { color: #94a3b8 !important; }
     body.force-dark td.frozen-num,
     body.force-dark td.frozen-num input,
     body.force-dark .row-num,
@@ -5296,6 +5304,23 @@
       opacity: 0.4 !important;
     }
     .title-icon-btn:hover { opacity: 0.9 !important; }
+
+    /* ── Stronger card borders and shadows ── */
+    .ds-offer-card,
+    .ic-card,
+    .tc-card {
+      border: 1.5px solid #e2e8f0 !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.05) !important;
+    }
+    body.force-dark .ds-offer-card,
+    body.force-dark .ic-card,
+    body.force-dark .tc-card {
+      border-color: rgba(255,255,255,.1) !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,.3) !important;
+    }
+
+    /* ── Force toggle button wider background ── */
+    .tc-toggle { padding-left: 28px !important; padding-right: 28px !important; gap: 12px !important; }
   </style>
 </head>
 <body>
