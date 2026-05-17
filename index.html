@@ -910,7 +910,7 @@
       position: fixed; top: 0; right: 0; bottom: 0;
       width: min(1100px, 92vw); max-width: 100vw;
       background: var(--bg-primary); z-index: 8001;
-      overflow-y: auto; overflow-x: hidden;
+      overflow: hidden;
       box-shadow: -16px 0 64px rgba(0,0,0,0.14);
       display: flex; flex-direction: column;
       transform: translateX(100%);
@@ -957,9 +957,9 @@
     .adp-tab.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--blue-bg); }
 
     /* Body */
-    .adp-body { padding: 16px 20px; flex: 1; overflow-y: auto; overflow-x: hidden; min-height: 0; }
+    .adp-body { padding: 16px 20px; flex: 1; overflow: hidden; min-height: 0; display: flex; flex-direction: column; }
     .adp-tab-panel { display: none; }
-    .adp-tab-panel.active { display: block; }
+    .adp-tab-panel.active { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
     /* Image */
     .adp-img-wrap { position: relative; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-light); margin-bottom: 16px; background: var(--bg-secondary); }
@@ -1838,6 +1838,12 @@
       body:not(.force-light) .adp-tab.active          { background: rgba(59,130,246,0.15); color: #93c5fd; border-bottom-color: #3b82f6; }
       body:not(.force-light) .hp-panel                { background: var(--bg-primary); }
       body:not(.force-light) .dp-panel                { background: var(--bg-primary); border-color: var(--border-mid); }
+      body:not(.force-light) .offers-panel-item.active { background: rgba(37,99,235,.18) !important; border-color: rgba(37,99,235,.3) !important; }
+      body:not(.force-light) .offers-panel-item.active .offers-panel-item-icon { background: rgba(37,99,235,.25) !important; color: #93c5fd !important; }
+      body:not(.force-light) .offers-panel-item.active .offers-panel-item-name { color: #93c5fd !important; }
+      body:not(.force-light) .offers-panel-item:hover { background: rgba(255,255,255,.05) !important; }
+      body:not(.force-light) .offers-panel-item-icon { background: #27272a !important; color: #71717a !important; }
+      body:not(.force-light) .offers-panel-item-name { color: #f4f4f5 !important; }
       body:not(.force-light) #offer-search-results > div:hover,
       body:not(.force-light) #offer-search-results button:hover { background: rgba(59,130,246,0.12); }
     }
@@ -3959,7 +3965,7 @@
     .adp-tab:hover { color: #374151 !important; background: #f9fafb !important; }
 
     /* Body padding */
-    .adp-body { padding: 20px 24px !important; }
+    .adp-body { padding: 14px 20px !important; overflow: hidden !important; display: flex !important; flex-direction: column !important; }
 
     /* Image */
     .adp-img-wrap { border-radius: 10px !important; margin-bottom: 20px !important; border-color: #e5e7eb !important; }
@@ -4870,18 +4876,19 @@
     .tc-toggle-group {
       display: flex !important;
       align-items: center !important;
-      gap: 8px !important;
-      background: transparent !important;
-      border: none !important;
-      padding: 0 !important;
+      gap: 3px !important;
+      background: var(--bg-secondary, #f3f4f6) !important;
+      border: 1px solid var(--border-light, #e5e7eb) !important;
+      border-radius: 10px !important;
+      padding: 3px !important;
     }
     .tc-toggle {
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
-      gap: 6px !important;
+      gap: 8px !important;
       height: 32px !important;
-      padding: 0 28px !important;
+      padding: 0 20px !important;
       font-size: 13px !important;
       font-weight: 500 !important;
       font-family: 'Inter', sans-serif !important;
@@ -5537,7 +5544,7 @@
     /* Dark mode grid card labels — more visible */
     body.force-dark .gc-field-label { color: #94a3b8 !important; }
     body.force-dark .grid-card-meta { color: #94a3b8 !important; }
-    .tc-toggle { padding-left: 28px !important; padding-right: 28px !important; gap: 12px !important; }
+    .tc-toggle { padding: 0 20px !important; gap: 8px !important; }
 
     /* Database settings hidden by default */
     #nav-db { display: none !important; }
@@ -7343,7 +7350,7 @@ function openAdDetail(rowIdx) {
   const copyWeights = {'Angle / Hook':1,'Headline':1,'CTA':1,'Title':1};
 
   const body = `
-    <div style="display:grid;grid-template-columns:280px 1fr 1fr;gap:14px;min-height:calc(100vh - 90px);">
+    <div style="display:grid;grid-template-columns:280px 1fr 1fr;gap:14px;flex:1;min-height:0;height:100%;">
 
       <!-- COL 1: Image + Links + Ad Details + Notes -->
       <div style="display:flex;flex-direction:column;gap:10px;height:100%;min-height:0;overflow-y:auto;">
@@ -7371,7 +7378,7 @@ function openAdDetail(rowIdx) {
         <div class="adp-section" style="margin:0;flex:1;display:flex;flex-direction:column;min-height:0;">
           <div class="adp-section-header"><div class="adp-section-title">Notes</div></div>
           <div class="adp-copy-block" data-field="notes" data-td="16" contenteditable="false"
-               style="min-height:240px;height:240px;overflow-y:auto;">${notes || '<span class=\"adp-copy-placeholder\">Add notes…</span>'}</div>
+               style="flex:1;min-height:60px;overflow-y:auto;">${notes || '<span class=\"adp-copy-placeholder\">Add notes…</span>'}</div>
         </div>
       </div>
 
