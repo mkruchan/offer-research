@@ -1000,7 +1000,7 @@
       flex: 1; font-size: 13px; font-family: inherit;
       border: 1px solid var(--border-light); border-radius: var(--radius-md);
       padding: 6px 10px; background: var(--bg-primary); color: var(--text-primary);
-      outline: none; resize: vertical; min-height: 60px; width: 100%;
+      outline: none; resize: vertical; min-height: 140px; width: 100%;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
     .adp-row-ta:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.10); }
@@ -3859,7 +3859,8 @@
       font-size: 13.5px !important;
       background: #fafafa !important;
       padding: 10px 12px !important;
-      min-height: 72px !important;
+      min-height: 240px !important;
+      height: 240px !important;
       line-height: 1.55 !important;
     }
     .adp-row-ta:focus { background: #fff !important; border-color: #2563eb !important; }
@@ -4298,6 +4299,11 @@
       font-size: 13px !important;
       line-height: 1.7 !important;
       color: #374151 !important;
+      word-break: normal !important;
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important;
+      white-space: pre-wrap !important;
+      hyphens: none !important;
     }
     /* Resize handle — cleaner */
     .notes-resize-handle {
@@ -4603,8 +4609,9 @@
       body:not(.force-light) .oc-meta-icon { color: #52525b !important; }
     }
 
-    /* Native date picker icon visible */
-    #meta-date { cursor: pointer !important; }
+    /* Custom calendar icon for date — hide native picker arrow */
+    #meta-date::-webkit-calendar-picker-indicator { opacity: 0 !important; position: absolute !important; right: 0 !important; width: 30px !important; height: 30px !important; cursor: pointer !important; }
+    #meta-date { cursor: pointer !important; position: relative !important; }
 
     /* ── Offer, Geo, Lifecycle: same rendering as Headline/CTA/Title ── */
     /* Override the position:absolute that was expanding these cells */
@@ -4743,6 +4750,9 @@
     }
 
     /* ── HIGH CONTRAST TEXT ── */
+    /* Ensure text wraps properly at all widths */
+    * { box-sizing: border-box; }
+    p, span, div, textarea, input { word-break: normal; overflow-wrap: break-word; }
     /* Light mode: near-black for all primary text */
     body { color: #0f172a !important; }
     .ds-nav-item { color: #1e293b !important; }
@@ -4801,6 +4811,73 @@
     body.force-dark #funnels-table tbody td input,
     body.force-dark #funnels-table tbody td textarea { color: #e2e8f0 !important; }
 
+    /* ── JSONBin Backup section polish ── */
+    .md-section-divider {
+      border-top: 1px solid #e5e7eb !important;
+      padding: 16px 20px !important;
+      margin: 0 !important;
+      background: #f8fafc !important;
+      border-radius: 0 0 12px 12px !important;
+    }
+    .md-section-header {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      margin-bottom: 6px !important;
+    }
+    .md-section-label {
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      color: #0f172a !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.07em !important;
+    }
+    .md-badge {
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      padding: 2px 8px !important;
+      border-radius: 20px !important;
+    }
+    .md-badge--amber {
+      background: #fef3c7 !important;
+      color: #92400e !important;
+    }
+    .md-section-desc {
+      font-size: 12.5px !important;
+      color: #475569 !important;
+      line-height: 1.5 !important;
+      margin: 0 0 12px !important;
+    }
+    .md-link-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      font-size: 12.5px !important;
+      font-weight: 500 !important;
+      padding: 8px 14px !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 8px !important;
+      background: #ffffff !important;
+      color: #374151 !important;
+      cursor: pointer !important;
+      transition: all .15s !important;
+      box-shadow: 0 1px 2px rgba(0,0,0,.05) !important;
+    }
+    .md-link-btn:hover {
+      background: #f3f4f6 !important;
+      color: #111827 !important;
+      border-color: #d1d5db !important;
+    }
+
+    /* Dark mode */
+    body.force-dark .md-section-divider { background: #1f1f23 !important; border-top-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .md-section-label { color: #f1f5f9 !important; }
+    body.force-dark .md-section-desc { color: #94a3b8 !important; }
+    body.force-dark .md-badge--amber { background: rgba(146,64,14,.2) !important; color: #fbbf24 !important; }
+    body.force-dark .md-link-btn { background: #27272a !important; border-color: rgba(255,255,255,.1) !important; color: #d4d4d8 !important; }
+    body.force-dark .md-link-btn:hover { background: #3f3f46 !important; color: #f4f4f5 !important; }
+    body.force-dark #tc-expand-popover { background: #27272a !important; border-color: rgba(255,255,255,.1) !important; color: #f1f5f9 !important; box-shadow: 0 8px 24px rgba(0,0,0,.4) !important; }
+
     /* ── UNIFIED ROW NUMBER COLOR ── */
     td.frozen-num,
     td.frozen-num input,
@@ -4828,6 +4905,9 @@
     h1#main-title {
       flex: 0 1 auto !important;
       min-width: 0 !important;
+      word-break: break-word !important;
+      overflow-wrap: break-word !important;
+      hyphens: none !important;
     }
     .title-icon-btn {
       flex-shrink: 0 !important;
@@ -5159,17 +5239,37 @@
         </div>
       </div>
       <div class="oc-meta-sep"></div>
-      <div class="oc-meta-field">
-        <label class="oc-meta-label" for="meta-date">Date</label>
-        <div class="oc-meta-value-row">
-          <input type="date" id="meta-date" class="oc-meta-input">
+      <div class="oc-meta-field" style="position:relative;">
+        <label class="oc-meta-label" for="meta-date-display">Date</label>
+        <div class="oc-meta-value-row" style="cursor:pointer;" onclick="toggleCustomCal(event)">
+          <svg class="oc-meta-icon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1.5" y="2.5" width="13" height="12" rx="2"/><path d="M1.5 6.5h13M5 1v3M11 1v3"/></svg>
+          <span id="meta-date-display" class="oc-meta-input" style="cursor:pointer;user-select:none;min-width:90px;">dd.mm.yyyy</span>
+          <input type="hidden" id="meta-date">
+        </div>
+        <!-- Custom calendar popup -->
+        <div id="custom-cal" style="display:none;position:absolute;top:calc(100% + 6px);left:0;z-index:9999;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);padding:14px;min-width:240px;font-family:'Inter',sans-serif;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <button onclick="calNav(-1)" style="background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:6px;font-size:16px;color:#475569;">‹</button>
+            <span id="cal-month-label" style="font-size:13px;font-weight:600;color:#0f172a;"></span>
+            <button onclick="calNav(1)" style="background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:6px;font-size:16px;color:#475569;">›</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px;">
+            <div style="text-align:center;font-size:10px;font-weight:600;color:#94a3b8;padding:2px;">Mo</div>
+            <div style="text-align:center;font-size:10px;font-weight:600;color:#94a3b8;padding:2px;">Tu</div>
+            <div style="text-align:center;font-size:10px;font-weight:600;color:#94a3b8;padding:2px;">We</div>
+            <div style="text-align:center;font-size:10px;font-weight:600;color:#94a3b8;padding:2px;">Th</div>
+            <div style="text-align:center;font-size:10px;font-weight:600;color:#94a3b8;padding:2px;">Fr</div>
+            <div style="text-align:center;font-size:10px;font-weight:600;color:#94a3b8;padding:2px;">Sa</div>
+            <div style="text-align:center;font-size:10px;font-weight:600;color:#94a3b8;padding:2px;">Su</div>
+          </div>
+          <div id="cal-days" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;"></div>
         </div>
       </div>
       <div class="oc-meta-sep"></div>
       <div class="oc-meta-field">
         <label class="oc-meta-label" for="meta-period">Report Period</label>
         <div class="oc-meta-value-row">
-          <svg class="oc-meta-icon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1.5" y="2.5" width="13" height="12" rx="2"/><path d="M1.5 6.5h13M5 1v3M11 1v3"/></svg>
+          <svg class="oc-meta-icon" width="15" height="15" viewBox="0 0 489.42 489.42" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><g><path d="M46.1,138.368c4.2,2.1,16.1,8.4,29.1-6.2c5.2-7.3,10.4-14.6,16.6-21.8c7.3-8.3,6.2-21.8-2.1-29.1c-8.3-7.3-21.8-6.2-29.1,2.1s-14.6,17.7-20.8,27C33.7,119.668,36.8,132.068,46.1,138.368z"/><path d="M249,40.568c19.8,0,39.5,3.1,58.3,9.4c12.6,3.7,21.8-4.2,26-12.5c3.1-11.4-3.1-22.9-13.5-26c-22.9-7.3-45.8-11.4-69.7-11.4c-11.4,0-20.8,8.3-20.8,19.8S237.6,40.568,249,40.568z"/><path d="M434.2,167.468c7.3,17.7,11.4,36.4,13.5,55.1c0,0,1.2,23.2,22.9,19.8c21.5-2.8,18.7-23.9,18.7-23.9c-2.1-22.9-8.3-45.8-16.6-66.6c-5.2-10.4-16.6-15.6-27-11.4C435.2,145.668,430,157.068,434.2,167.468z"/><path d="M359.3,75.968c16.6,11.4,31.2,25,43.7,40.6c9.3,11.6,25,6.8,28.1,3.1c8.3-7.3,10.4-20.8,3.1-29.1c-14.6-17.7-32.3-34.3-52-47.9c-9.4-6.2-21.8-4.2-28.1,5.2S349.9,69.668,359.3,75.968z"/><path d="M134.6,72.768c16.6-10.4,35.4-18.7,54.1-23.9c11.4-3.1,17.7-14.6,14.6-25c-3.1-11.4-14.6-17.7-25-14.6c-22.9,6.2-44.7,15.6-64.5,28.1c-9.4,6.2-12.5,18.7-6.2,28.1C111.7,71.768,120.5,77.968,134.6,72.768z"/><path d="M468.5,268.368c-11.4-3.1-21.8,4.2-23.9,15.6c-2.1,9.4-8.5,31.3-8.6,33.4c-27.5,71.5-93.5,121.8-169.3,129.9c-74.6,7.8-147.2-25.9-189.3-86.5l38.5,8.5c10.4,2.1,21.8-4.2,23.9-15.6c2.1-10.4-4.2-21.8-15.6-23.9l-81.1-17.7c-5.2-1-21.4,0-25,15.6l-17.7,82.2c-2.1,10.4,4.2,21.8,15.6,23.9c12.7,1.3,21.8-6.2,25-16.6l6.2-28.2c46.3,62.7,129.9,109.1,223.7,99c94.6-10.2,174.8-73.9,206-163.3c1-2.6,5.7-24.4,7.3-32.3C487.3,280.868,480,270.468,468.5,268.368z"/><path d="M164.6,265.268h95.9c11.4,0,19.8-9.4,20.8-20.8v-142.2c0-11.4-9.4-20.8-20.8-20.8c-11.4,0-20.8,9.4-20.8,20.8v121.4h-75.1c-11.4,0-20.8,9.4-20.8,20.8S153.1,265.268,164.6,265.268z"/></g></svg>
           <input type="text" id="meta-period" class="oc-meta-input" placeholder="e.g. Apr 2025">
         </div>
       </div>
@@ -6538,13 +6638,13 @@ function openAdDetail(rowIdx) {
   const copyFields = [['Angle / Hook',angle,11],['Headline',headline,12],['CTA',cta,13],['Title',title,14]];
 
   // Smart flex weights: Angle/Headline get more space, CTA/Title less
-  const copyWeights = {'Angle / Hook':3,'Headline':3,'CTA':1,'Title':1};
+  const copyWeights = {'Angle / Hook':2,'Headline':2,'CTA':1,'Title':1};
 
   const body = `
     <div style="display:grid;grid-template-columns:280px 1fr 1fr;gap:14px;min-height:calc(100vh - 90px);">
 
       <!-- COL 1: Image + Links + Ad Details + Notes -->
-      <div style="display:flex;flex-direction:column;gap:10px;min-height:0;overflow-y:auto;">
+      <div style="display:flex;flex-direction:column;gap:10px;height:100%;min-height:0;overflow-y:auto;">
         ${imgBlock}
         <div class="adp-section" style="margin:0;">
           <div class="adp-section-header"><div class="adp-section-title">Links</div></div>
@@ -6566,10 +6666,10 @@ function openAdDetail(rowIdx) {
             ${_adpEditRow('Impressions', imp, 15)}
           </div>
         </div>
-        <div class="adp-section" style="margin:0;">
+        <div class="adp-section" style="margin:0;flex:1;display:flex;flex-direction:column;min-height:0;">
           <div class="adp-section-header"><div class="adp-section-title">Notes</div></div>
           <div class="adp-copy-block" data-field="notes" data-td="16" contenteditable="false"
-               style="min-height:60px;max-height:160px;overflow-y:auto;">${notes || '<span class=\"adp-copy-placeholder\">Add notes…</span>'}</div>
+               style="min-height:240px;height:240px;overflow-y:auto;">${notes || '<span class=\"adp-copy-placeholder\">Add notes…</span>'}</div>
         </div>
       </div>
 
@@ -6591,7 +6691,177 @@ function openAdDetail(rowIdx) {
   _adpOpen(offerVal, '', body);
 }
 
-/* ── Top Traffic Sources detail ── */
+/* ── Custom Calendar for Date field ── */
+let _calDate = new Date();
+let _calSelected = null;
+
+function toggleCustomCal(e) {
+  if (e) e.stopPropagation();
+  const cal = document.getElementById('custom-cal');
+  if (!cal) return;
+  const isOpen = cal.style.display !== 'none';
+  if (isOpen) { cal.style.display = 'none'; return; }
+  // Init from current value
+  const hidden = document.getElementById('meta-date');
+  if (hidden && hidden.value) {
+    const parts = hidden.value.split(/[.\-\/]/);
+    if (parts.length === 3) {
+      // Try dd.mm.yyyy or yyyy-mm-dd
+      if (parts[0].length === 4) _calDate = new Date(+parts[0], +parts[1]-1, +parts[2]);
+      else _calDate = new Date(+parts[2], +parts[1]-1, +parts[0]);
+      _calSelected = new Date(_calDate);
+    }
+  } else {
+    _calDate = new Date();
+    _calSelected = null;
+  }
+  renderCal();
+  cal.style.display = 'block';
+  // Dark mode
+  if (document.body.classList.contains('force-dark')) {
+    cal.style.background = '#27272a';
+    cal.style.borderColor = 'rgba(255,255,255,.1)';
+    cal.style.boxShadow = '0 8px 24px rgba(0,0,0,.4)';
+  } else {
+    cal.style.background = '#fff';
+    cal.style.borderColor = '#e5e7eb';
+  }
+}
+
+function renderCal() {
+  const lbl = document.getElementById('cal-month-label');
+  const grid = document.getElementById('cal-days');
+  if (!lbl || !grid) return;
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  lbl.textContent = months[_calDate.getMonth()] + ' ' + _calDate.getFullYear();
+  const year = _calDate.getFullYear(), month = _calDate.getMonth();
+  const first = new Date(year, month, 1);
+  // Monday-first: 0=Mon...6=Sun
+  let startDay = first.getDay(); // 0=Sun
+  startDay = startDay === 0 ? 6 : startDay - 1;
+  const days = new Date(year, month + 1, 0).getDate();
+  const isDark = document.body.classList.contains('force-dark');
+  const textColor = isDark ? '#f1f5f9' : '#0f172a';
+  const mutedColor = isDark ? '#64748b' : '#94a3b8';
+  let html = '';
+  for (let i = 0; i < startDay; i++) html += '<div></div>';
+  for (let d = 1; d <= days; d++) {
+    const isToday = new Date().getDate()===d && new Date().getMonth()===month && new Date().getFullYear()===year;
+    const isSel = _calSelected && _calSelected.getDate()===d && _calSelected.getMonth()===month && _calSelected.getFullYear()===year;
+    const bg = isSel ? '#2563eb' : isToday ? (isDark ? 'rgba(37,99,235,.2)' : '#eff6ff') : 'transparent';
+    const color = isSel ? '#fff' : isToday ? '#2563eb' : textColor;
+    html += `<div onclick="calPick(${year},${month},${d})" style="text-align:center;padding:5px 2px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:${isSel||isToday?'600':'400'};background:${bg};color:${color};transition:background .1s;" onmouseover="if(!${isSel})this.style.background='${isDark?'rgba(255,255,255,.06)':'#f1f5f9'}'" onmouseout="this.style.background='${bg}'">${d}</div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function calNav(dir) {
+  _calDate = new Date(_calDate.getFullYear(), _calDate.getMonth() + dir, 1);
+  renderCal();
+}
+
+function calPick(y, m, d) {
+  _calSelected = new Date(y, m, d);
+  const pad = n => String(n).padStart(2,'0');
+  const display = `${pad(d)}.${pad(m+1)}.${y}`;
+  const iso = `${y}-${pad(m+1)}-${pad(d)}`;
+  document.getElementById('meta-date-display').textContent = display;
+  const hidden = document.getElementById('meta-date');
+  if (hidden) { hidden.value = iso; }
+  document.getElementById('custom-cal').style.display = 'none';
+  scheduleSave();
+}
+
+// Close calendar on outside click
+document.addEventListener('mousedown', e => {
+  const cal = document.getElementById('custom-cal');
+  if (cal && cal.style.display !== 'none' && !e.target.closest('#custom-cal') && !e.target.closest('.oc-meta-field')) {
+    cal.style.display = 'none';
+  }
+});
+
+// Sync display from stored value on load
+(function syncCalDisplay() {
+  setTimeout(() => {
+    const hidden = document.getElementById('meta-date');
+    const display = document.getElementById('meta-date-display');
+    if (!hidden || !display) return;
+    const v = hidden.value;
+    if (v) {
+      const parts = v.split('-');
+      if (parts.length === 3) display.textContent = `${parts[2]}.${parts[1]}.${parts[0]}`;
+    }
+  }, 600);
+})();
+
+/* ── Table cell text expand on click ── */
+function initTableCellExpand() {
+  // Remove existing popover if any
+  let existing = document.getElementById('tc-expand-popover');
+  if (!existing) {
+    const pop = document.createElement('div');
+    pop.id = 'tc-expand-popover';
+    pop.style.cssText = `
+      position:fixed; z-index:9999; background:#fff; border:1px solid #e5e7eb;
+      border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.12); padding:12px 14px;
+      font-size:13px; color:#0f172a; line-height:1.6; max-width:360px; min-width:160px;
+      white-space:pre-wrap; word-break:break-word; display:none;
+      font-family:'Inter',-apple-system,sans-serif;
+    `;
+    document.body.appendChild(pop);
+    // Close on outside click
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#tc-expand-popover') && !e.target.closest('#ads-table textarea') && !e.target.closest('#funnels-table textarea') && !e.target.closest('#traffic-table textarea')) {
+        pop.style.display = 'none';
+      }
+    }, true);
+  }
+
+  // Add click handlers to all table textareas with overflow
+  const tables = ['ads-table','funnels-table','traffic-table'];
+  tables.forEach(tid => {
+    const table = document.getElementById(tid);
+    if (!table) return;
+    table.querySelectorAll('tbody textarea').forEach(ta => {
+      if (ta._expandInit) return;
+      ta._expandInit = true;
+      ta.addEventListener('click', function(e) {
+        const val = this.value.trim();
+        if (!val || val === this.placeholder) return;
+        // If text fits, don't show popover
+        if (this.scrollWidth <= this.clientWidth + 2) return;
+        e.stopPropagation();
+        const pop = document.getElementById('tc-expand-popover');
+        const rect = this.getBoundingClientRect();
+        pop.textContent = val;
+        pop.style.display = 'block';
+        // Position below or above the cell
+        const spaceBelow = window.innerHeight - rect.bottom;
+        if (spaceBelow > 120) {
+          pop.style.top = (rect.bottom + 6) + 'px';
+        } else {
+          pop.style.top = '';
+          pop.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+        }
+        pop.style.left = Math.min(rect.left, window.innerWidth - 380) + 'px';
+        pop.style.bottom = spaceBelow > 120 ? '' : (window.innerHeight - rect.top + 6) + 'px';
+      });
+    });
+  });
+}
+
+// Re-init after table rows are added
+const _origAddRow = window.addRow;
+if (typeof addRow === 'function') {
+  // Hook into row additions
+  const origAddRow = addRow;
+  window.addRow = function(...args) {
+    const r = origAddRow.apply(this, args);
+    setTimeout(initTableCellExpand, 50);
+    return r;
+  };
+}
+setTimeout(initTableCellExpand, 500);
 function openTrafficDetail(rowIdx) {
   const tr = document.querySelectorAll('#traffic-body tr')[rowIdx];
   if (!tr) return;
@@ -6624,7 +6894,7 @@ function openTrafficDetail(rowIdx) {
     </div>
     <div class="adp-section">
       <div class="adp-section-header"><div class="adp-section-title">Notes</div></div>
-      <div class="adp-copy-block" data-field="notes" data-td="5" contenteditable="false" style="min-height:60px;">${notes || '<span class=\"adp-copy-placeholder\">Add notes…</span>'}</div>
+      <div class="adp-copy-block" data-field="notes" data-td="5" contenteditable="false" style="min-height:120px;max-height:300px;overflow-y:auto;">${notes || '<span class=\"adp-copy-placeholder\">Add notes…</span>'}</div>
     </div>
   `;
   _adpOpen(source, '', body);
@@ -8267,7 +8537,8 @@ function restoreData(data) {
 
   }
   document.getElementById('meta-analyst').value = data.meta?.analyst||'';
-  document.getElementById('meta-date').value = data.meta?.date||'';
+  const _md = data.meta?.date||''; document.getElementById('meta-date').value = _md;
+  if (_md) { const _p = _md.split('-'); if (_p.length===3 && document.getElementById('meta-date-display')) document.getElementById('meta-date-display').textContent = `${_p[2]}.${_p[1]}.${_p[0]}`; }
   document.getElementById('meta-period').value = data.meta?.period||'';
   document.getElementById('notes-takeaways').value = data.notes?.takeaways||'';
   document.getElementById('notes-actions').value = data.notes?.actions||'';
