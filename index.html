@@ -1842,6 +1842,8 @@
       body:not(.force-light) .offers-panel-item.active .offers-panel-item-icon { background: rgba(37,99,235,.25) !important; color: #93c5fd !important; }
       body:not(.force-light) .offers-panel-item.active .offers-panel-item-name { color: #93c5fd !important; }
       body:not(.force-light) .offers-panel-item:hover { background: rgba(255,255,255,.05) !important; }
+      body:not(.force-light) .offers-panel-new-btn { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; border: 1px solid rgba(37,99,235,.35) !important; }
+      body:not(.force-light) .offers-panel-new-btn:hover { background: rgba(37,99,235,.28) !important; }
       body:not(.force-light) .offers-panel-item-icon { background: #27272a !important; color: #71717a !important; }
       body:not(.force-light) .offers-panel-item-name { color: #f4f4f5 !important; }
       body:not(.force-light) #offer-search-results > div:hover,
@@ -3357,6 +3359,8 @@
       transition: background .13s;
     }
     .offers-panel-new-btn:hover { background: #1d4ed8; }
+    body.force-dark .offers-panel-new-btn { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; border: 1px solid rgba(37,99,235,.35) !important; }
+    body.force-dark .offers-panel-new-btn:hover { background: rgba(37,99,235,.28) !important; }
 
     /* Dark mode */
     body.force-dark .offers-panel { background: #18181b; border-right-color: rgba(255,255,255,.08); }
@@ -5636,7 +5640,7 @@
 <div class="offers-panel" id="offers-panel">
   <div class="offers-panel-header">
     <div class="offers-panel-title">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M1 7h14M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4" stroke-linecap="round"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"/></svg>
       Offers
     </div>
     <button class="offers-panel-close" onclick="closeOffersPanel()">
