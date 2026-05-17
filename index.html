@@ -3729,7 +3729,7 @@
     }
     .ds-hdr-collapse-btn:hover { background: #f3f4f6 !important; color: #111827 !important; border-color: #d1d5db !important; }
     /* Hide on mobile (hamburger handles it) */
-    @media (max-width: 860px) { .ds-hdr-collapse-btn { display: none !important; } }
+    @media (max-width: 860px) { .ds-hdr-collapse-btn { display: none !important; } .ds-hamburger { display: inline-flex !important; } }
     body.force-dark .ds-hdr-collapse-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #a1a1aa !important; }
     body.force-dark .ds-hdr-collapse-btn:hover { background: #3f3f46 !important; color: #f4f4f5 !important; }
 
@@ -4320,7 +4320,7 @@
     .ds-top-header-mobile-row > div { display: flex !important; flex-direction: column !important; gap: 2px !important; justify-content: center !important; }
     .ds-top-header-title { line-height: 1.2 !important; display: block !important; }
     .ds-top-header-subtitle { line-height: 1.2 !important; display: block !important; margin: 0 !important; }
-    .ds-hdr-collapse-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; }
+    @media (min-width: 861px) { .ds-hdr-collapse-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; } }
     .ds-top-header-right { display: flex !important; align-items: center !important; gap: 8px !important; flex-shrink: 0 !important; }
     .ds-hdr-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; line-height: 1 !important; }
     .ds-hdr-btn svg, .ds-hdr-collapse-btn svg { display: block !important; flex-shrink: 0 !important; }
