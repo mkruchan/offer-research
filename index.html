@@ -2218,7 +2218,7 @@
       background: #18181b;
     }
     body.force-dark .ds-app { background: #18181b; }
-    body.force-dark .ds-sidebar { background: #18181b; border-right: none; }
+    body.force-dark .ds-sidebar { background: #18181b; }
     body.force-dark .ds-sidebar-logo { border-bottom-color: rgba(255,255,255,.08); }
     body.force-dark .ds-sidebar-logo-text { color: #f4f4f5; }
     body.force-dark .ds-sidebar-footer { border-top-color: rgba(255,255,255,.06); }
@@ -2274,7 +2274,7 @@
 
     /* prefers-color-scheme mirror */
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .ds-sidebar { background: #18181b !important; border-right: none !important; box-shadow: none !important; }
+      body:not(.force-light) .ds-sidebar { background: #18181b !important; border-right: 1px solid rgba(255,255,255,0.10) !important; box-shadow: none !important; }
       body:not(.force-light) .ds-top-header { background: #18181b; border-bottom-color: rgba(255,255,255,.08); }
       body:not(.force-light) .ds-hdr-btn { background: #18181b; border-color: rgba(255,255,255,.12); color: #a1a1aa; }
       body:not(.force-light) .ds-offer-card { background: #18181b; border-color: rgba(255,255,255,.08); }
@@ -2523,7 +2523,7 @@
     /* ── 9. Dark mode overrides ── */
     body.force-dark          { background: #18181b !important; }
     body.force-dark .ds-app  { background: #18181b !important; }
-    body.force-dark .ds-sidebar { background: #18181b !important; border-right: none !important; }
+    body.force-dark .ds-sidebar { background: #18181b !important; }
     body.force-dark .ds-top-header {
       background: #18181b !important;
       border-bottom-color: rgba(255,255,255,.08) !important;
@@ -2597,7 +2597,7 @@
     }
 
     /* ── 11. Dark mode sidebar ── */
-    body.force-dark .ds-sidebar { background: #18181b !important; border-right: none !important; }
+    body.force-dark .ds-sidebar { background: #18181b !important; }
     body.force-dark .ds-sidebar-logo { border-bottom-color: rgba(255,255,255,.08) !important; }
     body.force-dark .ds-sidebar-logo-text { color: #f4f4f5 !important; }
     body.force-dark .ds-sidebar-footer { border-top-color: rgba(255,255,255,.06) !important; }
@@ -3370,7 +3370,7 @@
     }
 
     .offers-panel-footer {
-      padding: 10px 14px; border-top: 1px solid #e5e7eb; flex-shrink: 0;
+      padding: 10px 8px; border-top: 1px solid #e5e7eb; flex-shrink: 0; box-sizing: border-box;
     }
     .offers-panel-new-btn {
       display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -3880,7 +3880,7 @@
     body.force-dark .ds-top-status-label { color: #a1a1aa !important; }
 
     /* Sidebar */
-    body.force-dark .ds-sidebar { background: #18181b !important; border-right: none !important; }
+    body.force-dark .ds-sidebar { background: #18181b !important; }
     body.force-dark .ds-sidebar-logo { border-bottom-color: rgba(255,255,255,.08) !important; }
     body.force-dark .ds-nav-item { color: #a1a1aa !important; }
     body.force-dark .ds-nav-item:hover { background: rgba(255,255,255,.06) !important; color: #f4f4f5 !important; }
@@ -4627,7 +4627,7 @@
       font-weight: 500 !important;
     }
     .ds-nav-item svg { width: 15px !important; height: 15px !important; }
-    .ds-sidebar-footer { padding: 10px 8px !important; gap: 3px !important; }
+    .ds-sidebar-footer { padding: 10px 8px !important; gap: 3px !important; box-sizing: border-box !important; }
     .ds-user-pill {
       padding: 8px 10px !important;
       border-radius: 8px !important;
@@ -4773,7 +4773,7 @@
     body.force-dark .ds-hdr-collapse-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #a1a1aa !important; }
 
     /* Sidebar */
-    body.force-dark .ds-sidebar { background: #18181b !important; border-right: none !important; }
+    body.force-dark .ds-sidebar { background: #18181b !important; }
     body.force-dark .ds-sidebar-logo { border-bottom-color: rgba(255,255,255,.08) !important; }
     body.force-dark .ds-nav-item { color: #a1a1aa !important; background: transparent !important; }
     body.force-dark .ds-nav-item:hover { background: rgba(255,255,255,.06) !important; color: #f4f4f5 !important; }
@@ -5550,7 +5550,7 @@
       border-bottom: 1px solid #e5e7eb !important;
       box-shadow: none !important;
     }
-    body.force-dark .ds-sidebar { border-right: none !important; box-shadow: none !important; }
+    body.force-dark .ds-sidebar { box-shadow: none !important; }
     body.force-dark .ds-top-header { border-bottom-color: rgba(255,255,255,.08) !important; box-shadow: none !important; }
 
     /* Fix offer card overflow so custom calendar can show */
@@ -5653,7 +5653,44 @@
     /* Status indicator hidden by default */
     #sidebar-status { display: none !important; }
     #sidebar-status.visible { display: flex !important; }
-  </style>
+  
+    /* ── FINAL: Sidebar border + soft gradient shadow ── */
+    body:not(.force-dark) .ds-sidebar { border-right: none !important; box-shadow: 2px 0 8px rgba(0,0,0,0.07) !important; }
+    body.force-dark .ds-sidebar { border-right: none !important; box-shadow: 2px 0 8px rgba(0,0,0,0.35) !important; }
+
+    /* ── Footer border alignment ── */
+    .ds-sidebar-footer, .offers-panel-footer {
+      padding-top: 10px !important;
+      padding-bottom: 10px !important;
+    }
+    .ds-darkmode-btn, .offers-panel-new-btn {
+      height: 36px !important;
+      box-sizing: border-box !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    /* ── Footer alignment — final ── */
+    .ds-sidebar-footer {
+      height: 56px !important;
+      padding: 10px 8px !important;
+      box-sizing: border-box !important;
+    }
+    .offers-panel-footer {
+      height: 56px !important;
+      padding: 10px 8px !important;
+      box-sizing: border-box !important;
+      border-top: 1px solid #e5e7eb !important;
+    }
+    .ds-darkmode-btn, .offers-panel-new-btn {
+      height: 36px !important;
+      line-height: 36px !important;
+      padding: 0 10px !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+</style>
 </head>
 <body>
 
@@ -10199,8 +10236,10 @@ async function offerLoadAll() {
   if (error) { console.error('offerLoadAll:', error); showToast('Failed to load offers: ' + error.message, 'error'); return; }
   _allOffers = data || [];
 
-  // If table empty, auto-save current page as first offer
-  if (_allOffers.length === 0) {
+  // If table empty AND no URL slug, auto-save current page as first offer
+  const _initUrlParams = new URLSearchParams(location.search);
+  const _initSlug = _initUrlParams.get('offer') || location.pathname.replace('/offer-research/', '').replace(/\/$/, '').replace(/\.html$/, '') || '';
+  if (_allOffers.length === 0 && !_initSlug) {
     const title = (document.getElementById('main-title')?.dataset?.text || '').trim();
     if (title && title !== '—') {
       const pageData = collectData();
