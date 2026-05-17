@@ -655,7 +655,7 @@
     ═══════════════════════════════════════════════ */
     .badge-meta        { background: #DBEAFE; color: #1D4ED8; }
     .badge-tiktok      { background: #F3F4F6; color: #111827; }
-    .badge-google      { background: #FEF9C3; color: #854D0E; }
+    .badge-google      { background: #dcfce7; color: #166534; }
     .badge-native      { background: #D1FAE5; color: #065F46; }
     .badge-youtube     { background: #FEE2E2; color: #B91C1C; }
     .badge-pinterest   { background: #FFE4E6; color: #9F1239; }
@@ -1629,7 +1629,7 @@
     /* Traffic source badges — dark versions */
     body.force-dark .badge-meta        { background: #1e3a5f; color: #93c5fd; }
     body.force-dark .badge-tiktok      { background: #27272a; color: #d4d4d8; }
-    body.force-dark .badge-google      { background: #3d2b0a; color: #fcd34d; }
+    body.force-dark .badge-google      { background: #14532d; color: #86efac; }
     body.force-dark .badge-native      { background: #14352b; color: #6ee7b7; }
     body.force-dark .badge-youtube     { background: #3d150a; color: #fca5a5; }
     body.force-dark .badge-pinterest   { background: #3d0d1a; color: #fda4af; }
@@ -1740,7 +1740,7 @@
       body:not(.force-light) .remove-row-btn:hover     { background: rgba(239,68,68,0.2) !important; color: #fca5a5 !important; }
       body:not(.force-light) .dup-row-btn:hover        { background: rgba(59,130,246,0.15) !important; color: #93c5fd !important; }
       body:not(.force-light) .badge-meta               { background: #1e3a5f; color: #93c5fd; }
-      body:not(.force-light) .badge-google             { background: #3d2b0a; color: #fcd34d; }
+      body:not(.force-light) .badge-google             { background: #14532d; color: #86efac; }
       body:not(.force-light) .badge-native             { background: #14352b; color: #6ee7b7; }
       body:not(.force-light) .badge-youtube            { background: #3d150a; color: #fca5a5; }
       body:not(.force-light) .badge-static             { background: #1e3a5f; color: #93c5fd; }
@@ -3164,7 +3164,9 @@
     .offers-panel-item-info { flex: 1; min-width: 0; }
     .offers-panel-item-name {
       font-size: 13px; font-weight: 500; color: #111827;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      white-space: normal; overflow: visible; text-overflow: unset;
+      word-break: break-word; line-height: 1.4;
+    }
     }
     .offers-panel-item.active .offers-panel-item-name { color: #2563eb; }
     .offers-panel-item-meta { font-size: 11px; color: #9ca3af; margin-top: 1px; }
@@ -4733,12 +4735,12 @@
     .ds-sidebar-logo svg { width: 120px !important; height: 32px !important; }
 
     /* Nav */
-    .ds-sidebar-nav { padding: 12px 10px !important; gap: 2px !important; }
+    .ds-sidebar-nav { padding: 8px 10px !important; gap: 2px !important; }
     .ds-nav-item {
       display: flex !important;
       align-items: center !important;
       gap: 12px !important;
-      padding: 11px 14px !important;
+      padding: 10px 14px !important;
       font-size: 14px !important;
       font-weight: 500 !important;
       border-radius: 10px !important;
@@ -5225,32 +5227,26 @@
   <!-- Nav -->
   <nav class="ds-sidebar-nav">
     <button class="ds-nav-item active" id="nav-report" onclick="openReport()">
-      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="14" rx="2"/><path d="M1 5h14M5 5v9" stroke-linecap="round"/></svg>
+      <!-- Document/report icon like reference -->
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
       Report
     </button>
     <button class="ds-nav-item" id="nav-offers" onclick="openOffersPanel()">
-      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M1 7h14M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4" stroke-linecap="round"/></svg>
+      <!-- Tag/label icon like reference -->
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"/></svg>
       Offers
     </button>
     <button class="ds-nav-item" id="nav-db" onclick="sbModalOpen()">
-      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="8" cy="4" rx="5" ry="2"/><path d="M3 4v4c0 1.1 2.24 2 5 2s5-.9 5-2V4" stroke-linecap="round"/><path d="M3 8v4c0 1.1 2.24 2 5 2s5-.9 5-2V8" stroke-linecap="round"/></svg>
+      <!-- Database cylinder icon -->
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
       Database settings
     </button>
   </nav>
 
   <!-- Footer: user + dark mode -->
   <div class="ds-sidebar-footer">
-    <!-- User pill -->
-    <div class="ds-user-pill">
-      <div class="ds-user-avatar" id="ds-user-avatar">M</div>
-      <div class="ds-user-info">
-        <div class="ds-user-name" id="ds-user-name">Analyst</div>
-        <div class="ds-user-role">Analyst</div>
-      </div>
-      <span class="ds-user-chevron">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6l4 4 4-4"/></svg>
-      </span>
-    </div>
+    <!-- Hidden elements preserved for JS compatibility -->
+    <div style="display:none"><div id="ds-user-avatar">M</div><div id="ds-user-name">Analyst</div></div>
     <!-- Dark mode toggle -->
     <button class="ds-darkmode-btn" onclick="toggleTheme()">
       <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12.3 10.3A6 6 0 0 1 5.7 3.7 6 6 0 1 0 12.3 10.3z" stroke-linecap="round"/></svg>
@@ -5620,7 +5616,7 @@
     <div class="tc-header section-header">
       <div class="tc-header-left">
         <div class="section-icon icon-blue">
-          <svg width="15" height="15" viewBox="0 0 247 247" fill="#185FA5" xmlns="http://www.w3.org/2000/svg"><path d="M160.551,36.935c-0.614-1.892-1.956-3.462-3.727-4.365c-1.774-0.904-3.831-1.065-5.724-0.45l-31.376,10.196c-3.939,1.28-6.096,5.511-4.815,9.45l1.568,4.828l-79.811,58.625L5.183,125.448c-1.892,0.615-3.462,1.956-4.365,3.728c-0.903,1.772-1.065,3.831-0.45,5.723l19.129,58.862c1.03,3.169,3.97,5.184,7.131,5.184c0.769,0,1.55-0.119,2.32-0.369l31.478-10.229l16.173,0.085c3.248,15.336,16.888,26.88,33.176,26.88c16.164,0,29.714-11.371,33.095-26.531l16.587,0.087l1.568,4.829c0.614,1.892,1.955,3.462,3.728,4.365c1.064,0.542,2.232,0.817,3.405,0.817c0.78,0,1.563-0.122,2.317-0.367l31.377-10.195c3.939-1.28,6.096-5.511,4.816-9.45L160.551,36.935z M31.444,181.992l-14.492-44.597l18.364-5.967l14.49,44.597L31.444,181.992z M109.774,200.312c-7.912,0-14.694-4.887-17.513-11.797l34.958,0.184C124.356,195.514,117.617,200.312,109.774,200.312z M64.714,173.369l-7.888-24.277l-7.888-24.277l72.419-53.194l22.209,68.349l11.006,33.873L64.714,173.369z M172.972,181.929l-0.921-2.833c-0.001-0.005-0.002-0.011-0.004-0.017l-19.815-60.983l-20.74-63.833l17.111-5.561l41.48,127.665L172.972,181.929z"/><path d="M185.807,73.393c1.092,0.556,2.254,0.819,3.4,0.819c2.73,0,5.363-1.496,6.688-4.096l13.461-26.41c1.882-3.69,0.415-8.207-3.275-10.088c-3.69-1.88-8.207-0.415-10.088,3.276l-13.461,26.41C180.65,66.995,182.117,71.512,185.807,73.393z"/><path d="M242.176,144.712l-26.414-13.455c-3.691-1.879-8.207-0.412-10.087,3.279c-1.881,3.691-0.412,8.207,3.278,10.087l26.414,13.455c1.091,0.555,2.253,0.818,3.398,0.818c2.73,0,5.364-1.497,6.689-4.097C247.335,151.109,245.867,146.593,242.176,144.712z"/><path d="M204.242,101.204c1.03,3.169,3.97,5.184,7.131,5.184c0.769,0,1.55-0.119,2.32-0.369l28.188-9.16c3.938-1.28,6.095-5.511,4.814-9.451c-1.28-3.94-5.511-6.092-9.451-4.815l-28.188,9.16C205.118,93.034,202.962,97.265,204.242,101.204z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
         </div>
         <span class="section-title tc-title">Top traffic sources</span>
         <div class="tc-toggle-group">
@@ -5660,7 +5656,7 @@
     <div class="tc-header section-header">
       <div class="tc-header-left">
         <div class="section-icon icon-amber">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="12" rx="2" stroke="#854F0B" stroke-width="1.5"/><circle cx="5.5" cy="6" r="1.5" fill="#854F0B"/><path d="M1 11l4-3 3 3 2-2 4 3" stroke="#854F0B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M2 13l5-4 4 4 3-3 4 3"/><circle cx="8.5" cy="8.5" r="1.5" fill="#b45309" stroke="none"/></svg>
         </div>
         <span class="section-title tc-title">Top ads</span>
         <div class="tc-toggle-group">
@@ -5702,7 +5698,7 @@
     <div class="tc-header section-header">
       <div class="tc-header-left">
         <div class="section-icon icon-teal">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="20 7.75 4 7.75 2 3 22 3 20 7.75" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polygon points="17 14.88 7 14.88 5 10.13 19 10.13 17 14.88" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polygon points="14 22 10 22 8 17.25 16 17.25 14 22" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
         </div>
         <span class="section-title tc-title">Top funnels used by advertisers</span>
         <div class="tc-toggle-group">
@@ -5979,7 +5975,7 @@ function buildTrafficGrid() {
   if (!rows.length) { grid.innerHTML = '<div class="ads-grid-inner"><div class="grid-card-empty">No rows yet.</div></div>'; return; }
   const BADGE_COLORS = {
     'meta':{'bg':'#DBEAFE','color':'#1D4ED8'},'tiktok':{'bg':'#F3F4F6','color':'#111827'},
-    'google':{'bg':'#FEF9C3','color':'#854D0E'},'native':{'bg':'#D1FAE5','color':'#065F46'},
+    'google':{'bg':'#dcfce7','color':'#166534'},'native':{'bg':'#D1FAE5','color':'#065F46'},
     'youtube':{'bg':'#FEE2E2','color':'#B91C1C'},'pinterest':{'bg':'#FFE4E6','color':'#9F1239'},
     'snapchat':{'bg':'#FEFCE8','color':'#854D0E'},'twitter':{'bg':'#E0F2FE','color':'#0369A1'},
     'linkedin':{'bg':'#DBEAFE','color':'#1E40AF'},'reddit':{'bg':'#FEF3C7','color':'#92400E'},
@@ -6011,7 +6007,7 @@ function buildTrafficGrid() {
     const hasVal = val && !text.includes('select');
     const CHIP_COLORS = {
       'meta':{'bg':'#DBEAFE','color':'#1D4ED8'},'tiktok':{'bg':'#F3F4F6','color':'#111827'},
-      'google':{'bg':'#FEF9C3','color':'#854D0E'},'native':{'bg':'#D1FAE5','color':'#065F46'},
+      'google':{'bg':'#dcfce7','color':'#166534'},'native':{'bg':'#D1FAE5','color':'#065F46'},
       'youtube':{'bg':'#FEE2E2','color':'#B91C1C'},'pinterest':{'bg':'#FFE4E6','color':'#9F1239'},
       'snapchat':{'bg':'#FEFCE8','color':'#854D0E'},'twitter':{'bg':'#E0F2FE','color':'#0369A1'},
       'linkedin':{'bg':'#DBEAFE','color':'#1E40AF'},'reddit':{'bg':'#FEF3C7','color':'#92400E'},
@@ -6210,7 +6206,7 @@ function buildAdsGrid() {
   const getText = td => td?.querySelector('textarea')?.value || '';
   const ADS_COLORS = {
     'meta':{'bg':'#DBEAFE','color':'#1D4ED8'},'tiktok':{'bg':'#F3F4F6','color':'#111827'},
-    'google':{'bg':'#FEF9C3','color':'#854D0E'},'native':{'bg':'#D1FAE5','color':'#065F46'},
+    'google':{'bg':'#dcfce7','color':'#166534'},'native':{'bg':'#D1FAE5','color':'#065F46'},
     'youtube':{'bg':'#FEE2E2','color':'#B91C1C'},'pinterest':{'bg':'#FFE4E6','color':'#9F1239'},
     'snapchat':{'bg':'#FEFCE8','color':'#854D0E'},'twitter':{'bg':'#E0F2FE','color':'#0369A1'},
     'linkedin':{'bg':'#DBEAFE','color':'#1E40AF'},'reddit':{'bg':'#FEF3C7','color':'#92400E'},
@@ -6238,7 +6234,7 @@ function buildAdsGrid() {
     const hasVal = val && !text.includes('select');
     const CHIP_COLORS = {
       'meta':{'bg':'#DBEAFE','color':'#1D4ED8'},'tiktok':{'bg':'#F3F4F6','color':'#111827'},
-      'google':{'bg':'#FEF9C3','color':'#854D0E'},'native':{'bg':'#D1FAE5','color':'#065F46'},
+      'google':{'bg':'#dcfce7','color':'#166534'},'native':{'bg':'#D1FAE5','color':'#065F46'},
       'youtube':{'bg':'#FEE2E2','color':'#B91C1C'},'pinterest':{'bg':'#FFE4E6','color':'#9F1239'},
       'snapchat':{'bg':'#FEFCE8','color':'#854D0E'},'twitter':{'bg':'#E0F2FE','color':'#0369A1'},
       'linkedin':{'bg':'#DBEAFE','color':'#1E40AF'},'reddit':{'bg':'#FEF3C7','color':'#92400E'},
@@ -6759,7 +6755,7 @@ function _adpGetBadgeText(td) {
 /* Chip color maps */
 const _ADP_SOURCE_COLORS = {
   'meta':{'bg':'#DBEAFE','color':'#1D4ED8'},'tiktok':{'bg':'#F3F4F6','color':'#111827'},
-  'google':{'bg':'#FEF9C3','color':'#854D0E'},'native':{'bg':'#D1FAE5','color':'#065F46'},
+  'google':{'bg':'#dcfce7','color':'#166534'},'native':{'bg':'#D1FAE5','color':'#065F46'},
   'youtube':{'bg':'#FEE2E2','color':'#B91C1C'},'pinterest':{'bg':'#FFE4E6','color':'#9F1239'},
   'snapchat':{'bg':'#FEFCE8','color':'#854D0E'},'twitter':{'bg':'#E0F2FE','color':'#0369A1'},
   'linkedin':{'bg':'#DBEAFE','color':'#1E40AF'},'reddit':{'bg':'#FEF3C7','color':'#92400E'},
