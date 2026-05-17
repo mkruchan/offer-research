@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <script>
-    // Convert path slug to hash and redirect to index.html
-    const slug = window.location.pathname.split('/').filter(Boolean).pop();
-    const base = window.location.pathname.replace(/\/[^\/]*$/, '/');
-    const target = (base || '/') + 'index.html' + (slug ? '#' + slug : '');
-    window.location.replace(target);
+    // Redirect /offer-research/obd-fuel → /offer-research/?offer=obd-fuel
+    const base = '/offer-research/';
+    const slug = window.location.pathname.replace(base, '').replace(/\/$/, '').replace(/\.html$/, '');
+    if (slug && slug !== 'index') {
+      window.location.replace(base + '?offer=' + encodeURIComponent(slug));
+    } else {
+      window.location.replace(base);
+    }
   </script>
 </head>
 <body></body>
