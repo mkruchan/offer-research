@@ -893,6 +893,7 @@
     #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 9999; align-items: center; justify-content: center; cursor: zoom-out; }
     #lightbox.open { display: flex; }
     #lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: var(--radius-lg); box-shadow: 0 24px 80px rgba(0,0,0,0.5); }
+    #lightbox video { max-width: 90vw; max-height: 90vh; border-radius: var(--radius-lg); box-shadow: 0 24px 80px rgba(0,0,0,0.5); }
     #lightbox-close { position: fixed; top: 20px; right: 24px; color: #fff; font-size: 28px; cursor: pointer; line-height: 1; opacity: 0.7; transition: opacity 0.15s; }
     #lightbox-close:hover { opacity: 1; }
 
@@ -4058,8 +4059,8 @@
       color: #111827 !important;
       line-height: 1.5 !important;
       min-height: 28px !important;
-      max-height: 120px !important;
-      overflow-y: auto !important;
+      min-height: 0 !important;
+      flex: 1 !important;
     }
     .adp-copy-block:empty::before,
     .adp-copy-placeholder { color: #d1d5db !important; font-style: italic !important; font-size: 13px !important; }
@@ -6139,7 +6140,7 @@
           <th class="frozen-offer col-group-offer">Offer</th><th>Traffic Source</th><th>Format</th><th style="width:90px">Geo</th><th style="width:110px">Lifecycle</th>
           <th class="col-group-links">Landing Page Link</th>
           <th class="col-group-links">Fan Page Link</th><th class="col-group-links">Spy Tool Link</th>
-          <th class="col-group-creative">Creative Preview</th>
+          <th class="col-group-creative">Creative</th>
           <th class="col-group-copy">Angle / Hook</th><th class="col-group-copy">Headline</th><th class="col-group-copy">CTA</th><th class="col-group-copy">Title</th>
           <th>Imp. Estimate</th>
           <th>Notes</th>
@@ -6288,7 +6289,11 @@
   </div>
 </div>
 
-<div id="lightbox" onclick="closeLightbox()"><span id="lightbox-close" onclick="closeLightbox()">×</span><img id="lightbox-img" src="" alt=""></div>
+<div id="lightbox" onclick="closeLightbox()">
+  <span id="lightbox-close" onclick="closeLightbox()">×</span>
+  <img id="lightbox-img" src="" alt="" style="display:none;">
+  <video id="lightbox-video" controls style="display:none;max-width:90vw;max-height:90vh;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,0.5);" onclick="event.stopPropagation()"></video>
+</div>
 
 
 <div class="toast-container" id="toastContainer"></div>
@@ -6794,7 +6799,7 @@ function buildAdsGrid() {
     const notes    = getText(tds[16]);
 
     const imgHtml = thumbSrc
-      ? `<img class="grid-card-img" src="${thumbSrc}" onclick="event.stopPropagation();window.open('${(thumbUrl||thumbSrc).replace(/\/upload\/[^/]+\//, '/upload/')}','_blank','noopener')" title="Open full image" style="cursor:pointer;">`
+      ? `<img class="grid-card-img" src="${thumbSrc}" onclick="event.stopPropagation();openLightbox('${thumbUrl||thumbSrc}')" title="View" style="cursor:pointer;">`
       : `<div class="grid-card-img-empty" onclick="event.stopPropagation();document.getElementById('grid-upload-${idx}').click()" style="cursor:pointer;" title="Click to upload image">
           <div style="display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text-secondary);">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
@@ -6920,7 +6925,7 @@ async function gridUploadMedia(input, rowIdx) {
     const pd = document.getElementById(previewId);
     if (pd) {
       pd.innerHTML = `<div class="media-preview">
-        <img class="media-thumb" src="${thumbUrl}" onclick="window.open('${url}','_blank')" style="cursor:pointer" title="Click to open">
+        <img class="media-thumb" src="${thumbUrl}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
         <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
       </div><input type="hidden" class="cloudinary-url" value="${url}">`;
     }
@@ -7252,12 +7257,26 @@ function resetRowHeight(input) {
 }
 
 function openLightbox(src) {
-  document.getElementById('lightbox-img').src = src;
+  const isVideo = /\.(mp4|webm|mov|avi|mkv)(\?|$)/i.test(src) || src.includes('video/upload') || src.includes('so_0');
+  const img = document.getElementById('lightbox-img');
+  const vid = document.getElementById('lightbox-video');
+  // Strip Cloudinary thumb transformations for full res
+  const fullSrc = src.replace(/\/upload\/[^/]+\//, '/upload/');
+  const videoSrc = isVideo ? fullSrc.replace(/\.jpg$/, '.mp4') : fullSrc;
+  if (isVideo) {
+    vid.src = videoSrc; vid.style.display = 'block';
+    img.style.display = 'none'; img.src = '';
+  } else {
+    img.src = fullSrc; img.style.display = 'block';
+    vid.style.display = 'none'; vid.src = '';
+  }
   document.getElementById('lightbox').classList.add('open');
   document.addEventListener('keydown', lbKey);
 }
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
+  const vid = document.getElementById('lightbox-video');
+  vid.pause(); vid.src = '';
   document.removeEventListener('keydown', lbKey);
 }
 function lbKey(e) { if (e.key === 'Escape') closeLightbox(); }
@@ -7462,20 +7481,20 @@ function openAdDetail(rowIdx) {
     const fullSrc = isVid
       ? thumbSrc.replace(/\/upload\/[^/]+\//, '/upload/').replace(/\.jpg$/, '.mp4')
       : thumbSrc.replace(/\/upload\/[^/]+\//, '/upload/');
-    return `<div class="adp-img-wrap" style="cursor:pointer;" onclick="window.open('${fullSrc}', '_blank', 'noopener')" title="${isVid ? 'Play video' : 'Open full image'}"><img class="adp-img" src="${thumbSrc}"></div>`;
+    return `<div class="adp-img-wrap" style="cursor:pointer;" onclick="openLightbox('${thumbSrc}')" title="View"><img class="adp-img" src="${thumbSrc}"></div>`;
   })()
     : `<div class="adp-img-wrap" onclick="document.getElementById('adp-img-file-${rowIdx}').click()" style="cursor:pointer;"><div class="adp-img-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Click to upload creative</span></div><input type="file" id="adp-img-file-${rowIdx}" accept="image/*,video/*" style="display:none;" onchange="gridUploadMedia(this,${rowIdx})"></div>`;
 
   const copyFields = [['Angle / Hook',angle,11],['Headline',headline,12],['CTA',cta,13],['Title',title,14]];
 
   // Smart flex weights: Angle/Headline get more space, CTA/Title less
-  const copyWeights = {'Angle / Hook':1,'Headline':1,'CTA':1,'Title':1};
+  const copyWeights = {'Angle / Hook':2,'Headline':2,'CTA':1,'Title':1};
 
   const body = `
-    <div style="display:grid;grid-template-columns:300px 1fr;grid-template-rows:auto auto;gap:16px;flex:1;min-height:0;overflow-y:auto;">
+    <div style="display:grid;grid-template-columns:300px 1fr;gap:16px;flex:1;min-height:0;height:100%;">
 
       <!-- COL 1: Image + Links + Ad Details -->
-      <div style="display:flex;flex-direction:column;gap:6px;padding-top:1px;">
+      <div style="display:flex;flex-direction:column;gap:6px;padding-top:1px;overflow-y:auto;">
         ${imgBlock}
         <div class="adp-section" style="margin:0;">
           <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Links</div></div>
@@ -7498,24 +7517,22 @@ function openAdDetail(rowIdx) {
         </div>
       </div>
 
-      <!-- COL 2: Ad Copy -->
-      <div style="display:flex;flex-direction:column;gap:6px;">
-        <div class="adp-section-header" style="margin-bottom:2px;flex-shrink:0;"><div class="adp-section-title">Ad Copy</div></div>
+      <!-- COL 2: Ad Copy + Notes -->
+      <div style="display:flex;flex-direction:column;gap:6px;height:100%;min-height:0;">
+        <div class="adp-section-header" style="margin-bottom:0;flex-shrink:0;padding:0 0 4px;"><div class="adp-section-title">Ad Copy</div></div>
         ${copyFields.map(([l,v,ti]) => {
           const w = copyWeights[l] || 1;
           const placeholder = '<span class="adp-copy-placeholder">' + l + '\u2026</span>';
-          return '<div class="adp-copy-item" style="margin:0;display:flex;flex-direction:column;min-height:0;">' +
+          return '<div class="adp-copy-item" style="margin:0;display:flex;flex-direction:column;flex:' + w + ';min-height:50px;">' +
             '<div class="adp-copy-label">' + l + '</div>' +
-            '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="flex:1;min-height:28px;overflow-y:auto;">' + (v || placeholder) + '</div>' +
+            '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="flex:1;min-height:0;overflow-y:auto;">' + (v || placeholder) + '</div>' +
             '</div>';
         }).join('')}
-      </div>
-
-      <!-- ROW 2: Notes — full width spanning both columns -->
-      <div style="grid-column:1/-1;display:flex;flex-direction:column;gap:4px;flex-shrink:0;">
-        <div class="adp-section-header" style="padding:4px 0;"><div class="adp-section-title">Notes</div></div>
-        <div class="adp-copy-block" data-field="notes" data-td="16" contenteditable="false"
-             style="min-height:80px;max-height:140px;overflow-y:auto;width:100%;">${notes || '<span class="adp-copy-placeholder">Add notes…</span>'}</div>
+        <div style="flex-shrink:0;">
+          <div class="adp-section-header" style="padding:4px 0 4px;flex-shrink:0;"><div class="adp-section-title">Notes</div></div>
+          <div class="adp-copy-block" data-field="notes" data-td="16" contenteditable="false"
+               style="min-height:60px;max-height:100px;overflow-y:auto;">${notes || '<span class="adp-copy-placeholder">Add notes…</span>'}</div>
+        </div>
       </div>
 
     </div>
@@ -8692,7 +8709,7 @@ async function handleMediaUpload(input, previewId) {
       : url.replace('/upload/', '/upload/w_144,h_108,c_fill,q_80/');
 
     preview.innerHTML = `<div class="media-preview">
-      <img class="media-thumb" src="${thumbUrl}" onclick="window.open('${url}','_blank')" style="cursor:pointer" title="Click to open">
+      <img class="media-thumb" src="${thumbUrl}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
       <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
     </div>`;
     // Store URL in a hidden input for saving
@@ -8725,7 +8742,7 @@ async function handleMediaUpload(input, previewId) {
         const url = publicUrl;
         const thumbUrl = url; // No auto-thumbnail for Supabase, use full URL
         preview.innerHTML = `<div class="media-preview">
-          <img class="media-thumb" src="${thumbUrl}" onclick="window.open('${url}','_blank')" style="cursor:pointer" title="Click to open">
+          <img class="media-thumb" src="${thumbUrl}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
           <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
         </div>`;
         let hiddenUrl = preview.querySelector('.cloudinary-url');
