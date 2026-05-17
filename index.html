@@ -7024,7 +7024,7 @@ function openAdDetail(rowIdx) {
   const copyFields = [['Angle / Hook',angle,11],['Headline',headline,12],['CTA',cta,13],['Title',title,14]];
 
   // Smart flex weights: Angle/Headline get more space, CTA/Title less
-  const copyWeights = {'Angle / Hook':2,'Headline':2,'CTA':1,'Title':1};
+  const copyWeights = {'Angle / Hook':1,'Headline':1,'CTA':1,'Title':1};
 
   const body = `
     <div style="display:grid;grid-template-columns:280px 1fr 1fr;gap:14px;min-height:calc(100vh - 90px);">
@@ -7064,7 +7064,7 @@ function openAdDetail(rowIdx) {
         <div class="adp-section-header" style="margin-bottom:2px;flex-shrink:0;"><div class="adp-section-title">Ad Copy</div></div>
         ${copyFields.map(([l,v,ti]) => {
           const w = copyWeights[l] || 1;
-          return `<div class="adp-copy-item" style="margin:0;flex:${w};display:flex;flex-direction:column;min-height:${w>1?'80px':'44px'};">
+          return `<div class="adp-copy-item" style="margin:0;flex:${w};display:flex;flex-direction:column;min-height:44px;">
             <div class="adp-copy-label">${l}</div>
             <div class="adp-copy-block" data-field="${l}" data-td="${ti}" contenteditable="false"
                  style="flex:1;overflow-y:auto;min-height:0;">${v || `<span class="adp-copy-placeholder">${l}…</span>`}</div>
