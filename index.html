@@ -7415,7 +7415,7 @@ function openAdDetail(rowIdx) {
   const subtitleChips = [sourceChip, formatChip, geo ? `<span style="font-size:12px;color:var(--text-secondary);">${geo}</span>` : ''].filter(Boolean).join('');
 
   const imgBlock = thumbSrc
-    ? `<div class="adp-img-wrap"><img class="adp-img" src="${thumbSrc}" onclick="openLightbox('${thumbSrc}')" title="Enlarge"></div>`
+    ? `<div class="adp-img-wrap" style="cursor:pointer;" onclick="window.open('${thumbSrc}', '_blank', 'noopener')"><img class="adp-img" src="${thumbSrc}" title="Open in new tab"></div>`
     : `<div class="adp-img-wrap" onclick="document.getElementById('adp-img-file-${rowIdx}').click()" style="cursor:pointer;"><div class="adp-img-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Click to upload creative</span></div><input type="file" id="adp-img-file-${rowIdx}" accept="image/*,video/*" style="display:none;" onchange="gridUploadMedia(this,${rowIdx})"></div>`;
 
   const copyFields = [['Angle / Hook',angle,11],['Headline',headline,12],['CTA',cta,13],['Title',title,14]];
@@ -7427,7 +7427,7 @@ function openAdDetail(rowIdx) {
     <div style="display:grid;grid-template-columns:300px 1fr;grid-template-rows:auto auto;gap:16px;flex:1;min-height:0;overflow-y:auto;">
 
       <!-- COL 1: Image + Links + Ad Details -->
-      <div style="display:flex;flex-direction:column;gap:6px;min-height:0;overflow-y:auto;padding-top:1px;">
+      <div style="display:flex;flex-direction:column;gap:6px;padding-top:1px;">
         ${imgBlock}
         <div class="adp-section" style="margin:0;">
           <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Links</div></div>
@@ -7452,7 +7452,7 @@ function openAdDetail(rowIdx) {
       </div>
 
       <!-- COL 2: Ad Copy -->
-      <div style="display:flex;flex-direction:column;gap:10px;min-height:0;overflow-y:auto;">
+      <div style="display:flex;flex-direction:column;gap:10px;">
         <div class="adp-section-header" style="margin-bottom:2px;flex-shrink:0;"><div class="adp-section-title">Ad Copy</div></div>
         ${copyFields.map(([l,v,ti]) => {
           const w = copyWeights[l] || 1;
@@ -10025,9 +10025,13 @@ async function offerLoadAll() {
   offerRebuildSelect();
 
   // Restore last selected — prefer URL hash slug match first
-  // Read slug from path OR ?offer= query param (set by 404.html redirect)
+  // Read slug from ?offer= query param (set by 404.html redirect) and restore clean URL
   const _urlParams = new URLSearchParams(location.search);
-  const _urlSlug = _urlParams.get('offer') || location.pathname.replace('/offer-research/', '').replace(/\/$/, '').replace(/\.html$/, '') || '';
+  const _offerParam = _urlParams.get('offer');
+  if (_offerParam) {
+    history.replaceState(null, '', '/offer-research/' + _offerParam);
+  }
+  const _urlSlug = _offerParam || location.pathname.replace('/offer-research/', '').replace(/\/$/, '').replace(/\.html$/, '') || '';
   const slugMatch = _urlSlug && _allOffers.find(o => offerSlugFromTitle(o.name) === _urlSlug);
   const lastId = localStorage.getItem(SB_OFFER_KEY);
   const lastMatch = lastId && _allOffers.find(o => o.id === lastId);
