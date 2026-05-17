@@ -8035,11 +8035,21 @@ function openBoardView(board) {
   document.querySelectorAll('.ds-nav-item').forEach(el => el.classList.remove('active'));
   document.getElementById(cfg.nav).classList.add('active');
 
-  // Update header title
+  // Update header title and subtitle
   const headerTitle = document.querySelector('.ds-top-header-title');
+  const headerSub = document.querySelector('.ds-top-header-subtitle');
+  const subtitles = {
+    traffic: 'Track and compare performance across traffic channels',
+    ads:     'Browse and analyze top performing ad creatives',
+    funnels: 'Explore the most effective funnel structures'
+  };
   if (headerTitle) {
     headerTitle.dataset._origTitle = headerTitle.dataset._origTitle || headerTitle.textContent;
     headerTitle.textContent = cfg.title;
+  }
+  if (headerSub) {
+    headerSub.dataset._origSub = headerSub.dataset._origSub || headerSub.textContent;
+    headerSub.textContent = subtitles[board] || headerSub.dataset._origSub;
   }
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -8057,10 +8067,14 @@ function closeBoardView() {
     if (el) el.style.display = '';
   });
 
-  // Restore header title
+  // Restore header title and subtitle
   const headerTitle = document.querySelector('.ds-top-header-title');
+  const headerSub = document.querySelector('.ds-top-header-subtitle');
   if (headerTitle && headerTitle.dataset._origTitle) {
     headerTitle.textContent = headerTitle.dataset._origTitle;
+  }
+  if (headerSub && headerSub.dataset._origSub) {
+    headerSub.textContent = headerSub.dataset._origSub;
   }
 
   // Restore Report nav
