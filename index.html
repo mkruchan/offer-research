@@ -6807,8 +6807,8 @@ function buildAdsGrid() {
       const hasUrl = url && url.startsWith('http');
       return `<div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;" onclick="event.stopPropagation()">
         ${hasUrl
-          ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:11px;display:flex;align-items:center;gap:2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
-          : `<span style="font-size:11px;color:var(--text-secondary);opacity:0.4;">${label}</span>`
+          ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
+          : `<span style="font-size:13px;color:var(--text-secondary);opacity:0.4;">${label}</span>`
         }
         <button onclick="gridEditLink(this,${idx},'ads-body',${tdIdx})" title="Edit URL" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.4;padding:1px;line-height:1;flex-shrink:0;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.4'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg></button>
       </div>`;
@@ -6821,10 +6821,11 @@ function buildAdsGrid() {
       </div>
     </div>`;
 
-    const linkBlockTop = `<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border-light);">
-        <div style="flex:1;display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(landingUrl,'Landing',7)}</div>
-        <div style="flex:1;display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
-        <div style="flex:1;display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
+    const linkBlockTop = `<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border-light);display:grid;grid-template-columns:1fr 1fr;gap:3px 6px;">
+        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(landingUrl,'Landing',7)}</div>
+        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
+        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
+        <div></div>
       </div>`;
 
     return `<div class="grid-card" onclick="(function(e){if(!e.target.closest('button,a,select,.gce,.card-expand-toggle,.grid-card-img,.grid-card-img-empty,.link-input-wrap,.grid-drag-handle')){openAdDetail(${idx})}})(event)" style="cursor:default;" >
@@ -10518,7 +10519,7 @@ function offerRename() {
 })();
 </script>
 
-
+<script>
 // ── Drag & drop for media cells ──────────────────────────────
 function initMediaDragDrop() {
   // Table media cells
@@ -10568,6 +10569,7 @@ function initMediaDragDrop() {
 const _origBuildAdsGrid = buildAdsGrid;
 // Call initMediaDragDrop after any grid/panel open
 document.addEventListener('DOMContentLoaded', () => setTimeout(initMediaDragDrop, 500));
+</script>
 
 </body>
 </html>
