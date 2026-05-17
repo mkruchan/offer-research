@@ -1171,6 +1171,11 @@
       border-radius: inherit;
     }
 
+
+    /* Board view — hide notes */
+    body.board-view #ic-grid-notes { display: none !important; }
+    body.board-view .notes-card { display: none !important; }
+
 </style>
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -5683,6 +5688,20 @@
 
 
 
+    <!-- Board views -->
+    <button class="ds-nav-item" id="nav-traffic" onclick="openBoardView('traffic')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      Sources
+    </button>
+    <button class="ds-nav-item" id="nav-ads" onclick="openBoardView('ads')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Ads
+    </button>
+    <button class="ds-nav-item" id="nav-funnels" onclick="openBoardView('funnels')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.46V19l4 2V12.46L22 3z"/></svg>
+      Funnels
+    </button>
+
     <!-- History -->
     <button class="ds-nav-item" id="nav-history" onclick="openHistoryPanel()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
@@ -6031,7 +6050,7 @@
     </div><!-- /.oc-meta -->
 
   </div><!-- /.ds-offer-card -->
-  <div class="ic-grid">
+  <div class="ic-grid" id="ic-grid-notes">
 
     <!-- ── Key Takeaways card ── -->
     <div class="ic-card ic-card--blue notes-card" id="notes-card-takeaways">
@@ -6077,7 +6096,7 @@
   </div>
 
   <!-- ── Top Traffic Sources ── -->
-  <div class="tc-card section">
+  <div class="tc-card section" id="section-traffic">
     <div class="tc-header section-header">
       <div class="tc-header-left">
         <div class="section-icon icon-blue">
@@ -6117,7 +6136,7 @@
   </div>
 
   <!-- ── Top Ads ── -->
-  <div class="tc-card section">
+  <div class="tc-card section" id="section-ads">
     <div class="tc-header section-header">
       <div class="tc-header-left">
         <div class="section-icon icon-amber">
@@ -6159,7 +6178,7 @@
   </div>
 
   <!-- ── Top Funnels ── -->
-  <div class="tc-card section">
+  <div class="tc-card section" id="section-funnels">
     <div class="tc-header section-header">
       <div class="tc-header-left">
         <div class="section-icon icon-teal">
@@ -7971,15 +7990,82 @@ function updateTitleLinkBtn(url) {
 }
 
 function openReport() {
-  // Set Report as active nav item
+  closeBoardView();
   document.querySelectorAll('.ds-nav-item').forEach(el => el.classList.remove('active'));
   document.getElementById('nav-report').classList.add('active');
-  // Close offers panel if open
   closeOffersPanel();
   // Scroll to top of main content
   const main = document.querySelector('.ds-main');
   if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+// ── Board Views (Traffic / Ads / Funnels) ────────────────────
+const _boardSections = {
+  traffic: { id: 'section-traffic', nav: 'nav-traffic', title: 'Top Traffic Sources' },
+  ads:     { id: 'section-ads',     nav: 'nav-ads',     title: 'Top Ads' },
+  funnels: { id: 'section-funnels', nav: 'nav-funnels', title: 'Top Funnels' }
+};
+let _currentBoard = null;
+
+function openBoardView(board) {
+  if (_currentBoard === board) { closeBoardView(); return; }
+  closeOffersPanel(); closeHistoryPanel(); closeExportPanel();
+  _currentBoard = board;
+  const cfg = _boardSections[board];
+
+  // Add board-view class to body — CSS handles hiding
+  document.body.classList.add('board-view');
+  // Also hide sections directly
+  ['section-traffic', 'section-ads', 'section-funnels'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+
+  // Show offer meta bar
+  const offerCard = document.querySelector('.ds-offer-card');
+  if (offerCard) offerCard.style.display = '';
+
+  // Show only target section
+  const section = document.getElementById(cfg.id);
+  if (section) section.style.display = '';
+
+  // Update nav
+  document.querySelectorAll('.ds-nav-item').forEach(el => el.classList.remove('active'));
+  document.getElementById(cfg.nav).classList.add('active');
+
+  // Update header title
+  const headerTitle = document.querySelector('.ds-top-header-title');
+  if (headerTitle) {
+    headerTitle.dataset._origTitle = headerTitle.dataset._origTitle || headerTitle.textContent;
+    headerTitle.textContent = cfg.title;
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeBoardView() {
+  if (!_currentBoard) return;
+  _currentBoard = null;
+
+  // Remove board-view class — CSS restores visibility
+  document.body.classList.remove('board-view');
+  // Restore sections
+  ['section-traffic', 'section-ads', 'section-funnels'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = '';
+  });
+
+  // Restore header title
+  const headerTitle = document.querySelector('.ds-top-header-title');
+  if (headerTitle && headerTitle.dataset._origTitle) {
+    headerTitle.textContent = headerTitle.dataset._origTitle;
+  }
+
+  // Restore Report nav
+  document.querySelectorAll('.ds-nav-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('nav-report').classList.add('active');
 }
 
 /* ── Offers Panel ── */
