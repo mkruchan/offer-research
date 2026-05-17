@@ -1114,7 +1114,7 @@
     }
     #confirm-cancel-btn {
       height: 36px; padding: 0 16px; border-radius: 8px;
-      border: 1px solid #d1d5db; background: #fff;
+      border: 1.25px solid #e9ebee; background: #fff;
       font-size: 13px; font-weight: 500; color: #374151;
       cursor: pointer; font-family: inherit; transition: all .13s;
     }
@@ -1973,8 +1973,8 @@
     .ds-sidebar {
       width: var(--sidebar-w);
       flex-shrink: 0;
-      background: #ffffff;
-      border-right: 1px solid #f0f0f0;
+      background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%);
+      border-right: 1px solid #e9ebee;
       display: flex;
       isolation: isolate;
       flex-direction: column;
@@ -2024,7 +2024,7 @@
       min-width: 0;
       width: 0;               /* forces flex child to shrink properly */
       margin-left: var(--sidebar-w);
-      background: #ffffff;
+      background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%);
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
@@ -2039,8 +2039,7 @@
       padding: 0 32px;
       height: 72px;
       background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
-      position: sticky;
+      border-bottom: 1px solid #e9ebee;
       top: 0;
       z-index: 100;
       flex-shrink: 0;
@@ -2064,7 +2063,7 @@
       height: 36px; padding: 0 14px;
       font-size: 13px; font-weight: 500; font-family: inherit;
       color: #374151; background: #ffffff;
-      border: 1px solid #d1d5db; border-radius: 8px;
+      border: 1.25px solid #e9ebee; border-radius: 8px;
       cursor: pointer; white-space: nowrap;
       box-shadow: 0 1px 2px rgba(0,0,0,.05);
       transition: all .15s;
@@ -2087,7 +2086,7 @@
     /* ── Offer summary card ── */
     .ds-offer-card {
       background: #ffffff;
-      border: 1px solid #e5e7eb;
+      border: none;
       border-radius: 12px;
       box-shadow: none;
       margin-bottom: 20px;
@@ -2116,7 +2115,7 @@
     .oc-edit-btn { flex-shrink: 0; opacity: .4; transition: opacity .15s !important; }
     .oc-edit-btn:hover { opacity: .8 !important; }
     .oc-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; padding-top: 22px; }
-    .oc-select-btn { height: 36px !important; padding: 0 14px !important; font-size: 13px !important; font-weight: 500 !important; background: #fff !important; border: 1px solid #d1d5db !important; border-radius: 8px !important; color: #374151 !important; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+    .oc-select-btn { height: 36px !important; padding: 0 14px !important; font-size: 13px !important; font-weight: 500 !important; background: #fff !important; border: 1.25px solid #e9ebee !important; border-radius: 8px !important; color: #374151 !important; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
     .oc-select-btn:hover { background: #ffffff !important; border-color: #9ca3af !important; }
     .oc-new-btn { height: 36px !important; padding: 0 16px !important; font-size: 13px !important; font-weight: 600 !important; background: #2563eb !important; border: none !important; border-radius: 8px !important; box-shadow: 0 1px 3px rgba(37,99,235,.35) !important; }
     .oc-new-btn:hover { background: #1d4ed8 !important; }
@@ -2174,7 +2173,7 @@
     .notes-resize-handle:hover::after { background: #2563eb; }
 
     /* ── Table section cards ── */
-    .tc-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.05); overflow: visible; margin-bottom: 20px; }
+    .tc-card { background: #ffffff; border: 1.25px solid #e9ebee; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.05); overflow: visible; margin-bottom: 20px; }
     .tc-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; background: #ffffff; border-bottom: 1px solid #e5e7eb; border-radius: 12px 12px 0 0; flex-wrap: wrap; }
     .tc-header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .tc-title { font-size: 15px; font-weight: 700; color: #6b7280; white-space: nowrap; }
@@ -2197,7 +2196,7 @@
     .icon-coral  { background: #FFF1EE; }
 
     /* Grid cards */
-    .grid-card { border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; display: flex; flex-direction: column; box-shadow: 0 1px 4px rgba(0,0,0,.05); transition: box-shadow .2s; }
+    .grid-card { border-radius: 12px; border: 1.25px solid #e9ebee; background: #fff; display: flex; flex-direction: column; box-shadow: 0 1px 4px rgba(0,0,0,.05); transition: box-shadow .2s; }
     .grid-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,.08); }
     .grid-card-img { border-radius: 12px 12px 0 0; }
     .grid-card-img-empty { border-radius: 12px 12px 0 0; }
@@ -2400,8 +2399,8 @@
     }
 
     /* ── 3. Page & app background ── */
-    body    { background: #ffffff !important; }
-    .ds-app { background: #ffffff !important; }
+    body    { background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important; background-attachment: fixed !important; }
+    .ds-app { background: transparent !important; }
 
     /* ── 4. Top header: auto-height, consistent padding ── */
     .ds-top-header {
@@ -2482,8 +2481,8 @@
       justify-content: center !important;
       gap: 20px !important;
       padding: 24px 28px !important;
-      background: #ffffff !important;
-      border-left: 1px solid #e5e7eb !important;
+      background: transparent !important;
+      border-left: none !important;
       border-radius: 0 12px 12px 0 !important;
       min-width: 320px !important;
     }
@@ -2770,7 +2769,7 @@
       height: 36px !important; padding: 0 14px !important;
       font-size: 13px !important; font-weight: 500 !important; font-family: inherit !important;
       color: #374151 !important; background: #ffffff !important;
-      border: 1px solid #d1d5db !important; border-radius: 8px !important;
+      border: 1.25px solid #e9ebee !important; border-radius: 8px !important;
       cursor: pointer !important; white-space: nowrap !important;
       box-shadow: 0 1px 2px rgba(0,0,0,.05) !important;
       transition: all .15s !important;
@@ -2834,8 +2833,8 @@
       display: flex !important;
       flex-direction: row !important;
       align-items: stretch !important;
-      background: #ffffff !important;
-      border-radius: 0 0 14px 14px !important;
+      background: transparent !important;
+      border-radius: 0 !important;
       border-left: none !important;
       min-width: unset !important;
       padding: 0 !important;
@@ -2850,7 +2849,7 @@
       display: flex !important; flex-direction: column !important; gap: 4px !important;
       width: auto !important;
     }
-    .oc-meta-sep { width: 1px !important; background: #e5e7eb !important; flex-shrink: 0 !important; margin: 8px 0 !important; display: block !important; }
+    .oc-meta-sep { width: 1px !important; background: #e9ebee !important; flex-shrink: 0 !important; margin: 0 !important; display: block !important; }
     .oc-meta-label { font-size: 10px !important; font-weight: 700 !important; letter-spacing: .09em !important; text-transform: uppercase !important; color: #9ca3af !important; }
     .oc-meta-input {
       background: transparent !important; border: none !important;
@@ -2899,7 +2898,7 @@
     .ic-textarea::placeholder, .notes-body textarea::placeholder { color: #9ca3af !important; font-size: 12.5px !important; }
 
     /* ── TABLE SECTION ── */
-    .tc-card { background: #fff !important; border: 1px solid #e5e7eb !important; border-radius: 12px !important; box-shadow: 0 1px 4px rgba(0,0,0,.05) !important; overflow: visible !important; margin-bottom: 20px !important; }
+    .tc-card { background: #fff !important; border: 1.25px solid #e9ebee !important; border-radius: 12px !important; box-shadow: 0 1px 4px rgba(0,0,0,.05) !important; overflow: visible !important; margin-bottom: 20px !important; }
     .tc-header { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 12px !important; padding: 15px 20px !important; background: #fff !important; border-bottom: 1px solid #e5e7eb !important; flex-wrap: wrap !important; }
     .tc-title { font-size: 15px !important; font-weight: 700 !important; color: #475569 !important; }
     .tc-toggle-group { display: flex !important; align-items: center !important; background: #f3f4f6 !important; border: 1px solid #e5e7eb !important; border-radius: 8px !important; padding: 3px !important; gap: 2px !important; }
@@ -3128,7 +3127,7 @@
       font-size: 12.5px !important;
       border-radius: 8px !important;
       background: #ffffff !important;
-      border: 1px solid #d1d5db !important;
+      border: 1.25px solid #e9ebee !important;
       color: #374151 !important;
       box-shadow: 0 1px 2px rgba(0,0,0,.05) !important;
     }
@@ -3159,7 +3158,7 @@
       gap: 0 !important;
       padding: 0 !important;
       background: transparent !important;
-      border-left: 1px solid #e5e7eb !important;
+      border-left: none !important;
       border-radius: 0 12px 12px 0 !important;
       min-width: unset !important;
     }
@@ -3174,7 +3173,11 @@
       min-width: 110px !important;
     }
     .oc-meta-field:not(:last-child) {
-      border-right: 1px solid #e5e7eb !important;
+      border-right: none !important;
+    }
+    .oc-meta-field:last-of-type,
+    .oc-meta .oc-meta-field:last-of-type {
+      border-right: none !important;
     }
     .oc-meta-sep { display: none !important; }
     .oc-meta-label {
@@ -4000,7 +4003,7 @@
     }
 
     /* Links card */
-    .adp-lp-card { border-radius: 10px !important; border-color: #e5e7eb !important; background: #fafafa !important; }
+    .adp-lp-card { border-radius: 10px !important; border-color: #d1d5db !important; background: #fafafa !important; }
     .adp-lp-row { padding: 10px 14px !important; border-bottom-color: #f0f0f0 !important; gap: 12px !important; }
     .adp-lp-icon {
       width: 30px !important; height: 30px !important;
@@ -4011,7 +4014,7 @@
     .adp-lp-url { font-size: 12.5px !important; color: #2563eb !important; }
 
     /* Ad details card */
-    .adp-card { border-radius: 10px !important; border-color: #e5e7eb !important; background: #fafafa !important; }
+    .adp-card { border-radius: 10px !important; border-color: #d1d5db !important; background: #fafafa !important; }
     .adp-row { padding: 10px 14px !important; border-bottom-color: #f0f0f0 !important; gap: 12px !important; align-items: center !important; }
     .adp-row-label {
       font-size: 10px !important;
@@ -4363,7 +4366,7 @@
       --card-padding-h: 24px;
       --card-padding-v: 20px;
       --section-gap: 20px;
-      --card-border: 1px solid #e5e7eb;
+      --card-border: 1.25px solid #e9ebee;
       --card-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
       --label-color: #9ca3af;
       --label-size: 10.5px;
@@ -4418,10 +4421,10 @@
       letter-spacing: -0.3px !important;
     }
     .oc-meta {
-      border-top: 1px solid #f3f4f6 !important;
+      border-top: none !important;
       border-left: none !important;
       border-radius: 0 0 var(--card-radius) var(--card-radius) !important;
-      background: #ffffff !important;
+      background: transparent !important;
       display: flex !important;
       flex-direction: row !important;
     }
@@ -5490,7 +5493,7 @@
     }
     /* Align header bottom border with sidebar logo bottom border */
     .ds-top-header {
-      border-bottom: 1px solid #e5e7eb !important;
+      border-bottom: 1px solid #e9ebee !important;
       box-shadow: none !important;
     }
     body.force-dark .ds-sidebar { box-shadow: none !important; }
@@ -5648,7 +5651,7 @@
 
     /* ══ FINAL FIXES ══ */
     /* Sidebar always on top */
-    .ds-sidebar { z-index: 600 !important; background: #ffffff; }
+    .ds-sidebar { z-index: 600 !important; background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important; }
     body.force-dark .ds-sidebar { background: #18181b; }
     /* Footer lines aligned */
     .ds-sidebar-footer { padding: 10px 8px !important; }
@@ -5673,7 +5676,7 @@
     /* ══ SIDEBAR ALWAYS COVERS CONTENT ══ */
     .ds-sidebar {
       z-index: 600 !important;
-      background: #ffffff !important;
+      background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important;
     }
     body.force-dark .ds-sidebar,
     body:not(.force-light) .ds-sidebar {
@@ -5685,8 +5688,17 @@
     .ds-sidebar-footer { height: 56px !important; min-height: 56px !important; max-height: 56px !important; display: flex !important; flex-direction: row !important; align-items: center !important; padding: 0 8px !important; box-sizing: border-box !important; gap: 0 !important; }
     .ds-sidebar-footer .ds-sidebar-nav { flex: 1 !important; padding: 0 !important; }
     #sidebar-status { display: none !important; }
+    .oc-meta-field { border-right: none !important; border-bottom: none !important; }
+    .ds-offer-card { border: 1.25px solid #e9ebee !important; }
+    .ic-card { border: 1.25px solid #e9ebee !important; }
+    .tc-card { border: 1.25px solid #e9ebee !important; }
+    .grid-card { border: 1.25px solid #e9ebee !important; }
+    .oc-divider { display: none !important; }
+    .oc-meta { background: transparent !important; border-top: none !important; border-left: none !important; }
+    .oc-meta-sep { width: 1px !important; background: #e9ebee !important; flex-shrink: 0 !important; margin: 0 !important; display: block !important; }
+    body:not(.force-dark) .ds-sidebar { border-right: none !important; box-shadow: 1px 0 0 #e9ebee, 4px 0 12px rgba(0,0,0,0.04) !important; }
+    body:not(.force-dark) .ds-main { background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important; }
 </style>
-</head>
 <body>
 
 <div class="ds-app">
@@ -6046,7 +6058,7 @@
           <input type="text" id="meta-analyst" class="oc-meta-input" placeholder="Your name">
         </div>
       </div>
-      <div class="oc-meta-sep"></div>
+      <div class="oc-meta-sep" style="width:0.85px!important;"></div>
       <div class="oc-meta-field" style="position:relative;">
         <label class="oc-meta-label" for="meta-date-display">Date</label>
         <div class="oc-meta-value-row" style="cursor:pointer;" onclick="toggleCustomCal(event)">
@@ -6073,7 +6085,7 @@
           <div id="cal-days" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;"></div>
         </div>
       </div>
-      <div class="oc-meta-sep"></div>
+      <div class="oc-meta-sep" style="width:0.75px!important;"></div>
       <div class="oc-meta-field">
         <label class="oc-meta-label" for="meta-period">Report Period</label>
         <div class="oc-meta-value-row">
