@@ -4038,11 +4038,13 @@
       background: #ffffff !important;
       border: 1px solid #e5e7eb !important;
       border-radius: 8px !important;
-      padding: 7px 12px !important;
+      padding: 6px 12px !important;
       font-size: 13px !important;
       color: #111827 !important;
       line-height: 1.5 !important;
-      min-height: 32px !important;
+      min-height: 28px !important;
+      max-height: 80px !important;
+      overflow-y: auto !important;
     }
     .adp-copy-block:empty::before,
     .adp-copy-placeholder { color: #d1d5db !important; font-style: italic !important; font-size: 13px !important; }
@@ -6121,8 +6123,8 @@
           <th class="num-col frozen-num">#</th>
           <th class="frozen-offer col-group-offer">Offer</th><th>Traffic Source</th><th>Format</th><th style="width:90px">Geo</th><th style="width:110px">Lifecycle</th>
           <th class="col-group-links">Landing Page Link</th>
-          <th class="col-group-links">Spy Tool Link</th><th class="col-group-links">Fan Page Link</th>
-          <th class="col-group-creative">Creative Preview</th><th class="col-group-creative">Creative Link</th>
+          <th class="col-group-links">Fan Page Link</th><th class="col-group-links">Spy Tool Link</th>
+          <th class="col-group-creative">Creative Preview</th>
           <th class="col-group-copy">Angle / Hook</th><th class="col-group-copy">Headline</th><th class="col-group-copy">CTA</th><th class="col-group-copy">Title</th>
           <th>Imp. Estimate</th>
           <th>Notes</th>
@@ -6769,7 +6771,6 @@ function buildAdsGrid() {
     const thumbImg = tr.querySelector('img.media-thumb');
     const thumbSrc = thumbImg ? thumbImg.src : '';
     const thumbUrl = thumbImg ? (thumbImg.getAttribute('onclick')?.match(/window\.open\('([^']+)'/)?.[1] || thumbSrc) : '';
-    const creativeUrl = getLinkHref(tds[10]);
     const angle    = getText(tds[11]);
     const headline = getText(tds[12]);
     const cta      = getText(tds[13]);
@@ -6799,14 +6800,16 @@ function buildAdsGrid() {
     };
     const linkBlock = `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">
       <div style="display:flex;gap:8px;justify-content:space-between;">
-        <div style="flex:1;">${mkEditableLink(landingUrl,'Landing',7)}${mkEditableLink(creativeUrl,'Creative',11)}</div>
-        <div style="flex:1;">${mkEditableLink(spyUrl,'Spy tool',8)}${mkEditableLink(fanUrl,'Fan page',9)}</div>
+        <div style="flex:1;">${mkEditableLink(landingUrl,'Landing',7)}</div>
+        <div style="flex:1;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
+        <div style="flex:1;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
       </div>
     </div>`;
 
     const linkBlockTop = `<div style="display:flex;gap:8px;justify-content:space-between;margin-bottom:6px;padding:6px 0;border-bottom:1px solid var(--border-light);">
-        <div style="display:flex;flex-direction:column;gap:2px;flex:1;">${mkEditableLink(landingUrl,'Landing',7)}${mkEditableLink(creativeUrl,'Creative',11)}</div>
-        <div style="display:flex;flex-direction:column;gap:2px;flex:1;align-items:flex-end;">${mkEditableLink(spyUrl,'Spy tool',8)}${mkEditableLink(fanUrl,'Fan page',9)}</div>
+        <div style="display:flex;flex-direction:column;gap:2px;flex:1;">${mkEditableLink(landingUrl,'Landing',7)}</div>
+        <div style="display:flex;flex-direction:column;gap:2px;flex:1;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
+        <div style="display:flex;flex-direction:column;gap:2px;flex:1;align-items:flex-end;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
       </div>`;
 
     return `<div class="grid-card" onclick="(function(e){if(!e.target.closest('button,a,select,.gce,.card-expand-toggle,.grid-card-img,.grid-card-img-empty,.link-input-wrap,.grid-drag-handle')){openAdDetail(${idx})}})(event)" style="cursor:default;" >
@@ -7416,8 +7419,12 @@ function openAdDetail(rowIdx) {
 
   const imgBlock = thumbSrc
     ? (()=>{
-    const fullSrc = thumbSrc.replace(/\/upload\/[^/]+\//, '/upload/');
-    return `<div class="adp-img-wrap" style="cursor:pointer;" onclick="window.open('${fullSrc}', '_blank', 'noopener')" title="Open full image"><img class="adp-img" src="${thumbSrc}"></div>`;
+    // For videos (jpg thumbnail from video), get the original video URL
+    const isVid = thumbSrc.includes('so_0') || thumbSrc.match(/\.(mp4|webm|mov)/i);
+    const fullSrc = isVid
+      ? thumbSrc.replace(/\/upload\/[^/]+\//, '/upload/').replace(/\.jpg$/, '.mp4')
+      : thumbSrc.replace(/\/upload\/[^/]+\//, '/upload/');
+    return `<div class="adp-img-wrap" style="cursor:pointer;" onclick="window.open('${fullSrc}', '_blank', 'noopener')" title="${isVid ? 'Play video' : 'Open full image'}"><img class="adp-img" src="${thumbSrc}"></div>`;
   })()
     : `<div class="adp-img-wrap" onclick="document.getElementById('adp-img-file-${rowIdx}').click()" style="cursor:pointer;"><div class="adp-img-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Click to upload creative</span></div><input type="file" id="adp-img-file-${rowIdx}" accept="image/*,video/*" style="display:none;" onchange="gridUploadMedia(this,${rowIdx})"></div>`;
 
@@ -7436,9 +7443,8 @@ function openAdDetail(rowIdx) {
           <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Links</div></div>
           <div class="adp-lp-card">
             ${_adpLpRow(landingUrl,'Landing Page',_lpIcons.lp,'var(--blue-bg)',null,6)}
-            ${_adpLpRow(spyUrl,'Spy Tool',_lpIcons.spy,'var(--teal-bg)',null,7)}
             ${_adpLpRow(fanUrl,'Fan Page',_lpIcons.fan,'var(--purple-bg)',null,8)}
-            ${_adpLpRow(creativeUrl,'Creative Link',_lpIcons.creative,'var(--amber-bg)',null,10)}
+            ${_adpLpRow(spyUrl,'Spy Tool',_lpIcons.spy,'var(--teal-bg)',null,7)}
           </div>
         </div>
         <div class="adp-section" style="margin:0;">
@@ -7460,9 +7466,9 @@ function openAdDetail(rowIdx) {
         ${copyFields.map(([l,v,ti]) => {
           const w = copyWeights[l] || 1;
           const placeholder = '<span class="adp-copy-placeholder">' + l + '\u2026</span>';
-          return '<div class="adp-copy-item" style="margin:0;flex:' + w + ';display:flex;flex-direction:column;min-height:28px;">' +
+          return '<div class="adp-copy-item" style="margin:0;display:flex;flex-direction:column;">' +
             '<div class="adp-copy-label">' + l + '</div>' +
-            '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="flex:1;overflow-y:auto;min-height:0;">' + (v || placeholder) + '</div>' +
+            '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="min-height:28px;">' + (v || placeholder) + '</div>' +
             '</div>';
         }).join('')}
       </div>
@@ -8570,23 +8576,6 @@ function adsRow(n) {
         </button>
       </div>
     </td>
-    <td class="link-cell"><div class="link-chip-wrap">
-      <div class="link-chip-wrap-display">
-        <a class="link-chip" href="#" target="_blank" style="display:none">
-          <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="link-chip-text"></span>
-        </a>
-        <button class="link-chip-edit-icon" onclick="startLinkEdit(this)" title="Edit link">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
-      </div>
-      <div class="link-input-wrap">
-        <input class="link-input-field" type="url" placeholder="https://...">
-        <button class="link-save-btn" onclick="saveLinkChip(this)">Save</button>
-        <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
-      </div>
-    </div></td>
     <td><textarea placeholder="Angle / hook description" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="Ad headline text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. Get a Free Quote" oninput="autoGrow(this);scheduleSave()"></textarea></td>
@@ -9373,7 +9362,7 @@ function restoreData(data) {
   if (data.notes?.takeawaysH) { const c = document.getElementById('notes-card-takeaways'); if(c) c.style.height = data.notes.takeawaysH; }
   if (data.notes?.actionsH) { const c = document.getElementById('notes-card-actions'); if(c) c.style.height = data.notes.actionsH; }
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','qty','type','notes']);
-  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']);
+  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','fanPage','spyLink','creative','angle','headline','cta','title','imp','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','type','obs']);
   if (data.savedSites) {
     try { localStorage.setItem('ecoverage_saved_sites', JSON.stringify(data.savedSites)); } catch(e) {}
@@ -9635,7 +9624,7 @@ document.addEventListener('click', function(e) {
 function exportCSV() {
   const offerName = (document.getElementById('main-title')?.dataset?.text || 'research').replace(/[^a-z0-9\s\-]/gi,'').trim() || 'research';
   const tables = [
-    { id: 'ads-body',     name: 'Top Ads',             headers: ['#','Offer','Traffic Source','Format','Geo','Lifecycle','Landing Page','Spy Tool','Fan Page','Creative Link','Angle / Hook','Headline','CTA','Title','Impressions','Notes'] },
+    { id: 'ads-body',     name: 'Top Ads',             headers: ['#','Offer','Traffic Source','Format','Geo','Lifecycle','Landing Page','Fan Page','Spy Tool','Angle / Hook','Headline','CTA','Title','Impressions','Notes'] },
     { id: 'traffic-body', name: 'Top Traffic Sources',  headers: ['#','Source','Geo','Qty','Traffic Type','Notes'] },
     { id: 'funnels-body', name: 'Top Funnels',          headers: ['#','Link','Advertiser','Geo','Funnel Type','Key Observations'] },
   ];
