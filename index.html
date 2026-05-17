@@ -5690,6 +5690,8 @@
       display: flex !important;
       align-items: center !important;
     }
+
+    .oc-divider { display: none !important; }
 </style>
 </head>
 <body>
@@ -6489,17 +6491,20 @@ function editTitle() {
     updateTitleLinkBtn(newUrl);
     scheduleCloudSave();
     // Also update the offer name in Supabase immediately
-    if (_currentOfferId) {
+    const _renameId = _currentOfferId || localStorage.getItem(SB_OFFER_KEY);
+    if (_renameId) {
       const sb = sbGetClient();
       if (sb) {
-        sb.from('offers').update({ name: newText }).eq('id', _currentOfferId).then(({ error }) => {
-          if (error) console.error('Failed to rename offer:', error);
+        sb.from('offers').update({ name: newText, updated_at: new Date().toISOString() }).eq('id', _renameId).then(({ error }) => {
+          if (error) { console.error('Failed to rename offer:', error); showToast('Rename failed: ' + error.message, 'error'); }
           else {
-            _allOffers = _allOffers.map(o => o.id === _currentOfferId ? { ...o, name: newText } : o);
+            _allOffers = _allOffers.map(o => o.id === _renameId ? { ...o, name: newText } : o);
             offerRebuildSelect();
-            showToast('Offer renamed', 'success');
+            showToast('Offer renamed ✓', 'success');
           }
         });
+      } else {
+        showToast('Not connected to Supabase', 'error');
       }
     }
     offerRebuildSelect();
