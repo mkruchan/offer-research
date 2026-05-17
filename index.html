@@ -7890,10 +7890,9 @@ function offerSlugFromTitle(title) {
 }
 function updateOfferSlugPath(title) {
   const slug = offerSlugFromTitle(title);
-  const base = location.pathname.replace(/\/[^\/]*$/, '/').replace(/\/$/, '') || '';
-  const newPath = slug ? base + '/' + slug : base || '/';
-  if (location.pathname !== newPath) {
-    history.replaceState(null, '', newPath + location.search);
+  const newHash = slug ? '#' + slug : '';
+  if (location.hash !== newHash) {
+    history.replaceState(null, '', location.pathname + location.search + newHash);
   }
 }
 
@@ -10024,8 +10023,8 @@ async function offerLoadAll() {
 
   offerRebuildSelect();
 
-  // Restore last selected — prefer URL slug match first
-  const _urlSlug = location.pathname.split('/').filter(Boolean).pop() || '';
+  // Restore last selected — prefer URL hash slug match first
+  const _urlSlug = location.hash.replace('#', '') || '';
   const slugMatch = _urlSlug && _allOffers.find(o => offerSlugFromTitle(o.name) === _urlSlug);
   const lastId = localStorage.getItem(SB_OFFER_KEY);
   const lastMatch = lastId && _allOffers.find(o => o.id === lastId);
