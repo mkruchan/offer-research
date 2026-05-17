@@ -4043,7 +4043,7 @@
       color: #111827 !important;
       line-height: 1.5 !important;
       min-height: 28px !important;
-      max-height: 80px !important;
+      max-height: 120px !important;
       overflow-y: auto !important;
     }
     .adp-copy-block:empty::before,
@@ -6792,10 +6792,10 @@ function buildAdsGrid() {
       const hasUrl = url && url.startsWith('http');
       return `<div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;" onclick="event.stopPropagation()">
         ${hasUrl
-          ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:3px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
-          : `<span style="font-size:13px;color:var(--text-secondary);opacity:0.5;flex:1;">${label}</span>`
+          ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:11px;display:flex;align-items:center;gap:2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
+          : `<span style="font-size:11px;color:var(--text-secondary);opacity:0.4;">${label}</span>`
         }
-        <button onclick="gridEditLink(this,${idx},'ads-body',${tdIdx})" title="Edit URL" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.5;padding:1px;line-height:1;flex-shrink:0;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg></button>
+        <button onclick="gridEditLink(this,${idx},'ads-body',${tdIdx})" title="Edit URL" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.4;padding:1px;line-height:1;flex-shrink:0;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.4'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg></button>
       </div>`;
     };
     const linkBlock = `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">
@@ -6806,10 +6806,10 @@ function buildAdsGrid() {
       </div>
     </div>`;
 
-    const linkBlockTop = `<div style="display:flex;gap:8px;justify-content:space-between;margin-bottom:6px;padding:6px 0;border-bottom:1px solid var(--border-light);">
-        <div style="display:flex;flex-direction:column;gap:2px;flex:1;">${mkEditableLink(landingUrl,'Landing',7)}</div>
-        <div style="display:flex;flex-direction:column;gap:2px;flex:1;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
-        <div style="display:flex;flex-direction:column;gap:2px;flex:1;align-items:flex-end;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
+    const linkBlockTop = `<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border-light);">
+        <div style="flex:1;display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(landingUrl,'Landing',7)}</div>
+        <div style="flex:1;display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
+        <div style="flex:1;display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
       </div>`;
 
     return `<div class="grid-card" onclick="(function(e){if(!e.target.closest('button,a,select,.gce,.card-expand-toggle,.grid-card-img,.grid-card-img-empty,.link-input-wrap,.grid-drag-handle')){openAdDetail(${idx})}})(event)" style="cursor:default;" >
@@ -7487,9 +7487,9 @@ function openAdDetail(rowIdx) {
         ${copyFields.map(([l,v,ti]) => {
           const w = copyWeights[l] || 1;
           const placeholder = '<span class="adp-copy-placeholder">' + l + '\u2026</span>';
-          return '<div class="adp-copy-item" style="margin:0;display:flex;flex-direction:column;">' +
+          return '<div class="adp-copy-item" style="margin:0;display:flex;flex-direction:column;min-height:0;">' +
             '<div class="adp-copy-label">' + l + '</div>' +
-            '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="min-height:28px;">' + (v || placeholder) + '</div>' +
+            '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="flex:1;min-height:28px;overflow-y:auto;">' + (v || placeholder) + '</div>' +
             '</div>';
         }).join('')}
       </div>
