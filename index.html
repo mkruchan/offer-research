@@ -5305,18 +5305,37 @@
     }
     .title-icon-btn:hover { opacity: 0.9 !important; }
 
-    /* ── Stronger card borders and shadows ── */
+    /* Remove sidebar shadow/blur, use clean border only */
+    .ds-sidebar {
+      box-shadow: none !important;
+      border-right: 1px solid #e5e7eb !important;
+    }
+    /* Align header bottom border with sidebar logo bottom border */
+    .ds-top-header {
+      border-bottom: 1px solid #e5e7eb !important;
+      box-shadow: none !important;
+    }
+    body.force-dark .ds-sidebar { border-right-color: rgba(255,255,255,.08) !important; box-shadow: none !important; }
+    body.force-dark .ds-top-header { border-bottom-color: rgba(255,255,255,.08) !important; box-shadow: none !important; }
+
+    /* Fix offer card overflow so custom calendar can show */
+    .ds-offer-card { overflow: visible !important; }
+    .oc-top { overflow: visible !important; }
+    .oc-meta { overflow: visible !important; }
+    .oc-meta-field { overflow: visible !important; position: relative !important; }
+
+    /* ── Lighter card borders and subtle shadows ── */
     .ds-offer-card,
     .ic-card,
     .tc-card {
-      border: 1.5px solid #e2e8f0 !important;
-      box-shadow: 0 2px 8px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.05) !important;
+      border: 1px solid #e5e7eb !important;
+      box-shadow: 0 1px 4px rgba(0,0,0,.05) !important;
     }
     body.force-dark .ds-offer-card,
     body.force-dark .ic-card,
     body.force-dark .tc-card {
-      border-color: rgba(255,255,255,.1) !important;
-      box-shadow: 0 2px 8px rgba(0,0,0,.3) !important;
+      border-color: rgba(255,255,255,.08) !important;
+      box-shadow: 0 1px 4px rgba(0,0,0,.2) !important;
     }
 
     /* ── Force toggle button wider background ── */
