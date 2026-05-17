@@ -4688,6 +4688,14 @@
     .ds-main,
     .container { overflow-x: clip !important; }
 
+    /* Allow custom calendar to overflow the meta section */
+    .oc-meta { overflow: visible !important; }
+    .oc-meta-field { overflow: visible !important; position: relative !important; }
+    .oc-meta-value-row { position: relative !important; }
+    /* Keep offer card clipping but exclude the meta row */
+    .ds-offer-card { overflow: visible !important; }
+    .oc-top { overflow: visible !important; }
+
     /* ── DEFINITIVE FROZEN COLUMN STICKY — must be last to win ── */
     #ads-table td.frozen-num,
     #funnels-table td.frozen-num {
