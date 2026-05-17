@@ -1029,7 +1029,7 @@
     /* Copy fields */
     .adp-copy-item { margin-bottom: 10px; }
     .adp-copy-item:last-child { margin-bottom: 0; }
-    .adp-copy-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; margin-bottom: 6px; }
+    .adp-copy-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; margin-bottom: 2px; }
     .adp-copy-block {
       background: var(--bg-secondary);
       border: 1px solid var(--border-light);
@@ -4031,18 +4031,18 @@
       text-transform: uppercase !important;
       letter-spacing: 0.08em !important;
       color: #9ca3af !important;
-      margin-bottom: 5px !important;
+      margin-bottom: 2px !important;
       display: block !important;
     }
     .adp-copy-block {
       background: #ffffff !important;
       border: 1px solid #e5e7eb !important;
       border-radius: 8px !important;
-      padding: 12px 14px !important;
-      font-size: 13.5px !important;
+      padding: 7px 12px !important;
+      font-size: 13px !important;
       color: #111827 !important;
-      line-height: 1.6 !important;
-      min-height: 44px !important;
+      line-height: 1.5 !important;
+      min-height: 32px !important;
     }
     .adp-copy-block:empty::before,
     .adp-copy-placeholder { color: #d1d5db !important; font-style: italic !important; font-size: 13px !important; }
@@ -7455,12 +7455,12 @@ function openAdDetail(rowIdx) {
       </div>
 
       <!-- COL 2: Ad Copy -->
-      <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;flex-direction:column;gap:6px;">
         <div class="adp-section-header" style="margin-bottom:2px;flex-shrink:0;"><div class="adp-section-title">Ad Copy</div></div>
         ${copyFields.map(([l,v,ti]) => {
           const w = copyWeights[l] || 1;
           const placeholder = '<span class="adp-copy-placeholder">' + l + '\u2026</span>';
-          return '<div class="adp-copy-item" style="margin:0;flex:' + w + ';display:flex;flex-direction:column;min-height:44px;">' +
+          return '<div class="adp-copy-item" style="margin:0;flex:' + w + ';display:flex;flex-direction:column;min-height:28px;">' +
             '<div class="adp-copy-label">' + l + '</div>' +
             '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="flex:1;overflow-y:auto;min-height:0;">' + (v || placeholder) + '</div>' +
             '</div>';
