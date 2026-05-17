@@ -1550,7 +1550,7 @@
 
     /* Sidebar nav active item */
     body.force-dark .ds-nav-item.active {
-      background: rgba(59,130,246,0.18);
+      background: rgba(37,99,235,.18);
       color: #93c5fd;
     }
     body.force-dark .ds-nav-item:hover {
@@ -1570,11 +1570,11 @@
     body.force-dark .oc-meta-input:hover { border-bottom-color: var(--border-mid) !important; }
     body.force-dark .oc-meta-input:focus { border-bottom-color: var(--accent) !important; }
     body.force-dark .oc-select-btn { background: var(--bg-secondary) !important; border-color: var(--border-mid) !important; }
-    body.force-dark .oc-new-btn { background: var(--accent) !important; }
+    body.force-dark .oc-new-btn { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; border: 1px solid rgba(37,99,235,.35) !important; box-shadow: none !important; }
 
     /* ── Insight cards ── */
     body.force-dark .ic-card--blue { border-top-color: #3b82f6; }
-    body.force-dark .ic-badge--blue { background: rgba(59,130,246,0.18); }
+    body.force-dark .ic-badge--blue { background: rgba(37,99,235,.18); }
     body.force-dark .ic-card--green { border-top-color: #22c55e; }
     body.force-dark .ic-badge--green { background: rgba(34,197,94,0.15); }
     body.force-dark .ic-textarea, body.force-dark .notes-body textarea {
@@ -1668,7 +1668,7 @@
     body.force-dark .md-copy-url { background: var(--bg-secondary); border-color: var(--border-light); color: var(--accent); }
     body.force-dark .md-badge--amber { background: var(--amber-bg); color: var(--amber-text); }
     body.force-dark .md-badge--blue  { background: var(--blue-bg);  color: var(--blue-text); }
-    body.force-dark .md-icon--blue   { background: rgba(59,130,246,0.18); }
+    body.force-dark .md-icon--blue   { background: rgba(37,99,235,.18); }
     body.force-dark .md-icon--amber  { background: rgba(245,158,11,0.18); }
     body.force-dark .md-btn { background: var(--bg-secondary); color: var(--text-secondary); border-color: var(--border-light); }
     body.force-dark .md-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
@@ -1708,7 +1708,7 @@
     body.force-dark .adp-lp-card { background: var(--bg-secondary); border-color: var(--border-light); }
     body.force-dark .adp-lp-row { border-bottom-color: var(--border-light); }
     body.force-dark .adp-edit-btn { background: var(--bg-secondary); border-color: var(--border-light); }
-    body.force-dark .adp-edit-btn.active { background: rgba(59,130,246,0.18); color: #93c5fd; border-color: #3b82f6; }
+    body.force-dark .adp-edit-btn.active { background: rgba(37,99,235,.18); color: #93c5fd; border-color: #3b82f6; }
 
     /* ── Meta fields ── */
     body.force-dark .meta-field input { background: var(--bg-secondary) !important; border-color: var(--border-light) !important; }
@@ -1730,11 +1730,11 @@
        SYSTEM DARK (prefers-color-scheme) — mirrors force-dark
     ═══════════════════════════════════════════════ */
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .ds-nav-item.active       { background: rgba(59,130,246,0.18); color: #93c5fd; }
+      body:not(.force-light) .ds-nav-item.active       { background: rgba(37,99,235,.18); color: #93c5fd; }
       body:not(.force-light) .ds-nav-item:hover        { background: rgba(255,255,255,0.06); }
       body:not(.force-light) .ds-hdr-btn               { background: var(--bg-secondary); }
       body:not(.force-light) .ic-card--blue            { border-top-color: #3b82f6; }
-      body:not(.force-light) .ic-badge--blue           { background: rgba(59,130,246,0.18); }
+      body:not(.force-light) .ic-badge--blue           { background: rgba(37,99,235,.18); }
       body:not(.force-light) .ic-card--green           { border-top-color: #22c55e; }
       body:not(.force-light) .ic-badge--green          { background: rgba(34,197,94,0.15); }
       body:not(.force-light) .remove-row-btn:hover     { background: rgba(239,68,68,0.2) !important; color: #fca5a5 !important; }
@@ -1869,7 +1869,8 @@
     }
     .ds-sidebar-logo {
       display: flex; align-items: center; gap: 10px;
-      padding: 16px 18px 14px;
+      padding: 0 18px;
+      height: 72px;
       border-bottom: 1px solid #f0f0f0;
       flex-shrink: 0;
     }
@@ -1923,6 +1924,7 @@
       height: 72px;
       background: #ffffff;
       border-bottom: 1px solid #e5e7eb;
+      border-left: 1px solid #e5e7eb;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -2108,7 +2110,7 @@
     body.force-dark .ds-nav-item.active { background: rgba(59,130,246,.18); color: #93c5fd; }
     body.force-dark .ds-user-name { color: #f4f4f5; }
     body.force-dark .ds-darkmode-btn:hover { background: rgba(255,255,255,.06); color: #f4f4f5; }
-    body.force-dark .ds-top-header { background: #18181b; border-bottom-color: rgba(255,255,255,.08); }
+    body.force-dark .ds-top-header { background: #18181b; border-bottom-color: rgba(255,255,255,.08); border-left-color: rgba(255,255,255,.08); }
     body.force-dark .ds-top-header-title { color: #f4f4f5; }
     body.force-dark .ds-hdr-btn { background: #1f1f23; border-color: rgba(255,255,255,.12); color: #a1a1aa; }
     body.force-dark .ds-hdr-btn:hover { background: #27272a; color: #f4f4f5; }
@@ -2247,7 +2249,8 @@
     }
 
     .ds-sidebar-logo {
-      padding: 18px 20px 16px !important;
+      padding: 0 20px !important;
+      height: 72px !important;
       border-bottom: 1px solid #f0f0f0 !important;
     }
 
@@ -2285,9 +2288,9 @@
 
     /* ── 4. Top header: auto-height, consistent padding ── */
     .ds-top-header {
-      height: auto !important;
-      min-height: 0 !important;
-      padding: 14px 32px !important;
+      height: 72px !important;
+      min-height: 72px !important;
+      padding: 0 32px !important;
       display: grid !important;
       grid-template-columns: minmax(0, 1fr) auto !important;
       align-items: center !important;
@@ -2493,7 +2496,8 @@
 
     /* ── SIDEBAR ── */
     .ds-sidebar-logo {
-      padding: 20px 20px 18px !important;
+      padding: 0 20px !important;
+      height: 72px !important;
       border-bottom: 1px solid #f0f0f0 !important;
       gap: 11px !important;
     }
@@ -2560,11 +2564,11 @@
 
     /* ── TOP HEADER ── */
     .ds-top-header {
-      height: auto !important; min-height: 0 !important;
+      height: 72px !important; min-height: 72px !important;
       padding: 0 28px !important;
       display: flex !important; align-items: center !important;
       justify-content: space-between !important;
-      gap: 16px !important; min-height: 72px !important;
+      gap: 16px !important;
       background: #ffffff !important;
       border-bottom: 1px solid #e5e7eb !important;
       box-shadow: 0 1px 3px rgba(0,0,0,.04) !important;
@@ -2577,8 +2581,8 @@
       flex-direction: row !important;
       align-items: center !important;
       justify-content: space-between !important;
-      min-height: 64px !important;
-      height: 64px !important;
+      min-height: 72px !important;
+      height: 72px !important;
       padding: 0 24px !important;
       position: sticky !important;
       top: 0 !important;
@@ -2634,7 +2638,6 @@
       min-height: 72px !important;
       max-height: 72px !important;
       border-bottom: 1px solid #e5e7eb !important;
-      padding-top: 2px !important;
     }
     /* Collapse button — no background, just icon, flush in header */
     .ds-hdr-collapse-btn {
@@ -2896,7 +2899,8 @@
 
     /* Logo: triangle icon matching reference */
     .ds-sidebar-logo {
-      padding: 16px 18px 14px !important;
+      padding: 0 18px !important;
+      height: 72px !important;
       gap: 9px !important;
     }
     .ds-sidebar-logo-icon {
@@ -2949,8 +2953,8 @@
     /* ── 2. TOP HEADER ── */
     .ds-top-header {
       padding: 0 28px !important;
-      min-height: 68px !important;
-      height: 68px !important;
+      min-height: 72px !important;
+      height: 72px !important;
       display: flex !important;
       align-items: center !important;
       justify-content: space-between !important;
@@ -3670,12 +3674,12 @@
     /* Offer card */
     body.force-dark .ds-offer-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
     body.force-dark .oc-top { background: #18181b !important; }
-    body.force-dark .oc-label { color: #52525b !important; }
+    body.force-dark .oc-label { color: #71717a !important; }
     body.force-dark h1#main-title { color: #f4f4f5 !important; }
     body.force-dark .title-icon-btn { border-color: rgba(255,255,255,.12) !important; background: #27272a !important; color: #a1a1aa !important; }
     body.force-dark .oc-meta { background: #1f1f23 !important; border-left-color: rgba(255,255,255,.08) !important; }
     body.force-dark .oc-meta-field:not(:last-child) { border-right-color: rgba(255,255,255,.08) !important; }
-    body.force-dark .oc-meta-label { color: #52525b !important; }
+    body.force-dark .oc-meta-label { color: #71717a !important; }
     body.force-dark .oc-meta-input { color: #f4f4f5 !important; }
     body.force-dark .oc-meta-input::placeholder { color: #52525b !important; }
     body.force-dark .oc-divider { background: rgba(255,255,255,.08) !important; }
@@ -3683,7 +3687,7 @@
     /* Offer buttons */
     body.force-dark .oc-select-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #d4d4d8 !important; }
     body.force-dark .oc-select-btn:hover { background: #3f3f46 !important; }
-    body.force-dark .oc-new-btn { background: #2563eb !important; color: #fff !important; }
+    body.force-dark .oc-new-btn { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; border: 1px solid rgba(37,99,235,.35) !important; box-shadow: none !important; }
 
     /* Insight cards */
     body.force-dark .ic-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
@@ -3773,7 +3777,8 @@
 
     /* ── 8. LiftIQ real logo ── */
     .ds-sidebar-logo {
-      padding: 16px 20px 14px !important;
+      padding: 0 20px !important;
+      height: 72px !important;
       gap: 0 !important;
       border-bottom: 1px solid #f0f0f0 !important;
     }
@@ -4170,8 +4175,8 @@
       align-items: center !important;
       justify-content: flex-start !important;
       padding: 0 18px !important;
-      height: 60px !important;
-      min-height: 60px !important;
+      height: 72px !important;
+      min-height: 72px !important;
       border-bottom: 1px solid #f0f0f0 !important;
       flex-shrink: 0 !important;
     }
@@ -4439,8 +4444,8 @@
 
     /* 7. Top header — tight, clean */
     .ds-top-header {
-      min-height: 64px !important;
-      height: 64px !important;
+      min-height: 72px !important;
+      height: 72px !important;
       padding: 0 24px !important;
     }
     .ds-top-header-title {
@@ -4554,12 +4559,12 @@
     body.force-dark .oc-meta { background: #1f1f23 !important; border-left-color: rgba(255,255,255,.08) !important; }
     body.force-dark .oc-meta-field:not(:last-child) { border-right-color: rgba(255,255,255,.08) !important; }
     body.force-dark .oc-label,
-    body.force-dark .oc-meta-label { color: #52525b !important; }
+    body.force-dark .oc-meta-label { color: #71717a !important; }
     body.force-dark h1#main-title { color: #f4f4f5 !important; }
     body.force-dark .oc-meta-input { color: #f4f4f5 !important; }
     body.force-dark .oc-meta-input::placeholder { color: #52525b !important; }
     body.force-dark .oc-select-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #d4d4d8 !important; }
-    body.force-dark .oc-new-btn { background: #2563eb !important; color: #fff !important; }
+    body.force-dark .oc-new-btn { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; border: 1px solid rgba(37,99,235,.35) !important; box-shadow: none !important; }
     body.force-dark .title-icon-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #a1a1aa !important; }
 
     /* Insight cards headers */
@@ -5223,7 +5228,7 @@
     body.force-dark .ds-top-status-label { color: #94a3b8 !important; }
     body.force-dark .ds-hdr-btn { color: #e2e8f0 !important; }
     body.force-dark h1#main-title { color: #f8fafc !important; }
-    body.force-dark .oc-meta-label { color: #64748b !important; }
+    body.force-dark .oc-meta-label { color: #71717a !important; }
     body.force-dark .oc-meta-input { color: #f1f5f9 !important; }
     body.force-dark .ic-title { color: #f1f5f9 !important; }
     body.force-dark .ic-textarea,
@@ -7285,14 +7290,23 @@ function toggleCustomCal(e) {
   }
   cal.style.display = 'block';
   // Dark mode
-  if (document.body.classList.contains('force-dark')) {
-    cal.style.background = '#27272a';
+  const _isDark = document.body.classList.contains('force-dark');
+  if (_isDark) {
+    cal.style.background = '#1f1f23';
     cal.style.borderColor = 'rgba(255,255,255,.1)';
-    cal.style.boxShadow = '0 8px 24px rgba(0,0,0,.4)';
+    cal.style.boxShadow = '0 8px 24px rgba(0,0,0,.5)';
   } else {
     cal.style.background = '#fff';
     cal.style.borderColor = '#e5e7eb';
+    cal.style.boxShadow = '0 8px 24px rgba(0,0,0,.12)';
   }
+  // Update month label color
+  const _lbl = document.getElementById('cal-month-label');
+  if (_lbl) _lbl.style.color = _isDark ? '#f1f5f9' : '#0f172a';
+  // Update nav buttons
+  cal.querySelectorAll('button').forEach(b => {
+    b.style.color = _isDark ? '#94a3b8' : '#475569';
+  });
 }
 
 function renderCal() {
