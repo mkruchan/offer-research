@@ -6488,6 +6488,20 @@ function editTitle() {
     document.title = newText;
     updateTitleLinkBtn(newUrl);
     scheduleCloudSave();
+    // Also update the offer name in Supabase immediately
+    if (_currentOfferId) {
+      const sb = sbGetClient();
+      if (sb) {
+        sb.from('offers').update({ name: newText }).eq('id', _currentOfferId).then(({ error }) => {
+          if (error) console.error('Failed to rename offer:', error);
+          else {
+            _allOffers = _allOffers.map(o => o.id === _currentOfferId ? { ...o, name: newText } : o);
+            offerRebuildSelect();
+            showToast('Offer renamed', 'success');
+          }
+        });
+      }
+    }
     offerRebuildSelect();
   };
 
