@@ -2571,7 +2571,85 @@
       position: sticky !important; top: 0 !important; z-index: 100 !important;
       flex-shrink: 0 !important; width: 100% !important; box-sizing: border-box !important;
     }
-    .ds-top-header-left { display: flex !important; flex-direction: column !important; justify-content: center !important; gap: 2px !important; min-width: 0 !important; }
+    /* ── Header: single clean row ── */
+    .ds-top-header {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      min-height: 64px !important;
+      height: 64px !important;
+      padding: 0 24px !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 100 !important;
+    }
+    .ds-top-header-left {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 10px !important;
+      flex: 1 !important;
+      min-width: 0 !important;
+      overflow: hidden !important;
+    }
+    .ds-top-header-mobile-row {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 10px !important;
+      min-width: 0 !important;
+      flex: 1 !important;
+      overflow: hidden !important;
+    }
+    .ds-top-header-mobile-row > div {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1px !important;
+      min-width: 0 !important;
+    }
+    .ds-hdr-collapse-btn {
+      flex-shrink: 0 !important;
+      position: static !important;
+    }
+    .ds-top-header-right {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 8px !important;
+      flex-shrink: 0 !important;
+    }
+
+    /* Sidebar logo height matches header exactly */
+    .ds-sidebar-logo {
+      height: 72px !important;
+      min-height: 72px !important;
+      max-height: 72px !important;
+      border-bottom: 1px solid #e5e7eb !important;
+      padding-bottom: 0 !important;
+    }
+    /* Header same exact height */
+    .ds-top-header {
+      height: 72px !important;
+      min-height: 72px !important;
+      max-height: 72px !important;
+      border-bottom: 1px solid #e5e7eb !important;
+      padding-top: 2px !important;
+    }
+    /* Collapse button — no background, just icon, flush in header */
+    .ds-hdr-collapse-btn {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: #9ca3af !important;
+      flex-shrink: 0 !important;
+      position: static !important;
+    }
+    .ds-hdr-collapse-btn:hover { background: #f3f4f6 !important; border-radius: 8px !important; color: #374151 !important; }
+    body.force-dark .ds-sidebar-logo { border-bottom-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .ds-top-header { border-bottom-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .ds-hdr-collapse-btn { color: #64748b !important; }
+    body.force-dark .ds-hdr-collapse-btn:hover { background: rgba(255,255,255,.06) !important; color: #94a3b8 !important; }
     .ds-top-header-mobile-row { display: flex !important; align-items: center !important; gap: 8px !important; }
     .ds-top-header-title { font-size: 19px !important; font-weight: 700 !important; color: #111827 !important; letter-spacing: -0.3px !important; line-height: 1.2 !important; }
     .ds-top-header-subtitle { font-size: 13px !important; color: #6b7280 !important; margin: 0 !important; line-height: 1.3 !important; }
@@ -5337,8 +5415,35 @@
       box-shadow: 0 1px 4px rgba(0,0,0,.2) !important;
     }
 
-    /* ── Force toggle button wider background ── */
+    body.force-dark .oc-meta-input { border-bottom-color: transparent !important; }
+    body.force-dark .oc-meta-input:hover { border-bottom-color: rgba(255,255,255,.15) !important; }
+    body.force-dark .oc-meta-input:focus { border-bottom-color: #2563eb !important; }
+    body.force-dark .oc-meta-sep { background: rgba(255,255,255,.08) !important; }
+
+    /* Unified grey text color in dark mode — #94a3b8 everywhere */
+    body.force-dark .oc-meta-label,
+    body.force-dark .adp-row-label,
+    body.force-dark .adp-copy-label,
+    body.force-dark .adp-lp-type,
+    body.force-dark .ds-top-header-subtitle,
+    body.force-dark .ds-top-status-label,
+    body.force-dark .ds-nav-item,
+    body.force-dark .ds-darkmode-btn,
+    body.force-dark .tc-title,
+    body.force-dark thead th,
+    body.force-dark .gc-field-label { color: #94a3b8 !important; }
+
+    /* Dark mode grid card labels — more visible */
+    body.force-dark .gc-field-label { color: #94a3b8 !important; }
+    body.force-dark .grid-card-meta { color: #94a3b8 !important; }
     .tc-toggle { padding-left: 28px !important; padding-right: 28px !important; gap: 12px !important; }
+
+    /* Database settings hidden by default */
+    #nav-db { display: none !important; }
+    #nav-db.visible { display: flex !important; }
+    /* Status indicator hidden by default */
+    #sidebar-status { display: none !important; }
+    #sidebar-status.visible { display: flex !important; }
   </style>
 </head>
 <body>
@@ -5349,7 +5454,7 @@
 <aside class="ds-sidebar" id="ds-sidebar">
 
   <!-- Logo -->
-  <div class="ds-sidebar-logo">
+  <div class="ds-sidebar-logo" onclick="logoTripleClick()" style="cursor:default;">
     <svg width="110" height="30" viewBox="0 0 978 262" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M220.008 216.22L118.899 0V137.338C118.899 180.903 154.603 216.22 198.647 216.22H220.008Z" fill="#016AC9"/>
       <path d="M0 216.22L101.109 0V137.338C101.109 180.903 65.4042 216.22 21.361 216.22H0Z" fill="#016AC9"/>
@@ -5375,8 +5480,27 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"/></svg>
       Offers
     </button>
-    <button class="ds-nav-item" id="nav-db" onclick="sbModalOpen()">
-      <!-- Database cylinder icon -->
+
+    <!-- History -->
+    <button class="ds-nav-item" onclick="showHistory()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      History
+    </button>
+
+    <!-- Export -->
+    <div style="position:relative;">
+      <button class="ds-nav-item" onclick="toggleExportMenu()" id="exportBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+        Export
+      </button>
+      <div class="export-menu hidden" id="exportMenu" style="left:0;top:100%;width:100%;min-width:180px;">
+        <button onclick="exportPDF();closeExportMenu()">🖨️ PDF</button>
+        <button onclick="exportCSV();closeExportMenu()">📊 CSV (Excel/Sheets)</button>
+        <button onclick="exportJSON();closeExportMenu()">📄 JSON (backup)</button>
+      </div>
+    </div>
+
+    <button class="ds-nav-item" id="nav-db" onclick="sbModalOpen()" style="display:none;">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
       Database settings
     </button>
@@ -5386,10 +5510,17 @@
   <div class="ds-sidebar-footer">
     <!-- Hidden elements preserved for JS compatibility -->
     <div style="display:none"><div id="ds-user-avatar">M</div><div id="ds-user-name">Analyst</div></div>
+
+    <!-- Status indicator -->
+    <div id="sidebar-status" style="display:flex;align-items:center;gap:8px;padding:8px 14px 4px;font-size:12px;color:#9ca3af;">
+      <div class="autosave-dot saved" id="autosaveDot"></div>
+      <span id="autosaveText" class="ds-top-status-label" style="font-size:12px;">Cloud synced</span>
+    </div>
+
     <!-- Dark mode toggle -->
-    <button class="ds-darkmode-btn" onclick="toggleTheme()">
-      <svg width="18" height="18" viewBox="-1 -1 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12.3 10.3A6 6 0 0 1 5.7 3.7 6 6 0 1 0 12.3 10.3z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Dark mode
+    <button class="ds-darkmode-btn" id="themeToggle" onclick="toggleTheme()">
+      <svg width="16" height="16" viewBox="-1 -1 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12.3 10.3A6 6 0 0 1 5.7 3.7 6 6 0 1 0 12.3 10.3z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="themeLabel">Dark mode</span>
     </button>
   </div>
 </aside>
@@ -5561,17 +5692,17 @@
     </div>
   </div>
 
-  <!-- Right: status + actions -->
-  <div class="ds-top-header-right">
+  <!-- Right: status + actions (hidden — moved to sidebar) -->
+  <div class="ds-top-header-right" style="display:none !important;">
 
-    <!-- Status pill (autosave indicator) -->
-    <div class="ds-top-status autosave-status ds-status-group">
+    <!-- Status pill (autosave indicator) — kept for JS -->
+    <div class="ds-top-status autosave-status ds-status-group" style="display:none !important;">
       <div class="autosave-dot saved" id="autosaveDot"></div>
       <span id="autosaveText" class="ds-top-status-label">Cloud synced</span>
     </div>
 
     <!-- Export button + dropdown (IDs + logic preserved) -->
-    <div class="export-wrap" id="exportWrap">
+    <div class="export-wrap" id="exportWrap" style="display:none !important;">
       <button class="ds-hdr-btn" onclick="toggleExportMenu()" id="exportBtn" title="Export">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span>Export</span>
@@ -5584,18 +5715,18 @@
     </div>
 
     <!-- Dark mode button (ID + logic preserved) -->
-    <button class="ds-hdr-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+    <button class="ds-hdr-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode" style="display:none !important;">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12.3 10.3A6 6 0 0 1 5.7 3.7 6 6 0 1 0 12.3 10.3z" stroke-linecap="round"/></svg>
       <span id="themeLabel">Dark mode</span>
     </button>
 
     <!-- History button (logic preserved) -->
-    <button class="ds-hdr-btn" onclick="showHistory()" title="Version history">
+    <button class="ds-hdr-btn" onclick="showHistory()" title="Version history" style="display:none !important;">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2.5 1.5" stroke-linecap="round"/></svg>
       <span>History</span>
     </button>
 
-    <!-- DB / Supabase button (hidden — opened via Database settings in sidebar) -->
+    <!-- DB / Supabase button (hidden) -->
     <button class="ds-hdr-btn" onclick="sbModalOpen()" title="Supabase database" id="sb-toolbar-btn" style="display:none !important; pointer-events:none; visibility:hidden; position:absolute;">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="8" cy="4" rx="5" ry="2"/><path d="M3 4v4c0 1.1 2.24 2 5 2s5-.9 5-2V4" stroke-linecap="round"/><path d="M3 8v4c0 1.1 2.24 2 5 2s5-.9 5-2V8" stroke-linecap="round"/></svg>
       <span>DB</span>
@@ -5605,7 +5736,7 @@
     <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(this)">
     <input type="file" id="header-img-input" accept="image/*" style="display:none;" onchange="loadHeaderImg(this)">
 
-    <!-- Hidden logo trigger (ID + triple-click logic preserved) -->
+    <!-- Hidden logo trigger -->
     <img id="liftiq-logo" src="" alt="" style="display:none;position:absolute;width:0;height:0;pointer-events:none;" onclick="logoTripleClick()">
   </div>
 
@@ -6171,7 +6302,7 @@ function buildTrafficGrid() {
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
     return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-      <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
+      <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
         <select data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
@@ -6184,7 +6315,7 @@ function buildTrafficGrid() {
 
   const getText = td => td?.querySelector('textarea')?.value || '';
   const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
+    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -6193,7 +6324,7 @@ function buildTrafficGrid() {
     >${val||''}</div>
   </div>`;
   const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
+    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -6246,7 +6377,7 @@ function buildFunnelsGrid() {
   const getLinkHref = td => { const a = td?.querySelector('a.link-chip'); const h = a?.href||''; return (h && h.startsWith('http')) ? h : ''; };
   const mkLink = (url, label) => url ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
   const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
+    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -6255,7 +6386,7 @@ function buildFunnelsGrid() {
     >${val||''}</div>
   </div>`;
   const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
+    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -6283,7 +6414,7 @@ function buildFunnelsGrid() {
     const fc = FUNNEL_CHIP_COLORS[fv] || {bg:'#E5E7EB',color:'#374151'};
     const funnelChipHtml = fv ? `<span style="background:${fc.bg};color:${fc.color};border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;letter-spacing:0.02em;white-space:nowrap;">${ft}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
     const typeChip = funnelSel ? `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-      <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Funnel type</div>
+      <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Funnel type</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${funnelChipHtml}
         <select data-row="${idx}" data-table="funnels-body" data-tdidx="5"
@@ -6332,7 +6463,7 @@ function buildAdsGrid() {
   const mkLink = (url, label) => url && url !== '#' && !url.endsWith('#')
     ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
   const field = (label, val, taSelector, rowIdx, h=52) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:${h}px;min-height:${h}px;max-height:${h}px;overflow:hidden;flex-shrink:0;">
-    <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
+    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
       style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -6398,7 +6529,7 @@ function buildAdsGrid() {
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
     return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-      <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
+      <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
         <select data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
@@ -9510,11 +9641,10 @@ function logoTripleClick() {
   _logoTimer = setTimeout(() => { _logoClicks = 0; }, 600);
   if (_logoClicks >= 3) {
     _logoClicks = 0;
-    const btn = document.getElementById('sb-toolbar-btn');
-    if (!btn) return;
-    const visible = btn.style.display !== 'none';
-    btn.style.display = visible ? 'none' : '';
-    if (!visible) sbModalOpen();
+    const navDb = document.getElementById('nav-db');
+    const status = document.getElementById('sidebar-status');
+    if (navDb) navDb.classList.toggle('visible');
+    if (status) status.classList.toggle('visible');
   }
 }
 
