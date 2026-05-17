@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script>
+    // Convert path slug to hash and redirect to index.html
+    const slug = window.location.pathname.split('/').filter(Boolean).pop();
+    const base = window.location.pathname.replace(/\/[^\/]*$/, '/');
+    const target = (base || '/') + 'index.html' + (slug ? '#' + slug : '');
+    window.location.replace(target);
+  </script>
+</head>
+<body></body>
+</html>
