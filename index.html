@@ -6910,7 +6910,28 @@ async function gridUploadMedia(input, rowIdx) {
     scheduleSave();
     buildAdsGrid();
   } catch(e) {
-    console.error('Upload error:', e);
+    // Cloudinary failed — try Supabase Storage
+    console.warn('Cloudinary failed, trying Supabase Storage...', e);
+    const sb = sbGetClient();
+    if (sb && pd) {
+      try {
+        const ext = file.name.split('.').pop() || (isVideo ? 'mp4' : 'jpg');
+        const path = `creatives/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+        const { error: sbErr } = await sb.storage.from('creatives').upload(path, file, { contentType: file.type });
+        if (sbErr) throw sbErr;
+        const { data: { publicUrl } } = sb.storage.from('creatives').getPublicUrl(path);
+        pd.innerHTML = `<div class="media-preview">
+          <img class="media-thumb" src="${publicUrl}" onclick="window.open('${publicUrl}','_blank')" style="cursor:pointer" title="Click to open">
+          <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
+        </div><input type="hidden" class="cloudinary-url" value="${publicUrl}">`;
+        scheduleSave();
+        buildAdsGrid();
+        showToast('Uploaded via backup storage!', 'success');
+      } catch(sbE) {
+        console.error('Supabase Storage also failed:', sbE);
+        showToast('Upload failed. File may be too large.', 'error');
+      }
+    }
   }
 }
 
@@ -8668,12 +8689,54 @@ async function handleMediaUpload(input, previewId) {
     scheduleSave();
     showToast('Uploaded successfully!', 'success');
   } catch(e) {
-    preview.innerHTML = `<button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
-      <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-        <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>Image/Video</button>`;
-    showToast('Upload failed. Try again.', 'error');
+    // Cloudinary failed — try Supabase Storage as fallback
+    console.warn('Cloudinary upload failed, trying Supabase Storage...', e);
+    const sb = sbGetClient();
+    if (sb) {
+      try {
+        preview.innerHTML = `<div class="media-preview" style="opacity:0.6">
+          <div style="font-size:11px;color:var(--text-secondary);padding:4px 8px;">Trying backup upload...</div>
+        </div>`;
+        const ext = file.name.split('.').pop() || (isVideo ? 'mp4' : 'jpg');
+        const path = `creatives/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+        const { data: sbData, error: sbErr } = await sb.storage.from('creatives').upload(path, file, {
+          contentType: file.type, upsert: false
+        });
+        if (sbErr) throw sbErr;
+        const { data: { publicUrl } } = sb.storage.from('creatives').getPublicUrl(path);
+        const url = publicUrl;
+        const thumbUrl = url; // No auto-thumbnail for Supabase, use full URL
+        preview.innerHTML = `<div class="media-preview">
+          <img class="media-thumb" src="${thumbUrl}" onclick="window.open('${url}','_blank')" style="cursor:pointer" title="Click to open">
+          <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
+        </div>`;
+        let hiddenUrl = preview.querySelector('.cloudinary-url');
+        if (!hiddenUrl) {
+          hiddenUrl = document.createElement('input');
+          hiddenUrl.type = 'hidden';
+          hiddenUrl.className = 'cloudinary-url';
+          preview.appendChild(hiddenUrl);
+        }
+        hiddenUrl.value = url;
+        scheduleSave();
+        showToast('Uploaded via backup storage!', 'success');
+      } catch(sbE) {
+        console.error('Supabase Storage upload also failed:', sbE);
+        preview.innerHTML = `<button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>Image/Video</button>`;
+        showToast('Upload failed on all services. File may be too large.', 'error');
+      }
+    } else {
+      preview.innerHTML = `<button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>Image/Video</button>`;
+      showToast('Upload failed. Try again.', 'error');
+    }
   }
   input.value = '';
 }
