@@ -1925,17 +1925,18 @@
     #lightbox { backdrop-filter: blur(6px); }
     #lightbox img { border-radius: var(--radius-lg); }
     #lightbox-close {
-      position: fixed; top: 20px; right: 24px;
-      color: rgba(255,255,255,0.85);
-      font-size: 26px; cursor: pointer; line-height: 1;
-      width: 36px; height: 36px;
+      position: fixed; top: 16px; right: 20px;
+      color: rgba(255,255,255,0.9);
+      font-size: 20px; cursor: pointer; line-height: 1;
+      width: 32px; height: 32px;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(0,0,0,0.35);
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.2);
-      transition: background 0.15s;
+      background: rgba(255,255,255,0.12);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.18);
+      transition: all 0.15s;
+      backdrop-filter: blur(4px);
     }
-    #lightbox-close:hover { background: rgba(0,0,0,0.6); color: #fff; }
+    #lightbox-close:hover { background: rgba(255,255,255,0.22); color: #fff; }
 
     /* Toast refinements */
     .toast { border-radius: var(--radius-lg); }
@@ -7488,10 +7489,10 @@ function openAdDetail(rowIdx) {
   const copyFields = [['Angle / Hook',angle,11],['Headline',headline,12],['CTA',cta,13],['Title',title,14]];
 
   // Smart flex weights: Angle/Headline get more space, CTA/Title less
-  const copyWeights = {'Angle / Hook':2,'Headline':2,'CTA':1,'Title':1};
+  const copyWeights = {'Angle / Hook':1,'Headline':1,'CTA':1,'Title':1};
 
   const body = `
-    <div style="display:grid;grid-template-columns:300px 1fr;gap:16px;flex:1;min-height:0;height:100%;">
+    <div style="display:grid;grid-template-columns:300px 1fr;gap:16px;flex:1;min-height:0;align-items:stretch;">
 
       <!-- COL 1: Image + Links + Ad Details -->
       <div style="display:flex;flex-direction:column;gap:6px;padding-top:1px;overflow-y:auto;">
@@ -7528,10 +7529,10 @@ function openAdDetail(rowIdx) {
             '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="flex:1;min-height:0;overflow-y:auto;">' + (v || placeholder) + '</div>' +
             '</div>';
         }).join('')}
-        <div style="flex-shrink:0;">
+        <div style="flex:1;display:flex;flex-direction:column;min-height:0;">
           <div class="adp-section-header" style="padding:4px 0 4px;flex-shrink:0;"><div class="adp-section-title">Notes</div></div>
           <div class="adp-copy-block" data-field="notes" data-td="16" contenteditable="false"
-               style="min-height:60px;max-height:100px;overflow-y:auto;">${notes || '<span class="adp-copy-placeholder">Add notes…</span>'}</div>
+               style="flex:1;min-height:100px;overflow-y:auto;">${notes || '<span class="adp-copy-placeholder">Add notes…</span>'}</div>
         </div>
       </div>
 
