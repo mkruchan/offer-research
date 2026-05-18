@@ -10016,12 +10016,16 @@ let lastSnap = null;
 
 function snapForUndo() {
   const data = collectData();
+  const snapKey = JSON.stringify(data);
+  if (snapKey === lastSnap) return;
+  // Add timestamp and version number
+  data._snapAt = new Date().toISOString();
+  data._versionNum = undoStack.length + 1;
   const snap = JSON.stringify(data);
-  if (snap === lastSnap) return;
   undoStack.push(snap);
   if (undoStack.length > 100) undoStack.shift();
   redoStack.length = 0;
-  lastSnap = snap;
+  lastSnap = snapKey;
 }
 
 function scheduleSnap() {
@@ -10194,20 +10198,32 @@ function openHistoryPanel() {
   const list = document.getElementById('history-list');
   const count = document.getElementById('history-count');
   const allSnaps = [...undoStack].reverse();
-  count.textContent = allSnaps.length;
-  if (!allSnaps.length) {
+  // Deduplicate by _snapAt timestamp
+  const seen = new Set();
+  const uniqueSnaps = allSnaps.filter(snap => {
+    const d = JSON.parse(snap);
+    const key = d._snapAt || snap.slice(0, 100);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+  count.textContent = uniqueSnaps.length;
+  if (!uniqueSnaps.length) {
     list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);font-size:13px;">No history yet — make some edits first.</div>';
   } else {
-    list.innerHTML = allSnaps.map((snap, i) => {
+    list.innerHTML = uniqueSnaps.map((snap, i) => {
       const data = JSON.parse(snap);
       const title = data.header?.title || data.meta?.analyst || 'Version';
-      const time = data._snapAt ? new Date(data._snapAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}) : 'Unknown time';
+      const time = data._snapAt ? new Date(data._snapAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}) : '';
       const date = data._snapAt ? new Date(data._snapAt).toLocaleDateString([], {month:'short',day:'numeric'}) : '';
       const rowCount = (data.ads?.length||0) + (data.traffic?.length||0) + (data.funnels?.length||0);
-      return `<div style="background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:10px;padding:12px 14px;cursor:pointer;transition:border-color .13s;" onmouseover="this.style.borderColor='var(--accent,#2563eb)'" onmouseout="this.style.borderColor='var(--border-light)'" onclick="restoreVersion(${undoStack.length - 1 - i})">
+      const versionLabel = i === 0 ? '⭐ Latest' : 'Version ' + (uniqueSnaps.length - i);
+      const timeLabel = date && time ? `${date} ${time}` : 'Unknown time';
+      const origIdx = undoStack.length - 1 - allSnaps.indexOf(snap);
+      return `<div style="background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:10px;padding:12px 14px;cursor:pointer;transition:border-color .16s cubic-bezier(0.4,0,0.2,1);" onmouseover="this.style.borderColor='var(--accent,#2563eb)'" onmouseout="this.style.borderColor='var(--border-light)'" onclick="restoreVersion(${origIdx})">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-          <span style="font-size:13px;font-weight:600;color:var(--text-primary);">${i === 0 ? '⭐ Latest' : 'Version ' + (data._versionNum || (allSnaps.length - i))}</span>
-          <span style="font-size:11px;color:var(--text-muted);">${date} ${time}</span>
+          <span style="font-size:13px;font-weight:600;color:var(--text-primary);">${versionLabel}</span>
+          <span style="font-size:11px;color:var(--text-muted);">${timeLabel}</span>
         </div>
         <div style="font-size:12px;color:var(--text-secondary);">${rowCount} rows · ${title}</div>
       </div>`;
