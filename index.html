@@ -10462,15 +10462,48 @@ async function offerLoadAll() {
 async function offerLoad(id, showMsg) {
   const sb = sbGetClient();
   if (!sb) return;
+
+  // ── Cache-first: render instantly from localStorage ──
+  const cacheKey = 'ecoverage_offer_cache_' + id;
+  const cachedRaw = localStorage.getItem(cacheKey);
+  if (cachedRaw) {
+    try {
+      const cached = JSON.parse(cachedRaw);
+      if (cached.data && cached.data.v) {
+        _offerSwitching = true;
+        _currentOfferId = id;
+        localStorage.setItem(SB_OFFER_KEY, id);
+        const offerName = cached.name || '';
+        localStorage.setItem('ecoverage_last_offer_name', offerName);
+        localStorage.setItem('ecoverage_last_offer_id', id);
+        cached.data.header = cached.data.header || {};
+        if (!cached.data.header.title) cached.data.header.title = offerName;
+        const prev = _restoring; _restoring = true;
+        restoreData(cached.data);
+        _restoring = prev;
+        setTimeout(() => { runPostInit(cached.data); _offerSwitching = false; }, 0);
+        _offerSyncNamePill(offerName);
+        if (window._loaderDone) window._loaderDone();
+      }
+    } catch(e) {}
+  }
+
+  // ── Background refresh from Supabase ──
   const { data, error } = await sb.from('offers').select('*').eq('id', id).single();
-  if (error || !data) { showToast('Failed to load offer', 'error'); return; }
-  _offerSwitching = true; // block autosave during switch
+  if (error || !data) {
+    if (!cachedRaw) showToast('Failed to load offer', 'error');
+    return;
+  }
+
+  // Update cache
+  try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch(e) {}
+
+  _offerSwitching = true;
   _currentOfferId = id;
   localStorage.setItem(SB_OFFER_KEY, id);
   const sel = document.getElementById('offer-select');
   if (sel) sel.value = id;
   const offerName = data.name || '';
-  // Persist offer name locally so it shows instantly on next reload
   localStorage.setItem('ecoverage_last_offer_name', offerName);
   localStorage.setItem('ecoverage_last_offer_id', id);
   const hasData = data.data && data.data.v;
@@ -10482,12 +10515,13 @@ async function offerLoad(id, showMsg) {
     const prev = _restoring; _restoring = true;
     restoreData(data.data);
     _restoring = prev;
-    setTimeout(() => { runPostInit(data.data); _offerSwitching = false; }, 150);
+    setTimeout(() => { runPostInit(data.data); _offerSwitching = false; }, 0);
   } else {
     clearPageData(offerName);
-    setTimeout(() => { _offerSwitching = false; }, 150);
+    setTimeout(() => { _offerSwitching = false; }, 0);
   }
   _offerSyncNamePill(offerName);
+  if (window._loaderDone) window._loaderDone();
   if (showMsg) showToast('Loaded: ' + offerName, 'success');
 }
 
