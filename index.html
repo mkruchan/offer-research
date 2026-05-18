@@ -572,6 +572,16 @@
     #funnels-table thead th:last-child, #funnels-table tbody td:last-child { border-right: none !important; }
     tbody tr:last-child td { border-bottom: none; }
     tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: middle; overflow: hidden; }
+    tbody td textarea:focus {
+      position: relative !important;
+      z-index: 50 !important;
+      overflow: visible !important;
+      white-space: normal !important;
+      min-width: 200px !important;
+      background: var(--bg-primary) !important;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1) !important;
+      border-radius: 4px !important;
+    }
     tbody td input, tbody td select, tbody td textarea {
       padding: 5px 8px; font-size: 12px;
       border: none; border-right: 1px solid var(--border-light);
