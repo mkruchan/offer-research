@@ -6,6 +6,17 @@
   <title>Multi-Platform Creative Research</title>
   <script>
     // ── Loader globals — defined early so offerLoadAll can call them ──
+    (function() {
+      // Hide loader immediately if cached data exists
+      const lastId = localStorage.getItem('ecoverage_last_offer_id');
+      const cached = lastId && localStorage.getItem('ecoverage_offer_cache_' + lastId);
+      if (cached) {
+        document.addEventListener('DOMContentLoaded', function() {
+          const el = document.getElementById('liftiq-loader');
+          if (el) el.classList.add('hidden');
+        });
+      }
+    })();
     window._loaderSetStatus = function(text) {
       const el = document.getElementById('loader-status');
       if (el) el.textContent = text;
@@ -10915,12 +10926,19 @@ window.addEventListener('load', () => {
       console.log('Sidebar footer computed padding:', getComputedStyle(sf).padding);
       console.log('Panel footer computed padding:', getComputedStyle(pf).padding);
     }
+  }, 1000);
+});
+</script>
+
+<script>
 // ── Loading screen progress bar ──────────────────────────────
 (function() {
   const loader = document.getElementById('liftiq-loader');
   const onRealSite = window.location.hostname.includes('github.io') ||
     window.location.hostname.includes('mkruchan');
-  if (!onRealSite) { loader.classList.add('hidden'); return; }
+  const lastId = localStorage.getItem('ecoverage_last_offer_id');
+  const cached = lastId && localStorage.getItem('ecoverage_offer_cache_' + lastId);
+  if (!onRealSite || cached) { loader.classList.add('hidden'); return; }
 
   const bar = document.getElementById('loader-bar');
   let prog = 0;
