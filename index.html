@@ -6,6 +6,9 @@
   <title>Multi-Platform Creative Research</title>
   <script>
     // ── Loader globals — defined early so offerLoadAll can call them ──
+    window.history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
     (function() {
       // Hide loader immediately if cached data exists
       const lastId = localStorage.getItem('ecoverage_last_offer_id');
@@ -760,15 +763,48 @@
     }
     .drag-handle:active { cursor: grabbing; }
     tr.drag-over td { background: var(--blue-bg) !important; transition: background 0.18s cubic-bezier(0.4, 0, 0.2, 1); }
-    tr.dragging-row { opacity: 0.3; }
+    tr.dragging-row td {
+      opacity: 0.25 !important;
+      background: var(--accent-muted) !important;
+      transform: scale(0.99);
+      transition: opacity 0.2s ease, background 0.2s ease !important;
+    }
+    tr.drag-over td {
+      background: var(--blue-bg) !important;
+      transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      position: relative;
+    }
+    tr.drag-over td:first-child::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      border-radius: 0 2px 2px 0;
+      animation: dragIndicator 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes dragIndicator {
+      from { transform: scaleY(0); opacity: 0; }
+      to { transform: scaleY(1); opacity: 1; }
+    }
     #drag-ghost {
       position: fixed; top: -1000px; left: -1000px; pointer-events: none; z-index: 9999;
-      background: var(--bg-primary);
+      background: #ffffff;
       border: 1.5px solid var(--accent);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-lg);
-      padding: 6px 10px; font-size: 10px; font-family: inherit;
-      color: var(--text-primary); white-space: nowrap; max-width: 320px; overflow: hidden; opacity: 0.95;
+      border-radius: 10px;
+      box-shadow: 0 8px 32px rgba(37,99,235,0.18), 0 2px 8px rgba(0,0,0,0.10);
+      padding: 8px 16px; font-size: 12px; font-family: inherit; font-weight: 500;
+      color: var(--accent); white-space: nowrap; max-width: 340px; overflow: hidden;
+      display: flex; align-items: center; gap: 8px;
+    }
+    #drag-ghost::before {
+      content: '↕';
+      font-size: 14px;
+      opacity: 0.6;
+    }
+    body.force-dark #drag-ghost {
+      background: #1e293b;
+      box-shadow: 0 8px 32px rgba(37,99,235,0.25), 0 2px 8px rgba(0,0,0,0.4);
     }
     .comment-btn {
       position: absolute; top: 4px; right: 4px;
@@ -5834,9 +5870,62 @@
     body.force-dark .loader-subtitle { color: #a1a1aa; }
     .loader-bar-wrap { width: 100%; height: 3px; background: #e5e7eb; border-radius: 99px; overflow: hidden; }
     body.force-dark .loader-bar-wrap { background: #3f3f46; }
-    .loader-bar { height: 100%; width: 0%; background: #2563eb; border-radius: 99px; transition: width 0.5s ease; }
+    .loader-bar { height: 100%; width: 0%; background: #2563eb; border-radius: 99px; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
     .loader-status { font-size: 13px; color: #6b7280; margin: 0; font-weight: 500; }
-</style>
+
+    /* ── Row drop flash ── */
+    @keyframes rowDropFlash {
+      0%   { background: rgba(37,99,235,0.18) !important; }
+      100% { background: transparent !important; }
+    }
+    tr.just-dropped td { animation: rowDropFlash 0.6s cubic-bezier(0.4,0,0.2,1) both !important; }
+
+    /* ── Sidebar nav active indicator ── */
+    .ds-nav-item { position: relative; }
+    .ds-nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 20%; bottom: 20%;
+      width: 3px;
+      background: #2563eb;
+      border-radius: 0 3px 3px 0;
+      animation: navIndicator 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes navIndicator {
+      from { transform: scaleY(0); opacity: 0; }
+      to   { transform: scaleY(1); opacity: 1; }
+    }
+    body.force-dark .ds-nav-item.active::before { background: #93c5fd; }
+
+    /* ── Card grid drag over lift ── */
+    .grid-card.drag-over {
+      transform: scale(1.02) !important;
+      outline: 2px solid var(--accent) !important;
+      outline-offset: 2px !important;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }
+
+    /* ── Content fade in on load ── */
+    @keyframes contentFadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .ds-offer-card { animation: contentFadeIn 0.32s cubic-bezier(0.4,0,0.2,1) both; }
+    .ic-grid        { animation: contentFadeIn 0.32s 0.06s cubic-bezier(0.4,0,0.2,1) both; }
+    .tc-card        { animation: contentFadeIn 0.32s 0.10s cubic-bezier(0.4,0,0.2,1) both; }
+    #section-traffic, #section-ads, #section-funnels { animation: contentFadeIn 0.28s cubic-bezier(0.4,0,0.2,1) both; }
+
+    /* ── Button press ripple ── */
+    .ds-hdr-btn { overflow: hidden; position: relative; }
+    .ds-hdr-btn::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.15); opacity: 0; transition: opacity 0.3s ease; border-radius: inherit; }
+    .ds-hdr-btn:active::after { opacity: 1; transition: opacity 0s; }
+
+    /* ── Save status dot pulse ── */
+    @keyframes savePulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.4); opacity: 0.7; }
+    }
+    .autosave-dot.saving { animation: savePulse 0.8s ease infinite; }</style>
 <body>
 
 <div id="liftiq-loader">
@@ -9606,6 +9695,9 @@ function initDragReorder(tbody) {
     snapForUndo();
     if (srcIdx < tgtIdx) tr.after(dragSrc);
     else tr.before(dragSrc);
+    // Flash the dropped row
+    dragSrc.classList.add('just-dropped');
+    setTimeout(() => dragSrc.classList.remove('just-dropped'), 600);
     const id = tbody.id;
     renumberTable(id);
     scheduleSave();
