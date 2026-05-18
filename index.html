@@ -10051,7 +10051,7 @@ function applyUndo(stack, otherStack) {
 let _restoring = false;
 
 function scheduleSave() {
-  if (_restoring) return;
+  if (_restoring || _offerSwitching) return;
   scheduleSnap();
   setStatus('saving','Saving…');
   clearTimeout(saveTimer);
@@ -10562,49 +10562,48 @@ async function offerLoad(id, showMsg) {
   const sb = sbGetClient();
   if (!sb) return;
 
-  // ── Cache-first: render instantly from localStorage ──
+  _offerSwitching = true;
+  _currentOfferId = id;
+  localStorage.setItem(SB_OFFER_KEY, id);
+
   const cacheKey = 'ecoverage_offer_cache_' + id;
   const cachedRaw = localStorage.getItem(cacheKey);
+
+  // ── Show cached version instantly while fetching ──
   if (cachedRaw) {
     try {
       const cached = JSON.parse(cachedRaw);
       if (cached.data && cached.data.v) {
-        _offerSwitching = true;
-        _currentOfferId = id;
-        localStorage.setItem(SB_OFFER_KEY, id);
         const offerName = cached.name || '';
-        localStorage.setItem('ecoverage_last_offer_name', offerName);
-        localStorage.setItem('ecoverage_last_offer_id', id);
         cached.data.header = cached.data.header || {};
         if (!cached.data.header.title) cached.data.header.title = offerName;
         const prev = _restoring; _restoring = true;
         restoreData(cached.data);
         _restoring = prev;
-        setTimeout(() => { runPostInit(cached.data); _offerSwitching = false; }, 0);
+        runPostInit(cached.data);
         _offerSyncNamePill(offerName);
         if (window._loaderDone) window._loaderDone();
       }
     } catch(e) {}
   }
 
-  // ── Background refresh from Supabase ──
+  // ── Fetch fresh data from Supabase ──
   const { data, error } = await sb.from('offers').select('*').eq('id', id).single();
   if (error || !data) {
     if (!cachedRaw) showToast('Failed to load offer', 'error');
+    _offerSwitching = false;
     return;
   }
 
-  // Update cache
+  // Update cache with fresh data
   try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch(e) {}
 
-  _offerSwitching = true;
-  _currentOfferId = id;
-  localStorage.setItem(SB_OFFER_KEY, id);
   const sel = document.getElementById('offer-select');
   if (sel) sel.value = id;
   const offerName = data.name || '';
   localStorage.setItem('ecoverage_last_offer_name', offerName);
   localStorage.setItem('ecoverage_last_offer_id', id);
+
   const hasData = data.data && data.data.v;
   if (hasData) {
     data.data.header = data.data.header || {};
