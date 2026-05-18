@@ -4785,15 +4785,20 @@
     body.force-dark .offers-panel-close:hover { background: #27272a !important; color: #f4f4f5 !important; }
 
     /* Meta field icon+input row */
-    .oc-meta-value-row {
-      display: flex !important;
-      align-items: center !important;
-      gap: 7px !important;
-    }
     .oc-meta-icon {
       flex-shrink: 0 !important;
       color: #9ca3af !important;
       opacity: 0.7 !important;
+      display: block !important;
+      position: relative !important;
+      top: 0 !important;
+      vertical-align: middle !important;
+    }
+    .oc-meta-value-row {
+      display: flex !important;
+      align-items: center !important;
+      gap: 7px !important;
+      line-height: 1 !important;
     }
     .oc-meta-input { flex: 1 !important; min-width: 0 !important; }
 
@@ -5220,7 +5225,7 @@
     .offers-panel-title { gap: 10px !important; }
     .offers-panel-new-btn { gap: 8px !important; }
     .ic-header { gap: 12px !important; }
-    .oc-meta-value-row { gap: 10px !important; }
+    .oc-meta-value-row { gap: 10px !important; align-items: center !important; display: flex !important; }
     .ds-top-status { gap: 8px !important; }
     .md-link-btn { gap: 8px !important; }
     .title-icon-btn { gap: 6px !important; }
