@@ -1973,7 +1973,7 @@
     .ds-sidebar {
       width: var(--sidebar-w);
       flex-shrink: 0;
-      background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%);
+      background: #ffffff;
       border-right: 1px solid #e9ebee;
       display: flex;
       isolation: isolate;
@@ -2024,7 +2024,7 @@
       min-width: 0;
       width: 0;               /* forces flex child to shrink properly */
       margin-left: var(--sidebar-w);
-      background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%);
+      background: #ffffff;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
@@ -2122,7 +2122,7 @@
     .oc-divider { height: 1px; background: #e5e7eb; margin: 0; }
     .oc-meta {
       display: flex; align-items: stretch; flex-wrap: wrap;
-      background: #f9fafb;
+      background: #ffffff;
       border-radius: 0 0 12px 12px;
     }
     .oc-meta-field { flex: 1; min-width: 140px; padding: 16px 24px; display: flex; flex-direction: column; gap: 5px; }
@@ -2399,7 +2399,7 @@
     }
 
     /* ── 3. Page & app background ── */
-    body    { background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important; background-attachment: fixed !important; }
+    body    { background: #ffffff !important; background-attachment: fixed !important; }
     .ds-app { background: transparent !important; }
 
     /* ── 4. Top header: auto-height, consistent padding ── */
@@ -2483,8 +2483,8 @@
       padding: 24px 28px !important;
       background: transparent !important;
       border-left: none !important;
-      border-radius: 0 12px 12px 0 !important;
-      min-width: 320px !important;
+      border-radius: 0 !important;
+      min-width: 380px !important;
     }
 
     .oc-meta-sep { display: none !important; }
@@ -3153,27 +3153,28 @@
       grid-row: 1 !important;
       display: flex !important;
       flex-direction: row !important;
-      align-items: center !important;
+      align-items: stretch !important;
       justify-content: flex-end !important;
       gap: 0 !important;
       padding: 0 !important;
       background: transparent !important;
       border-left: none !important;
-      border-radius: 0 12px 12px 0 !important;
-      min-width: unset !important;
+      box-shadow: inset 1px 0 0 #e9ebee !important;
+      border-radius: 0 !important;
+      min-width: 520px !important;
     }
     .oc-meta-field {
-      flex: unset !important;
-      min-width: unset !important;
-      width: auto !important;
+      flex: 1 1 0 !important;
+      min-width: 160px !important;
+      width: 0 !important;
       padding: 18px 20px !important;
       display: flex !important;
       flex-direction: column !important;
-      gap: 4px !important;
-      min-width: 110px !important;
+      gap: 6px !important;
     }
     .oc-meta-field:not(:last-child) {
       border-right: none !important;
+      box-shadow: inset -1px 0 0 #e9ebee !important;
     }
     .oc-meta-field:last-of-type,
     .oc-meta .oc-meta-field:last-of-type {
@@ -3193,6 +3194,7 @@
       font-weight: 500 !important;
       color: #111827 !important;
       padding: 2px 0 !important;
+      white-space: nowrap !important;
     }
 
     /* ── 4. INSIGHT CARDS ── */
@@ -5546,7 +5548,7 @@
     .ds-top-header { background: #ffffff !important; }
     body.force-dark .ds-sidebar { border-right: none !important; }
     /* Sidebar subtle separation - must be last */
-    body:not(.force-dark) .ds-sidebar { border-right: 1px solid #e5e7eb !important; }
+    body:not(.force-dark) .ds-sidebar { border-right: none !important; }
     body.force-dark .ds-top-header,
     body.force-dark .ds-sidebar,
     body.force-dark .ds-sidebar-logo,
@@ -5601,8 +5603,8 @@
     #sidebar-status.visible { display: flex !important; }
   
     /* ── FINAL: Sidebar border + soft gradient shadow ── */
-    body:not(.force-dark) .ds-sidebar { border-right: none !important; box-shadow: 2px 0 8px rgba(0,0,0,0.07) !important; }
-    body.force-dark .ds-sidebar { border-right: none !important; box-shadow: 2px 0 8px rgba(0,0,0,0.35) !important; }
+    body:not(.force-dark) .ds-sidebar { border-right: none !important; box-shadow: 2px 0 12px rgba(0,0,0,0.10) !important; }
+    body.force-dark .ds-sidebar { border-right: none !important; box-shadow: 2px 0 12px rgba(0,0,0,0.18) !important; }
 
 
 
@@ -5651,7 +5653,7 @@
 
     /* ══ FINAL FIXES ══ */
     /* Sidebar always on top */
-    .ds-sidebar { z-index: 600 !important; background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important; }
+    .ds-sidebar { z-index: 600 !important; background: #ffffff !important; }
     body.force-dark .ds-sidebar { background: #18181b; }
     /* Footer lines aligned */
     .ds-sidebar-footer { padding: 10px 8px !important; }
@@ -5676,7 +5678,7 @@
     /* ══ SIDEBAR ALWAYS COVERS CONTENT ══ */
     .ds-sidebar {
       z-index: 600 !important;
-      background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important;
+      background: #ffffff !important;
     }
     body.force-dark .ds-sidebar,
     body:not(.force-light) .ds-sidebar {
@@ -5688,16 +5690,17 @@
     .ds-sidebar-footer { height: 56px !important; min-height: 56px !important; max-height: 56px !important; display: flex !important; flex-direction: row !important; align-items: center !important; padding: 0 8px !important; box-sizing: border-box !important; gap: 0 !important; }
     .ds-sidebar-footer .ds-sidebar-nav { flex: 1 !important; padding: 0 !important; }
     #sidebar-status { display: none !important; }
-    .oc-meta-field { border-right: none !important; border-bottom: none !important; }
+    .oc-meta-field { border-right: none !important; border-bottom: none !important; min-width: 160px !important; }
+    .oc-meta-field:not(:last-child) { box-shadow: inset -1px 0 0 #e9ebee !important; border-right: none !important; }
     .ds-offer-card { border: 1.25px solid #e9ebee !important; }
     .ic-card { border: 1.25px solid #e9ebee !important; }
     .tc-card { border: 1.25px solid #e9ebee !important; }
     .grid-card { border: 1.25px solid #e9ebee !important; }
     .oc-divider { display: none !important; }
-    .oc-meta { background: transparent !important; border-top: none !important; border-left: none !important; }
-    .oc-meta-sep { width: 1px !important; background: #e9ebee !important; flex-shrink: 0 !important; margin: 0 !important; display: block !important; }
-    body:not(.force-dark) .ds-sidebar { border-right: none !important; box-shadow: 1px 0 0 #e9ebee, 4px 0 12px rgba(0,0,0,0.04) !important; }
-    body:not(.force-dark) .ds-main { background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important; }
+    .oc-meta { background: transparent !important; border-top: none !important; border-left: none !important; box-shadow: inset 1px 0 0 #e9ebee !important; min-width: 520px !important; align-items: stretch !important; border-radius: 0 !important; }
+    .oc-meta-sep { display: none !important; }
+    body:not(.force-dark) .ds-sidebar { border-right: none !important; box-shadow: 2px 0 12px rgba(0,0,0,0.10) !important; }
+    body:not(.force-dark) .ds-main { background: #ffffff !important; }
 </style>
 <body>
 
