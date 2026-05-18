@@ -10122,7 +10122,7 @@ function scheduleSave() {
   scheduleSnap();
   setStatus('saving','Saving…');
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(doSave, 600);
+  saveTimer = setTimeout(doSave, 300);
 }
 
 async function doSave() {
@@ -11162,6 +11162,24 @@ window.addEventListener('load', () => {
 </script>
 
 <script>
+// ── Save before page unload ──
+window.addEventListener('beforeunload', function() {
+  if (typeof doSave === 'function' && !_offerSwitching) {
+    clearTimeout(saveTimer);
+    clearTimeout(cloudSaveTimer);
+    doSave();
+  }
+});
+
+// ── Save when tab becomes hidden (phone switching apps, etc) ──
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'hidden' && typeof doSave === 'function' && !_offerSwitching) {
+    clearTimeout(saveTimer);
+    clearTimeout(cloudSaveTimer);
+    doSave();
+  }
+});
+
 // ── Mobile sidebar shadow control ──
 function _updateSidebarShadow() {
   if (window.innerWidth > 860) return;
