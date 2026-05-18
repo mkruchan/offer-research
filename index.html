@@ -6025,7 +6025,7 @@
 </aside>
 
 <!-- Mobile sidebar overlay -->
-<div class="ds-sidebar-overlay" id="ds-sidebar-overlay" onclick="document.getElementById('ds-sidebar').classList.remove('open');this.classList.remove('open')"></div>
+<div class="ds-sidebar-overlay" id="ds-sidebar-overlay" onclick="document.getElementById('ds-sidebar').classList.remove('open');this.classList.remove('open');setTimeout(function(){if(typeof _updateSidebarShadow==='function')_updateSidebarShadow();},50);"></div>
 
 <!-- ══ OFFERS PANEL ══════════════════════════════════ -->
 <div class="offers-panel-overlay" id="offers-panel-overlay" onclick="closeOffersPanel()"></div>
@@ -6177,7 +6177,7 @@
   <div class="ds-top-header-left">
     <div class="ds-top-header-mobile-row">
       <!-- Mobile hamburger (hidden on desktop) -->
-      <button class="ds-hamburger" onclick="var s=document.getElementById('ds-sidebar'),o=document.getElementById('ds-sidebar-overlay');s.classList.toggle('open');o.classList.toggle('open')" aria-label="Menu">
+      <button class="ds-hamburger" onclick="var s=document.getElementById('ds-sidebar'),o=document.getElementById('ds-sidebar-overlay');s.classList.toggle('open');o.classList.toggle('open');setTimeout(function(){if(typeof _updateSidebarShadow==='function')_updateSidebarShadow();},50);" aria-label="Menu">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
       </button>
       <!-- Sidebar collapse toggle (desktop) -->
