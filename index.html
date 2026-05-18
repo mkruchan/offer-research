@@ -10258,7 +10258,7 @@ function offerRebuildSelect() {
 async function offerLoadAll() {
   const sb = sbGetClient();
   if (!sb) { offerRebuildSelect(); return; }
-  const { data, error } = await sb.from('offers').select('id,name,data,updated_at').order('updated_at', { ascending: false });
+  const { data, error } = await sb.from('offers').select('*').order('updated_at', { ascending: false });
   if (error) { console.error('offerLoadAll:', error); showToast('Failed to load offers: ' + error.message, 'error'); return; }
   _allOffers = data || [];
 
