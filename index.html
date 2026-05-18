@@ -8446,10 +8446,17 @@ function renderOffersList(filter) {
     const initials = o.name.split(/\s+/).slice(0,2).map(w => w[0]).join('').toUpperCase() || 'O';
     const isActive = (typeof _currentOfferId !== 'undefined' && o.id === _currentOfferId) || o.id === '__local__';
     const date = (() => {
-      // Prefer the analyst-set report date from meta
-      const metaDate = o.data?.meta?.date || o.data?.header?.date || '';
+      // Prefer the analyst-set report date from meta — check cache first
+      const cached = localStorage.getItem('ecoverage_offer_cache_' + o.id);
+      const metaDate = (cached ? JSON.parse(cached).data?.meta?.date : null) || o.data?.meta?.date || o.data?.header?.date || '';
       if (metaDate) {
-        const d = new Date(metaDate);
+        const parts = metaDate.split('.');
+        let d;
+        if (parts.length === 3 && parts[0].length <= 2) {
+          d = new Date(+parts[2], +parts[1]-1, +parts[0]);
+        } else {
+          d = new Date(metaDate);
+        }
         if (!isNaN(d)) return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
         return metaDate;
       }
@@ -10575,7 +10582,7 @@ async function offerLoadAll() {
   if (window._loaderSetStatus) window._loaderSetStatus('Connecting...');
   if (!sb) { offerRebuildSelect(); if (window._loaderDone) window._loaderDone(); return; }
   if (window._loaderSetStatus) window._loaderSetStatus('Loading offers...');
-  const { data, error } = await sb.from('offers').select('id,name,updated_at').order('updated_at', { ascending: false });
+  const { data, error } = await sb.from('offers').select('id,name,updated_at,data->meta->date').order('updated_at', { ascending: false });
   if (error) { console.error('offerLoadAll:', error); showToast('Failed to load offers: ' + error.message, 'error'); return; }
   _allOffers = data || [];
 
@@ -10590,7 +10597,7 @@ async function offerLoadAll() {
       if (!err && row) {
         _currentOfferId = row.id;
         localStorage.setItem(SB_OFFER_KEY, row.id);
-        const { data: fresh } = await sb.from('offers').select('id,name,updated_at').order('updated_at', { ascending: false });
+        const { data: fresh } = await sb.from('offers').select('id,name,updated_at,data->meta->date').order('updated_at', { ascending: false });
         _allOffers = fresh || [];
         showToast('✅ First offer created: "' + title + '"', 'success');
       }
