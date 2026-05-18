@@ -5795,9 +5795,9 @@
     body.force-dark #liftiq-loader { background: #18181b; }
     #liftiq-loader.fade-out { opacity: 0; pointer-events: none; }
     #liftiq-loader.hidden { display: none !important; }
-    .loader-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 260px; }
+    .loader-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 380px; }
     .loader-logo { display: flex; align-items: center; gap: 10px; }
-    .loader-logo-text { font-size: 22px; font-weight: 700; color: #111827; letter-spacing: -0.5px; font-family: inherit; }
+    .loader-logo-text { font-size: 14px; font-weight: 500; color: #374151; letter-spacing: -0.1px; font-family: inherit; }
     body.force-dark .loader-logo-text { color: #f4f4f5; }
     .loader-subtitle { font-size: 13px; color: #6b7280; margin: 0; text-align: center; }
     body.force-dark .loader-subtitle { color: #a1a1aa; }
@@ -5811,12 +5811,19 @@
 <div id="liftiq-loader">
   <div class="loader-inner">
     <div class="loader-logo">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16 4L4 10l12 6 12-6-12-6z" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M4 22l12 6 12-6" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M4 16l12 6 12-6" stroke="#93c5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg width="90" height="24" viewBox="0 0 978 262" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M220.008 216.22L118.899 0V137.338C118.899 180.903 154.603 216.22 198.647 216.22H220.008Z" fill="#016AC9"/>
+        <path d="M0 216.22L101.109 0V137.338C101.109 180.903 65.4042 216.22 21.361 216.22H0Z" fill="#016AC9"/>
+        <path d="M108.94 181.71L116.166 194.381C121.014 202.884 128.12 209.912 136.715 214.708L149.526 221.855L136.715 229.002C128.12 233.798 121.014 240.826 116.166 249.328L108.94 262L101.715 249.328C96.8664 240.826 89.7607 233.798 81.1653 229.002L68.3542 221.855L81.1653 214.708C89.7607 209.912 96.8664 202.884 101.715 194.381L108.94 181.71Z" fill="#016AC9"/>
+        <path d="M305.484 193.174H370.901V224.402H265.665V28.0327H305.484V193.174Z" fill="#016AC9"/>
+        <path d="M416.402 49.9764C409.385 49.9764 403.507 47.8193 398.766 43.5055C394.218 39.0045 391.942 33.4716 391.942 26.9072C391.942 20.3428 394.218 14.9037 398.766 10.59C403.507 6.08867 409.385 3.83804 416.402 3.83804C423.418 3.83804 429.2 6.08867 433.752 10.59C438.493 14.9037 440.861 20.3428 440.861 26.9072C440.861 33.4716 438.493 39.0045 433.752 43.5055C429.2 47.8193 423.418 49.9764 416.402 49.9764ZM436.028 68.5444V224.402H396.209V68.5444H436.028Z" fill="#016AC9"/>
+        <path d="M547.613 100.898H520.024V224.402H479.636V100.898H461.716V68.5446H479.636V60.6673C479.636 41.5366 485.137 27.4701 496.133 18.4675C507.129 9.4649 523.719 5.24492 545.906 5.80758V39.0047C536.233 38.8171 529.504 40.4114 525.71 43.7873C521.919 47.1635 520.024 53.2588 520.024 62.074V68.5446H547.613V100.898Z" fill="#016AC9"/>
+        <path d="M619.775 100.897V176.294C619.775 181.546 621.009 185.39 623.473 187.828C626.126 190.079 630.49 191.204 636.557 191.204H655.045V224.402H630.013C596.456 224.402 579.671 208.272 579.671 176.013V100.897H560.901V68.5442H579.671V30.0017H619.775V68.5442H655.045V100.897H619.775Z" fill="#016AC9"/>
+        <path d="M741.67 26.9073V224.402H693.032V26.9073H741.67Z" fill="#016AC9"/>
+        <path d="M919.123 258.161L893.526 224.12C885.944 225.62 878.547 226.371 871.342 226.371C852.572 226.371 835.314 222.057 819.577 213.43C804.03 204.802 791.608 192.799 782.319 177.42C773.215 161.852 768.667 144.41 768.667 125.092C768.667 105.774 773.215 88.4248 782.319 73.0458C791.608 57.6661 804.03 45.6627 819.577 37.0351C835.314 28.4076 852.572 24.0939 871.342 24.0939C890.112 24.0939 907.274 28.4076 922.825 37.0351C938.558 45.6627 950.887 57.6661 959.796 73.0458C968.896 88.4248 973.448 105.774 973.448 125.092C973.448 141.972 969.938 157.445 962.925 171.512C956.101 185.39 946.524 196.925 934.198 206.115L978 258.161H919.123ZM818.439 125.092C818.439 142.534 823.177 156.507 832.661 167.01C842.33 177.326 855.225 182.483 871.342 182.483C887.27 182.483 899.973 177.232 909.454 166.729C919.123 156.226 923.96 142.347 923.96 125.092C923.96 107.649 919.123 93.7702 909.454 83.4547C899.973 72.9519 887.27 67.7001 871.342 67.7001C855.225 67.7001 842.33 72.8579 832.661 83.1734C823.177 93.489 818.439 107.462 818.439 125.092Z" fill="#016AC9"/>
       </svg>
-      <span class="loader-logo-text">LiftIQ</span>
+      <span style="color:#d1d5db;font-size:18px;font-weight:300;margin:0 2px;">|</span>
+      <span class="loader-logo-text">Multi-Platform Creative Research</span>
     </div>
     <div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div>
     <p class="loader-status" id="loader-status">Connecting...</p>
@@ -10891,19 +10898,13 @@ window.addEventListener('load', () => {
 // ── Loading screen ──────────────────────────────────────────
 (function() {
   const loader = document.getElementById('liftiq-loader');
-  // Hide in Claude preview, iframes, or when no Supabase configured
   const sbUrl = localStorage.getItem('ecoverage_sb_url');
-  const isPreview = !window.location.protocol.startsWith('http') ||
-    window.location.hostname === 'claude.ai' ||
-    window.location.hostname === '' ||
-    window.location.hostname === 'localhost' ||
-    !sbUrl ||
-    (function() { try { return window.self !== window.top; } catch(e) { return true; } })();
-  if (isPreview) { loader.classList.add('hidden'); return; }
+  const lastId = localStorage.getItem('ecoverage_last_offer_id');
+  const cached = lastId && localStorage.getItem('ecoverage_offer_cache_' + lastId);
+  const onRealSite = window.location.hostname.includes('github.io') ||
+    window.location.hostname.includes('mkruchan');
+  if (!sbUrl || cached || !onRealSite) { loader.classList.add('hidden'); return; }
 
-  const cached = localStorage.getItem('ecoverage_last_offer_id') &&
-    localStorage.getItem('ecoverage_offer_cache_' + localStorage.getItem('ecoverage_last_offer_id'));
-  if (cached) { loader.classList.add('hidden'); return; }
   const bar = document.getElementById('loader-bar');
   const status = document.getElementById('loader-status');
   let prog = 0;
