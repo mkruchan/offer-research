@@ -2072,6 +2072,7 @@
       cursor: pointer; border: none; background: none;
       width: 100%; text-align: left; transition: all 0.16s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none; font-family: inherit;
+      white-space: nowrap; overflow: hidden;
     }
     .ds-nav-item:hover { background: #f3f4f6; color: #111827; }
     .ds-nav-item.active { background: #eff6ff; color: #2563eb; font-weight: 600; }
@@ -5263,7 +5264,7 @@
 
     @media (max-width: 480px) {
       .ds-top-header-title { font-size: 13px !important; }
-      .ds-hdr-btn span, #themeLabel { display: none !important; }
+      .ds-hdr-btn span { display: none !important; }
       .ds-hdr-btn { width: 36px !important; padding: 0 !important; justify-content: center !important; }
       h1#main-title { font-size: 14px !important; }
       .oc-top { padding: 12px 12px 10px !important; }
@@ -5778,8 +5779,17 @@
     body.force-dark .oc-meta { box-shadow: inset 1px 0 0 rgba(255,255,255,.08) !important; }
     body.force-dark .oc-meta-field:not(:last-child) { box-shadow: inset -1px 0 0 rgba(255,255,255,.08) !important; }
     .oc-meta-sep { display: none !important; }
+    @media (max-width: 860px) {
+      .oc-meta { min-width: unset !important; box-shadow: none !important; border-left: none !important; border-top: 1px solid #e9ebee !important; }
+      body.force-dark .oc-meta { border-top-color: rgba(255,255,255,.08) !important; }
+    }
     body:not(.force-dark) .ds-sidebar { border-right: none !important; box-shadow: 2px 0 12px rgba(0,0,0,0.10) !important; }
     body.force-dark .ds-sidebar { border-right: none !important; box-shadow: 2px 0 12px rgba(0,0,0,0.18) !important; }
+    @media (max-width: 860px) {
+      .ds-sidebar { will-change: transform; }
+      .ds-sidebar:not(.open) { box-shadow: none !important; }
+      .ds-sidebar.open { box-shadow: 4px 0 24px rgba(0,0,0,.2) !important; }
+    }
     body:not(.force-dark) .ds-main { background: #ffffff !important; }
 
     /* ── Smooth panel animations ── */
@@ -8292,6 +8302,7 @@ function openReport() {
   if (window.innerWidth <= 860) {
     document.getElementById('ds-sidebar')?.classList.remove('open');
     document.getElementById('ds-sidebar-overlay')?.classList.remove('open');
+    if (typeof _updateSidebarShadow === 'function') setTimeout(_updateSidebarShadow, 50);
   }
   closeBoardView();
   closeHistoryPanel(); closeExportPanel();
@@ -8318,6 +8329,7 @@ function openBoardView(board) {
   if (window.innerWidth <= 860) {
     document.getElementById('ds-sidebar')?.classList.remove('open');
     document.getElementById('ds-sidebar-overlay')?.classList.remove('open');
+    if (typeof _updateSidebarShadow === 'function') setTimeout(_updateSidebarShadow, 50);
   }
   if (_currentBoard === board) { closeBoardView(); return; }
   closeOffersPanel(); closeHistoryPanel(); closeExportPanel();
@@ -8397,6 +8409,7 @@ function openOffersPanel() {
   if (window.innerWidth <= 860) {
     document.getElementById('ds-sidebar')?.classList.remove('open');
     document.getElementById('ds-sidebar-overlay')?.classList.remove('open');
+    if (typeof _updateSidebarShadow === 'function') setTimeout(_updateSidebarShadow, 50);
   }
   if (document.getElementById('offers-panel').classList.contains('open')) { closeOffersPanel(); return; }
   closeHistoryPanel(); closeExportPanel();
@@ -9871,7 +9884,7 @@ function restoreData(data) {
   if (data.notes?.takeawaysH) { const c = document.getElementById('notes-card-takeaways'); if(c) c.style.height = data.notes.takeawaysH; }
   if (data.notes?.actionsH) { const c = document.getElementById('notes-card-actions'); if(c) c.style.height = data.notes.actionsH; }
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','qty','type','notes']);
-  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','fanPage','spyLink','creative','angle','headline','cta','title','imp','notes']);
+  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','angle','headline','cta','title','imp','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','type','obs']);
   if (data.savedSites) {
     try { localStorage.setItem('ecoverage_saved_sites', JSON.stringify(data.savedSites)); } catch(e) {}
@@ -10226,6 +10239,7 @@ function openHistoryPanel() {
   if (window.innerWidth <= 860) {
     document.getElementById('ds-sidebar')?.classList.remove('open');
     document.getElementById('ds-sidebar-overlay')?.classList.remove('open');
+    if (typeof _updateSidebarShadow === 'function') setTimeout(_updateSidebarShadow, 50);
   }
   if (document.getElementById('history-panel').classList.contains('open')) { closeHistoryPanel(); return; }
   closeOffersPanel(); closeExportPanel();
@@ -10286,6 +10300,7 @@ function openExportPanel() {
   if (window.innerWidth <= 860) {
     document.getElementById('ds-sidebar')?.classList.remove('open');
     document.getElementById('ds-sidebar-overlay')?.classList.remove('open');
+    if (typeof _updateSidebarShadow === 'function') setTimeout(_updateSidebarShadow, 50);
   }
   if (document.getElementById('export-panel').classList.contains('open')) { closeExportPanel(); return; }
   closeOffersPanel(); closeHistoryPanel();
@@ -11131,6 +11146,28 @@ window.addEventListener('load', () => {
 </script>
 
 <script>
+// ── Mobile sidebar shadow control ──
+function _updateSidebarShadow() {
+  if (window.innerWidth > 860) return;
+  const sb = document.getElementById('ds-sidebar');
+  if (!sb) return;
+  const isDark = document.body.classList.contains('force-dark');
+  if (sb.classList.contains('open')) {
+    sb.style.setProperty('box-shadow', '4px 0 24px rgba(0,0,0,0.25)', 'important');
+  } else {
+    sb.style.setProperty('box-shadow', 'none', 'important');
+  }
+}
+// Run after page settles
+setTimeout(_updateSidebarShadow, 100);
+window.addEventListener('resize', _updateSidebarShadow);
+
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.ds-hamburger') || e.target.closest('#ds-sidebar-overlay')) {
+    setTimeout(_updateSidebarShadow, 50);
+  }
+});
+
 // ── Loading screen progress bar ──────────────────────────────
 (function() {
   const loader = document.getElementById('liftiq-loader');
