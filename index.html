@@ -8262,8 +8262,13 @@ function offerSlugFromTitle(title) {
     .filter(Boolean).join('-');
 }
 function updateOfferSlugPath(title) {
-  // Disabled — GitHub Pages doesn't support client-side routing
-  // Changing URL causes 404 on page refresh
+  if (window._offerSwitching) return;
+  const slug = offerSlugFromTitle(title);
+  const base = '/creative-research/';
+  const newPath = slug ? base + slug : base;
+  if (location.pathname !== newPath) {
+    history.replaceState(null, '', newPath);
+  }
 }
 
 function updateTitleLinkBtn(url) {
