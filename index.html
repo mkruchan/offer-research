@@ -5832,15 +5832,7 @@
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
-    /* ── Page content fade-in ── */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .ds-offer-card  { animation: fadeInUp 0.35s cubic-bezier(0.4, 0, 0.2, 1) both; }
-    .ic-grid .ic-card:nth-child(1) { animation: fadeInUp 0.35s 0.05s cubic-bezier(0.4, 0, 0.2, 1) both; }
-    .ic-grid .ic-card:nth-child(2) { animation: fadeInUp 0.35s 0.10s cubic-bezier(0.4, 0, 0.2, 1) both; }
-    .tc-card  { animation: fadeInUp 0.35s 0.12s cubic-bezier(0.4, 0, 0.2, 1) both; }
+    /* fadeInUp removed — caused chip flicker on reload */
 
     /* ── Smooth row highlight on drag ── */
     tr.drag-over td { transition: background 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important; }
@@ -5890,9 +5882,7 @@
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .ds-offer-card { animation: contentFadeIn 0.32s cubic-bezier(0.4,0,0.2,1) both; }
-    .ic-grid        { animation: contentFadeIn 0.32s 0.06s cubic-bezier(0.4,0,0.2,1) both; }
-    .tc-card        { animation: contentFadeIn 0.32s 0.10s cubic-bezier(0.4,0,0.2,1) both; }
+    /* content fade-in removed — caused chip flicker on reload */
     #section-traffic, #section-ads, #section-funnels { animation: contentFadeIn 0.28s cubic-bezier(0.4,0,0.2,1) both; }
 
     /* ── Button press ripple ── */
