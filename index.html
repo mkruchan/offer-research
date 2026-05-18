@@ -10293,20 +10293,26 @@ async function offerLoadAll() {
   const lastId = localStorage.getItem(SB_OFFER_KEY);
   const lastMatch = lastId && _allOffers.find(o => o.id === lastId);
   if (slugMatch) {
-    await offerLoad(slugMatch.id, false);
+    await offerLoad(slugMatch.id, false, slugMatch);
   } else if (lastMatch) {
-    await offerLoad(lastId, false);
+    await offerLoad(lastId, false, lastMatch);
   } else if (_allOffers.length > 0) {
-    await offerLoad(_allOffers[0].id, false);
+    await offerLoad(_allOffers[0].id, false, _allOffers[0]);
   }
 }
 
 /* ── Load one offer ── */
-async function offerLoad(id, showMsg) {
+async function offerLoad(id, showMsg, prefetchedData) {
   const sb = sbGetClient();
   if (!sb) return;
-  const { data, error } = await sb.from('offers').select('*').eq('id', id).single();
-  if (error || !data) { showToast('Failed to load offer', 'error'); return; }
+  let data;
+  if (prefetchedData) {
+    data = prefetchedData;
+  } else {
+    const { data: fetched, error } = await sb.from('offers').select('*').eq('id', id).single();
+    if (error || !fetched) { showToast('Failed to load offer', 'error'); return; }
+    data = fetched;
+  }
   _offerSwitching = true; // block autosave during switch
   _currentOfferId = id;
   localStorage.setItem(SB_OFFER_KEY, id);
@@ -10325,10 +10331,10 @@ async function offerLoad(id, showMsg) {
     const prev = _restoring; _restoring = true;
     restoreData(data.data);
     _restoring = prev;
-    setTimeout(() => { runPostInit(data.data); _offerSwitching = false; }, 150);
+    setTimeout(() => { runPostInit(data.data); _offerSwitching = false; }, 0);
   } else {
     clearPageData(offerName);
-    setTimeout(() => { _offerSwitching = false; }, 150);
+    setTimeout(() => { _offerSwitching = false; }, 0);
   }
   _offerSyncNamePill(offerName);
   if (showMsg) showToast('Loaded: ' + offerName, 'success');
