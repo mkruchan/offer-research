@@ -7133,15 +7133,15 @@ function buildAdsGrid() {
     const linkBlock = `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">
       <div style="display:flex;gap:8px;justify-content:space-between;">
         <div style="flex:1;">${mkEditableLink(landingUrl,'Landing',7)}</div>
-        <div style="flex:1;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
-        <div style="flex:1;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
+        <div style="flex:1;">${mkEditableLink(fanUrl,'Fan page',8)}</div>
+        <div style="flex:1;">${mkEditableLink(spyUrl,'Spy tool',7)}</div>
       </div>
     </div>`;
 
     const linkBlockTop = `<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border-light);display:grid;grid-template-columns:1fr 1fr;gap:3px 6px;">
         <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(landingUrl,'Landing',7)}</div>
-        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
-        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
+        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(spyUrl,'Spy tool',7)}</div>
+        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(fanUrl,'Fan page',8)}</div>
         <div></div>
       </div>`;
 
@@ -8272,9 +8272,11 @@ function updateOfferSlugPath(title) {
   const slug = offerSlugFromTitle(title);
   const base = '/creative-research/';
   const newPath = slug ? base + slug : base;
-  if (location.pathname !== newPath) {
-    history.replaceState(null, '', newPath);
-  }
+  try {
+    if (location.pathname !== newPath) {
+      history.replaceState(null, '', newPath);
+    }
+  } catch(e) { /* ignore SecurityError in iframes/previews */ }
 }
 
 function updateTitleLinkBtn(url) {
@@ -10526,7 +10528,7 @@ async function offerLoadAll() {
   if (window._loaderSetStatus) window._loaderSetStatus('Connecting...');
   if (!sb) { offerRebuildSelect(); if (window._loaderDone) window._loaderDone(); return; }
   if (window._loaderSetStatus) window._loaderSetStatus('Loading offers...');
-  const { data, error } = await sb.from('offers').select('id,name,data,updated_at').order('updated_at', { ascending: false });
+  const { data, error } = await sb.from('offers').select('id,name,updated_at').order('updated_at', { ascending: false });
   if (error) { console.error('offerLoadAll:', error); showToast('Failed to load offers: ' + error.message, 'error'); return; }
   _allOffers = data || [];
 
@@ -10541,7 +10543,7 @@ async function offerLoadAll() {
       if (!err && row) {
         _currentOfferId = row.id;
         localStorage.setItem(SB_OFFER_KEY, row.id);
-        const { data: fresh } = await sb.from('offers').select('id,name,data,updated_at').order('updated_at', { ascending: false });
+        const { data: fresh } = await sb.from('offers').select('id,name,updated_at').order('updated_at', { ascending: false });
         _allOffers = fresh || [];
         showToast('✅ First offer created: "' + title + '"', 'success');
       }
@@ -10583,36 +10585,48 @@ async function offerLoad(id, showMsg) {
   localStorage.setItem(SB_OFFER_KEY, id);
 
   const cacheKey = 'ecoverage_offer_cache_' + id;
+  const cachedRaw = localStorage.getItem(cacheKey);
+  let cached = null;
+  try { cached = cachedRaw ? JSON.parse(cachedRaw) : null; } catch(e) {}
 
-  // ── Always fetch fresh from Supabase ──
+  // ── Step 1: Render from cache instantly ──
+  if (cached?.data?.v) {
+    const offerName = cached.name || '';
+    cached.data.header = cached.data.header || {};
+    if (!cached.data.header.title) cached.data.header.title = offerName;
+    const prev = _restoring; _restoring = true;
+    restoreData(cached.data);
+    _restoring = prev;
+    runPostInit(cached.data);
+    _offerSyncNamePill(offerName);
+    if (window._loaderDone) window._loaderDone();
+  }
+
+  // ── Step 2: Check if cache is stale (lightweight query) ──
+  const { data: meta } = await sb.from('offers').select('updated_at').eq('id', id).single();
+  const cacheTime = cached?.updated_at;
+  const freshTime = meta?.updated_at;
+
+  if (cacheTime && freshTime && cacheTime === freshTime) {
+    // Cache is fresh — no need to refetch
+    const sel = document.getElementById('offer-select');
+    if (sel) sel.value = id;
+    localStorage.setItem('ecoverage_last_offer_name', cached.name || '');
+    localStorage.setItem('ecoverage_last_offer_id', id);
+    setTimeout(() => { _offerSwitching = false; }, 0);
+    return;
+  }
+
+  // ── Step 3: Cache is stale — fetch full data ──
   const { data, error } = await sb.from('offers').select('*').eq('id', id).single();
-
   if (error || !data) {
-    // Fallback to cache only if Supabase fails
-    const cachedRaw = localStorage.getItem(cacheKey);
-    if (cachedRaw) {
-      try {
-        const cached = JSON.parse(cachedRaw);
-        if (cached.data && cached.data.v) {
-          const offerName = cached.name || '';
-          cached.data.header = cached.data.header || {};
-          if (!cached.data.header.title) cached.data.header.title = offerName;
-          const prev = _restoring; _restoring = true;
-          restoreData(cached.data);
-          _restoring = prev;
-          runPostInit(cached.data);
-          _offerSyncNamePill(offerName);
-        }
-      } catch(e) {}
-    } else {
-      showToast('Failed to load offer', 'error');
-    }
+    if (!cached) showToast('Failed to load offer', 'error');
     _offerSwitching = false;
     if (window._loaderDone) window._loaderDone();
     return;
   }
 
-  // Update cache with fresh data
+  // Update cache
   try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch(e) {}
 
   const sel = document.getElementById('offer-select');
@@ -11087,7 +11101,10 @@ window.addEventListener('load', () => {
   const loader = document.getElementById('liftiq-loader');
   const onRealSite = window.location.hostname.includes('github.io') ||
     window.location.hostname.includes('mkruchan');
-  if (!onRealSite) { loader.classList.add('hidden'); return; }
+  const lastId = localStorage.getItem('ecoverage_last_offer_id');
+  const cached = lastId && localStorage.getItem('ecoverage_offer_cache_' + lastId);
+  // Hide loader if we have cache (will show instantly, then check freshness in background)
+  if (!onRealSite || cached) { loader.classList.add('hidden'); return; }
 
   const bar = document.getElementById('loader-bar');
   let prog = 0;
