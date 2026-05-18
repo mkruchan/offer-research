@@ -10021,7 +10021,6 @@ function snapForUndo() {
   const data = collectData();
   const snapKey = JSON.stringify(data);
   if (snapKey === lastSnap) return;
-  // Add timestamp and version number
   data._snapAt = new Date().toISOString();
   data._versionNum = undoStack.length + 1;
   const snap = JSON.stringify(data);
@@ -10029,6 +10028,38 @@ function snapForUndo() {
   if (undoStack.length > 100) undoStack.shift();
   redoStack.length = 0;
   lastSnap = snapKey;
+  // Save to cloud history
+  cloudHistorySave(data);
+}
+
+async function cloudHistorySave(data) {
+  if (!_currentOfferId) return;
+  const sb = sbGetClient();
+  if (!sb) return;
+  try {
+    await sb.from('offer_history').insert({ offer_id: _currentOfferId, data });
+  } catch(e) { console.warn('History save failed:', e); }
+}
+
+async function cloudHistoryLoad() {
+  if (!_currentOfferId) return;
+  const sb = sbGetClient();
+  if (!sb) return;
+  try {
+    const { data, error } = await sb.from('offer_history')
+      .select('id,data,created_at')
+      .eq('offer_id', _currentOfferId)
+      .order('created_at', { ascending: false })
+      .limit(50);
+    if (error || !data) return;
+    // Merge cloud history into undoStack (newest first → reverse for stack)
+    undoStack.length = 0;
+    [...data].reverse().forEach(row => {
+      const snap = typeof row.data === 'string' ? row.data : JSON.stringify(row.data);
+      undoStack.push(snap);
+    });
+    lastSnap = undoStack.length ? undoStack[undoStack.length - 1] : null;
+  } catch(e) { console.warn('History load failed:', e); }
 }
 
 function scheduleSnap() {
@@ -10217,8 +10248,9 @@ function openHistoryPanel() {
     list.innerHTML = uniqueSnaps.map((snap, i) => {
       const data = JSON.parse(snap);
       const title = data.header?.title || data.meta?.analyst || 'Version';
-      const time = data._snapAt ? new Date(data._snapAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}) : '';
-      const date = data._snapAt ? new Date(data._snapAt).toLocaleDateString([], {month:'short',day:'numeric'}) : '';
+      const snapTime = data._snapAt || data.created_at;
+      const time = snapTime ? new Date(snapTime).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}) : '';
+      const date = snapTime ? new Date(snapTime).toLocaleDateString([], {month:'short',day:'numeric'}) : '';
       const rowCount = (data.ads?.length||0) + (data.traffic?.length||0) + (data.funnels?.length||0);
       const versionLabel = i === 0 ? '⭐ Latest' : 'Version ' + (uniqueSnaps.length - i);
       const timeLabel = date && time ? `${date} ${time}` : 'Unknown time';
@@ -10653,6 +10685,8 @@ async function offerLoad(id, showMsg) {
   _offerSyncNamePill(offerName);
   if (window._loaderDone) window._loaderDone();
   if (showMsg) showToast('Loaded: ' + offerName, 'success');
+  // Load cloud history in background
+  cloudHistoryLoad();
 }
 
 function clearPageData(title) {
