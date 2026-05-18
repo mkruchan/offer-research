@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <script>
-    // Redirect /creative-research/obd-fuel → /creative-research/?offer=obd-fuel
+    // Redirect /creative-research/<slug> → /creative-research/?offer=<slug>
     const base = '/creative-research/';
     const slug = window.location.pathname.replace(base, '').replace(/\/$/, '').replace(/\.html$/, '');
     if (slug && slug !== 'index') {
