@@ -8178,6 +8178,7 @@ function initTableCellExpand() {
     if (ta._expandInit) return;
     if (ta.closest('.comment-popup')) return;
     if (ta.closest('.link-input-wrap')) return;
+    if (ta.id === 'notes-takeaways' || ta.id === 'notes-actions') return;
     ta._expandInit = true;
     ta.addEventListener('click', function(e) {
       const val = this.value.trim();
