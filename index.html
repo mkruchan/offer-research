@@ -7167,8 +7167,11 @@ function buildAdsGrid() {
     const imp      = getText(tds[14]);
     const notes    = getText(tds[15]);
 
+    const isVideoSrc = thumbUrl && /\.(mp4|webm|mov)(\?|$)/i.test(thumbUrl);
     const imgHtml = thumbSrc
-      ? `<img class="grid-card-img" src="${thumbUrl||thumbSrc}" onclick="event.stopPropagation();openLightbox('${thumbUrl||thumbSrc}')" title="View" style="cursor:pointer;">`
+      ? (isVideoSrc
+          ? `<video class="grid-card-img" src="${thumbUrl}" onclick="event.stopPropagation();openLightbox('${thumbUrl}')" title="View" style="cursor:pointer;object-fit:cover;width:100%;height:100%;" muted playsinline preload="metadata"></video>`
+          : `<img class="grid-card-img" src="${thumbUrl||thumbSrc}" onclick="event.stopPropagation();openLightbox('${thumbUrl||thumbSrc}')" title="View" style="cursor:pointer;">`)
       : `<div class="grid-card-img-empty" onclick="event.stopPropagation();document.getElementById('grid-upload-${idx}').click()" style="cursor:pointer;" title="Click to upload image">
           <div style="display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text-secondary);">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
@@ -7288,7 +7291,7 @@ async function gridUploadMedia(input, rowIdx) {
     const data = await res.json();
     const url = data.secure_url;
     const thumbUrl = isVideo
-      ? url.replace('/upload/', '/upload/w_800,h_800,c_fill,so_0/').replace(/\.[^.]+$/, '.jpg')
+      ? url
       : url.replace('/upload/', '/upload/w_800,h_800,c_fill,q_auto:best/');
 
     const pd = document.getElementById(previewId);
@@ -9212,7 +9215,7 @@ async function handleMediaUpload(input, previewId) {
     const data = await res.json();
     const url = data.secure_url;
     const thumbUrl = isVideo
-      ? url.replace('/upload/', '/upload/w_800,h_800,c_fill,so_0/').replace(/\.[^.]+$/, '.jpg')
+      ? url
       : url.replace('/upload/', '/upload/w_800,h_800,c_fill,q_auto:best/');
 
     preview.innerHTML = `<div class="media-preview">
