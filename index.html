@@ -10752,26 +10752,10 @@ async function offerLoad(id, showMsg) {
     if (!data.data.header.title) data.data.header.title = offerName;
     localStorage.setItem('ecoverage_title', data.data.header.title || offerName);
     localStorage.setItem('ecoverage_title_url', data.data.header.titleUrl || '');
-    // Guard: if local LS_LOCAL has a newer savedAt than Supabase data, don't overwrite — local data is more recent
-    const localRaw = (() => { try { return JSON.parse(localStorage.getItem(LS_LOCAL)||'{}'); } catch { return {}; } })();
-    const localSavedAt = localRaw.savedAt ? new Date(localRaw.savedAt) : new Date(0);
-    const remoteSavedAt = data.updated_at ? new Date(data.updated_at) : new Date(0);
-    const localIsNewer = localSavedAt > remoteSavedAt && localRaw.v;
-    if (localIsNewer) {
-      // Local has unsaved changes newer than Supabase — restore from local instead
-      console.warn('[offerLoad] Local data is newer than Supabase — keeping local version', { localSavedAt, remoteSavedAt });
-      const prev = _restoring; _restoring = true;
-      restoreData(localRaw);
-      _restoring = prev;
-      setTimeout(() => { runPostInit(localRaw); _offerSwitching = false; }, 0);
-      // Trigger a save to sync local → Supabase
-      setTimeout(() => scheduleSave(), 500);
-    } else {
-      const prev = _restoring; _restoring = true;
-      restoreData(data.data);
-      _restoring = prev;
-      setTimeout(() => { runPostInit(data.data); _offerSwitching = false; }, 0);
-    }
+    const prev = _restoring; _restoring = true;
+    restoreData(data.data);
+    _restoring = prev;
+    setTimeout(() => { runPostInit(data.data); _offerSwitching = false; }, 0);
   } else {
     clearPageData(offerName);
     setTimeout(() => { _offerSwitching = false; }, 0);
@@ -10992,7 +10976,7 @@ function offerRename() {
         await sb.from('offers').update({ data: pageData, updated_at: savedAt }).eq('id', _currentOfferId);
         const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
         setStatus('saved', '☁️ Saved · ' + t);
-        // Update cache with the freshly saved data so next page load renders instantly without stale data risk
+        // Update cache with freshly saved data so cache stays in sync with Supabase
         try {
           const existingCache = JSON.parse(localStorage.getItem('ecoverage_offer_cache_' + _currentOfferId) || '{}');
           localStorage.setItem('ecoverage_offer_cache_' + _currentOfferId, JSON.stringify({ ...existingCache, data: pageData, updated_at: savedAt }));
