@@ -3648,6 +3648,25 @@
       resize: none !important;
       vertical-align: top !important;
     }
+    #traffic-table td:nth-child(3) textarea,
+    #traffic-table td:nth-child(4) textarea,
+    #traffic-table td:nth-child(6) textarea {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 0 10px !important;
+      line-height: 52px !important;
+      font-size: 12.5px !important;
+      color: #374151 !important;
+      border: none !important;
+      border-right: none !important;
+      background: transparent !important;
+      resize: none !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      box-sizing: border-box !important;
+    }
 
     /* Ads & funnels — consistent top-aligned padding */
     #ads-table tbody td input,
@@ -8503,7 +8522,8 @@ function renderOffersList(filter) {
     const date = (() => {
       // Prefer the analyst-set report date from meta — check cache first
       const cached = localStorage.getItem('ecoverage_offer_cache_' + o.id);
-      const metaDate = (cached ? JSON.parse(cached).data?.meta?.date : null) || o.data?.meta?.date || o.data?.header?.date || '';
+      const activeMeta = (isActive ? document.getElementById('meta-date')?.value : null) || '';
+      const metaDate = activeMeta || (cached ? JSON.parse(cached).data?.meta?.date : null) || o.data?.meta?.date || o.data?.header?.date || '';
       if (metaDate) {
         const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         let day, mon, year;
