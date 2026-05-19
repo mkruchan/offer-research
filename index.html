@@ -7609,7 +7609,12 @@ function gridCardDelete(idx, tableId) {
   const row = tbody.querySelectorAll('tr')[idx];
   if (!row) return;
   const mediaCell = row.querySelector('.media-cell');
-  const hasCreative = mediaCell && (mediaCell.querySelector('.media-preview') || mediaCell.querySelector('.cloudinary-url'));
+  const hasCreative = mediaCell && (
+    mediaCell.querySelector('.media-preview') ||
+    mediaCell.querySelector('.cloudinary-url') ||
+    mediaCell.querySelector('img.media-thumb') ||
+    mediaCell.querySelector('video.media-thumb')
+  );
   if (hasCreative) {
     showConfirmDialog(
       'Delete this creative?',
@@ -7619,6 +7624,8 @@ function gridCardDelete(idx, tableId) {
         if (preview) preview.remove();
         const urlInput = mediaCell.querySelector('.cloudinary-url');
         if (urlInput) urlInput.remove();
+        // Also clear any standalone thumb not inside .media-preview
+        mediaCell.querySelectorAll('img.media-thumb, video.media-thumb').forEach(el => el.remove());
         scheduleSave();
         rebuildGridForTable(tableId);
       }
