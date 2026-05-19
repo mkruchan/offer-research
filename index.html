@@ -7855,7 +7855,7 @@ function openAdDetail(rowIdx) {
   })()
     : `<div class="adp-img-wrap" onclick="document.getElementById('adp-img-file-${rowIdx}').click()" style="cursor:pointer;"><div class="adp-img-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Click to upload creative</span></div><input type="file" id="adp-img-file-${rowIdx}" accept="image/*,video/*" style="display:none;" onchange="gridUploadMedia(this,${rowIdx})"></div>`;
 
-  const copyFields = [['Angle / Hook',angle,10],['Headline',headline,11],['CTA',cta,12]];
+  const copyFields = [['Angle / Hook',angle,10],['Headline',headline,11],['CTA',cta,12],['Title',title,13]];
 
   // Smart flex weights: Angle/Headline get more space, CTA/Title less
   const copyWeights = {'Angle / Hook':1,'Headline':1,'CTA':1,'Title':1};
