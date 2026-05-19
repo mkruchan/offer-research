@@ -6853,7 +6853,7 @@ function buildTrafficGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+    return `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
       <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
@@ -6866,7 +6866,7 @@ function buildTrafficGrid() {
   };
 
   const getText = td => td?.querySelector('textarea')?.value || '';
-  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
     <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
@@ -6875,7 +6875,7 @@ function buildTrafficGrid() {
       onblur="gcHandleBlur(event,this)"
     >${val||''}</div>
   </div>`;
-  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
     <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
@@ -6928,7 +6928,7 @@ function buildFunnelsGrid() {
   const getText = td => td?.querySelector('textarea')?.value || '';
   const getLinkHref = td => { const a = td?.querySelector('a.link-chip'); const h = a?.href||''; return (h && h.startsWith('http')) ? h : ''; };
   const mkLink = (url, label) => url ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
-  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
     <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
@@ -6937,7 +6937,7 @@ function buildFunnelsGrid() {
       onblur="gcHandleBlur(event,this)"
     >${val||''}</div>
   </div>`;
-  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
     <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
@@ -6965,7 +6965,7 @@ function buildFunnelsGrid() {
     const ft = fv ? (funnelSel.options[funnelSel.selectedIndex]?.text || fv) : '';
     const fc = FUNNEL_CHIP_COLORS[fv] || {bg:'#E5E7EB',color:'#374151'};
     const funnelChipHtml = fv ? `<span style="background:${fc.bg};color:${fc.color};border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;letter-spacing:0.02em;white-space:nowrap;">${ft}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
-    const typeChip = funnelSel ? `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+    const typeChip = funnelSel ? `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
       <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">Funnel type</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${funnelChipHtml}
@@ -7014,7 +7014,7 @@ function buildAdsGrid() {
 
   const mkLink = (url, label) => url && url !== '#' && !url.endsWith('#')
     ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
-  const field = (label, val, taSelector, rowIdx, h=52) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+  const field = (label, val, taSelector, rowIdx, h=52) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
     <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
       style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
@@ -7080,7 +7080,7 @@ function buildAdsGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+    return `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
       <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
