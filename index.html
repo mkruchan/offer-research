@@ -8525,7 +8525,7 @@ function renderOffersList(filter) {
       // Prefer the analyst-set report date from meta — check cache first
       const cached = localStorage.getItem('ecoverage_offer_cache_' + o.id);
       const activeMeta = (isActive ? document.getElementById('meta-date')?.value : null) || '';
-      const metaDate = activeMeta || (cached ? JSON.parse(cached).data?.meta?.date : null) || o.data?.meta?.date || o.data?.header?.date || '';
+      const metaDate = activeMeta || o.date || (cached ? JSON.parse(cached).data?.meta?.date : null) || o.data?.meta?.date || o.data?.header?.date || '';
       if (metaDate) {
         const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         let day, mon, year;
@@ -10954,7 +10954,8 @@ function offerSearchFilter(q) {
   results.innerHTML = filtered.map(o => {
     const active = o.id === _currentOfferId;
     const activeMeta = (active ? document.getElementById('meta-date')?.value : null) || '';
-    const metaDate = activeMeta || o.data?.meta?.date;
+    const cached = localStorage.getItem('ecoverage_offer_cache_' + o.id);
+    const metaDate = activeMeta || o.date || (cached ? JSON.parse(cached).data?.meta?.date : null) || o.data?.meta?.date || '';
     let date = '';
     if (metaDate) {
       // Handle dd.mm.yyyy format
