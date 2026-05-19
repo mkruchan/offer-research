@@ -2993,7 +2993,7 @@
     tbody tr { border-bottom: 1px solid #f3f4f6 !important; transition: background .1s !important; }
     tbody tr:hover { background: #ffffff !important; }
     /* Only apply generous padding to traffic table — ads/funnels use position:absolute cells */
-    #traffic-table tbody td { padding: 0 !important; font-size: 13px !important; color: #374151 !important; vertical-align: middle !important; }
+    #traffic-table tbody td { padding: 0 !important; font-size: 12px !important; color: #374151 !important; vertical-align: middle !important; }
     #traffic-table td.frozen-num, #traffic-table td.row-num { color: #374151 !important; }
     #traffic-table td.frozen-num input, #traffic-table td.row-num input, #traffic-table td.frozen-num * { color: #374151 !important; }
     #ads-table tbody td,
@@ -3612,22 +3612,15 @@
     /* Text inputs & textareas — vertically centered in cell */
     #traffic-table tbody td input,
     #traffic-table tbody td textarea {
-      padding: 0 14px !important;
-      font-size: 13px !important;
+      padding: 14px 10px;
+      font-size: 12.5px !important;
       color: #374151 !important;
       border: none !important;
       border-right: none !important;
       background: transparent !important;
-      height: 52px !important;
-      line-height: 52px !important;
+      line-height: 1.45 !important;
       display: block !important;
       width: 100% !important;
-    }
-    #traffic-table tbody td textarea {
-      line-height: 1.5 !important;
-      padding-top: 16px !important;
-      padding-bottom: 16px !important;
-      height: 52px !important;
       resize: none !important;
     }
 
@@ -4200,8 +4193,8 @@
     }
     /* Override any inline paddingTop set by centerTextareas */
     #ads-table tbody td textarea,
-    #traffic-table tbody td textarea,
     #funnels-table tbody td textarea { padding-top: 10px !important; }
+    /* traffic-table textarea padding is handled dynamically by centerTextareas() */
 
     /* Frozen num — sticky for ads and funnels */
     #ads-table,
@@ -9669,7 +9662,23 @@ function autoGrow(el) {
 function _growOne(el) { autoGrow(el); }
 
 function centerTextareas() {
-  // Disabled — use consistent top-aligned padding via CSS instead
+  // Vertically center text in absolute-positioned textareas by adjusting padding-top
+  document.querySelectorAll('#traffic-table tbody td, #ads-table tbody td, #funnels-table tbody td').forEach(td => {
+    const ta = td.querySelector('textarea');
+    if (!ta) return;
+    if (getComputedStyle(ta).position !== 'absolute') return;
+    const cellH = td.offsetHeight;
+    const lineH = parseFloat(getComputedStyle(ta).lineHeight) || 18;
+    const text = ta.value || '';
+    const lines = text ? text.split('\n').length : 1;
+    const contentH = lines * lineH;
+    const sidePad = 10;
+    const topPad = Math.max(sidePad, (cellH - contentH) / 2);
+    ta.style.paddingTop = topPad + 'px';
+    ta.style.paddingBottom = topPad + 'px';
+    ta.style.paddingLeft = sidePad + 'px';
+    ta.style.paddingRight = sidePad + 'px';
+  });
 }
 
 function resizeAllInputs() {
