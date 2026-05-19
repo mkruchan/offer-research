@@ -108,6 +108,22 @@
       --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
       --shadow-lg: 0 8px 28px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.05);
     }
+    /* Dark mode scrollbars */
+    body.force-dark ::-webkit-scrollbar { width: 8px; height: 8px; }
+    body.force-dark ::-webkit-scrollbar-track { background: #18181b; }
+    body.force-dark ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; border: 2px solid #18181b; }
+    body.force-dark ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+    body.force-dark ::-webkit-scrollbar-corner { background: #18181b; }
+    @media (prefers-color-scheme: dark) {
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: #18181b; }
+      ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; border: 2px solid #18181b; }
+      ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+      ::-webkit-scrollbar-corner { background: #18181b; }
+    }
+
+    body.force-dark .new-offer-btn { background: var(--blue-bg) !important; color: var(--blue-text) !important; }
+    @media (prefers-color-scheme: dark) { .new-offer-btn { background: var(--blue-bg) !important; color: var(--blue-text) !important; } }
     body.force-dark {
       --bg-primary: #18181b; --bg-secondary: #18181b; --bg-tertiary: #27272a; --surface: #18181b;
       --text-primary: #f4f4f5; --text-secondary: #a1a1aa; --text-muted: #71717a;
@@ -6037,7 +6053,7 @@
     <div class="offers-panel-empty">Loading offers…</div>
   </div>
   <div style="padding:10px 8px;border-top:1px solid var(--border-light, #e5e7eb);flex-shrink:0;box-sizing:border-box;height:56px;display:flex;align-items:center;">
-    <button onclick="closeOffersPanel();offerNewToggle()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 10px;font-size:13px;font-weight:500;font-family:inherit;border-radius:8px;background:#2563eb;color:#fff;border:none;cursor:pointer;box-sizing:border-box;">
+    <button onclick="closeOffersPanel();offerNewToggle()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 10px;font-size:13px;font-weight:500;font-family:inherit;border-radius:8px;background:var(--accent);color:#fff;border:none;cursor:pointer;box-sizing:border-box;" class="new-offer-btn">
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg>
       New offer
     </button>
@@ -6508,7 +6524,7 @@
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
     </button>
   </div>
-  <div style="padding:10px 18px 6px;font-size:11px;color:var(--text-muted);border-bottom:1px solid #f0f0f0;flex-shrink:0);">
+  <div style="padding:10px 18px 6px;font-size:11px;color:var(--text-muted);border-bottom:1px solid var(--border-light);flex-shrink:0;">
     Last <strong id="history-count">0</strong> versions saved
   </div>
   <div id="history-list" class="offers-panel-list" style="padding:10px;gap:6px;display:flex;flex-direction:column;"></div>
