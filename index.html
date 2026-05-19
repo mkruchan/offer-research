@@ -8024,24 +8024,26 @@ function initTableCellExpand() {
     table.querySelectorAll('tbody textarea').forEach(ta => {
       if (ta._expandInit) return;
       ta._expandInit = true;
-      ta.addEventListener('dblclick', function(e) {
+      ta.addEventListener('click', function(e) {
         const val = this.value.trim();
         if (!val || val === this.placeholder) return;
+        const el = this;
+        const isClipped = el.scrollHeight > el.offsetHeight + 2 || el.scrollWidth > el.offsetWidth + 2;
+        if (!isClipped) return;
         e.stopPropagation();
         const pop = document.getElementById('tc-expand-popover');
-        const rect = this.getBoundingClientRect();
+        const rect = el.getBoundingClientRect();
         pop.textContent = val;
         pop.style.display = 'block';
-        // Position below or above the cell
         const spaceBelow = window.innerHeight - rect.bottom;
         if (spaceBelow > 120) {
           pop.style.top = (rect.bottom + 6) + 'px';
+          pop.style.bottom = '';
         } else {
           pop.style.top = '';
           pop.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
         }
         pop.style.left = Math.min(rect.left, window.innerWidth - 380) + 'px';
-        pop.style.bottom = spaceBelow > 120 ? '' : (window.innerHeight - rect.top + 6) + 'px';
       });
     });
   });
@@ -9156,6 +9158,7 @@ async function handleMediaUpload(input, previewId) {
     }
     hiddenUrl.value = url;
     scheduleSave();
+    snapForUndoForced();
     showToast('Uploaded successfully!', 'success');
   } catch(e) {
     // Cloudinary failed — try Supabase Storage as fallback
@@ -9188,6 +9191,7 @@ async function handleMediaUpload(input, previewId) {
         }
         hiddenUrl.value = url;
         scheduleSave();
+        snapForUndoForced();
         showToast('Uploaded via backup storage!', 'success');
       } catch(sbE) {
         console.error('Supabase Storage upload also failed:', sbE);
@@ -9224,6 +9228,7 @@ function removeMedia(uid, previewId) {
         <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
       </svg>Image/Video</button>`;
     scheduleSave();
+    snapForUndoForced();
   }
 }
 
@@ -9286,6 +9291,7 @@ function saveLinkChip(btn) {
   wrap.querySelector('.link-chip-wrap-display').style.display = 'flex';
   wrap.querySelector('.link-input-wrap').classList.remove('editing');
   scheduleSave();
+  snapForUndoForced();
 }
 function cancelLinkEdit(btn) {
   const wrap = btn.closest('.link-chip-wrap');
@@ -10042,6 +10048,21 @@ function snapForUndo() {
   const data = collectData();
   const snapKey = JSON.stringify(data);
   if (snapKey === lastSnap) return;
+
+  // ── Content diff threshold: only save cloud version if 50+ chars changed ──
+  const CLOUD_DIFF_THRESHOLD = 50;
+  const shouldSaveCloud = !lastSnap || Math.abs(snapKey.length - lastSnap.length) >= CLOUD_DIFF_THRESHOLD ||
+    (() => {
+      let diff = 0;
+      const a = lastSnap || '', b = snapKey;
+      const len = Math.max(a.length, b.length);
+      for (let i = 0; i < len; i++) {
+        if (a[i] !== b[i]) diff++;
+        if (diff >= CLOUD_DIFF_THRESHOLD) return true;
+      }
+      return false;
+    })();
+
   data._snapAt = new Date().toISOString();
   data._versionNum = undoStack.length + 1;
   const snap = JSON.stringify(data);
@@ -10049,7 +10070,21 @@ function snapForUndo() {
   if (undoStack.length > 100) undoStack.shift();
   redoStack.length = 0;
   lastSnap = snapKey;
-  // Save to cloud history
+
+  if (shouldSaveCloud) cloudHistorySave(data);
+}
+
+// Force cloud history save (for media/link changes)
+function snapForUndoForced() {
+  const data = collectData();
+  const snapKey = JSON.stringify(data);
+  data._snapAt = new Date().toISOString();
+  data._versionNum = undoStack.length + 1;
+  const snap = JSON.stringify(data);
+  undoStack.push(snap);
+  if (undoStack.length > 100) undoStack.shift();
+  redoStack.length = 0;
+  lastSnap = snapKey;
   cloudHistorySave(data);
 }
 
