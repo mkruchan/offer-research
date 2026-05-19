@@ -122,8 +122,9 @@
       ::-webkit-scrollbar-corner { background: #18181b; }
     }
 
-    body.force-dark .new-offer-btn { background: var(--blue-bg) !important; color: var(--blue-text) !important; }
-    @media (prefers-color-scheme: dark) { .new-offer-btn { background: var(--blue-bg) !important; color: var(--blue-text) !important; } }
+    .new-offer-btn { background: var(--accent); color: #fff; }
+    body.force-dark .new-offer-btn { background: var(--blue-bg); color: var(--blue-text); }
+    @media (prefers-color-scheme: dark) { .new-offer-btn { background: var(--blue-bg); color: var(--blue-text); } }
     body.force-dark {
       --bg-primary: #18181b; --bg-secondary: #18181b; --bg-tertiary: #27272a; --surface: #18181b;
       --text-primary: #f4f4f5; --text-secondary: #a1a1aa; --text-muted: #71717a;
@@ -6053,7 +6054,7 @@
     <div class="offers-panel-empty">Loading offers…</div>
   </div>
   <div style="padding:10px 8px;border-top:1px solid var(--border-light, #e5e7eb);flex-shrink:0;box-sizing:border-box;height:56px;display:flex;align-items:center;">
-    <button onclick="closeOffersPanel();offerNewToggle()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 10px;font-size:13px;font-weight:500;font-family:inherit;border-radius:8px;background:var(--accent);color:#fff;border:none;cursor:pointer;box-sizing:border-box;" class="new-offer-btn">
+    <button onclick="closeOffersPanel();offerNewToggle()" class="new-offer-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 10px;font-size:13px;font-weight:500;font-family:inherit;border-radius:8px;border:none;cursor:pointer;box-sizing:border-box;">
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg>
       New offer
     </button>
@@ -6282,7 +6283,7 @@
         </button>
         <button onmousedown="event.stopPropagation();offerNewToggle()"
                 id="offer-new-trigger"
-                style="display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 16px;font-size:13px;font-weight:600;font-family:inherit;border-radius:8px;background:#2563eb;color:#fff;border:none;cursor:pointer;flex-shrink:0;">
+                class="new-offer-btn" style="display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 16px;font-size:13px;font-weight:600;font-family:inherit;border-radius:8px;border:none;cursor:pointer;flex-shrink:0;">
           <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2">
             <path d="M8 2v12M2 8h12" stroke-linecap="round"/>
           </svg>
