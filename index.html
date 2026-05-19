@@ -8492,7 +8492,7 @@ function renderOffersList(filter) {
         if (!isNaN(d)) return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
         return metaDate;
       }
-      if (o.updated_at) return new Date(o.updated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      if (o.updated_at) return new Date(o.updated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'America/New_York' });
       return 'Local';
     })();
     return `<div class="offers-panel-item${isActive ? ' active' : ''}" onclick="selectOfferFromPanel('${o.id}')">
