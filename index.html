@@ -6616,7 +6616,7 @@
   <div class="adp-header">
     <div class="adp-header-top">
       <div class="adp-header-left">
-        <div class="adp-title" id="adp-offer" title="Click to rename offer" style="cursor:pointer;" onclick="adpStartRenameOffer(this)">—</div>
+        <div class="adp-title" id="adp-offer">—</div>
         <div class="adp-subtitle" id="adp-source-chips">—</div>
       </div>
       <div class="adp-header-actions">
@@ -8254,6 +8254,18 @@ function adpToggleEdit() {
   btn.innerHTML = _adpEditMode
     ? `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Editing`
     : `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Edit`;
+  const offerTitle = document.getElementById('adp-offer');
+  if (offerTitle) {
+    if (_adpEditMode) {
+      offerTitle.title = 'Click to rename offer';
+      offerTitle.style.cursor = 'pointer';
+      offerTitle.onclick = () => adpStartRenameOffer(offerTitle);
+    } else {
+      offerTitle.title = '';
+      offerTitle.style.cursor = 'default';
+      offerTitle.onclick = null;
+    }
+  }
   document.getElementById('adp-save-bar').classList.toggle('visible', _adpEditMode);
   document.querySelectorAll('.adp-copy-block[data-field]').forEach(el => {
     el.contentEditable = _adpEditMode ? 'true' : 'false';
