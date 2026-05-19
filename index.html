@@ -8054,6 +8054,42 @@ function initTableCellExpand() {
       });
     });
   });
+
+  // Also apply to all other textareas (notes, key takeaways, etc.)
+  document.querySelectorAll('textarea').forEach(ta => {
+    if (ta._expandInit) return;
+    if (ta.closest('.comment-popup')) return;
+    if (ta.closest('.link-input-wrap')) return;
+    ta._expandInit = true;
+    ta.addEventListener('click', function(e) {
+      const val = this.value.trim();
+      if (!val || val === this.placeholder) return;
+      const prevOverflow = this.style.overflow;
+      const prevHeight = this.style.height;
+      this.style.overflow = 'hidden';
+      this.style.height = 'auto';
+      const trueScrollH = this.scrollHeight;
+      this.style.height = prevHeight;
+      this.style.overflow = prevOverflow;
+      const isClipped = trueScrollH > this.offsetHeight + 2;
+      if (!isClipped) return;
+      e.stopPropagation();
+      const pop = document.getElementById('tc-expand-popover');
+      if (!pop) return;
+      const rect = this.getBoundingClientRect();
+      pop.textContent = val;
+      pop.style.display = 'block';
+      const spaceBelow = window.innerHeight - rect.bottom;
+      if (spaceBelow > 120) {
+        pop.style.top = (rect.bottom + 6) + 'px';
+        pop.style.bottom = '';
+      } else {
+        pop.style.top = '';
+        pop.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+      }
+      pop.style.left = Math.min(rect.left, window.innerWidth - 380) + 'px';
+    });
+  });
 }
 
 // Re-init after table rows are added
@@ -9636,7 +9672,13 @@ function centerTextareas() {
   // Disabled — use consistent top-aligned padding via CSS instead
 }
 
-function resizeAllInputs() { document.querySelectorAll('tbody td textarea').forEach(ta => { autoGrow(ta); ta.style.marginTop = ''; }); }
+function resizeAllInputs() {
+  document.querySelectorAll('tbody td textarea').forEach(ta => {
+    autoGrow(ta);
+    ta.scrollTop = 0;
+    ta.style.marginTop = '';
+  });
+}
 function renumberTable(id) {
   document.getElementById(id).querySelectorAll('tr').forEach((r,i) => {
     const inp = r.querySelector('.row-num input'); if (inp) inp.value = i+1;
@@ -9910,7 +9952,10 @@ function restoreData(data) {
   if (data.savedSites) {
     try { localStorage.setItem('ecoverage_saved_sites', JSON.stringify(data.savedSites)); } catch(e) {}
   }
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(data.colWidths); restoreRowHeights(data.rowHeights); setTimeout(resizeAllInputs, 50); centerTextareas(); initAllDragReorder(); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(data.colWidths); restoreRowHeights(data.rowHeights); setTimeout(resizeAllInputs, 50); centerTextareas(); initAllDragReorder();
+    // Reset all textarea scroll positions to show text from start
+    setTimeout(() => { document.querySelectorAll('textarea').forEach(ta => { ta.scrollTop = 0; }); }, 100);
+  }, 0);
   return true;
 }
 
