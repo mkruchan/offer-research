@@ -573,7 +573,6 @@
     tbody tr:last-child td { border-bottom: none; }
     tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: middle; overflow: hidden; }
     tbody td textarea:focus {
-      position: relative !important;
       z-index: 50 !important;
     }
     tbody td input, tbody td select, tbody td textarea {
@@ -585,7 +584,7 @@
       line-height: 1.5; display: block; width: 100%; align-self: center;
     }
     tbody td textarea { white-space: pre-wrap; word-break: break-word; }
-    tbody td textarea:focus { position: relative; z-index: 10; }
+    tbody td textarea:focus { z-index: 10; }
     tbody td input:focus, tbody td select:focus, tbody td textarea:focus { background: var(--bg-secondary); }
     tbody td:last-child input, tbody td:last-child select, tbody td:last-child textarea { border-right: none; }
 
@@ -6854,8 +6853,8 @@ function buildTrafficGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-      <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;margin-top:6px;">${label}</div>
+    return `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+      <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
         <select data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
@@ -6867,19 +6866,19 @@ function buildTrafficGrid() {
   };
 
   const getText = td => td?.querySelector('textarea')?.value || '';
-  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;margin-top:6px;">${label}</div>
+  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
+      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
       onclick="gcExpand(this)"
       oninput="gridInlineEdit(this);this.style.color='var(--text-primary)';this.style.opacity='1';"
       onblur="gcHandleBlur(event,this)"
     >${val||''}</div>
   </div>`;
-  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;margin-top:6px;">${label}</div>
+  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
+      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
       onclick="gcExpand(this)"
       oninput="gridInlineEdit(this);this.style.color='var(--text-primary)';this.style.opacity='1';"
       onblur="gcHandleBlur(event,this)"
@@ -6929,19 +6928,19 @@ function buildFunnelsGrid() {
   const getText = td => td?.querySelector('textarea')?.value || '';
   const getLinkHref = td => { const a = td?.querySelector('a.link-chip'); const h = a?.href||''; return (h && h.startsWith('http')) ? h : ''; };
   const mkLink = (url, label) => url ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
-  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;margin-top:6px;">${label}</div>
+  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
+      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
       onclick="gcExpand(this)"
       oninput="gridInlineEdit(this);this.style.color='var(--text-primary)';this.style.opacity='1';"
       onblur="gcHandleBlur(event,this)"
     >${val||''}</div>
   </div>`;
-  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;margin-top:6px;">${label}</div>
+  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
+      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
       onclick="gcExpand(this)"
       oninput="gridInlineEdit(this);this.style.color='var(--text-primary)';this.style.opacity='1';"
       onblur="gcHandleBlur(event,this)"
@@ -6966,8 +6965,8 @@ function buildFunnelsGrid() {
     const ft = fv ? (funnelSel.options[funnelSel.selectedIndex]?.text || fv) : '';
     const fc = FUNNEL_CHIP_COLORS[fv] || {bg:'#E5E7EB',color:'#374151'};
     const funnelChipHtml = fv ? `<span style="background:${fc.bg};color:${fc.color};border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;letter-spacing:0.02em;white-space:nowrap;">${ft}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
-    const typeChip = funnelSel ? `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-      <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;margin-top:6px;">Funnel type</div>
+    const typeChip = funnelSel ? `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+      <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">Funnel type</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${funnelChipHtml}
         <select data-row="${idx}" data-table="funnels-body" data-tdidx="5"
@@ -7015,10 +7014,10 @@ function buildAdsGrid() {
 
   const mkLink = (url, label) => url && url !== '#' && !url.endsWith('#')
     ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
-  const field = (label, val, taSelector, rowIdx, h=52) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:${h}px;min-height:${h}px;max-height:${h}px;overflow:hidden;flex-shrink:0;">
-    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;margin-top:6px;">${label}</div>
+  const field = (label, val, taSelector, rowIdx, h=52) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+    <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
-      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
+      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
       onclick="gcExpand(this)"
       oninput="gridInlineEdit(this);this.style.color='var(--text-primary)';this.style.opacity='1';"
       onblur="gcHandleBlur(event,this)"
@@ -7081,8 +7080,8 @@ function buildAdsGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-      <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;margin-top:6px;">${label}</div>
+    return `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;border-bottom:1px solid #f3f4f6;flex-shrink:0;">
+      <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
         <select data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
@@ -7105,12 +7104,12 @@ function buildAdsGrid() {
     const thumbImg = tr.querySelector('img.media-thumb');
     const thumbSrc = thumbImg ? thumbImg.src : '';
     const thumbUrl = thumbImg ? (thumbImg.getAttribute('onclick')?.match(/window\.open\('([^']+)'/)?.[1] || thumbSrc) : '';
-    const angle    = getText(tds[11]);
-    const headline = getText(tds[12]);
-    const cta      = getText(tds[13]);
-    const title    = getText(tds[14]);
-    const imp      = getText(tds[15]);
-    const notes    = getText(tds[16]);
+    const angle    = getText(tds[10]);
+    const headline = getText(tds[11]);
+    const cta      = getText(tds[12]);
+    const title    = getText(tds[13]);
+    const imp      = getText(tds[14]);
+    const notes    = getText(tds[15]);
 
     const imgHtml = thumbSrc
       ? `<img class="grid-card-img" src="${thumbSrc}" onclick="event.stopPropagation();openLightbox('${thumbUrl||thumbSrc}')" title="View" style="cursor:pointer;">`
@@ -7169,12 +7168,12 @@ function buildAdsGrid() {
           <span class="card-expand-label">Angle, Headline, Notes…</span>
         </div>
         <div class="card-expandable" style="display:none;">
-        ${field('Angle / Hook', angle, 'td:nth-child(12)', idx, 70)}
-        ${field('Headline', headline, 'td:nth-child(13)', idx, 80)}
-        ${field('CTA', cta, 'td:nth-child(14)', idx)}
-        ${field('Title', title, 'td:nth-child(15)', idx, 70)}
-        ${field('Imp. Estimate', imp, 'td:nth-child(16)', idx)}
-        ${field('Notes', notes, 'td:nth-child(17)', idx, 80)}
+        ${field('Angle / Hook', angle, 'td:nth-child(11)', idx, 70)}
+        ${field('Headline', headline, 'td:nth-child(12)', idx, 80)}
+        ${field('CTA', cta, 'td:nth-child(13)', idx)}
+        ${field('Title', title, 'td:nth-child(14)', idx, 70)}
+        ${field('Imp. Estimate', imp, 'td:nth-child(15)', idx)}
+        ${field('Notes', notes, 'td:nth-child(16)', idx, 80)}
         </div>
       </div>
     </div>`;
@@ -7768,15 +7767,14 @@ function openAdDetail(rowIdx) {
   const landingUrl = _adpGetLink(tds[6]);
   const spyUrl     = _adpGetLink(tds[7]);
   const fanUrl     = _adpGetLink(tds[8]);
-  const creativeUrl= _adpGetLink(tds[10]);
   const thumbImg   = tr.querySelector('img.media-thumb');
   const thumbSrc   = thumbImg?.src || '';
-  const angle      = _adpGetText(tds[11]);
-  const headline   = _adpGetText(tds[12]);
-  const cta        = _adpGetText(tds[13]);
-  const title      = _adpGetText(tds[14]);
-  const imp        = _adpGetText(tds[15]);
-  const notes      = _adpGetText(tds[16]);
+  const angle      = _adpGetText(tds[10]);
+  const headline   = _adpGetText(tds[11]);
+  const cta        = _adpGetText(tds[12]);
+  const title      = _adpGetText(tds[13]);
+  const imp        = _adpGetText(tds[14]);
+  const notes      = _adpGetText(tds[15]);
 
   const sourceVal  = _adpGetSelectVal(tds[2]) || '';
   const formatVal  = _adpGetSelectVal(tds[3]) || '';
@@ -7799,7 +7797,7 @@ function openAdDetail(rowIdx) {
   })()
     : `<div class="adp-img-wrap" onclick="document.getElementById('adp-img-file-${rowIdx}').click()" style="cursor:pointer;"><div class="adp-img-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Click to upload creative</span></div><input type="file" id="adp-img-file-${rowIdx}" accept="image/*,video/*" style="display:none;" onchange="gridUploadMedia(this,${rowIdx})"></div>`;
 
-  const copyFields = [['Angle / Hook',angle,11],['Headline',headline,12],['CTA',cta,13],['Title',title,14]];
+  const copyFields = [['Angle / Hook',angle,10],['Headline',headline,11],['CTA',cta,12],['Title',title,13]];
 
   // Smart flex weights: Angle/Headline get more space, CTA/Title less
   const copyWeights = {'Angle / Hook':1,'Headline':1,'CTA':1,'Title':1};
@@ -7826,7 +7824,7 @@ function openAdDetail(rowIdx) {
             ${_adpSelectRow('Format', formatVal, FORMAT_OPTS, 3, _ADP_FORMAT_COLORS)}
             ${_adpEditRow('Geo', geo, 4)}
             ${_adpEditRow('Lifecycle', lifecycle, 5)}
-            ${_adpEditRow('Impressions', imp, 15)}
+            ${_adpEditRow('Impressions', imp, 14)}
           </div>
         </div>
       </div>
@@ -7844,7 +7842,7 @@ function openAdDetail(rowIdx) {
         }).join('')}
         <div style="flex:1;display:flex;flex-direction:column;min-height:0;">
           <div class="adp-section-header" style="padding:4px 0 4px;flex-shrink:0;"><div class="adp-section-title">Notes</div></div>
-          <div class="adp-copy-block" data-field="notes" data-td="16" contenteditable="false"
+          <div class="adp-copy-block" data-field="notes" data-td="15" contenteditable="false"
                style="flex:1;min-height:100px;overflow-y:auto;">${notes || '<span class="adp-copy-placeholder">Add notes…</span>'}</div>
         </div>
       </div>
