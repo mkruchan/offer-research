@@ -7288,8 +7288,8 @@ async function gridUploadMedia(input, rowIdx) {
     const data = await res.json();
     const url = data.secure_url;
     const thumbUrl = isVideo
-      ? url.replace('/upload/', '/upload/w_144,h_108,c_fill,so_0/').replace(/\.[^.]+$/, '.jpg')
-      : url.replace('/upload/', '/upload/w_144,h_108,c_fill,q_80/');
+      ? url.replace('/upload/', '/upload/w_800,h_800,c_fill,so_0/').replace(/\.[^.]+$/, '.jpg')
+      : url.replace('/upload/', '/upload/w_800,h_800,c_fill,q_auto:best/');
 
     const pd = document.getElementById(previewId);
     if (pd) {
@@ -7338,10 +7338,11 @@ function initGridDrag(gridId, tableId) {
     const handle = card.querySelector('.grid-drag-handle');
     if (!handle) return;
 
-    // Enable drag only when handle is pressed
-    handle.addEventListener('mousedown', () => { card.draggable = true; });
-    handle.addEventListener('touchstart', () => { card.draggable = true; }, { passive: true });
-    document.addEventListener('mouseup', () => { if (!dragSrc) card.draggable = false; }, { once: false });
+    handle.addEventListener('mousedown', () => {
+      card.draggable = true;
+      const onUp = () => { if (!dragSrc) card.draggable = false; document.removeEventListener('mouseup', onUp); };
+      document.addEventListener('mouseup', onUp);
+    });
 
     card.addEventListener('dragstart', (e) => {
       dragSrc = card;
@@ -9210,8 +9211,8 @@ async function handleMediaUpload(input, previewId) {
     const data = await res.json();
     const url = data.secure_url;
     const thumbUrl = isVideo
-      ? url.replace('/upload/', '/upload/w_144,h_108,c_fill,so_0/').replace(/\.[^.]+$/, '.jpg')
-      : url.replace('/upload/', '/upload/w_144,h_108,c_fill,q_80/');
+      ? url.replace('/upload/', '/upload/w_800,h_800,c_fill,so_0/').replace(/\.[^.]+$/, '.jpg')
+      : url.replace('/upload/', '/upload/w_800,h_800,c_fill,q_auto:best/');
 
     preview.innerHTML = `<div class="media-preview">
       <img class="media-thumb" src="${thumbUrl}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
@@ -10004,7 +10005,7 @@ function restoreTable(id, rows, fn, keys) {
         const fi = cell.querySelector('input[type="file"]'), pd = cell.querySelector('[id$="-preview"]');
         if (pd && fi) {
           if (v.t === 'cloudinary' && v.url) {
-            const thumb = v.thumb || v.url.replace('/upload/', '/upload/w_144,h_108,c_fill,q_80/');
+            const thumb = v.thumb || v.url.replace('/upload/', '/upload/w_800,h_800,c_fill,q_auto:best/');
             pd.innerHTML = `<div class="media-preview">
               <img class="media-thumb" src="${thumb}" onclick="openLightbox('${v.url}')" style="cursor:pointer" title="View">
               <button class="media-remove" onclick="removeMedia('${fi.id}','${pd.id}')">×</button>
