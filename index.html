@@ -7612,8 +7612,8 @@ function gridCardDelete(idx, tableId) {
   const hasCreative = mediaCell && (mediaCell.querySelector('.media-preview') || mediaCell.querySelector('.cloudinary-url'));
   if (hasCreative) {
     showConfirmDialog(
-      'Remove creative?',
-      'This will remove the image/video from this ad. The card will remain.',
+      'Delete this creative?',
+      'The image/video will be removed from this ad. The card will remain.',
       function() {
         const preview = mediaCell.querySelector('.media-preview');
         if (preview) preview.remove();
@@ -7625,7 +7625,7 @@ function gridCardDelete(idx, tableId) {
     );
   } else {
     showConfirmDialog(
-      'Delete this ad?',
+      'Delete this card?',
       'This ad will be permanently removed.',
       function() {
         const rows = tbody.querySelectorAll('tr');
@@ -8275,20 +8275,23 @@ function openFunnelDetail(rowIdx) {
 }
 
 function adpRemoveCreative(rowIdx) {
-  const tbody = document.getElementById('ads-body');
-  if (!tbody) return;
-  const row = tbody.querySelectorAll('tr')[rowIdx];
-  if (!row) return;
-  const mediaCell = row.querySelector('.media-cell');
-  if (!mediaCell) return;
-  const previewId = mediaCell.querySelector('[id$="-preview"]')?.id;
-  const fileId = mediaCell.querySelector('input[type="file"]')?.id;
-  if (previewId && fileId) removeMedia(fileId, previewId);
-  // Rebuild the panel to reflect the removal
-  setTimeout(() => {
-    const wrap = document.querySelector('.adp-img-wrap');
-    if (wrap) wrap.outerHTML = `<div class="adp-img-wrap" onclick="document.getElementById('adp-img-file-${rowIdx}').click()" style="cursor:pointer;"><div class="adp-img-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Click to upload creative</span></div><input type="file" id="adp-img-file-${rowIdx}" accept="image/*,video/*" style="display:none;" onchange="gridUploadMedia(this,${rowIdx})"></div>`;
-  }, 100);
+  showConfirmDialog(
+    'Delete this creative?',
+    'The image/video will be removed from this ad. The card will remain.',
+    function() {
+      const tbody = document.getElementById('ads-body');
+      if (!tbody) return;
+      const row = tbody.querySelectorAll('tr')[rowIdx];
+      if (!row) return;
+      const mediaCell = row.querySelector('.media-cell');
+      if (!mediaCell) return;
+      const previewId = mediaCell.querySelector('[id$="-preview"]')?.id;
+      const fileId = mediaCell.querySelector('input[type="file"]')?.id;
+      if (previewId && fileId) removeMedia(fileId, previewId);
+      scheduleSave();
+      rebuildGridForTable('ads-body');
+    }
+  );
 }
 
 function adpStartRenameOffer(el) {
