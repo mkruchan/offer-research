@@ -10006,9 +10006,8 @@ function restoreTable(id, rows, fn, keys) {
         const fi = cell.querySelector('input[type="file"]'), pd = cell.querySelector('[id$="-preview"]');
         if (pd && fi) {
           if (v.t === 'cloudinary' && v.url) {
-            const thumb = v.thumb || v.url.replace('/upload/', '/upload/w_800,h_800,c_fill,q_auto:best/');
             pd.innerHTML = `<div class="media-preview">
-              <img class="media-thumb" src="${thumb}" onclick="openLightbox('${v.url}')" style="cursor:pointer" title="View">
+              <img class="media-thumb" src="${v.url}" onclick="openLightbox('${v.url}')" style="cursor:pointer" title="View">
               <button class="media-remove" onclick="removeMedia('${fi.id}','${pd.id}')">×</button>
             </div><input type="hidden" class="cloudinary-url" value="${v.url}">`;
           } else if (v.t === 'img' && v.src) {
@@ -10954,7 +10953,8 @@ function offerSearchFilter(q) {
   }
   results.innerHTML = filtered.map(o => {
     const active = o.id === _currentOfferId;
-    const metaDate = o.data?.meta?.date;
+    const activeMeta = (active ? document.getElementById('meta-date')?.value : null) || '';
+    const metaDate = activeMeta || o.data?.meta?.date;
     let date = '';
     if (metaDate) {
       // Handle dd.mm.yyyy format
