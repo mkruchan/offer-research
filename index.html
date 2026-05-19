@@ -3612,7 +3612,7 @@
     /* Text inputs & textareas — vertically centered in cell */
     #traffic-table tbody td input,
     #traffic-table tbody td textarea {
-      padding: 14px 10px;
+      padding: 8px 10px !important;
       font-size: 12.5px !important;
       color: #374151 !important;
       border: none !important;
@@ -3622,9 +3622,10 @@
       display: block !important;
       width: 100% !important;
       resize: none !important;
+      vertical-align: top !important;
     }
 
-    /* Ads & funnels — position:absolute textareas already fill cell */
+    /* Ads & funnels — consistent top-aligned padding */
     #ads-table tbody td input,
     #ads-table tbody td textarea,
     #funnels-table tbody td input,
@@ -3634,19 +3635,10 @@
       border: none !important;
       border-right: none !important;
       background: transparent !important;
-      padding: 0 10px !important;
-      display: flex !important;
-      align-items: center !important;
-    }
-    /* Absolute textareas — use flex centering via padding */
-    #ads-table td:nth-child(5) textarea,
-    #ads-table td:nth-child(6) textarea,
-    #ads-table td.frozen-offer textarea,
-    #funnels-table td:nth-child(3) textarea,
-    #funnels-table td:nth-child(4) textarea,
-    #funnels-table td:nth-child(6) textarea {
-      padding: 14px 10px !important;
+      padding: 8px 10px !important;
+      display: block !important;
       line-height: 1.45 !important;
+      vertical-align: top !important;
     }
 
     /* Actions column — consistent across all tables */
@@ -4191,10 +4183,7 @@
       word-break: break-word !important;
       vertical-align: top !important;
     }
-    /* Override any inline paddingTop set by centerTextareas */
-    #ads-table tbody td textarea,
-    #funnels-table tbody td textarea { padding-top: 10px !important; }
-    /* traffic-table textarea padding is handled dynamically by centerTextareas() */
+    /* Uniform padding — all tables top-aligned */
 
     /* Frozen num — sticky for ads and funnels */
     #ads-table,
@@ -9662,23 +9651,7 @@ function autoGrow(el) {
 function _growOne(el) { autoGrow(el); }
 
 function centerTextareas() {
-  // Vertically center text in absolute-positioned textareas by adjusting padding-top
-  document.querySelectorAll('#traffic-table tbody td, #ads-table tbody td, #funnels-table tbody td').forEach(td => {
-    const ta = td.querySelector('textarea');
-    if (!ta) return;
-    if (getComputedStyle(ta).position !== 'absolute') return;
-    const cellH = td.offsetHeight;
-    const lineH = parseFloat(getComputedStyle(ta).lineHeight) || 18;
-    const text = ta.value || '';
-    const lines = text ? text.split('\n').length : 1;
-    const contentH = lines * lineH;
-    const sidePad = 10;
-    const topPad = Math.max(sidePad, (cellH - contentH) / 2);
-    ta.style.paddingTop = topPad + 'px';
-    ta.style.paddingBottom = topPad + 'px';
-    ta.style.paddingLeft = sidePad + 'px';
-    ta.style.paddingRight = sidePad + 'px';
-  });
+  // no-op — padding handled by CSS
 }
 
 function resizeAllInputs() {
