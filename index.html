@@ -3567,12 +3567,20 @@
     #funnels-table tbody tr:last-child { border-bottom: none !important; }
     #traffic-table tbody tr:hover td,
     #ads-table tbody tr:hover td,
-    #funnels-table tbody tr:hover td { background: #ffffff !important; }
+    #funnels-table tbody tr:hover td { background: #EFF6FF !important; }
     #traffic-table tbody tr:hover td.frozen-num,
     #ads-table tbody tr:hover td.frozen-num,
     #funnels-table tbody tr:hover td.frozen-num,
     #ads-table tbody tr:hover td.frozen-offer,
-    #funnels-table tbody tr:hover td.frozen-offer { background: #ffffff !important; }
+    #funnels-table tbody tr:hover td.frozen-offer { background: #EFF6FF !important; }
+    body.force-light #traffic-table tbody tr:hover td,
+    body.force-light #ads-table tbody tr:hover td,
+    body.force-light #funnels-table tbody tr:hover td { background: #EFF6FF !important; }
+    body.force-light #traffic-table tbody tr:hover td.frozen-num,
+    body.force-light #ads-table tbody tr:hover td.frozen-num,
+    body.force-light #funnels-table tbody tr:hover td.frozen-num,
+    body.force-light #ads-table tbody tr:hover td.frozen-offer,
+    body.force-light #funnels-table tbody tr:hover td.frozen-offer { background: #EFF6FF !important; }
 
     /* All cells — no borders between columns, clean */
     #traffic-table tbody td,
@@ -4370,7 +4378,7 @@
     body.force-dark #ads-table tbody tr:hover td.frozen-offer,
     body.force-dark #funnels-table tbody tr:hover td.frozen-offer,
     body.force-dark #ads-table tbody tr:hover td.frozen-num,
-    body.force-dark #funnels-table tbody tr:hover td.frozen-num { background: #27272a !important; }
+    body.force-dark #funnels-table tbody tr:hover td.frozen-num { background: rgba(37,99,235,0.1) !important; }
 
 
 
@@ -5341,7 +5349,11 @@
     #ads-table tbody tr:hover td.frozen-num,
     #ads-table tbody tr:hover td.frozen-offer,
     #funnels-table tbody tr:hover td.frozen-num,
-    #funnels-table tbody tr:hover td.frozen-offer { background: #ffffff !important; }
+    #funnels-table tbody tr:hover td.frozen-offer { background: #EFF6FF !important; }
+    body.force-light #ads-table tbody tr:hover td.frozen-num,
+    body.force-light #ads-table tbody tr:hover td.frozen-offer,
+    body.force-light #funnels-table tbody tr:hover td.frozen-num,
+    body.force-light #funnels-table tbody tr:hover td.frozen-offer { background: #EFF6FF !important; }
     /* Dark mode */
     body.force-dark #ads-table td.frozen-num,
     body.force-dark #funnels-table td.frozen-num { background: #18181b !important; }
@@ -5354,7 +5366,7 @@
     body.force-dark #ads-table tbody tr:hover td.frozen-num,
     body.force-dark #ads-table tbody tr:hover td.frozen-offer,
     body.force-dark #funnels-table tbody tr:hover td.frozen-num,
-    body.force-dark #funnels-table tbody tr:hover td.frozen-offer { background: #27272a !important; }
+    body.force-dark #funnels-table tbody tr:hover td.frozen-offer { background: rgba(37,99,235,0.1) !important; }
     body.force-dark .ds-sidebar-logo svg path,
     body.force-dark .ds-sidebar-logo svg rect,
     body.force-dark .ds-sidebar-logo svg polygon { fill: #ffffff !important; }
@@ -8485,15 +8497,18 @@ function renderOffersList(filter) {
       const cached = localStorage.getItem('ecoverage_offer_cache_' + o.id);
       const metaDate = (cached ? JSON.parse(cached).data?.meta?.date : null) || o.data?.meta?.date || o.data?.header?.date || '';
       if (metaDate) {
-        const parts = metaDate.split('.');
-        let d;
-        if (parts.length === 3 && parts[0].length <= 2) {
-          d = new Date(+parts[2], +parts[1]-1, +parts[0]);
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        let day, mon, year;
+        const dotParts = metaDate.split('.');
+        const dashParts = metaDate.split('-');
+        if (dotParts.length === 3 && dotParts[0].length <= 2) {
+          day = +dotParts[0]; mon = +dotParts[1]-1; year = +dotParts[2];
+        } else if (dashParts.length === 3 && dashParts[0].length === 4) {
+          day = +dashParts[2]; mon = +dashParts[1]-1; year = +dashParts[0];
         } else {
-          d = new Date(metaDate);
+          return metaDate;
         }
-        if (!isNaN(d)) return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-        return metaDate;
+        return `${day} ${months[mon]} ${year}`;
       }
       if (o.updated_at) return new Date(o.updated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'America/New_York' });
       return 'Local';
