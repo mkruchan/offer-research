@@ -10958,15 +10958,18 @@ function offerSearchFilter(q) {
     const metaDate = activeMeta || o.date || (cached ? JSON.parse(cached).data?.meta?.date : null) || o.data?.meta?.date || '';
     let date = '';
     if (metaDate) {
-      // Handle dd.mm.yyyy format
-      const parts = metaDate.split('.');
-      let d;
-      if (parts.length === 3 && parts[0].length <= 2) {
-        d = new Date(+parts[2], +parts[1]-1, +parts[0]);
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const dot = metaDate.split('.');
+      const dash = metaDate.split('-');
+      let day, mon, year;
+      if (dot.length === 3 && dot[0].length <= 2) {
+        day = +dot[0]; mon = +dot[1]-1; year = +dot[2];
+      } else if (dash.length === 3 && dash[0].length === 4) {
+        day = +dash[2]; mon = +dash[1]-1; year = +dash[0];
       } else {
-        d = new Date(metaDate);
+        date = metaDate;
       }
-      date = isNaN(d) ? metaDate : d.toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'});
+      if (!date) date = `${day} ${months[mon]} ${year}`;
     } else {
       date = new Date(o.updated_at).toLocaleDateString(undefined, {month:'short', day:'numeric'});
     }
