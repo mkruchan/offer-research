@@ -6925,20 +6925,16 @@ function buildTrafficGrid() {
   const getText = td => td?.querySelector('textarea')?.value || '';
   const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
     <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
-    <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
+    <div class="gce" contenteditable="false" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
+      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:default;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
       onclick="gcExpand(this)"
-      oninput="gridInlineEdit(this);this.style.color='var(--text-primary)';this.style.opacity='1';"
-      onblur="gcHandleBlur(event,this)"
     >${val||''}</div>
   </div>`;
   const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
     <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
-    <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
+    <div class="gce" contenteditable="false" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
+      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:default;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
       onclick="gcExpand(this)"
-      oninput="gridInlineEdit(this);this.style.color='var(--text-primary)';this.style.opacity='1';"
-      onblur="gcHandleBlur(event,this)"
     >${val||''}</div>
   </div>`;
 
@@ -6987,20 +6983,16 @@ function buildFunnelsGrid() {
   const mkLink = (url, label) => url ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
   const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
     <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
-    <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
+    <div class="gce" contenteditable="false" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
+      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:default;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
       onclick="gcExpand(this)"
-      oninput="gridInlineEdit(this);this.style.color='var(--text-primary)';this.style.opacity='1';"
-      onblur="gcHandleBlur(event,this)"
     >${val||''}</div>
   </div>`;
   const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
     <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
-    <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
-      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
+    <div class="gce" contenteditable="false" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
+      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:default;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
       onclick="gcExpand(this)"
-      oninput="gridInlineEdit(this);this.style.color='var(--text-primary)';this.style.opacity='1';"
-      onblur="gcHandleBlur(event,this)"
     >${val||''}</div>
   </div>`;
 
@@ -7051,7 +7043,6 @@ function buildFunnelsGrid() {
             ? `<a href="${linkUrl}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:3px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>Funnel link</a>`
             : `<span style="font-size:12px;color:var(--text-secondary);opacity:0.5;flex:1;">Funnel link</span>`
           }
-          <button onclick="gridEditLink(this,${idx},'funnels-body',2)" title="Edit URL" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.5;padding:1px;line-height:1;flex-shrink:0;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg></button>
         </div>
       </div>
     </div>`;
@@ -7073,11 +7064,9 @@ function buildAdsGrid() {
     ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
   const field = (label, val, taSelector, rowIdx, h=52) => `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
     <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
-    <div class="gce" contenteditable="true" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
-      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:pointer;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
+    <div class="gce" contenteditable="false" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
+      style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;overflow:hidden;cursor:default;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};font-size:13px;line-height:1.45;"
       onclick="gcExpand(this)"
-      oninput="gridInlineEdit(this);this.style.color='var(--text-primary)';this.style.opacity='1';"
-      onblur="gcHandleBlur(event,this)"
     >${val||''}</div>
   </div>`;
 
@@ -7173,7 +7162,7 @@ function buildAdsGrid() {
       ? (isVideoSrc
           ? `<video class="grid-card-img" src="${thumbUrl}" onclick="event.stopPropagation();openLightbox('${thumbUrl}')" title="View" style="cursor:pointer;object-fit:cover;width:100%;height:100%;" muted playsinline preload="metadata"></video>`
           : `<img class="grid-card-img" src="${thumbUrl||thumbSrc}" onclick="event.stopPropagation();openLightbox('${thumbUrl||thumbSrc}')" title="View" style="cursor:pointer;">`)
-      : `<div class="grid-card-img-empty" onclick="event.stopPropagation();document.getElementById('grid-upload-${idx}').click()" style="cursor:pointer;" title="Click to upload image">
+      : `<div class="grid-card-img-empty" style="cursor:default;">
           <div style="display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text-secondary);">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
             <span style="font-size:10px;">Add creative</span>
@@ -7188,7 +7177,6 @@ function buildAdsGrid() {
           ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
           : `<span style="font-size:13px;color:var(--text-secondary);opacity:0.4;">${label}</span>`
         }
-        <button onclick="gridEditLink(this,${idx},'ads-body',${tdIdx})" title="Edit URL" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.4;padding:1px;line-height:1;flex-shrink:0;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.4'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg></button>
       </div>`;
     };
     const linkBlock = `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">
