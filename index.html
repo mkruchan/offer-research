@@ -550,8 +550,8 @@
       user-select: none;
       width: 90px;
     }
-    .row-num { width: 28px; text-align: center; color: #9ca3af; vertical-align: middle; padding: 0; }
-    .row-num input { padding: 2px 0; width: 100%; text-align: center; border-right: none; color: #9ca3af; }
+    .row-num { width: 28px; text-align: center; color: #374151; vertical-align: middle; padding: 0; }
+    .row-num input { padding: 2px 0; width: 100%; text-align: center; border-right: none; color: #374151; }
     #ads-table td.frozen-num .row-num input, #ads-table td.row-num input,
     #traffic-table td.frozen-num .row-num input, #traffic-table td.row-num input,
     #funnels-table td.frozen-num .row-num input, #funnels-table td.row-num input { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
@@ -2994,8 +2994,8 @@
     tbody tr:hover { background: #ffffff !important; }
     /* Only apply generous padding to traffic table — ads/funnels use position:absolute cells */
     #traffic-table tbody td { padding: 0 !important; font-size: 13px !important; color: #374151 !important; vertical-align: middle !important; }
-    #traffic-table td.frozen-num, #traffic-table td.row-num { color: #9ca3af !important; }
-    #traffic-table td.frozen-num input, #traffic-table td.row-num input { color: #9ca3af !important; }
+    #traffic-table td.frozen-num, #traffic-table td.row-num { color: #374151 !important; }
+    #traffic-table td.frozen-num input, #traffic-table td.row-num input, #traffic-table td.frozen-num * { color: #374151 !important; }
     #ads-table tbody td,
     #funnels-table tbody td { padding: 0 !important; font-size: 12px !important; color: #374151 !important; vertical-align: middle !important; }
 
@@ -4198,6 +4198,10 @@
       word-break: break-word !important;
       vertical-align: top !important;
     }
+    /* Override any inline paddingTop set by centerTextareas */
+    #ads-table tbody td textarea,
+    #traffic-table tbody td textarea,
+    #funnels-table tbody td textarea { padding-top: 10px !important; }
 
     /* Frozen num — sticky for ads and funnels */
     #ads-table,
@@ -5540,7 +5544,7 @@
     #ads-table td.frozen-num,
     #ads-table td.frozen-num input,
     #funnels-table td.frozen-num,
-    #funnels-table td.frozen-num input { color: #a1a1aa !important; }
+    #funnels-table td.frozen-num input { color: #374151 !important; }
     body.force-dark td.frozen-num,
     body.force-dark td.frozen-num input,
     body.force-dark .row-num,
@@ -7149,15 +7153,15 @@ function buildAdsGrid() {
     const linkBlock = `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">
       <div style="display:flex;gap:8px;justify-content:space-between;">
         <div style="flex:1;">${mkEditableLink(landingUrl,'Landing',7)}</div>
-        <div style="flex:1;">${mkEditableLink(fanUrl,'Fan page',8)}</div>
-        <div style="flex:1;">${mkEditableLink(spyUrl,'Spy tool',7)}</div>
+        <div style="flex:1;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
+        <div style="flex:1;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
       </div>
     </div>`;
 
     const linkBlockTop = `<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border-light);display:grid;grid-template-columns:1fr 1fr;gap:3px 6px;">
         <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(landingUrl,'Landing',7)}</div>
-        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(spyUrl,'Spy tool',7)}</div>
-        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(fanUrl,'Fan page',8)}</div>
+        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
+        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
         <div></div>
       </div>`;
 
@@ -7828,8 +7832,8 @@ function openAdDetail(rowIdx) {
           <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Links</div></div>
           <div class="adp-lp-card">
             ${_adpLpRow(landingUrl,'Landing Page',_lpIcons.lp,'var(--blue-bg)',null,6)}
-            ${_adpLpRow(fanUrl,'Fan Page',_lpIcons.fan,'var(--purple-bg)',null,8)}
             ${_adpLpRow(spyUrl,'Spy Tool',_lpIcons.spy,'var(--teal-bg)',null,7)}
+            ${_adpLpRow(fanUrl,'Fan Page',_lpIcons.fan,'var(--purple-bg)',null,8)}
           </div>
         </div>
         <div class="adp-section" style="margin:0;">
@@ -9472,13 +9476,16 @@ function restoreRowHeights(cloudData) {
       if (!data[id]) return;
       table.querySelectorAll('tbody tr').forEach((tr, i) => {
         if (data[id][i]) {
-          tr.style.height = data[id][i];
-          tr.style.maxHeight = data[id][i];
+          tr.style.minHeight = data[id][i];
+          tr.style.height = '';
+          tr.style.maxHeight = '';
           tr.querySelectorAll('td').forEach(td => {
-            td.style.maxHeight = data[id][i];
-            td.style.overflow = 'hidden';
+            td.style.maxHeight = '';
+            td.style.overflow = '';
           });
-          tr.querySelectorAll('textarea').forEach(ta => { ta.style.height = data[id][i]; });
+          tr.querySelectorAll('textarea').forEach(ta => {
+            ta.style.minHeight = data[id][i];
+          });
           tr.querySelectorAll('img.media-thumb').forEach(img => { img.style.maxHeight = data[id][i]; });
         }
       });
@@ -9607,21 +9614,13 @@ function autoGrow(el) {
   if (getComputedStyle(el).position === 'absolute') return;
   el.style.height = 'auto';
   el.style.height = el.scrollHeight + 'px';
+  el.scrollTop = 0;
 }
 
 function _growOne(el) { autoGrow(el); }
 
 function centerTextareas() {
-  const sel = '#ads-body td.frozen-offer textarea, #ads-body td:nth-child(5) textarea, #ads-body td:nth-child(6) textarea, #traffic-body td:nth-child(3) textarea, #traffic-body td:nth-child(4) textarea, #traffic-body td:nth-child(6) textarea, #funnels-body td:nth-child(3) textarea, #funnels-body td:nth-child(4) textarea, #funnels-body td:nth-child(6) textarea';
-  document.querySelectorAll(sel).forEach(ta => {
-    ta.style.paddingTop = '';
-    const tdH = ta.closest('td').offsetHeight;
-    const lineH = parseInt(getComputedStyle(ta).lineHeight) || 14;
-    const lines = ta.value ? ta.value.split('\n').length : 1;
-    const contentH = lines * lineH;
-    const pad = Math.max(3, Math.floor((tdH - contentH) / 2));
-    ta.style.paddingTop = pad + 'px';
-  });
+  // Disabled — use consistent top-aligned padding via CSS instead
 }
 
 function resizeAllInputs() { document.querySelectorAll('tbody td textarea').forEach(ta => { autoGrow(ta); ta.style.marginTop = ''; }); }
@@ -9837,7 +9836,7 @@ function collectData() {
     colWidths: (function() { const d={}; document.querySelectorAll('table').forEach(t => { const id=t.id||'table'; d[id]={}; t.querySelectorAll('thead th').forEach((th,i)=>{ if(th.style.width) d[id][i]=th.style.width; }); if(t.style.width) d[id]['_tableW']=t.style.width; }); return d; })(),
     rowHeights: (function() { const d={}; document.querySelectorAll('table').forEach(t => { const id=t.id||'table'; d[id]={}; t.querySelectorAll('tbody tr').forEach((tr,i)=>{ if(tr.style.height) d[id][i]=tr.style.height; }); }); return d; })(),
     traffic: collectTable('traffic-body', ['num','source','geo','qty','type','notes']),
-    ads: collectTable('ads-body', ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']),
+    ads: collectTable('ads-body', ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','angle','headline','cta','title','imp','notes']),
     funnels: collectTable('funnels-body', ['num','link','advertiser','geo','type','obs']),
     savedSites: JSON.parse(localStorage.getItem('ecoverage_saved_sites') || '{}'),
   };
@@ -9893,12 +9892,12 @@ function restoreData(data) {
   if (data.notes?.takeawaysH) { const c = document.getElementById('notes-card-takeaways'); if(c) c.style.height = data.notes.takeawaysH; }
   if (data.notes?.actionsH) { const c = document.getElementById('notes-card-actions'); if(c) c.style.height = data.notes.actionsH; }
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','qty','type','notes']);
-  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']);
+  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','angle','headline','cta','title','imp','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','type','obs']);
   if (data.savedSites) {
     try { localStorage.setItem('ecoverage_saved_sites', JSON.stringify(data.savedSites)); } catch(e) {}
   }
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(data.colWidths); restoreRowHeights(data.rowHeights); centerTextareas(); initAllDragReorder(); }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(data.colWidths); restoreRowHeights(data.rowHeights); setTimeout(resizeAllInputs, 50); centerTextareas(); initAllDragReorder(); }, 0);
   return true;
 }
 
