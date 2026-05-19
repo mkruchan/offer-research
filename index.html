@@ -5955,7 +5955,23 @@
       0%, 100% { transform: scale(1); opacity: 1; }
       50%       { transform: scale(1.4); opacity: 0.7; }
     }
-    .autosave-dot.saving { animation: savePulse 0.8s ease infinite; }</style>
+    .autosave-dot.saving { animation: savePulse 0.8s ease infinite; }
+
+    /* ── Traffic table: header color fix + frozen # column ── */
+    #traffic-table thead th { color: #475569 !important; }
+    body.force-dark #traffic-table thead th { color: #a1a1aa !important; }
+    @media (prefers-color-scheme: dark) {
+      body:not(.force-light) #traffic-table thead th { color: #a1a1aa !important; }
+    }
+    #traffic-table thead th.frozen-num,
+    #traffic-table tbody td.frozen-num {
+      position: sticky !important;
+      left: 0 !important;
+      z-index: 22 !important;
+    }
+    #traffic-table thead th.frozen-num { background: var(--bg-secondary) !important; }
+    body.force-dark #traffic-table thead th.frozen-num { background: #18181b !important; }
+    </style>
 <body>
 
 <div id="liftiq-loader">
