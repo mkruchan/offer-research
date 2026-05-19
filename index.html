@@ -8027,12 +8027,19 @@ function initTableCellExpand() {
       ta.addEventListener('click', function(e) {
         const val = this.value.trim();
         if (!val || val === this.placeholder) return;
-        const el = this;
-        const isClipped = el.scrollHeight > el.offsetHeight + 2 || el.scrollWidth > el.offsetWidth + 2;
+        // Temporarily remove overflow to get true scrollHeight
+        const prevOverflow = this.style.overflow;
+        const prevHeight = this.style.height;
+        this.style.overflow = 'hidden';
+        this.style.height = 'auto';
+        const trueScrollH = this.scrollHeight;
+        this.style.height = prevHeight;
+        this.style.overflow = prevOverflow;
+        const isClipped = trueScrollH > this.offsetHeight + 2;
         if (!isClipped) return;
         e.stopPropagation();
         const pop = document.getElementById('tc-expand-popover');
-        const rect = el.getBoundingClientRect();
+        const rect = this.getBoundingClientRect();
         pop.textContent = val;
         pop.style.display = 'block';
         const spaceBelow = window.innerHeight - rect.bottom;
