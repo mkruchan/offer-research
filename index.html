@@ -7158,8 +7158,8 @@ function buildAdsGrid() {
     const landingUrl = getLinkHref(tds[6]);
     const spyUrl   = getLinkHref(tds[7]);
     const fanUrl   = getLinkHref(tds[8]);
-    const thumbImg = tr.querySelector('img.media-thumb');
-    const thumbSrc = thumbImg ? thumbImg.src : '';
+    const thumbImg = tr.querySelector('img.media-thumb, video.media-thumb');
+    const thumbSrc = thumbImg ? (thumbImg.src || thumbImg.currentSrc || '') : '';
     const thumbUrl = thumbImg ? (thumbImg.getAttribute('onclick')?.match(/openLightbox\('([^']+)'\)/)?.[1] || thumbSrc) : '';
     const angle    = getText(tds[10]);
     const headline = getText(tds[11]);
@@ -7168,7 +7168,7 @@ function buildAdsGrid() {
     const imp      = getText(tds[14]);
     const notes    = getText(tds[15]);
 
-    const isVideoSrc = thumbUrl && /\.(mp4|webm|mov)(\?|$)/i.test(thumbUrl);
+    const isVideoSrc = (thumbImg?.tagName === 'VIDEO') || (thumbUrl && /\.(mp4|webm|mov)(\?|$)/i.test(thumbUrl));
     const imgHtml = thumbSrc
       ? (isVideoSrc
           ? `<video class="grid-card-img" src="${thumbUrl}" onclick="event.stopPropagation();openLightbox('${thumbUrl}')" title="View" style="cursor:pointer;object-fit:cover;width:100%;height:100%;" muted playsinline preload="metadata"></video>`
@@ -7312,8 +7312,11 @@ async function gridUploadMedia(input, rowIdx) {
 
     const pd = document.getElementById(previewId);
     if (pd) {
+      const mediaTag = isVideo
+        ? `<video class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View" muted playsinline preload="metadata" controls></video>`
+        : `<img class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">`;
       pd.innerHTML = `<div class="media-preview">
-        <img class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
+        ${mediaTag}
         <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
       </div><input type="hidden" class="cloudinary-url" value="${url}">`;
     }
@@ -7330,8 +7333,11 @@ async function gridUploadMedia(input, rowIdx) {
         const { error: sbErr } = await sb.storage.from('creatives').upload(path, file, { contentType: file.type });
         if (sbErr) throw sbErr;
         const { data: { publicUrl } } = sb.storage.from('creatives').getPublicUrl(path);
+        const sbMediaTag = isVideo
+          ? `<video class="media-thumb" src="${publicUrl}" onclick="openLightbox('${publicUrl}')" style="cursor:pointer" title="View" muted playsinline preload="metadata" controls></video>`
+          : `<img class="media-thumb" src="${publicUrl}" onclick="openLightbox('${publicUrl}')" style="cursor:pointer" title="View">`;
         pd.innerHTML = `<div class="media-preview">
-          <img class="media-thumb" src="${publicUrl}" onclick="openLightbox('${publicUrl}')" style="cursor:pointer" title="View">
+          ${sbMediaTag}
           <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
         </div><input type="hidden" class="cloudinary-url" value="${publicUrl}">`;
         scheduleSave();
@@ -7683,7 +7689,7 @@ function resetRowHeight(input) {
   tr.style.height = ''; tr.style.maxHeight = '';
   tr.querySelectorAll('td').forEach(td => { td.style.maxHeight = ''; td.style.overflow = ''; });
   tr.querySelectorAll('textarea').forEach(ta => { ta.style.height = ''; autoGrow(ta); });
-  tr.querySelectorAll('img.media-thumb').forEach(img => { img.style.height = ''; img.style.maxHeight = ''; });
+  tr.querySelectorAll('img.media-thumb, video.media-thumb').forEach(img => { img.style.height = ''; img.style.maxHeight = ''; });
   saveRowHeights(); doSave();
 }
 
@@ -7886,7 +7892,7 @@ function openAdDetail(rowIdx) {
   const landingUrl = _adpGetLink(tds[6]);
   const spyUrl     = _adpGetLink(tds[7]);
   const fanUrl     = _adpGetLink(tds[8]);
-  const thumbImg   = tr.querySelector('img.media-thumb');
+  const thumbImg   = tr.querySelector('img.media-thumb, video.media-thumb');
   const thumbSrc   = thumbImg?.src || '';
   const angle      = _adpGetText(tds[10]);
   const headline   = _adpGetText(tds[11]);
@@ -9372,8 +9378,11 @@ async function handleMediaUpload(input, previewId) {
       ? url
       : url.replace('/upload/', '/upload/w_800,h_800,c_fill,q_auto:best/');
 
+    const hmMediaTag = isVideo
+      ? `<video class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View" muted playsinline preload="metadata" controls></video>`
+      : `<img class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">`;
     preview.innerHTML = `<div class="media-preview">
-      <img class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
+      ${hmMediaTag}
       <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
     </div>`;
     // Store URL in a hidden input for saving
@@ -9406,8 +9415,11 @@ async function handleMediaUpload(input, previewId) {
         const { data: { publicUrl } } = sb.storage.from('creatives').getPublicUrl(path);
         const url = publicUrl;
         const thumbUrl = url; // No auto-thumbnail for Supabase, use full URL
+        const sbHmMediaTag = isVideo
+          ? `<video class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View" muted playsinline preload="metadata" controls></video>`
+          : `<img class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">`;
         preview.innerHTML = `<div class="media-preview">
-          <img class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
+          ${sbHmMediaTag}
           <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
         </div>`;
         let hiddenUrl = preview.querySelector('.cloudinary-url');
@@ -9720,7 +9732,7 @@ function restoreRowHeights(cloudData) {
           tr.querySelectorAll('textarea').forEach(ta => {
             ta.style.minHeight = data[id][i];
           });
-          tr.querySelectorAll('img.media-thumb').forEach(img => { img.style.maxHeight = data[id][i]; });
+          tr.querySelectorAll('img.media-thumb, video.media-thumb').forEach(img => { img.style.maxHeight = data[id][i]; });
         }
       });
     });
@@ -9810,7 +9822,7 @@ function initRowResize(table) {
         });
         tr.querySelectorAll('textarea').forEach(ta => { if (getComputedStyle(ta).position !== 'absolute') { ta.style.height = newH + 'px'; } ta.style.marginTop = ''; });
         centerTextareas();
-        tr.querySelectorAll('img.media-thumb').forEach(img => { img.style.maxHeight = newH + 'px'; });
+        tr.querySelectorAll('img.media-thumb, video.media-thumb').forEach(img => { img.style.maxHeight = newH + 'px'; });
         centerTextareas();
       };
       const onUp = () => {
@@ -10165,13 +10177,20 @@ function restoreTable(id, rows, fn, keys) {
           if (v.t === 'cloudinary' && v.url) {
             const isVid = /\.(mp4|webm|mov)(\?|$)/i.test(v.url);
             const cardSrc = isVid ? v.url : v.url.replace('/upload/', '/upload/w_800,h_800,c_fill,q_auto:best/');
+            const restoreMediaTag = isVid
+              ? `<video class="media-thumb" src="${cardSrc}" onclick="openLightbox('${v.url}')" style="cursor:pointer" title="View" muted playsinline preload="metadata" controls></video>`
+              : `<img class="media-thumb" src="${cardSrc}" onclick="openLightbox('${v.url}')" style="cursor:pointer" title="View">`;
             pd.innerHTML = `<div class="media-preview">
-              <img class="media-thumb" src="${cardSrc}" onclick="openLightbox('${v.url}')" style="cursor:pointer" title="View">
+              ${restoreMediaTag}
               <button class="media-remove" onclick="removeMedia('${fi.id}','${pd.id}')">×</button>
             </div><input type="hidden" class="cloudinary-url" value="${v.url}">`;
           } else if (v.t === 'img' && v.src) {
+            const restoreImgIsVid = /\.(mp4|webm|mov)(\?|$)/i.test(v.src);
+            const restoreImgTag = restoreImgIsVid
+              ? `<video class="media-thumb" src="${v.src}" onclick="openLightbox('${v.src}')" style="cursor:pointer" title="View" muted playsinline preload="metadata" controls></video>`
+              : `<img class="media-thumb" src="${v.src}" onclick="openLightbox('${v.src}')" style="cursor:pointer" title="View">`;
             pd.innerHTML = `<div class="media-preview">
-              <img class="media-thumb" src="${v.src}" onclick="openLightbox('${v.src}')" style="cursor:pointer" title="View">
+              ${restoreImgTag}
               <button class="media-remove" onclick="removeMedia('${fi.id}','${pd.id}')">×</button>
             </div>`;
           }
