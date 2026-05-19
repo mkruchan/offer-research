@@ -7148,7 +7148,7 @@ function buildAdsGrid() {
     const spyUrl   = getLinkHref(tds[7]);
     const fanUrl   = getLinkHref(tds[8]);
     const thumbImg = tr.querySelector('img.media-thumb, video.media-thumb');
-    const thumbSrc = thumbImg ? (thumbImg.src || thumbImg.currentSrc || '') : '';
+    const thumbSrc = thumbImg ? (thumbImg.src || thumbImg.getAttribute('src') || thumbImg.currentSrc || '') : '';
     const thumbUrl = thumbImg ? (thumbImg.getAttribute('onclick')?.match(/openLightbox\('([^']+)'\)/)?.[1] || thumbSrc) : '';
     const angle    = getText(tds[10]);
     const headline = getText(tds[11]);
@@ -7158,10 +7158,11 @@ function buildAdsGrid() {
     const notes    = getText(tds[15]);
 
     const isVideoSrc = (thumbImg?.tagName === 'VIDEO') || (thumbUrl && /\.(mp4|webm|mov)(\?|$)/i.test(thumbUrl));
-    const imgHtml = thumbSrc
+    const mediaSrc = thumbUrl || thumbSrc;
+    const imgHtml = mediaSrc
       ? (isVideoSrc
-          ? `<video class="grid-card-img" src="${thumbUrl}" onclick="event.stopPropagation();openLightbox('${thumbUrl}')" title="View" style="cursor:pointer;object-fit:cover;width:100%;height:100%;" muted playsinline preload="metadata"></video>`
-          : `<img class="grid-card-img" src="${thumbUrl||thumbSrc}" onclick="event.stopPropagation();openLightbox('${thumbUrl||thumbSrc}')" title="View" style="cursor:pointer;">`)
+          ? `<video class="grid-card-img" src="${mediaSrc}" onclick="event.stopPropagation();openLightbox('${mediaSrc}')" title="View" style="cursor:pointer;object-fit:cover;width:100%;height:100%;" muted playsinline preload="metadata" controls></video>`
+          : `<img class="grid-card-img" src="${mediaSrc}" onclick="event.stopPropagation();openLightbox('${mediaSrc}')" title="View" style="cursor:pointer;">`)
       : `<div class="grid-card-img-empty" style="cursor:default;">
           <div style="display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text-secondary);">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
