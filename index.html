@@ -9835,6 +9835,12 @@ document.addEventListener('input', function(e) {
 });
 
 function collectData() {
+  // expose last snapshot for the save wrapper
+  const result = _collectDataInner();
+  window._lastCollectedData = result;
+  return result;
+}
+function _collectDataInner() {
   const h1 = document.getElementById('main-title');
   return {
     v: 2,
@@ -9888,7 +9894,6 @@ function collectTable(id, keys) {
     return obj;
   });
 }
-
 function restoreData(data) {
   if (!data) return false;
   if (data.header) {
@@ -10162,17 +10167,22 @@ function applyUndo(stack, otherStack) {
 
 let _restoring = false;
 
+let _saveSeq = 0;       // increments on every scheduleSave call
+let _saveInFlight = false; // true while a Supabase write is pending
+
 function scheduleSave() {
   if (_restoring || _offerSwitching) return;
   scheduleSnap();
   setStatus('saving','Saving…');
   clearTimeout(saveTimer);
+  _saveSeq++;             // mark this as the latest intent
   saveTimer = setTimeout(doSave, 300);
 }
 
 async function doSave() {
   updateLastEdited();
-  const data = collectData();
+  const mySeq = _saveSeq;  // capture sequence at the moment this save fires
+  const data = collectData(); // single DOM snapshot
   const snap = JSON.stringify(data);
   // Always record save in history with timestamp
   const versionNum = (parseInt(localStorage.getItem(LS_VER_CTR)||'0') || 0) + 1;
@@ -10967,31 +10977,61 @@ function offerRename() {
 (function() {
   const _orig = doSave;
   window.doSave = async function() {
-    await _orig();
+    // _orig captures mySeq and data from the closure via doSave's local vars —
+    // we pass the snapshot out via a shared slot to avoid a second collectData()
+    let _sharedSnap = null;
+    const _origWrapped = async () => {
+      await _orig();
+      // grab the snapshot that _orig just collected (set below via hook)
+      _sharedSnap = window._lastCollectedData || null;
+    };
+    await _origWrapped();
     const sb = sbGetClient();
     if (sb && _currentOfferId && !_offerSwitching) {
+      // If another save is already in-flight, skip — the newer one will win
+      if (_saveInFlight) {
+        console.log('[save] skipping — save already in flight');
+        return;
+      }
+      _saveInFlight = true;
+      const seqAtSaveStart = _saveSeq;
       try {
-        const pageData = collectData();
+        // Use the snapshot already collected by _orig; never re-collect DOM here
+        const pageData = _sharedSnap || collectData();
+        // If a newer scheduleSave fired while we were awaiting, abort — it will save instead
+        if (_saveSeq !== seqAtSaveStart) {
+          console.log('[save] aborting stale save — newer version pending');
+          _saveInFlight = false;
+          return;
+        }
         const savedAt = new Date().toISOString();
         await sb.from('offers').update({ data: pageData, updated_at: savedAt }).eq('id', _currentOfferId);
+        // Final check: if sequence changed while Supabase was writing, schedule one more save
+        if (_saveSeq !== seqAtSaveStart) {
+          console.log('[save] seq changed during write — scheduling follow-up save');
+          _saveInFlight = false;
+          scheduleSave();
+          return;
+        }
         const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
         setStatus('saved', '☁️ Saved · ' + t);
-        // Update cache with freshly saved data so cache stays in sync with Supabase
+        // Update cache with exactly what was written to Supabase
         try {
           const existingCache = JSON.parse(localStorage.getItem('ecoverage_offer_cache_' + _currentOfferId) || '{}');
           localStorage.setItem('ecoverage_offer_cache_' + _currentOfferId, JSON.stringify({ ...existingCache, data: pageData, updated_at: savedAt }));
         } catch(e) {}
       } catch(e) {
         console.warn('Supabase save failed, trying JSONBin backup:', e);
-        // Fallback to JSONBin
         if (BIN_ID && API_KEY) {
-          const pageData = collectData();
+          const pageData = _sharedSnap || collectData();
           const ok = await cloudSave(pageData);
           const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
           setStatus(ok ? 'saved' : 'error', ok ? '☁️ Backup saved · ' + t : '⚠️ Save failed');
         } else {
           setStatus('error', '⚠️ Supabase failed — check connection');
         }
+      } finally {
+        _saveInFlight = false;
       }
     }
   };
