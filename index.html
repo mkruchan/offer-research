@@ -8020,12 +8020,9 @@ function initTableCellExpand() {
     table.querySelectorAll('tbody textarea').forEach(ta => {
       if (ta._expandInit) return;
       ta._expandInit = true;
-      ta.addEventListener('click', function(e) {
+      ta.addEventListener('dblclick', function(e) {
         const val = this.value.trim();
         if (!val || val === this.placeholder) return;
-        // Only show popover if text is actually overflowing
-        const isOverflowing = this.scrollWidth > this.clientWidth + 4 || this.scrollHeight > this.clientHeight + 8;
-        if (!isOverflowing) return;
         e.stopPropagation();
         const pop = document.getElementById('tc-expand-popover');
         const rect = this.getBoundingClientRect();
