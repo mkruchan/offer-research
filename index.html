@@ -8007,15 +8007,8 @@ function initTableCellExpand() {
       ta.addEventListener('click', function(e) {
         const val = this.value.trim();
         if (!val || val === this.placeholder) return;
-        // Temporarily remove overflow to get true scrollHeight
-        const prevOverflow = this.style.overflow;
-        const prevHeight = this.style.height;
-        this.style.overflow = 'hidden';
-        this.style.height = 'auto';
-        const trueScrollH = this.scrollHeight;
-        this.style.height = prevHeight;
-        this.style.overflow = prevOverflow;
-        const isClipped = trueScrollH > this.offsetHeight + 2;
+        // Compare scrollHeight to clientHeight without touching styles (safe for absolute textareas too)
+        const isClipped = this.scrollHeight > this.clientHeight + 2;
         if (!isClipped) return;
         e.stopPropagation();
         const pop = document.getElementById('tc-expand-popover');
@@ -8044,14 +8037,7 @@ function initTableCellExpand() {
     ta.addEventListener('click', function(e) {
       const val = this.value.trim();
       if (!val || val === this.placeholder) return;
-      const prevOverflow = this.style.overflow;
-      const prevHeight = this.style.height;
-      this.style.overflow = 'hidden';
-      this.style.height = 'auto';
-      const trueScrollH = this.scrollHeight;
-      this.style.height = prevHeight;
-      this.style.overflow = prevOverflow;
-      const isClipped = trueScrollH > this.offsetHeight + 2;
+      const isClipped = this.scrollHeight > this.clientHeight + 2;
       if (!isClipped) return;
       e.stopPropagation();
       const pop = document.getElementById('tc-expand-popover');
@@ -10424,6 +10410,8 @@ function restoreVersion(stackIdx) {
     const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'grid' ? 'grid' : 'table');
     const fvm = localStorage.getItem('funnels_view_mode'); setFunnelsView(fvm === 'grid' ? 'grid' : 'table');
     showToast('Version restored', 'success');
+    // Push restored version to Supabase so it survives a page reload
+    scheduleSave();
   }, 100);
 }
 
@@ -10764,10 +10752,26 @@ async function offerLoad(id, showMsg) {
     if (!data.data.header.title) data.data.header.title = offerName;
     localStorage.setItem('ecoverage_title', data.data.header.title || offerName);
     localStorage.setItem('ecoverage_title_url', data.data.header.titleUrl || '');
-    const prev = _restoring; _restoring = true;
-    restoreData(data.data);
-    _restoring = prev;
-    setTimeout(() => { runPostInit(data.data); _offerSwitching = false; }, 0);
+    // Guard: if local LS_LOCAL has a newer savedAt than Supabase data, don't overwrite — local data is more recent
+    const localRaw = (() => { try { return JSON.parse(localStorage.getItem(LS_LOCAL)||'{}'); } catch { return {}; } })();
+    const localSavedAt = localRaw.savedAt ? new Date(localRaw.savedAt) : new Date(0);
+    const remoteSavedAt = data.updated_at ? new Date(data.updated_at) : new Date(0);
+    const localIsNewer = localSavedAt > remoteSavedAt && localRaw.v;
+    if (localIsNewer) {
+      // Local has unsaved changes newer than Supabase — restore from local instead
+      console.warn('[offerLoad] Local data is newer than Supabase — keeping local version', { localSavedAt, remoteSavedAt });
+      const prev = _restoring; _restoring = true;
+      restoreData(localRaw);
+      _restoring = prev;
+      setTimeout(() => { runPostInit(localRaw); _offerSwitching = false; }, 0);
+      // Trigger a save to sync local → Supabase
+      setTimeout(() => scheduleSave(), 500);
+    } else {
+      const prev = _restoring; _restoring = true;
+      restoreData(data.data);
+      _restoring = prev;
+      setTimeout(() => { runPostInit(data.data); _offerSwitching = false; }, 0);
+    }
   } else {
     clearPageData(offerName);
     setTimeout(() => { _offerSwitching = false; }, 0);
@@ -10984,11 +10988,15 @@ function offerRename() {
     if (sb && _currentOfferId && !_offerSwitching) {
       try {
         const pageData = collectData();
-        await sb.from('offers').update({ data: pageData, updated_at: new Date().toISOString() }).eq('id', _currentOfferId);
+        const savedAt = new Date().toISOString();
+        await sb.from('offers').update({ data: pageData, updated_at: savedAt }).eq('id', _currentOfferId);
         const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
         setStatus('saved', '☁️ Saved · ' + t);
-        // Invalidate cache so next page load fetches fresh data from Supabase
-        try { localStorage.removeItem('ecoverage_offer_cache_' + _currentOfferId); } catch(e) {}
+        // Update cache with the freshly saved data so next page load renders instantly without stale data risk
+        try {
+          const existingCache = JSON.parse(localStorage.getItem('ecoverage_offer_cache_' + _currentOfferId) || '{}');
+          localStorage.setItem('ecoverage_offer_cache_' + _currentOfferId, JSON.stringify({ ...existingCache, data: pageData, updated_at: savedAt }));
+        } catch(e) {}
       } catch(e) {
         console.warn('Supabase save failed, trying JSONBin backup:', e);
         // Fallback to JSONBin
