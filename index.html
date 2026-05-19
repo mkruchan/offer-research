@@ -4360,6 +4360,7 @@
       vertical-align: middle !important;
       padding: 0 8px !important;
       height: 52px !important;
+      overflow: hidden !important;
     }
     #ads-table .link-chip-wrap,
     #funnels-table .link-chip-wrap {
@@ -6615,7 +6616,7 @@
   <div class="adp-header">
     <div class="adp-header-top">
       <div class="adp-header-left">
-        <div class="adp-title" id="adp-offer">—</div>
+        <div class="adp-title" id="adp-offer" title="Click to rename offer" style="cursor:pointer;" onclick="adpStartRenameOffer(this)">—</div>
         <div class="adp-subtitle" id="adp-source-chips">—</div>
       </div>
       <div class="adp-header-actions">
@@ -8208,6 +8209,42 @@ function openFunnelDetail(rowIdx) {
     </div>
   `;
   _adpOpen(advertiser, '', body);
+}
+
+function adpStartRenameOffer(el) {
+  const current = el.textContent.trim();
+  const input = document.createElement('input');
+  input.value = current;
+  input.style.cssText = 'font-size:15px;font-weight:700;font-family:inherit;color:var(--text-primary);border:none;border-bottom:2px solid var(--accent);outline:none;background:transparent;width:100%;min-width:0;padding:0;line-height:1.3;';
+  el.textContent = '';
+  el.style.cursor = 'text';
+  el.appendChild(input);
+  input.focus();
+  input.select();
+
+  const finish = async () => {
+    const newName = input.value.trim();
+    el.textContent = newName || current;
+    el.style.cursor = 'pointer';
+    if (!newName || newName === current) return;
+    // Update H1 and page title
+    const h1 = document.querySelector('#offer-title-h1, [data-offer-title], h1[data-text]');
+    if (h1) { h1.textContent = newName; h1.dataset.text = newName; document.title = newName; }
+    _offerSyncNamePill(newName);
+    // Save to Supabase
+    const offerId = _currentOfferId || localStorage.getItem('ecoverage_current_offer_id');
+    if (offerId && typeof sb !== 'undefined') {
+      await sb.from('offers').update({ name: newName }).eq('id', offerId);
+      if (typeof offerRebuildSelect === 'function') offerRebuildSelect();
+    }
+    scheduleSave();
+  };
+
+  input.addEventListener('blur', finish);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+    if (e.key === 'Escape') { input.value = current; input.blur(); }
+  });
 }
 
 function adpToggleEdit() {
