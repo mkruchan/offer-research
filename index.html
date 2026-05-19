@@ -7168,11 +7168,11 @@ function buildAdsGrid() {
     const notes    = getText(tds[15]);
 
     const imgHtml = thumbSrc
-      ? `<img class="grid-card-img" src="${thumbSrc}" onclick="event.stopPropagation();openLightbox('${thumbUrl||thumbSrc}')" title="View" style="cursor:pointer;">`
+      ? `<img class="grid-card-img" src="${thumbUrl||thumbSrc}" onclick="event.stopPropagation();openLightbox('${thumbUrl||thumbSrc}')" title="View" style="cursor:pointer;">`
       : `<div class="grid-card-img-empty" onclick="event.stopPropagation();document.getElementById('grid-upload-${idx}').click()" style="cursor:pointer;" title="Click to upload image">
           <div style="display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text-secondary);">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            <span style="font-size:10px;">Add preview</span>
+            <span style="font-size:10px;">Add creative</span>
           </div>
           <input type="file" id="grid-upload-${idx}" accept="image/*,video/*" style="display:none;" onchange="gridUploadMedia(this,${idx})">
         </div>`;
@@ -7294,7 +7294,7 @@ async function gridUploadMedia(input, rowIdx) {
     const pd = document.getElementById(previewId);
     if (pd) {
       pd.innerHTML = `<div class="media-preview">
-        <img class="media-thumb" src="${thumbUrl}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
+        <img class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
         <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
       </div><input type="hidden" class="cloudinary-url" value="${url}">`;
     }
@@ -7799,6 +7799,7 @@ function _adpOpen(titleText, subtitleChipsHtml, bodyHtml) {
   document.getElementById('adp-offer').textContent = titleText || '(no data)';
   document.getElementById('adp-source-chips').innerHTML = subtitleChipsHtml || '';
   document.getElementById('adp-body-content').innerHTML = bodyHtml || '';
+  setTimeout(initMediaDragDrop, 0);
   _adpEditMode = false;
   const btn = document.getElementById('adp-edit-toggle');
   btn.classList.remove('active');
@@ -9215,7 +9216,7 @@ async function handleMediaUpload(input, previewId) {
       : url.replace('/upload/', '/upload/w_800,h_800,c_fill,q_auto:best/');
 
     preview.innerHTML = `<div class="media-preview">
-      <img class="media-thumb" src="${thumbUrl}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
+      <img class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
       <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
     </div>`;
     // Store URL in a hidden input for saving
@@ -9249,7 +9250,7 @@ async function handleMediaUpload(input, previewId) {
         const url = publicUrl;
         const thumbUrl = url; // No auto-thumbnail for Supabase, use full URL
         preview.innerHTML = `<div class="media-preview">
-          <img class="media-thumb" src="${thumbUrl}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
+          <img class="media-thumb" src="${url}" onclick="openLightbox('${url}')" style="cursor:pointer" title="View">
           <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
         </div>`;
         let hiddenUrl = preview.querySelector('.cloudinary-url');
@@ -11300,8 +11301,6 @@ function initMediaDragDrop() {
 
   // Ad detail panel image wrap
   document.querySelectorAll('.adp-img-wrap').forEach(wrap => {
-    if (wrap.dataset.dndInit) return;
-    wrap.dataset.dndInit = '1';
     wrap.addEventListener('dragover', e => { e.preventDefault(); wrap.classList.add('drag-over'); });
     wrap.addEventListener('dragleave', () => wrap.classList.remove('drag-over'));
     wrap.addEventListener('drop', e => {
