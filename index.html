@@ -1011,9 +1011,9 @@
       padding: 0; border-bottom: 1px solid var(--border-light);
       position: sticky; top: 0; background: var(--bg-primary); z-index: 10; flex-shrink: 0;
     }
-    .adp-header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 16px 20px 12px; }
+    .adp-header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 10px 16px 8px; }
     .adp-header-left { flex: 1; min-width: 0; }
-    .adp-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; line-height: 1.3; word-break: break-word; }
+    .adp-title { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; line-height: 1.3; word-break: break-word; }
     .adp-subtitle { font-size: 12px; color: var(--text-secondary); display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
     .adp-header-actions { display: flex; gap: 6px; flex-shrink: 0; padding-top: 2px; }
     .adp-close {
@@ -1045,12 +1045,12 @@
     .adp-tab.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--blue-bg); }
 
     /* Body */
-    .adp-body { padding: 16px 20px; flex: 1; overflow: hidden; min-height: 0; display: flex; flex-direction: column; }
+    .adp-body { padding: 10px 14px; flex: 1; overflow: hidden; min-height: 0; display: flex; flex-direction: column; }
     .adp-tab-panel { display: none; }
     .adp-tab-panel.active { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
     /* Image */
-    .adp-img-wrap { position: relative; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-light); margin-bottom: 8px; background: var(--bg-secondary); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; min-height: calc(300px * 3/4 + 1px); }
+    .adp-img-wrap { position: relative; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-light); margin-bottom: 6px; background: var(--bg-secondary); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; min-height: calc(200px * 3/4 + 1px); }
     .adp-img { width: 100%; height: 100%; display: block; cursor: zoom-in; object-fit: cover; position: absolute; inset: 0; }
     .adp-img-empty { width: 100%; display: flex; align-items: center; justify-content: center; height: 110px; color: #9ca3af; font-size: 12px; flex-direction: column; gap: 8px; }
     .adp-img-upload-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; cursor: pointer; border-radius: var(--radius-lg); }
@@ -1058,8 +1058,8 @@
     .adp-img-upload-overlay span { color: #fff; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
 
     /* Section */
-    .adp-section { margin-bottom: 20px; }
-    .adp-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .adp-section { margin-bottom: 12px; }
+    .adp-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
     .adp-section-title {
       font-size: 13px;
       font-weight: 700;
@@ -1072,10 +1072,10 @@
     .adp-card { background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; }
 
     /* Detail rows */
-    .adp-row { display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-bottom: 1px solid var(--border-light); }
+    .adp-row { display: flex; align-items: center; gap: 10px; padding: 6px 12px; border-bottom: 1px solid var(--border-light); }
     .adp-row:last-child { border-bottom: none; }
     .adp-row-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; width: 90px; flex-shrink: 0; }
-    .adp-row-val { flex: 1; min-width: 0; font-size: 14px; color: var(--text-primary); }
+    .adp-row-val { flex: 1; min-width: 0; font-size: 12px; color: var(--text-primary); }
     .adp-row-edit { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
     .adp-row-input {
       flex: 1; font-size: 13px; font-family: inherit;
@@ -1103,27 +1103,27 @@
 
     /* LP table */
     .adp-lp-card { background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; }
-    .adp-lp-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--border-light); }
+    .adp-lp-row { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-bottom: 1px solid var(--border-light); }
     .adp-lp-row:last-child { border-bottom: none; }
-    .adp-lp-icon { width: 28px; height: 28px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .adp-lp-icon { width: 22px; height: 22px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .adp-lp-info { flex: 1; min-width: 0; }
     .adp-lp-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #9ca3af; margin-bottom: 2px; }
-    .adp-lp-url { font-size: 13px; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .adp-lp-url { font-size: 11px; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .adp-lp-url:hover { text-decoration: underline; }
     .adp-lp-url-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
     .adp-lp-empty { font-size: 12px; color: #9ca3af; font-style: italic; }
     .adp-lp-edit-input { flex: 1; font-size: 12px; font-family: inherit; border: 1px solid var(--accent); border-radius: var(--radius-md); padding: 4px 8px; background: var(--bg-primary); color: var(--text-primary); outline: none; min-width: 0; box-shadow: 0 0 0 3px rgba(37,99,235,0.10); }
 
     /* Copy fields */
-    .adp-copy-item { margin-bottom: 10px; }
+    .adp-copy-item { margin-bottom: 6px; }
     .adp-copy-item:last-child { margin-bottom: 0; }
     .adp-copy-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; margin-bottom: 2px; }
     .adp-copy-block {
       background: var(--bg-secondary);
       border: 1px solid var(--border-light);
       border-radius: var(--radius-md);
-      padding: 10px 14px;
-      font-size: 14px; color: var(--text-primary); line-height: 1.55;
+      padding: 7px 10px;
+      font-size: 12px; color: var(--text-primary); line-height: 1.5;
       white-space: pre-wrap; word-break: break-word;
     }
     .adp-copy-block[contenteditable="true"] { cursor: text; outline: none; }
@@ -1138,19 +1138,19 @@
     .adp-save-bar {
       position: sticky; bottom: 0;
       background: var(--bg-primary); border-top: 1px solid var(--border-light);
-      padding: 12px 20px; display: none;
+      padding: 8px 14px; display: none;
       align-items: center; justify-content: flex-end; gap: 8px; z-index: 5;
       box-shadow: 0 -4px 12px rgba(0,0,0,0.06);
     }
     .adp-save-bar.visible { display: flex; }
     .adp-save-btn {
-      padding: 8px 18px; font-size: 12px; font-weight: 600; font-family: inherit;
+      padding: 6px 14px; font-size: 11px; font-weight: 600; font-family: inherit;
       background: var(--accent); color: #fff; border: none;
       border-radius: var(--radius-md); cursor: pointer; transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .adp-save-btn:hover { background: var(--accent-hover); }
     .adp-cancel-btn {
-      padding: 8px 14px; font-size: 12px; font-family: inherit;
+      padding: 6px 10px; font-size: 11px; font-family: inherit;
       background: none; color: var(--text-secondary);
       border: 1px solid var(--border-light); border-radius: var(--radius-md);
       cursor: pointer; transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
@@ -7864,7 +7864,7 @@ function openAdDetail(rowIdx) {
   const copyWeights = {'Angle / Hook':1,'Headline':1,'CTA':1,'Title':1};
 
   const body = `
-    <div style="display:grid;grid-template-columns:300px 1fr;gap:16px;flex:1;min-height:0;align-items:stretch;">
+    <div style="display:grid;grid-template-columns:260px 1fr;gap:12px;flex:1;min-height:0;align-items:stretch;">
 
       <!-- COL 1: Image + Links + Ad Details -->
       <div style="display:flex;flex-direction:column;gap:6px;padding-top:1px;overflow-y:auto;">
@@ -10009,8 +10009,10 @@ function restoreTable(id, rows, fn, keys) {
         const fi = cell.querySelector('input[type="file"]'), pd = cell.querySelector('[id$="-preview"]');
         if (pd && fi) {
           if (v.t === 'cloudinary' && v.url) {
+            const isVid = /\.(mp4|webm|mov)(\?|$)/i.test(v.url);
+            const cardSrc = isVid ? v.url : v.url.replace('/upload/', '/upload/w_800,h_800,c_fill,q_auto:best/');
             pd.innerHTML = `<div class="media-preview">
-              <img class="media-thumb" src="${v.url}" onclick="openLightbox('${v.url}')" style="cursor:pointer" title="View">
+              <img class="media-thumb" src="${cardSrc}" onclick="openLightbox('${v.url}')" style="cursor:pointer" title="View">
               <button class="media-remove" onclick="removeMedia('${fi.id}','${pd.id}')">×</button>
             </div><input type="hidden" class="cloudinary-url" value="${v.url}">`;
           } else if (v.t === 'img' && v.src) {
