@@ -4183,7 +4183,7 @@
     #funnels-table tbody td > input:not([type="file"]) {
       height: 52px !important;
       min-height: 52px !important;
-      padding: 16px 10px !important;
+      padding: 10px !important;
       line-height: 1.5 !important;
       font-size: 12.5px !important;
       color: #374151 !important;
@@ -4196,6 +4196,7 @@
       overflow: hidden !important;
       white-space: pre-wrap !important;
       word-break: break-word !important;
+      vertical-align: top !important;
     }
 
     /* Frozen num — sticky for ads and funnels */
@@ -9951,7 +9952,7 @@ function restoreTable(id, rows, fn, keys) {
           if (hiddenTa) hiddenTa.value = v;
         } else if (chipWrap) setLinkChipValue(chipWrap, v);
         else if (s) s.value = v;
-        else if (ta) { ta.value = v; autoGrow(ta); }
+        else if (ta) { ta.value = v; autoGrow(ta); ta.scrollTop = 0; }
         else if (inp) inp.value = v;
       }
     });
