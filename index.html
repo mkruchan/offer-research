@@ -8441,7 +8441,10 @@ function adpSaveEdit() {
     if (badge) badge.textContent = val || '';
   };
   const setLink = (td, val) => {
-    const a = td?.querySelector('a.link-chip'); if (a) { a.href = val; const t = a.querySelector('.link-chip-text'); if(t) t.textContent = val; }
+    const wrap = td?.querySelector('.link-chip-wrap');
+    if (wrap) { setLinkChipValue(wrap, val); } else {
+      const a = td?.querySelector('a.link-chip'); if (a) { a.href = val; const t = a.querySelector('.link-chip-text'); if(t) t.textContent = val; }
+    }
   };
   const setSelect = (td, val) => {
     const sel = td?.querySelector('select'); if (!sel) return;
