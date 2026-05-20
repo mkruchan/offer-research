@@ -1249,6 +1249,17 @@
     .media-cell.drag-over { border-color: var(--accent) !important; background: var(--accent-muted) !important; }
     .media-cell.drag-over .media-upload-btn { color: var(--accent) !important; }
     .adp-img-wrap.drag-over { outline: 2px dashed var(--accent) !important; outline-offset: 2px !important; }
+    .grid-card-img-empty.drag-over { outline: 2px dashed var(--accent) !important; background: var(--blue-bg) !important; }
+    .grid-card-img-empty.drag-over::after {
+      content: 'Drop to upload';
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(37,99,235,.15);
+      color: var(--accent); font-size: 13px; font-weight: 600;
+      border-radius: 8px 8px 0 0;
+      pointer-events: none;
+    }
+    .grid-card-img-empty { position: relative; }
     .adp-img-wrap.drag-over::after {
       content: 'Drop to upload';
       position: absolute; inset: 0;
@@ -11537,6 +11548,34 @@ function initMediaDragDrop() {
     });
   });
 
+  // Grid card empty creative area
+  document.querySelectorAll('.grid-card-img-empty').forEach(empty => {
+    if (empty.dataset.dndInit) return;
+    empty.dataset.dndInit = '1';
+    empty.addEventListener('dragover', e => { e.preventDefault(); e.stopPropagation(); empty.classList.add('drag-over'); });
+    empty.addEventListener('dragleave', e => { if (!empty.contains(e.relatedTarget)) empty.classList.remove('drag-over'); });
+    empty.addEventListener('drop', e => {
+      e.preventDefault(); e.stopPropagation(); empty.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (!file || !file.type.match(/^image\/|^video\//)) return;
+      // Find the hidden file input inside this empty area
+      const input = empty.querySelector('input[type="file"]');
+      if (input) {
+        const dt = new DataTransfer(); dt.items.add(file);
+        input.files = dt.files;
+        // Extract rowIdx from the input id: "grid-upload-{idx}"
+        const rowIdx = parseInt(input.id.replace('grid-upload-', ''), 10);
+        gridUploadMedia(input, rowIdx);
+      }
+    });
+    // Also allow clicking the empty area to open file picker
+    empty.addEventListener('click', e => {
+      if (e.target.closest('input[type="file"]')) return;
+      const input = empty.querySelector('input[type="file"]');
+      if (input) input.click();
+    });
+  });
+
   // Ad detail panel image wrap
   document.querySelectorAll('.adp-img-wrap').forEach(wrap => {
     wrap.addEventListener('dragover', e => { e.preventDefault(); wrap.classList.add('drag-over'); });
@@ -11559,6 +11598,10 @@ function initMediaDragDrop() {
 
 // Re-init on grid rebuild
 const _origBuildAdsGrid = buildAdsGrid;
+buildAdsGrid = function() {
+  _origBuildAdsGrid.apply(this, arguments);
+  setTimeout(initMediaDragDrop, 120);
+};
 // Call initMediaDragDrop after any grid/panel open
 document.addEventListener('DOMContentLoaded', () => setTimeout(initMediaDragDrop, 500));
 </script>
