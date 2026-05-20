@@ -1260,14 +1260,18 @@
       pointer-events: none;
     }
     .grid-card-img-empty { position: relative; }
+    .adp-img-wrap { position: relative; }
     .adp-img-wrap.drag-over::after {
       content: 'Drop to upload';
       position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(37,99,235,.15);
-      color: var(--accent); font-size: 13px; font-weight: 600;
+      background: rgba(37,99,235,.18);
+      color: var(--accent); font-size: 14px; font-weight: 700;
       border-radius: inherit;
+      pointer-events: none;
+      z-index: 10;
     }
+    .adp-img-wrap:has(.adp-img).drag-over::after { content: 'Drop to replace'; }
 
 
     /* Board view — hide notes */
@@ -11578,13 +11582,14 @@ function initMediaDragDrop() {
 
   // Ad detail panel image wrap
   document.querySelectorAll('.adp-img-wrap').forEach(wrap => {
-    wrap.addEventListener('dragover', e => { e.preventDefault(); wrap.classList.add('drag-over'); });
-    wrap.addEventListener('dragleave', () => wrap.classList.remove('drag-over'));
+    if (wrap.dataset.dndInit) return;
+    wrap.dataset.dndInit = '1';
+    wrap.addEventListener('dragover', e => { e.preventDefault(); e.stopPropagation(); wrap.classList.add('drag-over'); });
+    wrap.addEventListener('dragleave', e => { if (!wrap.contains(e.relatedTarget)) wrap.classList.remove('drag-over'); });
     wrap.addEventListener('drop', e => {
-      e.preventDefault(); wrap.classList.remove('drag-over');
+      e.preventDefault(); e.stopPropagation(); wrap.classList.remove('drag-over');
       const file = e.dataTransfer.files[0];
-      if (!file) return;
-      // Find the file input for the current ad detail row
+      if (!file || !file.type.match(/^image\/|^video\//)) return;
       const rowIdx = _adpCurrentRowIdx;
       const fileInput = document.getElementById('adp-img-file-' + rowIdx);
       if (fileInput) {
