@@ -6029,6 +6029,9 @@
     #traffic-table thead th.frozen-num { background: #ffffff !important; }
     body.force-dark #traffic-table thead th.frozen-num { background: #18181b !important; }
 
+    /* ── FIX: remove white border from image in dark mode detail panel ── */
+    body.force-dark .adp-img-wrap { border-color: rgba(255,255,255,0.08) !important; }
+
     /* ── BUG FIX: frozen sticky cells must match row hover colour.
        rgba(37,99,235,0.1) blended over #18181b = #191f2f solid ── */
     body.force-dark #ads-table tbody tr:hover td.frozen-num,
