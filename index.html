@@ -7476,11 +7476,10 @@ function buildAdsGrid() {
       </div>
     </div>`;
 
-    const linkBlockTop = `<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border-light);display:grid;grid-template-columns:1fr 1fr;gap:3px 6px;">
-        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(landingUrl,'Landing',7)}</div>
-        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
-        <div style="display:flex;align-items:center;gap:3px;min-width:0;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
-        <div></div>
+    const linkBlockTop = `<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border-light);display:flex;gap:8px;align-items:center;">
+        <div style="flex:1;min-width:0;">${mkEditableLink(landingUrl,'Landing',7)}</div>
+        <div style="flex:1;min-width:0;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
+        <div style="flex:1;min-width:0;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
       </div>`;
 
     return `<div class="grid-card" onclick="(function(e){if(e.currentTarget.classList.contains('card-editing'))return;if(!e.target.closest('button,a,select,.gce,.card-expand-toggle,.grid-card-img,.grid-card-img-empty,.link-input-wrap,.grid-drag-handle')){openAdDetail(${idx})}})(event)" style="cursor:default;" >
@@ -8229,50 +8228,68 @@ function openAdDetail(rowIdx) {
   const copyWeights = {'Angle / Hook':1,'Headline':1,'CTA':1,'Title':1};
 
   const body = `
-    <div style="display:grid;grid-template-columns:260px 1fr;gap:12px;flex:1;min-height:0;align-items:stretch;">
+    <div style="display:flex;flex-direction:column;gap:14px;flex:1;min-height:0;">
 
-      <!-- COL 1: Image + Links + Ad Details -->
-      <div style="display:flex;flex-direction:column;gap:6px;padding-top:1px;overflow-y:auto;">
-        ${imgBlock}
-        <div class="adp-section" style="margin:0;">
-          <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Links</div></div>
-          <div class="adp-lp-card">
-            ${_adpLpRow(landingUrl,'Landing Page',_lpIcons.lp,'var(--blue-bg)',null,6)}
-            ${_adpLpRow(spyUrl,'Spy Tool',_lpIcons.spy,'var(--teal-bg)',null,7)}
-            ${_adpLpRow(fanUrl,'Fan Page',_lpIcons.fan,'var(--purple-bg)',null,8)}
-          </div>
+      <!-- TOP ROW: Creative | Links + Ad Details -->
+      <div style="display:grid;grid-template-columns:240px 1fr;gap:12px;align-items:start;">
+
+        <!-- Creative -->
+        <div style="flex-shrink:0;">
+          ${imgBlock}
         </div>
-        <div class="adp-section" style="margin:0;">
-          <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Ad Details</div></div>
-          <div class="adp-card">
-            ${_adpEditRow('Offer', offerVal, 1)}
-            ${_adpSelectRow('Traffic Source', sourceVal, SOURCE_OPTS, 2, _ADP_SOURCE_COLORS)}
-            ${_adpSelectRow('Format', formatVal, FORMAT_OPTS, 3, _ADP_FORMAT_COLORS)}
-            ${_adpEditRow('Geo', geo, 4)}
-            ${_adpEditRow('Lifecycle', lifecycle, 5)}
-            ${_adpEditRow('Impressions', imp, 14)}
+
+        <!-- Links + Ad Details side by side -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;">
+
+          <!-- Links -->
+          <div class="adp-section" style="margin:0;">
+            <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Links</div></div>
+            <div class="adp-lp-card">
+              ${_adpLpRow(landingUrl,'Landing Page',_lpIcons.lp,'var(--blue-bg)',null,6)}
+              ${_adpLpRow(spyUrl,'Spy Tool',_lpIcons.spy,'var(--teal-bg)',null,7)}
+              ${_adpLpRow(fanUrl,'Fan Page',_lpIcons.fan,'var(--purple-bg)',null,8)}
+            </div>
           </div>
+
+          <!-- Ad Details -->
+          <div class="adp-section" style="margin:0;">
+            <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Ad Details</div></div>
+            <div class="adp-card">
+              ${_adpEditRow('Offer', offerVal, 1)}
+              ${_adpSelectRow('Traffic Source', sourceVal, SOURCE_OPTS, 2, _ADP_SOURCE_COLORS)}
+              ${_adpSelectRow('Format', formatVal, FORMAT_OPTS, 3, _ADP_FORMAT_COLORS)}
+              ${_adpEditRow('Geo', geo, 4)}
+              ${_adpEditRow('Lifecycle', lifecycle, 5)}
+              ${_adpEditRow('Impressions', imp, 14)}
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <!-- COL 2: Ad Copy + Notes -->
-      <div style="display:flex;flex-direction:column;gap:6px;height:100%;min-height:0;">
-        <div class="adp-section-header" style="margin-bottom:0;flex-shrink:0;padding:0 0 4px;"><div class="adp-section-title">Ad Copy</div></div>
-        ${copyFields.map(([l,v,ti]) => {
-          const w = copyWeights[l] || 1;
-          const placeholder = '<span class="adp-copy-placeholder">' + l + '\u2026</span>';
-          return '<div class="adp-copy-item" style="margin:0;display:flex;flex-direction:column;flex:' + w + ';min-height:50px;">' +
-            '<div class="adp-copy-label">' + l + '</div>' +
-            '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="flex:1;min-height:0;overflow-y:auto;">' + (v || placeholder) + '</div>' +
-            '</div>';
-        }).join('')}
-        <div style="flex:1;display:flex;flex-direction:column;min-height:0;">
-          <div class="adp-section-header" style="padding:4px 0 4px;flex-shrink:0;"><div class="adp-section-title">Notes</div></div>
+      <!-- BOTTOM ROW: Ad Copy + Notes -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0;">
+
+        <!-- Ad Copy -->
+        <div style="display:flex;flex-direction:column;gap:6px;min-height:0;">
+          <div class="adp-section-header" style="margin-bottom:0;flex-shrink:0;padding:0 0 4px;"><div class="adp-section-title">Ad Copy</div></div>
+          ${copyFields.map(([l,v,ti]) => {
+            const placeholder = '<span class="adp-copy-placeholder">' + l + '\u2026</span>';
+            return '<div class="adp-copy-item" style="margin:0;display:flex;flex-direction:column;min-height:50px;">' +
+              '<div class="adp-copy-label">' + l + '</div>' +
+              '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="flex:1;min-height:0;overflow-y:auto;">' + (v || placeholder) + '</div>' +
+              '</div>';
+          }).join('')}
+        </div>
+
+        <!-- Notes -->
+        <div style="display:flex;flex-direction:column;min-height:0;">
+          <div class="adp-section-header" style="padding:0 0 4px;flex-shrink:0;"><div class="adp-section-title">Notes</div></div>
           <div class="adp-copy-block" data-field="notes" data-td="15" contenteditable="false"
-               style="flex:1;min-height:100px;overflow-y:auto;">${notes || '<span class="adp-copy-placeholder">Add notes…</span>'}</div>
+               style="flex:1;min-height:120px;overflow-y:auto;">${notes || '<span class="adp-copy-placeholder">Add notes…</span>'}</div>
         </div>
-      </div>
 
+      </div>
     </div>
   `;
   _adpOpen(offerVal, '', body);
