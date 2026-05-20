@@ -2130,11 +2130,12 @@
     .ds-nav-item:hover { background: #f3f4f6; color: #111827; }
     .ds-nav-item.active { background: #eff6ff; color: #2563eb; font-weight: 600; }
     .ds-nav-item svg { flex-shrink: 0; opacity: .6; width: 16px; height: 16px; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s; }
-    #themeToggle svg { width: 16px !important; height: 16px !important; display: block; transform-origin: center center; }
-    .ds-nav-item svg.theme-icon-spin-to-light { animation: themeIconSpinToLight 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .ds-nav-item svg.theme-icon-spin-to-dark  { animation: themeIconSpinToDark  0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    @keyframes themeIconSpinToLight { from { transform: rotate(90deg)  scale(0.7); opacity: 0; } to { transform: rotate(0deg) scale(1); opacity: 0.6; } }
-    @keyframes themeIconSpinToDark  { from { transform: rotate(-90deg) scale(0.7); opacity: 0; } to { transform: rotate(0deg) scale(1); opacity: 0.6; } }
+    #themeToggle .theme-icon-wrap { position: relative; width: 16px; height: 16px; flex-shrink: 0; }
+    #themeToggle svg.theme-icon { position: absolute; top: 0; left: 0; width: 16px !important; height: 16px !important; transform-origin: center center; opacity: 0.6; }
+    #themeToggle svg.theme-icon-hidden { display: none !important; }
+    #themeToggle svg.theme-anim-in { animation: themeSwapIn 0.28s cubic-bezier(0.4, 0, 0.2, 1) both; }
+    @keyframes themeSwapIn { 0% { opacity: 0; transform: scale(0.7) rotate(20deg); } 100% { opacity: 0.6; transform: scale(1) rotate(0deg); } }
+    #themeToggle:active { transform: none !important; }
     .ds-nav-item.active svg { opacity: 1; }
     .ds-sidebar-footer { padding: 10px 8px; border-top: 1px solid #e5e7eb; flex-shrink: 0; display: flex; flex-direction: column; gap: 1px; }
     .ds-user-pill { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-md); }
@@ -6327,7 +6328,10 @@
     </div>
     <nav class="ds-sidebar-nav" style="flex:unset;padding:0;width:100%;">
       <button class="ds-nav-item" id="themeToggle" onclick="toggleTheme()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+        <div class="theme-icon-wrap">
+          <svg class="theme-icon theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+          <svg class="theme-icon theme-icon-sun theme-icon-hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </div>
         <span id="themeLabel">Dark mode</span>
       </button>
     </nav>
@@ -7474,17 +7478,17 @@ function buildAdsGrid() {
       </div>`;
     };
     const linkBlock = `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">
-      <div style="display:flex;gap:4px;justify-content:flex-start;">
-        <div style="flex:1;">${mkEditableLink(landingUrl,'Landing',6)}</div>
-        <div style="flex:1;">${mkEditableLink(fanUrl,'Fan page',7)}</div>
-        <div style="flex:1;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <div>${mkEditableLink(landingUrl,'Landing',6)}</div>
+        <div>${mkEditableLink(fanUrl,'Fan page',7)}</div>
+        <div>${mkEditableLink(spyUrl,'Spy tool',8)}</div>
       </div>
     </div>`;
 
-    const linkBlockTop = `<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border-light);display:flex;gap:8px;align-items:center;">
-        <div style="flex:1;min-width:0;">${mkEditableLink(landingUrl,'Landing',6)}</div>
-        <div style="flex:1;min-width:0;">${mkEditableLink(fanUrl,'Fan page',7)}</div>
-        <div style="flex:1;min-width:0;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
+    const linkBlockTop = `<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border-light);display:flex;gap:12px;align-items:center;">
+        <div>${mkEditableLink(landingUrl,'Landing',6)}</div>
+        <div>${mkEditableLink(fanUrl,'Fan page',7)}</div>
+        <div>${mkEditableLink(spyUrl,'Spy tool',8)}</div>
       </div>`;
 
     return `<div class="grid-card" onclick="(function(e){if(e.currentTarget.classList.contains('card-editing'))return;if(!e.target.closest('button,a,select,.gce,.card-expand-toggle,.grid-card-img,.grid-card-img-empty,.link-input-wrap,.grid-drag-handle')){openAdDetail(${idx})}})(event)" style="cursor:default;" >
@@ -9062,22 +9066,23 @@ function applyThemeUI() {
   const isDark = document.body.classList.contains('force-dark');
   const btn = document.getElementById('themeToggle');
   const label = document.getElementById('themeLabel');
-  const moonSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>';
-  const sunSVG  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+
   if (btn) {
-    // Replace only the SVG (first element child), keep the label span
-    const existingSvg = btn.querySelector('svg');
-    if (existingSvg) existingSvg.outerHTML = isDark ? sunSVG : moonSVG;
-    // Trigger spin animation on new icon
-    const newSvg = btn.querySelector('svg');
-    if (newSvg) {
-      newSvg.classList.remove('theme-icon-spin-to-light', 'theme-icon-spin-to-dark');
-      void newSvg.offsetWidth; // force reflow
-      newSvg.classList.add(isDark ? 'theme-icon-spin-to-dark' : 'theme-icon-spin-to-light');
+    const moon = btn.querySelector('.theme-icon-moon');
+    const sun  = btn.querySelector('.theme-icon-sun');
+    const visible = isDark ? sun : moon;
+    const hidden  = isDark ? moon : sun;
+
+    if (hidden)  { hidden.classList.add('theme-icon-hidden'); hidden.classList.remove('theme-anim-in'); }
+    if (visible) {
+      visible.classList.remove('theme-icon-hidden');
+      visible.classList.remove('theme-anim-in');
+      void visible.offsetWidth;
+      visible.classList.add('theme-anim-in');
     }
   }
+
   if (label) label.textContent = isDark ? 'Light mode' : 'Dark mode';
-  // btn is the sidebar toggle itself now
 }
 
 // Apply saved theme on load
