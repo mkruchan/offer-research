@@ -7426,8 +7426,8 @@ function buildAdsGrid() {
     const geo      = getText(tds[4]);
     const lifecycle = getText(tds[5]);
     const landingUrl = getLinkHref(tds[6]);
-    const spyUrl   = getLinkHref(tds[7]);
-    const fanUrl   = getLinkHref(tds[8]);
+    const fanUrl   = getLinkHref(tds[7]);
+    const spyUrl   = getLinkHref(tds[8]);
     const thumbImg = tr.querySelector('img.media-thumb, video.media-thumb');
     const thumbSrc = thumbImg ? (thumbImg.src || thumbImg.getAttribute('src') || thumbImg.currentSrc || '') : '';
     const thumbUrl = thumbImg ? (thumbImg.getAttribute('onclick')?.match(/openLightbox\('([^']+)'\)/)?.[1] || thumbSrc) : '';
@@ -7457,8 +7457,8 @@ function buildAdsGrid() {
       return `<div class="card-link-field" data-tdidx="${tdIdx}" style="display:flex;flex-direction:column;gap:2px;min-width:0;" onclick="event.stopPropagation()">
         <span class="card-link-display" style="display:flex;align-items:center;gap:3px;min-width:0;">
           ${hasUrl
-            ? `<a href="${url}" target="_blank" rel="noopener" class="card-link-anchor" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:12px;display:flex;align-items:center;gap:2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
-            : `<span style="font-size:12px;color:var(--text-secondary);opacity:0.4;">${label}</span>`
+            ? `<a href="${url}" target="_blank" rel="noopener" class="card-link-anchor" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:11.75px;display:flex;align-items:center;gap:2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
+            : `<span style="font-size:11.75px;color:var(--text-secondary);opacity:0.4;">${label}</span>`
           }
         </span>
         <input class="card-link-input" type="url" placeholder="${label} URL…" value="${url||''}"
@@ -7470,16 +7470,16 @@ function buildAdsGrid() {
     };
     const linkBlock = `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">
       <div style="display:flex;gap:8px;justify-content:space-between;">
-        <div style="flex:1;">${mkEditableLink(landingUrl,'Landing',7)}</div>
+        <div style="flex:1;">${mkEditableLink(landingUrl,'Landing',6)}</div>
+        <div style="flex:1;">${mkEditableLink(fanUrl,'Fan page',7)}</div>
         <div style="flex:1;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
-        <div style="flex:1;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
       </div>
     </div>`;
 
     const linkBlockTop = `<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border-light);display:flex;gap:8px;align-items:center;">
-        <div style="flex:1;min-width:0;">${mkEditableLink(landingUrl,'Landing',7)}</div>
+        <div style="flex:1;min-width:0;">${mkEditableLink(landingUrl,'Landing',6)}</div>
+        <div style="flex:1;min-width:0;">${mkEditableLink(fanUrl,'Fan page',7)}</div>
         <div style="flex:1;min-width:0;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
-        <div style="flex:1;min-width:0;">${mkEditableLink(fanUrl,'Fan page',9)}</div>
       </div>`;
 
     return `<div class="grid-card" onclick="(function(e){if(e.currentTarget.classList.contains('card-editing'))return;if(!e.target.closest('button,a,select,.gce,.card-expand-toggle,.grid-card-img,.grid-card-img-empty,.link-input-wrap,.grid-drag-handle')){openAdDetail(${idx})}})(event)" style="cursor:default;" >
