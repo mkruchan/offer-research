@@ -8228,68 +8228,53 @@ function openAdDetail(rowIdx) {
   const copyWeights = {'Angle / Hook':1,'Headline':1,'CTA':1,'Title':1};
 
   const body = `
-    <div style="display:flex;flex-direction:column;gap:14px;flex:1;min-height:0;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;min-height:0;align-items:start;">
 
-      <!-- TOP ROW: Creative | Links + Ad Details -->
-      <div style="display:grid;grid-template-columns:240px 1fr;gap:12px;align-items:start;">
-
-        <!-- Creative -->
-        <div style="flex-shrink:0;">
-          ${imgBlock}
-        </div>
-
-        <!-- Links + Ad Details side by side -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;">
-
-          <!-- Links -->
-          <div class="adp-section" style="margin:0;">
-            <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Links</div></div>
-            <div class="adp-lp-card">
-              ${_adpLpRow(landingUrl,'Landing Page',_lpIcons.lp,'var(--blue-bg)',null,6)}
-              ${_adpLpRow(spyUrl,'Spy Tool',_lpIcons.spy,'var(--teal-bg)',null,7)}
-              ${_adpLpRow(fanUrl,'Fan Page',_lpIcons.fan,'var(--purple-bg)',null,8)}
-            </div>
+      <!-- COL 1: Creative + Ad Copy -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        ${imgBlock}
+        <div class="adp-section" style="margin:0;">
+          <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Ad Copy</div></div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            ${copyFields.map(([l,v,ti]) => {
+              const placeholder = '<span class="adp-copy-placeholder">' + l + '\u2026</span>';
+              return '<div class="adp-copy-item" style="margin:0;display:flex;flex-direction:column;">' +
+                '<div class="adp-copy-label">' + l + '</div>' +
+                '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="min-height:70px;overflow-y:auto;">' + (v || placeholder) + '</div>' +
+                '</div>';
+            }).join('')}
           </div>
-
-          <!-- Ad Details -->
-          <div class="adp-section" style="margin:0;">
-            <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Ad Details</div></div>
-            <div class="adp-card">
-              ${_adpEditRow('Offer', offerVal, 1)}
-              ${_adpSelectRow('Traffic Source', sourceVal, SOURCE_OPTS, 2, _ADP_SOURCE_COLORS)}
-              ${_adpSelectRow('Format', formatVal, FORMAT_OPTS, 3, _ADP_FORMAT_COLORS)}
-              ${_adpEditRow('Geo', geo, 4)}
-              ${_adpEditRow('Lifecycle', lifecycle, 5)}
-              ${_adpEditRow('Impressions', imp, 14)}
-            </div>
-          </div>
-
         </div>
       </div>
 
-      <!-- BOTTOM ROW: Ad Copy + Notes -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0;">
-
-        <!-- Ad Copy -->
-        <div style="display:flex;flex-direction:column;gap:6px;min-height:0;">
-          <div class="adp-section-header" style="margin-bottom:0;flex-shrink:0;padding:0 0 4px;"><div class="adp-section-title">Ad Copy</div></div>
-          ${copyFields.map(([l,v,ti]) => {
-            const placeholder = '<span class="adp-copy-placeholder">' + l + '\u2026</span>';
-            return '<div class="adp-copy-item" style="margin:0;display:flex;flex-direction:column;min-height:50px;">' +
-              '<div class="adp-copy-label">' + l + '</div>' +
-              '<div class="adp-copy-block" data-field="' + l + '" data-td="' + ti + '" contenteditable="false" style="flex:1;min-height:0;overflow-y:auto;">' + (v || placeholder) + '</div>' +
-              '</div>';
-          }).join('')}
+      <!-- COL 2: Links + Ad Details + Notes -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="adp-section" style="margin:0;">
+          <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Links</div></div>
+          <div class="adp-lp-card">
+            ${_adpLpRow(landingUrl,'Landing Page',_lpIcons.lp,'var(--blue-bg)',null,6)}
+            ${_adpLpRow(spyUrl,'Spy Tool',_lpIcons.spy,'var(--teal-bg)',null,7)}
+            ${_adpLpRow(fanUrl,'Fan Page',_lpIcons.fan,'var(--purple-bg)',null,8)}
+          </div>
         </div>
-
-        <!-- Notes -->
-        <div style="display:flex;flex-direction:column;min-height:0;">
-          <div class="adp-section-header" style="padding:0 0 4px;flex-shrink:0;"><div class="adp-section-title">Notes</div></div>
+        <div class="adp-section" style="margin:0;">
+          <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Ad Details</div></div>
+          <div class="adp-card">
+            ${_adpEditRow('Offer', offerVal, 1)}
+            ${_adpSelectRow('Traffic Source', sourceVal, SOURCE_OPTS, 2, _ADP_SOURCE_COLORS)}
+            ${_adpSelectRow('Format', formatVal, FORMAT_OPTS, 3, _ADP_FORMAT_COLORS)}
+            ${_adpEditRow('Geo', geo, 4)}
+            ${_adpEditRow('Lifecycle', lifecycle, 5)}
+            ${_adpEditRow('Impressions', imp, 14)}
+          </div>
+        </div>
+        <div class="adp-section" style="margin:0;">
+          <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Notes</div></div>
           <div class="adp-copy-block" data-field="notes" data-td="15" contenteditable="false"
-               style="flex:1;min-height:120px;overflow-y:auto;">${notes || '<span class="adp-copy-placeholder">Add notes…</span>'}</div>
+               style="min-height:80px;overflow-y:auto;">${notes || '<span class="adp-copy-placeholder">Add notes…</span>'}</div>
         </div>
-
       </div>
+
     </div>
   `;
   _adpOpen(offerVal, '', body);
