@@ -1064,7 +1064,7 @@
     .adp-tab.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--blue-bg); }
 
     /* Body */
-    .adp-body { padding: 10px 14px; flex: 1; overflow: hidden; min-height: 0; display: flex; flex-direction: column; }
+    .adp-body { padding: 10px 14px; flex: 1; overflow-y: auto; overflow-x: hidden; min-height: 0; display: flex; flex-direction: column; }
     .adp-tab-panel { display: none; }
     .adp-tab-panel.active { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
@@ -4233,7 +4233,7 @@
     .adp-tab:hover { color: #374151 !important; background: #ffffff !important; }
 
     /* Body padding */
-    .adp-body { padding: 14px 20px !important; overflow: hidden !important; display: flex !important; flex-direction: column !important; }
+    .adp-body { padding: 14px 20px !important; overflow-y: auto !important; overflow-x: hidden !important; display: flex !important; flex-direction: column !important; }
 
     /* Image */
     .adp-img-wrap { border-radius: 10px !important; margin-bottom: 8px !important; border-color: #e5e7eb !important; aspect-ratio: 4/3 !important; }
@@ -8228,7 +8228,7 @@ function openAdDetail(rowIdx) {
   const copyWeights = {'Angle / Hook':1,'Headline':1,'CTA':1,'Title':1};
 
   const body = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;min-height:0;align-items:start;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
 
       <!-- COL 1: Creative + Ad Copy -->
       <div style="display:flex;flex-direction:column;gap:10px;">
