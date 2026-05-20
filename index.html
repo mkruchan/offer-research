@@ -109,23 +109,23 @@
       --shadow-lg: 0 8px 28px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.05);
     }
     /* Light mode scrollbars */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; border: none; }
-    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
-    ::-webkit-scrollbar-corner { background: transparent; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #ffffff; border-radius: 99px; }
+    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 99px; border: 2px solid #ffffff; }
+    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; border-color: #ffffff; }
+    ::-webkit-scrollbar-corner { background: #ffffff; }
     /* Dark mode scrollbars */
     body.force-dark ::-webkit-scrollbar { width: 8px; height: 8px; }
-    body.force-dark ::-webkit-scrollbar-track { background: #18181b; }
-    body.force-dark ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; border: 2px solid #18181b; }
+    body.force-dark ::-webkit-scrollbar-track { background: #27272a; border-radius: 99px; }
+    body.force-dark ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 99px; border: 2px solid #27272a; }
     body.force-dark ::-webkit-scrollbar-thumb:hover { background: #52525b; }
-    body.force-dark ::-webkit-scrollbar-corner { background: #18181b; }
+    body.force-dark ::-webkit-scrollbar-corner { background: #27272a; }
     @media (prefers-color-scheme: dark) {
       ::-webkit-scrollbar { width: 8px; height: 8px; }
-      ::-webkit-scrollbar-track { background: #18181b; }
-      ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; border: 2px solid #18181b; }
+      ::-webkit-scrollbar-track { background: #27272a; border-radius: 99px; }
+      ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 99px; border: 2px solid #27272a; }
       ::-webkit-scrollbar-thumb:hover { background: #52525b; }
-      ::-webkit-scrollbar-corner { background: #18181b; }
+      ::-webkit-scrollbar-corner { background: #27272a; }
     }
 
     .new-offer-btn { background: var(--accent); color: #fff; }
@@ -4123,6 +4123,103 @@
 
     /* Panel layout */
     #ad-detail-panel { font-family: 'Inter', -apple-system, sans-serif; }
+
+    /* ── Scrollbars inside ad-detail-panel — match horizontal table-scroll style ── */
+    #ad-detail-panel ::-webkit-scrollbar { width: 8px; height: 8px; }
+    #ad-detail-panel ::-webkit-scrollbar-track { background: #ffffff; border-radius: 99px; }
+    #ad-detail-panel ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 99px; border: 2px solid #ffffff; }
+    #ad-detail-panel ::-webkit-scrollbar-thumb:hover { background: #9ca3af; border-color: #ffffff; }
+    #ad-detail-panel ::-webkit-scrollbar-corner { background: #ffffff; }
+    body.force-dark #ad-detail-panel ::-webkit-scrollbar-track { background: #27272a; }
+    body.force-dark #ad-detail-panel ::-webkit-scrollbar-thumb { background: #3f3f46; border-color: #27272a; }
+    body.force-dark #ad-detail-panel ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+    @media (prefers-color-scheme: dark) {
+      body:not(.force-light) #ad-detail-panel ::-webkit-scrollbar-track { background: #27272a; }
+      body:not(.force-light) #ad-detail-panel ::-webkit-scrollbar-thumb { background: #3f3f46; border-color: #27272a; }
+      body:not(.force-light) #ad-detail-panel ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+    }
+
+    /* ── Scrollbars inside all sidebar/overlay panels ── */
+    .hp-panel ::-webkit-scrollbar,
+    .hp-list::-webkit-scrollbar,
+    .offers-panel ::-webkit-scrollbar,
+    .offers-panel-list::-webkit-scrollbar,
+    .dp-panel ::-webkit-scrollbar,
+    .dp-results::-webkit-scrollbar,
+    .ic-body::-webkit-scrollbar,
+    .notes-body::-webkit-scrollbar,
+    .notes-body textarea::-webkit-scrollbar,
+    .md-card::-webkit-scrollbar,
+    .md-body::-webkit-scrollbar { width: 8px; height: 8px; }
+
+    .hp-panel ::-webkit-scrollbar-track,
+    .hp-list::-webkit-scrollbar-track,
+    .offers-panel ::-webkit-scrollbar-track,
+    .offers-panel-list::-webkit-scrollbar-track,
+    .dp-panel ::-webkit-scrollbar-track,
+    .dp-results::-webkit-scrollbar-track,
+    .ic-body::-webkit-scrollbar-track,
+    .notes-body::-webkit-scrollbar-track,
+    .notes-body textarea::-webkit-scrollbar-track,
+    .md-card::-webkit-scrollbar-track,
+    .md-body::-webkit-scrollbar-track { background: #ffffff; border-radius: 99px; }
+
+    .hp-panel ::-webkit-scrollbar-thumb,
+    .hp-list::-webkit-scrollbar-thumb,
+    .offers-panel ::-webkit-scrollbar-thumb,
+    .offers-panel-list::-webkit-scrollbar-thumb,
+    .dp-panel ::-webkit-scrollbar-thumb,
+    .dp-results::-webkit-scrollbar-thumb,
+    .ic-body::-webkit-scrollbar-thumb,
+    .notes-body::-webkit-scrollbar-thumb,
+    .notes-body textarea::-webkit-scrollbar-thumb,
+    .md-card::-webkit-scrollbar-thumb,
+    .md-body::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 99px; border: 2px solid #ffffff; }
+
+    .hp-panel ::-webkit-scrollbar-thumb:hover,
+    .hp-list::-webkit-scrollbar-thumb:hover,
+    .offers-panel ::-webkit-scrollbar-thumb:hover,
+    .offers-panel-list::-webkit-scrollbar-thumb:hover,
+    .dp-panel ::-webkit-scrollbar-thumb:hover,
+    .dp-results::-webkit-scrollbar-thumb:hover,
+    .ic-body::-webkit-scrollbar-thumb:hover,
+    .notes-body::-webkit-scrollbar-thumb:hover,
+    .notes-body textarea::-webkit-scrollbar-thumb:hover,
+    .md-card::-webkit-scrollbar-thumb:hover,
+    .md-body::-webkit-scrollbar-thumb:hover { background: #9ca3af; border-color: #ffffff; }
+
+    body.force-dark .hp-panel ::-webkit-scrollbar-track,
+    body.force-dark .hp-list::-webkit-scrollbar-track,
+    body.force-dark .offers-panel ::-webkit-scrollbar-track,
+    body.force-dark .offers-panel-list::-webkit-scrollbar-track,
+    body.force-dark .dp-panel ::-webkit-scrollbar-track,
+    body.force-dark .dp-results::-webkit-scrollbar-track,
+    body.force-dark .ic-body::-webkit-scrollbar-track,
+    body.force-dark .notes-body::-webkit-scrollbar-track,
+    body.force-dark .md-card::-webkit-scrollbar-track,
+    body.force-dark .md-body::-webkit-scrollbar-track { background: #27272a; }
+
+    body.force-dark .hp-panel ::-webkit-scrollbar-thumb,
+    body.force-dark .hp-list::-webkit-scrollbar-thumb,
+    body.force-dark .offers-panel ::-webkit-scrollbar-thumb,
+    body.force-dark .offers-panel-list::-webkit-scrollbar-thumb,
+    body.force-dark .dp-panel ::-webkit-scrollbar-thumb,
+    body.force-dark .dp-results::-webkit-scrollbar-thumb,
+    body.force-dark .ic-body::-webkit-scrollbar-thumb,
+    body.force-dark .notes-body::-webkit-scrollbar-thumb,
+    body.force-dark .md-card::-webkit-scrollbar-thumb,
+    body.force-dark .md-body::-webkit-scrollbar-thumb { background: #3f3f46; border-color: #27272a; }
+
+    body.force-dark .hp-panel ::-webkit-scrollbar-thumb:hover,
+    body.force-dark .hp-list::-webkit-scrollbar-thumb:hover,
+    body.force-dark .offers-panel ::-webkit-scrollbar-thumb:hover,
+    body.force-dark .offers-panel-list::-webkit-scrollbar-thumb:hover,
+    body.force-dark .dp-panel ::-webkit-scrollbar-thumb:hover,
+    body.force-dark .dp-results::-webkit-scrollbar-thumb:hover,
+    body.force-dark .ic-body::-webkit-scrollbar-thumb:hover,
+    body.force-dark .notes-body::-webkit-scrollbar-thumb:hover,
+    body.force-dark .md-card::-webkit-scrollbar-thumb:hover,
+    body.force-dark .md-body::-webkit-scrollbar-thumb:hover { background: #52525b; }
 
     /* Header */
     .adp-header-top { padding: 20px 24px 14px !important; }
