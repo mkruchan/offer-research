@@ -6029,7 +6029,8 @@
     #traffic-table thead th.frozen-num { background: #ffffff !important; }
     body.force-dark #traffic-table thead th.frozen-num { background: #18181b !important; }
 
-    /* ── BUG FIX: frozen sticky cells must inherit row hover colour ── */
+    /* ── BUG FIX: frozen sticky cells must match row hover colour.
+       rgba(37,99,235,0.1) blended over #18181b = #191f2f solid ── */
     body.force-dark #ads-table tbody tr:hover td.frozen-num,
     body.force-dark #ads-table tbody tr:hover td.frozen-offer,
     body.force-dark #traffic-table tbody tr:hover td.frozen-num,
@@ -6037,7 +6038,7 @@
     body.force-dark #funnels-table tbody tr:hover td.frozen-offer,
     body.force-dark tbody tr:hover td.frozen-num,
     body.force-dark tbody tr:hover td.frozen-offer {
-      background: #27272a !important;
+      background: #191f2f !important;
     }
     </style>
 
