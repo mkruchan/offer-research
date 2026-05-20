@@ -6159,7 +6159,67 @@
     body.force-dark tbody tr:hover td.frozen-offer {
       background: #191f2f !important;
     }
+
+    /* ══════════════════════════════════════
+       IN-CARD EDIT MODE
+    ══════════════════════════════════════ */
+    .grid-card.card-editing {
+      outline: 2px solid var(--accent) !important;
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.15), var(--shadow-md) !important;
+    }
+    body.force-dark .grid-card.card-editing {
+      outline-color: var(--blue-text) !important;
+      box-shadow: 0 0 0 4px rgba(30,58,95,0.6), var(--shadow-md) !important;
+    }
+    .grid-card.card-editing .gce {
+      cursor: text !important;
+      background: var(--bg-secondary) !important;
+      border-radius: 4px !important;
+      padding: 3px 5px !important;
+      outline: 1px solid var(--border-mid) !important;
+      min-height: 22px !important;
+      display: block !important;
+      -webkit-line-clamp: unset !important;
+      overflow: visible !important;
+      white-space: pre-wrap !important;
+    }
+    .grid-card.card-editing .gce:focus {
+      outline: 2px solid var(--accent) !important;
+      background: var(--bg-primary) !important;
+    }
+    .grid-card.card-editing .card-link-display { display: none !important; }
+    .grid-card.card-editing .card-link-input {
+      display: block !important;
+      font-size: 11px; font-family: inherit;
+      border: 1px solid var(--accent); border-radius: 4px;
+      padding: 3px 6px; background: var(--bg-primary);
+      color: var(--text-primary); outline: none;
+      width: 100%; box-sizing: border-box;
+    }
+    .grid-card.card-editing .card-link-input:focus {
+      box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+    }
+    .grid-card.card-editing .card-chip-wrap { display: block !important; width: 100%; }
+    .grid-card.card-editing .card-chip-display { display: none !important; }
+    .grid-card.card-editing .card-chip-select {
+      position: relative !important; inset: auto !important;
+      opacity: 1 !important; width: 100% !important; height: auto !important;
+      font-size: 12px !important; font-family: inherit !important;
+      padding: 4px 6px !important; border: 1px solid var(--accent) !important;
+      border-radius: 4px !important; background: var(--bg-primary) !important;
+      color: var(--text-primary) !important; cursor: pointer !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      .grid-card.card-editing {
+        outline-color: #93c5fd !important;
+        box-shadow: 0 0 0 4px rgba(30,58,95,0.6), var(--shadow-md) !important;
+      }
+      .grid-card.card-editing .card-chip-select,
+      .grid-card.card-editing .card-link-input,
+      .grid-card.card-editing .gce { background: #27272a !important; }
+    }
     </style>
+
 
 
 <body>
@@ -7129,11 +7189,11 @@ function buildTrafficGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
+    return `<div class="card-chip-field" style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
       <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">${label}</div>
-      <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
-        ${chipHtml}
-        <select data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
+      <span class="card-chip-wrap" style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
+        <span class="card-chip-display">${chipHtml}</span>
+        <select class="card-chip-select" data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
           onchange="gridChipEdit(this)"
           style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;"
         >${opts}</select>
@@ -7164,12 +7224,13 @@ function buildTrafficGrid() {
     const qty = getText(tds[3]);
     const notes = getText(tds[5]);
 
-    return `<div class="grid-card" onclick="(function(e){if(!e.target.closest('button,a,select,.gce,.grid-drag-handle')){openTrafficDetail(${idx})}})(event)" style="cursor:default;" >
+    return `<div class="grid-card" onclick="(function(e){if(e.currentTarget.classList.contains('card-editing'))return;if(!e.target.closest('button,a,select,.gce,.grid-drag-handle')){openTrafficDetail(${idx})}})(event)" style="cursor:default;" >
       <div class="grid-card-body">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${idx+1}</span>
           <div style="display:flex;align-items:center;gap:2px;background:rgba(0,0,0,0.55);border-radius:8px;padding:4px 6px;backdrop-filter:blur(4px);height:28px;box-sizing:border-box;" onclick="event.stopPropagation()">
           <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px 3px;font-size:14px;line-height:1;display:flex;align-items:center;height:20px;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
+          <button title="Edit" onclick="event.stopPropagation();toggleCardEditMode(this.closest('.grid-card'),${idx},'traffic-body');" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin='round'/></svg></button>
           <button title="Delete" onclick="gridRemoveRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(239,68,68,.75)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'">×</button>
         </div>
         </div>
@@ -7244,12 +7305,13 @@ function buildFunnelsGrid() {
       </span>
     </div>` : '';
 
-    return `<div class="grid-card" onclick="(function(e){if(!e.target.closest('button,a,select,.gce,.grid-drag-handle')){openFunnelDetail(${idx})}})(event)" style="cursor:default;" >
+    return `<div class="grid-card" onclick="(function(e){if(e.currentTarget.classList.contains('card-editing'))return;if(!e.target.closest('button,a,select,.gce,.grid-drag-handle')){openFunnelDetail(${idx})}})(event)" style="cursor:default;" >
       <div class="grid-card-body">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${idx+1}</span>
           <div style="display:flex;align-items:center;gap:2px;background:rgba(0,0,0,0.55);border-radius:8px;padding:4px 6px;backdrop-filter:blur(4px);height:28px;box-sizing:border-box;" onclick="event.stopPropagation()">
           <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px 3px;font-size:14px;line-height:1;display:flex;align-items:center;height:20px;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
+          <button title="Edit" onclick="event.stopPropagation();toggleCardEditMode(this.closest('.grid-card'),${idx},'funnels-body');" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin='round'/></svg></button>
           <button title="Delete" onclick="gridRemoveRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(239,68,68,.75)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'">×</button>
         </div>
         </div>
@@ -7392,11 +7454,18 @@ function buildAdsGrid() {
 
     const mkEditableLink = (url, label, tdIdx) => {
       const hasUrl = url && url.startsWith('http');
-      return `<div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;" onclick="event.stopPropagation()">
-        ${hasUrl
-          ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
-          : `<span style="font-size:13px;color:var(--text-secondary);opacity:0.4;">${label}</span>`
-        }
+      return `<div class="card-link-field" data-tdidx="${tdIdx}" style="display:flex;flex-direction:column;gap:2px;min-width:0;" onclick="event.stopPropagation()">
+        <span class="card-link-display" style="display:flex;align-items:center;gap:3px;min-width:0;">
+          ${hasUrl
+            ? `<a href="${url}" target="_blank" rel="noopener" class="card-link-anchor" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:12px;display:flex;align-items:center;gap:2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
+            : `<span style="font-size:12px;color:var(--text-secondary);opacity:0.4;">${label}</span>`
+          }
+        </span>
+        <input class="card-link-input" type="url" placeholder="${label} URL…" value="${url||''}"
+          data-tdidx="${tdIdx}" data-row="${idx}" data-table="ads-body"
+          style="display:none;font-size:11px;font-family:inherit;border:1px solid var(--accent);border-radius:4px;padding:3px 6px;background:var(--bg-primary);color:var(--text-primary);outline:none;width:100%;box-sizing:border-box;"
+          onkeydown="if(event.key==='Enter'||event.key==='Escape'){this.blur();}"
+        >
       </div>`;
     };
     const linkBlock = `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">
@@ -7414,12 +7483,13 @@ function buildAdsGrid() {
         <div></div>
       </div>`;
 
-    return `<div class="grid-card" onclick="(function(e){if(!e.target.closest('button,a,select,.gce,.card-expand-toggle,.grid-card-img,.grid-card-img-empty,.link-input-wrap,.grid-drag-handle')){openAdDetail(${idx})}})(event)" style="cursor:default;" >
+    return `<div class="grid-card" onclick="(function(e){if(e.currentTarget.classList.contains('card-editing'))return;if(!e.target.closest('button,a,select,.gce,.card-expand-toggle,.grid-card-img,.grid-card-img-empty,.link-input-wrap,.grid-drag-handle')){openAdDetail(${idx})}})(event)" style="cursor:default;" >
       <div style="position:relative;overflow:hidden;border-radius:8px 8px 0 0;">${imgHtml}
         <div style="position:absolute;top:4px;left:4px;right:4px;display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${num}</span>
           <div style="display:flex;align-items:center;gap:2px;background:rgba(0,0,0,0.55);border-radius:8px;padding:4px 6px;backdrop-filter:blur(4px);height:28px;box-sizing:border-box;" onclick="event.stopPropagation()">
           <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px 3px;font-size:14px;line-height:1;display:flex;align-items:center;height:20px;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
+          <button title="Edit" onclick="event.stopPropagation();toggleCardEditMode(this.closest('.grid-card'),${idx},'ads-body');" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin='round'/></svg></button>
           <button title="Delete" onclick="gridCardDelete(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(239,68,68,.75)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'">×</button>
         </div>
         </div>
@@ -11857,5 +11927,132 @@ document.addEventListener('click', function(e) {
 })();
 </script>
 
+<script>
+// ── In-card edit mode ──
+window._cardEditingCard = null;
+
+function toggleCardEditMode(card, rowIdx, tableId) {
+  if (!card) return;
+  var isEditing = card.classList.contains('card-editing');
+  if (window._cardEditingCard && window._cardEditingCard !== card) {
+    exitCardEditMode(window._cardEditingCard);
+  }
+  if (isEditing) { exitCardEditMode(card); } else { enterCardEditMode(card); }
+}
+
+function enterCardEditMode(card) {
+  card.classList.add('card-editing');
+  window._cardEditingCard = card;
+  // Make gce text fields directly editable (bypass gcExpand/gcCollapse)
+  card.querySelectorAll('.gce').forEach(function(el) {
+    el.contentEditable = 'true';
+  });
+  // Auto-open the Angle/Headline/Notes expandable section
+  var expandable = card.querySelector('.card-expandable');
+  var toggle = card.querySelector('.card-expand-toggle');
+  if (expandable && expandable.style.display === 'none') {
+    expandable.style.display = 'block';
+    var icon = toggle && toggle.querySelector('.card-expand-icon');
+    if (icon) icon.style.transform = 'rotate(180deg)';
+    card._expandWasClosedOnEdit = true;
+  } else {
+    card._expandWasClosedOnEdit = false;
+  }
+}
+
+function exitCardEditMode(card) {
+  card.classList.remove('card-editing');
+  if (window._cardEditingCard === card) window._cardEditingCard = null;
+
+  // Auto-close the expandable if it was closed before editing
+  if (card._expandWasClosedOnEdit) {
+    var expandable = card.querySelector('.card-expandable');
+    var toggle = card.querySelector('.card-expand-toggle');
+    if (expandable) expandable.style.display = 'none';
+    var icon = toggle && toggle.querySelector('.card-expand-icon');
+    if (icon) icon.style.transform = '';
+    card._expandWasClosedOnEdit = false;
+  }
+
+  // Save gce text fields → hidden table textareas
+  card.querySelectorAll('.gce').forEach(function(el) {
+    el.contentEditable = 'false';
+    // Clear inline styles set by gcExpand so CSS takes over again
+    el.style.cursor = '';
+    el.style.background = '';
+    el.style.padding = '';
+    el.style.outline = '';
+    el.style.overflow = '';
+    el.style.display = '';
+    var selector = el.dataset.ta;
+    var rowIdx = parseInt(el.dataset.row);
+    var tableId = el.dataset.table;
+    if (selector && tableId) {
+      var tbody = document.getElementById(tableId);
+      if (tbody) {
+        var tr = tbody.querySelectorAll('tr')[rowIdx];
+        if (tr) {
+          var td = tr.querySelector(selector);
+          var ta = td ? td.querySelector('textarea') : null;
+          if (ta) { ta.value = el.innerText.replace(/\n$/, ''); if (typeof autoGrow === 'function') autoGrow(ta); }
+        }
+      }
+    }
+  });
+
+  // Save link inputs → hidden table link-chip anchors
+  card.querySelectorAll('.card-link-input').forEach(function(inp) {
+    var tdIdx = parseInt(inp.dataset.tdidx);
+    var rowIdx = parseInt(inp.dataset.row);
+    var tableId = inp.dataset.table;
+    var newUrl = inp.value.trim();
+    if (!tableId) return;
+    var tbody = document.getElementById(tableId);
+    if (!tbody) return;
+    var tr = tbody.querySelectorAll('tr')[rowIdx];
+    if (!tr) return;
+    var td = tr.querySelectorAll('td')[tdIdx - 1];
+    if (!td) return;
+    // Update the anchor in the hidden table cell
+    var anchor = td.querySelector('a.link-chip');
+    if (anchor) {
+      anchor.href = newUrl || '#';
+    } else if (newUrl) {
+      // Create a minimal anchor if none exists
+      var a = document.createElement('a');
+      a.className = 'link-chip';
+      a.href = newUrl;
+      td.appendChild(a);
+    }
+    // Also update the display anchor in the card
+    var displayWrap = inp.closest('.card-link-field');
+    if (displayWrap) {
+      var existingA = displayWrap.querySelector('.card-link-anchor');
+      var labelEl = displayWrap.querySelector('.card-link-display span');
+      var label = inp.placeholder.replace(' URL…','');
+      if (newUrl) {
+        if (existingA) {
+          existingA.href = newUrl;
+        } else {
+          var displaySpan = displayWrap.querySelector('.card-link-display');
+          if (displaySpan) {
+            displaySpan.innerHTML = '<a href="'+newUrl+'" target="_blank" rel="noopener" class="card-link-anchor" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:12px;display:flex;align-items:center;gap:2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><svg width=\'9\' height=\'9\' viewBox=\'0 0 16 16\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9\'/><path d=\'M10 2h4v4M14 2 8 8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/></svg>'+label+'</a>';
+          }
+        }
+      }
+    }
+  });
+
+  if (typeof scheduleAutoSave === 'function') scheduleAutoSave();
+}
+
+// Click outside editing card → exit edit mode
+document.addEventListener('click', function(e) {
+  if (!window._cardEditingCard) return;
+  if (!window._cardEditingCard.contains(e.target)) {
+    exitCardEditMode(window._cardEditingCard);
+  }
+});
+</script>
 </body>
 </html>
