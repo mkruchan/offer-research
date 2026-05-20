@@ -2129,7 +2129,12 @@
     }
     .ds-nav-item:hover { background: #f3f4f6; color: #111827; }
     .ds-nav-item.active { background: #eff6ff; color: #2563eb; font-weight: 600; }
-    .ds-nav-item svg { flex-shrink: 0; opacity: .6; width: 16px; height: 16px; }
+    .ds-nav-item svg { flex-shrink: 0; opacity: .6; width: 16px; height: 16px; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s; }
+    #themeToggle svg { width: 16px !important; height: 16px !important; display: block; transform-origin: center center; }
+    .ds-nav-item svg.theme-icon-spin-to-light { animation: themeIconSpinToLight 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .ds-nav-item svg.theme-icon-spin-to-dark  { animation: themeIconSpinToDark  0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    @keyframes themeIconSpinToLight { from { transform: rotate(90deg)  scale(0.7); opacity: 0; } to { transform: rotate(0deg) scale(1); opacity: 0.6; } }
+    @keyframes themeIconSpinToDark  { from { transform: rotate(-90deg) scale(0.7); opacity: 0; } to { transform: rotate(0deg) scale(1); opacity: 0.6; } }
     .ds-nav-item.active svg { opacity: 1; }
     .ds-sidebar-footer { padding: 10px 8px; border-top: 1px solid #e5e7eb; flex-shrink: 0; display: flex; flex-direction: column; gap: 1px; }
     .ds-user-pill { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-md); }
@@ -6322,7 +6327,7 @@
     </div>
     <nav class="ds-sidebar-nav" style="flex:unset;padding:0;width:100%;">
       <button class="ds-nav-item" id="themeToggle" onclick="toggleTheme()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
         <span id="themeLabel">Dark mode</span>
       </button>
     </nav>
@@ -7457,7 +7462,7 @@ function buildAdsGrid() {
       return `<div class="card-link-field" data-tdidx="${tdIdx}" style="display:flex;flex-direction:column;gap:2px;min-width:0;" onclick="event.stopPropagation()">
         <span class="card-link-display" style="display:flex;align-items:center;gap:3px;min-width:0;">
           ${hasUrl
-            ? `<a href="${url}" target="_blank" rel="noopener" class="card-link-anchor" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:11.75px;display:flex;align-items:center;gap:2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
+            ? `<a href="${url}" target="_blank" rel="noopener" class="card-link-anchor" style="color:var(--accent,#2563eb);text-decoration:none;font-size:11.75px;display:flex;align-items:center;gap:2px;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="9" height="9" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>`
             : `<span style="font-size:11.75px;color:var(--text-secondary);opacity:0.4;">${label}</span>`
           }
         </span>
@@ -7469,7 +7474,7 @@ function buildAdsGrid() {
       </div>`;
     };
     const linkBlock = `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">
-      <div style="display:flex;gap:8px;justify-content:space-between;">
+      <div style="display:flex;gap:4px;justify-content:flex-start;">
         <div style="flex:1;">${mkEditableLink(landingUrl,'Landing',6)}</div>
         <div style="flex:1;">${mkEditableLink(fanUrl,'Fan page',7)}</div>
         <div style="flex:1;">${mkEditableLink(spyUrl,'Spy tool',8)}</div>
@@ -9057,12 +9062,19 @@ function applyThemeUI() {
   const isDark = document.body.classList.contains('force-dark');
   const btn = document.getElementById('themeToggle');
   const label = document.getElementById('themeLabel');
-  const moonSVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>';
-  const sunSVG  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+  const moonSVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>';
+  const sunSVG  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
   if (btn) {
     // Replace only the SVG (first element child), keep the label span
     const existingSvg = btn.querySelector('svg');
     if (existingSvg) existingSvg.outerHTML = isDark ? sunSVG : moonSVG;
+    // Trigger spin animation on new icon
+    const newSvg = btn.querySelector('svg');
+    if (newSvg) {
+      newSvg.classList.remove('theme-icon-spin-to-light', 'theme-icon-spin-to-dark');
+      void newSvg.offsetWidth; // force reflow
+      newSvg.classList.add(isDark ? 'theme-icon-spin-to-dark' : 'theme-icon-spin-to-light');
+    }
   }
   if (label) label.textContent = isDark ? 'Light mode' : 'Dark mode';
   // btn is the sidebar toggle itself now
@@ -12038,7 +12050,7 @@ function exitCardEditMode(card) {
         } else {
           var displaySpan = displayWrap.querySelector('.card-link-display');
           if (displaySpan) {
-            displaySpan.innerHTML = '<a href="'+newUrl+'" target="_blank" rel="noopener" class="card-link-anchor" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:12px;display:flex;align-items:center;gap:2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><svg width=\'9\' height=\'9\' viewBox=\'0 0 16 16\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9\'/><path d=\'M10 2h4v4M14 2 8 8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/></svg>'+label+'</a>';
+            displaySpan.innerHTML = '<a href="'+newUrl+'" target="_blank" rel="noopener" class="card-link-anchor" style="color:var(--accent,#2563eb);text-decoration:none;font-size:11.75px;display:flex;align-items:center;gap:2px;white-space:nowrap;"><svg width=\'9\' height=\'9\' viewBox=\'0 0 16 16\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9\'/><path d=\'M10 2h4v4M14 2 8 8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/></svg>'+label+'</a>';
           }
         }
       }
