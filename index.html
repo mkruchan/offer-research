@@ -6865,6 +6865,16 @@ const MASTER_API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6W
 
 const _hostPath = (location.hostname + location.pathname).replace(/\/index\.html$/, '').replace(/\/$/, '');
 const _urlBin = new URLSearchParams(location.search).get('bin') || '';
+// ── Capture slug from URL immediately — before init() can overwrite pathname via runPostInit ──
+const _initialUrlSlug = (function() {
+  const params = new URLSearchParams(location.search);
+  const offerParam = params.get('offer');
+  if (offerParam) return offerParam;
+  const pathSlug = location.pathname.replace('/creative-research/', '').replace(/\/$/, '').replace(/\.html$/, '');
+  // Only use pathname slug if it looks like a real slug (not a full file path)
+  if (pathSlug && !pathSlug.includes('/') && !pathSlug.includes('.')) return pathSlug;
+  return '';
+})();
 // Per-file key — all storage is isolated per page URL
 const _pageKey = btoa(location.hostname + location.pathname.replace(/\/index\.html$/, '')).replace(/[^a-zA-Z0-9]/g,'').slice(-16);
 const LS_SETTINGS = 'ecoverage_settings_v1_' + _pageKey;
@@ -10951,7 +10961,9 @@ function runPostInit(cloudData) {
   }
 
   // 1. Show local data immediately — no waiting
+  // Skip if a URL slug is present — the correct offer will load via offerLoadAll
   let loadedFromLocal = false;
+  if (!_initialUrlSlug) {
   try {
     const raw = localStorage.getItem(LS_LOCAL);
     if (raw) {
@@ -10962,6 +10974,7 @@ function runPostInit(cloudData) {
       loadedFromLocal = true;
     }
   } catch(e) {}
+  }
 
   if (!loadedFromLocal) {
     for (let i=1;i<=3;i++) {
@@ -11157,11 +11170,9 @@ async function offerLoadAll() {
 
   offerRebuildSelect();
 
-  // Restore last selected — prefer URL hash slug match first
-  // Read slug from ?offer= query param (set by 404.html redirect) and restore clean URL
-  const _urlParams = new URLSearchParams(location.search);
-  const _offerParam = _urlParams.get('offer');
-  const _urlSlug = _offerParam || location.pathname.replace('/creative-research/', '').replace(/\/$/, '').replace(/\.html$/, '') || '';
+  // Restore last selected — prefer URL slug match first
+  // Use _initialUrlSlug captured at page-load time (before runPostInit can overwrite pathname)
+  const _urlSlug = _initialUrlSlug;
   const slugMatch = _urlSlug && _allOffers.find(o => offerSlugFromTitle(o.name) === _urlSlug);
   const lastId = localStorage.getItem(SB_OFFER_KEY);
   const lastMatch = lastId && _allOffers.find(o => o.id === lastId);
