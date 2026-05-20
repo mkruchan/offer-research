@@ -6028,7 +6028,20 @@
     }
     #traffic-table thead th.frozen-num { background: #ffffff !important; }
     body.force-dark #traffic-table thead th.frozen-num { background: #18181b !important; }
+
+    /* ── BUG FIX: frozen sticky cells must inherit row hover colour ── */
+    body.force-dark #ads-table tbody tr:hover td.frozen-num,
+    body.force-dark #ads-table tbody tr:hover td.frozen-offer,
+    body.force-dark #traffic-table tbody tr:hover td.frozen-num,
+    body.force-dark #funnels-table tbody tr:hover td.frozen-num,
+    body.force-dark #funnels-table tbody tr:hover td.frozen-offer,
+    body.force-dark tbody tr:hover td.frozen-num,
+    body.force-dark tbody tr:hover td.frozen-offer {
+      background: #27272a !important;
+    }
     </style>
+
+
 <body>
 
 <div id="liftiq-loader">
