@@ -6235,6 +6235,7 @@
       outline: 2px solid var(--accent) !important;
       background: var(--bg-primary) !important;
     }
+    .card-link-input { display: none !important; height: 0 !important; padding: 0 !important; margin: 0 !important; border: none !important; position: absolute !important; pointer-events: none !important; }
     .grid-card.card-editing .card-link-display { display: none !important; }
     .grid-card.card-editing .card-link-input {
       display: block !important;
@@ -7535,7 +7536,7 @@ function buildAdsGrid() {
         </span>
         <input class="card-link-input" type="url" placeholder="${label} URL…" value="${url||''}"
           data-tdidx="${tdIdx}" data-row="${idx}" data-table="ads-body"
-          style="display:none;font-size:11px;font-family:inherit;border:1px solid var(--accent);border-radius:4px;padding:3px 6px;background:var(--bg-primary);color:var(--text-primary);outline:none;width:100%;box-sizing:border-box;"
+          style="display:none;height:0;padding:0;margin:0;border:none;font-size:11px;font-family:inherit;border-radius:4px;background:var(--bg-primary);color:var(--text-primary);outline:none;width:100%;box-sizing:border-box;"
           onkeydown="if(event.key==='Enter'||event.key==='Escape'){this.blur();}"
         >
       </div>`;
@@ -8032,6 +8033,42 @@ function rebuildGridForTable(tableId) {
   if (tableId === 'traffic-body' && document.getElementById('traffic-grid').style.display !== 'none') buildTrafficGrid();
   if (tableId === 'funnels-body' && document.getElementById('funnels-grid').style.display !== 'none') buildFunnelsGrid();
 }
+
+// ── Table → Card live sync ──
+// When user edits directly in the table, rebuild the grid card after a short debounce
+(function() {
+  const _syncTimers = {};
+  function scheduleGridSync(tableId) {
+    clearTimeout(_syncTimers[tableId]);
+    _syncTimers[tableId] = setTimeout(function() {
+      rebuildGridForTable(tableId);
+    }, 300);
+  }
+
+  // Listen for input (textarea typing) and change (select) on all table bodies
+  ['ads-body','traffic-body','funnels-body'].forEach(function(tableId) {
+    document.addEventListener('input', function(e) {
+      const tbody = document.getElementById(tableId);
+      if (tbody && tbody.contains(e.target)) scheduleGridSync(tableId);
+    });
+    document.addEventListener('change', function(e) {
+      const tbody = document.getElementById(tableId);
+      if (tbody && tbody.contains(e.target)) scheduleGridSync(tableId);
+    });
+  });
+
+  // Also sync when a link chip value changes in the table
+  // (link chips fire a custom 'linkchange' or we catch blur on the link input)
+  document.addEventListener('blur', function(e) {
+    if (!e.target.matches('tbody td textarea, tbody td input')) return;
+    const tbody = e.target.closest('tbody');
+    if (!tbody) return;
+    const tableId = tbody.id;
+    if (['ads-body','traffic-body','funnels-body'].includes(tableId)) {
+      rebuildGridForTable(tableId);
+    }
+  }, true);
+})();
 
 function resetRowHeight(input) {
   const tr = input.closest('tr');
@@ -8836,6 +8873,52 @@ function adpSaveEdit() {
   if (_adpCurrentTable === 'funnels-body' && document.getElementById('funnels-grid').style.display !== 'none') buildFunnelsGrid();
   adpCancelEdit();
 }
+
+// ── ADP panel → Table live sync ──
+// Write changes from the detail panel back to the table in real time (no need to hit Save)
+let _adpSyncTimer = null;
+function adpLiveSync() {
+  clearTimeout(_adpSyncTimer);
+  _adpSyncTimer = setTimeout(function() {
+    const table = _adpCurrentTable;
+    const rowIdx = _adpCurrentRowIdx;
+    if (!table || rowIdx < 0) return;
+    const tr = document.querySelectorAll('#' + table + ' tr')[rowIdx];
+    if (!tr) return;
+    const tds = tr.querySelectorAll('td');
+    const setTa = (td, val) => { const ta = td?.querySelector('textarea'); if (ta && ta.value !== val) { ta.value = val; autoGrow(ta); } };
+    const setLink = (td, val) => { const wrap = td?.querySelector('.link-chip-wrap'); if (wrap) setLinkChipValue(wrap, val); };
+    const setSelect = (td, val) => { const sel = td?.querySelector('select'); if (sel && sel.value !== val) { sel.value = val; updateBadge(sel); } };
+    document.querySelectorAll('.adp-row-input[data-td]').forEach(inp => {
+      const tdIdx = parseInt(inp.dataset.td);
+      if (!isNaN(tdIdx) && tds[tdIdx]) setTa(tds[tdIdx], inp.value);
+    });
+    document.querySelectorAll('.adp-row-select[data-td]').forEach(sel => {
+      const tdIdx = parseInt(sel.dataset.td);
+      if (!isNaN(tdIdx) && tds[tdIdx]) setSelect(tds[tdIdx], sel.value);
+    });
+    document.querySelectorAll('.adp-lp-edit-input[data-td]').forEach(inp => {
+      const tdIdx = parseInt(inp.dataset.td);
+      if (!isNaN(tdIdx) && tds[tdIdx]) setLink(tds[tdIdx], inp.value.trim());
+    });
+    document.querySelectorAll('.adp-copy-block[data-td]').forEach(el => {
+      const tdIdx = parseInt(el.dataset.td);
+      if (!isNaN(tdIdx) && tds[tdIdx]) setTa(tds[tdIdx], el.textContent.trim());
+    });
+    scheduleSave();
+    rebuildGridForTable(table);
+  }, 300);
+}
+
+// Attach live sync listeners to ADP panel
+document.addEventListener('input', function(e) {
+  const panel = document.getElementById('ad-detail-panel');
+  if (panel && panel.contains(e.target)) adpLiveSync();
+});
+document.addEventListener('change', function(e) {
+  const panel = document.getElementById('ad-detail-panel');
+  if (panel && panel.contains(e.target)) adpLiveSync();
+});
 
 function gfExpand(clip) {
   document.querySelectorAll('.gf-full').forEach(f => {
@@ -12132,7 +12215,8 @@ function exitCardEditMode(card) {
     }
   });
 
-  // Save link inputs → hidden table link-chip anchors
+  // Save link inputs → hidden table link-chip cells
+  var _tableIdForRebuild = null;
   card.querySelectorAll('.card-link-input').forEach(function(inp) {
     var tdIdx = parseInt(inp.dataset.tdidx);
     var rowIdx = parseInt(inp.dataset.row);
@@ -12145,37 +12229,25 @@ function exitCardEditMode(card) {
     if (!tr) return;
     var td = tr.querySelectorAll('td')[tdIdx - 1];
     if (!td) return;
-    // Update the anchor in the hidden table cell
-    var anchor = td.querySelector('a.link-chip');
-    if (anchor) {
-      anchor.href = newUrl || '#';
-    } else if (newUrl) {
-      // Create a minimal anchor if none exists
-      var a = document.createElement('a');
-      a.className = 'link-chip';
-      a.href = newUrl;
-      td.appendChild(a);
+    // Use syncLinkCell so the chip display state (visible/hidden) updates correctly
+    if (typeof syncLinkCell === 'function') {
+      syncLinkCell(td, newUrl);
+    } else {
+      var anchor = td.querySelector('a.link-chip');
+      if (anchor) anchor.href = newUrl || '#';
     }
-    // Also update the display anchor in the card
-    var displayWrap = inp.closest('.card-link-field');
-    if (displayWrap) {
-      var existingA = displayWrap.querySelector('.card-link-anchor');
-      var labelEl = displayWrap.querySelector('.card-link-display span');
-      var label = inp.placeholder.replace(' URL…','');
-      if (newUrl) {
-        if (existingA) {
-          existingA.href = newUrl;
-        } else {
-          var displaySpan = displayWrap.querySelector('.card-link-display');
-          if (displaySpan) {
-            displaySpan.innerHTML = '<a href="'+newUrl+'" target="_blank" rel="noopener" class="card-link-anchor" style="color:var(--accent,#2563eb);text-decoration:none;font-size:11.75px;display:flex;align-items:center;gap:2px;white-space:nowrap;"><svg width=\'9\' height=\'9\' viewBox=\'0 0 16 16\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9\'/><path d=\'M10 2h4v4M14 2 8 8\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/></svg>'+label+'</a>';
-          }
-        }
-      }
-    }
+    _tableIdForRebuild = tableId;
   });
 
-  if (typeof scheduleAutoSave === 'function') scheduleAutoSave();
+  scheduleSave();
+  scheduleSnap();
+  if (_tableIdForRebuild) {
+    rebuildGridForTable(_tableIdForRebuild);
+  } else {
+    if (document.getElementById('ads-grid') && document.getElementById('ads-grid').style.display !== 'none') buildAdsGrid();
+    if (document.getElementById('traffic-grid') && document.getElementById('traffic-grid').style.display !== 'none') buildTrafficGrid();
+    if (document.getElementById('funnels-grid') && document.getElementById('funnels-grid').style.display !== 'none') buildFunnelsGrid();
+  }
 }
 
 // Click outside editing card → exit edit mode
