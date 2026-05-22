@@ -3794,20 +3794,73 @@
       background: var(--bg-secondary) !important;
     }
 
-    /* Ads & funnels — consistent top-aligned padding */
-    #ads-table tbody td input,
-    #ads-table tbody td textarea,
-    #funnels-table tbody td input,
-    #funnels-table tbody td textarea {
+    /* Ads & funnels — textarea td must be position:relative to contain absolute child */
+    #ads-table td.frozen-offer,
+    #ads-table td:nth-child(5),
+    #ads-table td:nth-child(6),
+    #ads-table td:nth-child(11),
+    #ads-table td:nth-child(12),
+    #ads-table td:nth-child(13),
+    #ads-table td:nth-child(14),
+    #ads-table td:nth-child(15),
+    #ads-table td:nth-child(16),
+    #funnels-table td:nth-child(3),
+    #funnels-table td:nth-child(4),
+    #funnels-table td:nth-child(7) {
+      position: relative !important;
+      overflow: hidden !important;
+    }
+    /* Textarea fills cell — identical to channels */
+    #ads-table td.frozen-offer textarea,
+    #ads-table td:nth-child(5) textarea,
+    #ads-table td:nth-child(6) textarea,
+    #ads-table td:nth-child(11) textarea,
+    #ads-table td:nth-child(12) textarea,
+    #ads-table td:nth-child(13) textarea,
+    #ads-table td:nth-child(14) textarea,
+    #ads-table td:nth-child(15) textarea,
+    #ads-table td:nth-child(16) textarea,
+    #funnels-table td:nth-child(3) textarea,
+    #funnels-table td:nth-child(4) textarea,
+    #funnels-table td:nth-child(7) textarea {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 8px 10px !important;
+      line-height: 1.45 !important;
       font-size: 12.5px !important;
       color: #000000 !important;
       border: none !important;
       border-right: none !important;
       background: transparent !important;
-      padding: 8px 10px !important;
+      resize: none !important;
+      overflow: hidden !important;
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
+      box-sizing: border-box !important;
       display: block !important;
-      line-height: 1.45 !important;
-      vertical-align: top !important;
+    }
+    /* On focus, expand — identical to channels */
+    #ads-table td.frozen-offer textarea:focus,
+    #ads-table td:nth-child(5) textarea:focus,
+    #ads-table td:nth-child(6) textarea:focus,
+    #ads-table td:nth-child(11) textarea:focus,
+    #ads-table td:nth-child(12) textarea:focus,
+    #ads-table td:nth-child(13) textarea:focus,
+    #ads-table td:nth-child(14) textarea:focus,
+    #ads-table td:nth-child(15) textarea:focus,
+    #ads-table td:nth-child(16) textarea:focus,
+    #funnels-table td:nth-child(3) textarea:focus,
+    #funnels-table td:nth-child(4) textarea:focus,
+    #funnels-table td:nth-child(7) textarea:focus {
+      position: relative !important;
+      inset: unset !important;
+      height: auto !important;
+      min-height: 36px !important;
+      overflow: visible !important;
+      z-index: 20 !important;
+      background: var(--bg-secondary) !important;
     }
 
     /* Actions column — consistent across all tables */
@@ -4492,57 +4545,9 @@
       vertical-align: middle !important;
     }
     #ads-table td.frozen-offer textarea,
-    #funnels-table td.frozen-offer textarea {
-      position: absolute !important;
-      inset: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-      padding: 0 10px !important;
-      line-height: 52px !important;
-      font-size: 12.5px !important;
-      font-weight: 500 !important;
-      color: #000000 !important;
-      border: none !important;
-      border-right: none !important;
-      background: transparent !important;
-      resize: none !important;
-      overflow: hidden !important;
-      white-space: nowrap !important;
-      box-sizing: border-box !important;
-    }
-
-    /* Ads absolute cols (GEO=5, LIFECYCLE=6) */
-    #ads-table td:nth-child(5),
-    #ads-table td:nth-child(6) {
-      height: 52px !important;
-      overflow: hidden !important;
-    }
+    #funnels-table td.frozen-offer textarea,
     #ads-table td:nth-child(5) textarea,
-    #ads-table td:nth-child(6) textarea {
-      position: absolute !important;
-      inset: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-      padding: 0 10px !important;
-      line-height: 52px !important;
-      font-size: 12.5px !important;
-      color: #000000 !important;
-      border: none !important;
-      border-right: none !important;
-      background: transparent !important;
-      resize: none !important;
-      overflow: hidden !important;
-      white-space: nowrap !important;
-      box-sizing: border-box !important;
-    }
-
-    /* Funnels absolute cols */
-    #funnels-table td:nth-child(3),
-    #funnels-table td:nth-child(4),
-    #funnels-table td:nth-child(6) {
-      height: 52px !important;
-      overflow: hidden !important;
-    }
+    #ads-table td:nth-child(6) textarea,
     #funnels-table td:nth-child(3) textarea,
     #funnels-table td:nth-child(4) textarea,
     #funnels-table td:nth-child(6) textarea {
@@ -4550,8 +4555,8 @@
       inset: 0 !important;
       width: 100% !important;
       height: 100% !important;
-      padding: 0 10px !important;
-      line-height: 52px !important;
+      padding: 8px 10px !important;
+      line-height: 1.45 !important;
       font-size: 12.5px !important;
       color: #000000 !important;
       border: none !important;
@@ -4559,8 +4564,24 @@
       background: transparent !important;
       resize: none !important;
       overflow: hidden !important;
-      white-space: nowrap !important;
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
       box-sizing: border-box !important;
+    }
+    #ads-table td.frozen-offer textarea:focus,
+    #funnels-table td.frozen-offer textarea:focus,
+    #ads-table td:nth-child(5) textarea:focus,
+    #ads-table td:nth-child(6) textarea:focus,
+    #funnels-table td:nth-child(3) textarea:focus,
+    #funnels-table td:nth-child(4) textarea:focus,
+    #funnels-table td:nth-child(6) textarea:focus {
+      position: relative !important;
+      inset: unset !important;
+      height: auto !important;
+      min-height: 36px !important;
+      overflow: visible !important;
+      z-index: 20 !important;
+      background: var(--bg-secondary) !important;
     }
 
     /* sel-wrap cells */
@@ -4679,9 +4700,8 @@
     .ds-top-header { display: flex !important; align-items: center !important; justify-content: space-between !important; }
     .ds-top-header-left { display: flex !important; align-items: center !important; gap: 0 !important; flex-direction: row !important; }
     .ds-top-header-mobile-row { display: flex !important; align-items: center !important; gap: 10px !important; flex-direction: row !important; }
-    .ds-top-header-mobile-row > div { display: flex !important; flex-direction: column !important; gap: 2px !important; justify-content: center !important; align-self: center !important; }
-    .ds-hdr-collapse-btn { align-self: center !important; }
-    .ds-top-header-title { line-height: 1.2 !important; display: block !important; margin: 0 !important; }
+    .ds-top-header-mobile-row > div { display: flex !important; flex-direction: column !important; gap: 2px !important; justify-content: center !important; }
+    .ds-top-header-title { line-height: 1.2 !important; display: block !important; }
     .ds-top-header-subtitle { line-height: 1.2 !important; display: block !important; margin: 0 !important; }
     @media (min-width: 861px) { .ds-hdr-collapse-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; } }
     .ds-top-header-right { display: flex !important; align-items: center !important; gap: 8px !important; flex-shrink: 0 !important; }
@@ -5188,14 +5208,12 @@
     #ads-table td.frozen-offer textarea,
     #ads-table td:nth-child(5) textarea,
     #ads-table td:nth-child(6) textarea {
-      position: static !important;
-      inset: unset !important;
+      position: absolute !important;
+      inset: 0 !important;
       width: 100% !important;
-      height: 52px !important;
-      min-height: 52px !important;
-      max-height: 52px !important;
-      padding: 0 10px !important;
-      line-height: 52px !important;
+      height: 100% !important;
+      padding: 8px 10px !important;
+      line-height: 1.45 !important;
       font-size: 12.5px !important;
       color: #000000 !important;
       border: none !important;
@@ -5203,7 +5221,8 @@
       background: transparent !important;
       resize: none !important;
       overflow: hidden !important;
-      white-space: nowrap !important;
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
       box-sizing: border-box !important;
       display: block !important;
     }
@@ -5217,14 +5236,12 @@
     #funnels-table td:nth-child(3) textarea,
     #funnels-table td:nth-child(4) textarea,
     #funnels-table td:nth-child(6) textarea {
-      position: static !important;
-      inset: unset !important;
+      position: absolute !important;
+      inset: 0 !important;
       width: 100% !important;
-      height: 52px !important;
-      min-height: 52px !important;
-      max-height: 52px !important;
-      padding: 0 10px !important;
-      line-height: 52px !important;
+      height: 100% !important;
+      padding: 8px 10px !important;
+      line-height: 1.45 !important;
       font-size: 12.5px !important;
       color: #000000 !important;
       border: none !important;
@@ -5232,7 +5249,8 @@
       background: transparent !important;
       resize: none !important;
       overflow: hidden !important;
-      white-space: nowrap !important;
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
       box-sizing: border-box !important;
       display: block !important;
     }
@@ -6306,74 +6324,6 @@
     /* Apply dark background immediately before JS runs to avoid white flash */
     html.force-dark-early body,
     html.force-dark-early { background: #18181b !important; }
-  </style>
-  <style>
-    /* ── ADS & FUNNELS CELL ALIGNMENT — match Top Channels ── */
-    /* Plain textarea cells: use flex to vertically center the textarea within the 52px row */
-    #ads-table tbody td:has(> textarea),
-    #funnels-table tbody td:has(> textarea) {
-      display: table-cell !important;
-      vertical-align: middle !important;
-      padding: 0 !important;
-    }
-    #ads-table tbody td > textarea,
-    #funnels-table tbody td > textarea {
-      display: block !important;
-      width: 100% !important;
-      padding: 0 10px !important;
-      border: none !important;
-      background: transparent !important;
-      resize: none !important;
-      overflow: hidden !important;
-      box-sizing: border-box !important;
-      font-size: 12.5px !important;
-      line-height: 1.45 !important;
-      vertical-align: middle !important;
-    }
-    /* ── HEADER ALIGNMENT FINAL FIX ── */
-    .ds-top-header {
-      display: flex !important;
-      flex-direction: row !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-    }
-    .ds-top-header-left {
-      display: flex !important;
-      flex-direction: row !important;
-      align-items: center !important;
-      height: 100% !important;
-    }
-    .ds-top-header-mobile-row {
-      display: flex !important;
-      flex-direction: row !important;
-      align-items: center !important;
-      gap: 10px !important;
-      height: 100% !important;
-    }
-    .ds-hdr-collapse-btn {
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      align-self: center !important;
-      flex-shrink: 0 !important;
-    }
-    .ds-top-header-mobile-row > div {
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: center !important;
-      align-self: center !important;
-      gap: 2px !important;
-    }
-    .ds-top-header-title {
-      display: block !important;
-      margin: 0 !important;
-      line-height: 1.2 !important;
-    }
-    .ds-top-header-subtitle {
-      display: block !important;
-      margin: 0 !important;
-      line-height: 1.2 !important;
-    }
   </style>
 <body>
 
@@ -7671,7 +7621,9 @@ function buildAdsGrid() {
             if(val && !val.startsWith('http://') && !val.startsWith('https://') && val.includes('.')) val='https://'+val;
             inp.value=val;
             if(typeof syncLinkCell==='function') syncLinkCell(td,val);
-            if(typeof rebuildGridForTable==='function') rebuildGridForTable(tableId);
+            var card=inp.closest('.grid-card');
+            var stillEditing=card&&card.classList.contains('card-editing');
+            if(!stillEditing&&typeof rebuildGridForTable==='function') rebuildGridForTable(tableId);
             if(typeof scheduleSave==='function') scheduleSave();
           })(this)"
         >
@@ -12288,6 +12240,9 @@ function enterCardEditMode(card) {
   // Make gce text fields directly editable (bypass gcExpand/gcCollapse)
   card.querySelectorAll('.gce').forEach(function(el) {
     el.contentEditable = 'true';
+    // Hide placeholder span so it's not editable/readable
+    var placeholder = el.querySelector('span[style*="opacity"]');
+    if (placeholder) placeholder.style.display = 'none';
   });
   // Auto-open the Angle/Headline/Notes expandable section
   var expandable = card.querySelector('.card-expandable');
@@ -12326,6 +12281,9 @@ function exitCardEditMode(card) {
     el.style.outline = '';
     el.style.overflow = '';
     el.style.display = '';
+    // Hide placeholder span before reading text so it doesn't pollute the value
+    var placeholder = el.querySelector('span[style*="opacity"]');
+    if (placeholder) placeholder.style.display = 'none';
     var selector = el.dataset.ta;
     var rowIdx = parseInt(el.dataset.row);
     var tableId = el.dataset.table;
