@@ -7562,6 +7562,18 @@ function buildAdsGrid() {
           data-tdidx="${tdIdx}" data-row="${idx}" data-table="ads-body"
           style="display:none;height:0;padding:0;margin:0;border:none;font-size:11px;font-family:inherit;border-radius:4px;background:var(--bg-primary);color:var(--text-primary);outline:none;width:100%;box-sizing:border-box;"
           onkeydown="if(event.key==='Enter'||event.key==='Escape'){this.blur();}"
+          onblur="(function(inp){
+            var tdIdx=parseInt(inp.dataset.tdidx),rowIdx=parseInt(inp.dataset.row),tableId=inp.dataset.table;
+            var tbody=document.getElementById(tableId); if(!tbody) return;
+            var tr=tbody.querySelectorAll('tr')[rowIdx]; if(!tr) return;
+            var td=tr.querySelectorAll('td')[tdIdx-1]; if(!td) return;
+            var val=inp.value.trim();
+            if(val && !val.startsWith('http://') && !val.startsWith('https://') && val.includes('.')) val='https://'+val;
+            inp.value=val;
+            if(typeof syncLinkCell==='function') syncLinkCell(td,val);
+            if(typeof rebuildGridForTable==='function') rebuildGridForTable(tableId);
+            if(typeof scheduleSave==='function') scheduleSave();
+          })(this)"
         >
       </div>`;
     };
