@@ -769,6 +769,7 @@
     .badge-multi-step     { background: #EDE9FE; color: #6D28D9; }
     .badge-advertorial    { background: #FEF3C7; color: #92400E; }
     .badge-comparison     { background: #F0F9FF; color: #0C4A6E; }
+    .badge-checkout-page  { background: #FFF7ED; color: #C2410C; }
 
     /* ═══════════════════════════════════════════════
        ROW ACTIONS (remove, dup, drag, comment)
@@ -1880,6 +1881,7 @@
     body.force-dark .badge-lead-gen    { background: #14352b; color: #6ee7b7; }
     body.force-dark .badge-multi-step  { background: #2e1a4e; color: #c4b5fd; }
     body.force-dark .badge-advertorial { background: #3d2b0a; color: #fcd34d; }
+    body.force-dark .badge-checkout-page { background: #3d1a0a; color: #fdba74; }
 
     /* .sel-badge inline bg/color set by JS via getColorForValue() — no override needed */
 
@@ -7325,7 +7327,7 @@ function buildFunnelsGrid() {
     'quiz':{'bg':'#EDE9FE','color':'#6D28D9'},'landing-page':{'bg':'#DBEAFE','color':'#1D4ED8'},
     'vsl':{'bg':'#FEE2E2','color':'#B91C1C'},'lead-gen':{'bg':'#D1FAE5','color':'#065F46'},
     'multi-step':{'bg':'#FEF3C7','color':'#92400E'},'advertorial':{'bg':'#FCE7F3','color':'#9D174D'},
-    'comparison':{'bg':'#F0F9FF','color':'#0C4A6E'},
+    'comparison':{'bg':'#F0F9FF','color':'#0C4A6E'},'checkout-page':{'bg':'#FFF7ED','color':'#C2410C'},
   };
 
   const getText = td => td?.querySelector('textarea')?.value || '';
@@ -7357,7 +7359,7 @@ function buildFunnelsGrid() {
       'quiz':{'bg':'#EDE9FE','color':'#6D28D9'},'landing-page':{'bg':'#DBEAFE','color':'#1D4ED8'},
       'vsl':{'bg':'#FEE2E2','color':'#B91C1C'},'lead-gen':{'bg':'#D1FAE5','color':'#065F46'},
       'multi-step':{'bg':'#FEF3C7','color':'#92400E'},'advertorial':{'bg':'#FCE7F3','color':'#9D174D'},
-      'comparison':{'bg':'#F0F9FF','color':'#0C4A6E'},
+      'comparison':{'bg':'#F0F9FF','color':'#0C4A6E'},'checkout-page':{'bg':'#FFF7ED','color':'#C2410C'},
     };
     const funnelOpts = funnelSel ? Array.from(funnelSel.options).map(o => `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`).join('') : '';
     const fv = funnelSel?.value || '';
@@ -8122,7 +8124,7 @@ const _ADP_FUNNEL_COLORS = {
   'quiz':{'bg':'#EDE9FE','color':'#6D28D9'},'landing-page':{'bg':'#DBEAFE','color':'#1D4ED8'},
   'vsl':{'bg':'#FEE2E2','color':'#B91C1C'},'lead-gen':{'bg':'#D1FAE5','color':'#065F46'},
   'multi-step':{'bg':'#FEF3C7','color':'#92400E'},'advertorial':{'bg':'#FCE7F3','color':'#9D174D'},
-  'comparison':{'bg':'#F0F9FF','color':'#0C4A6E'},
+  'comparison':{'bg':'#F0F9FF','color':'#0C4A6E'},'checkout-page':{'bg':'#FFF7ED','color':'#C2410C'},
 };
 
 function _adpChip(val, colorMap) {
@@ -8622,7 +8624,7 @@ function openFunnelDetail(rowIdx) {
   const funnelChip = _adpChip(funnelType, _ADP_FUNNEL_COLORS);
   const subtitleChips = [funnelChip, geo ? `<span style="font-size:12px;color:var(--text-secondary);">${geo}</span>` : ''].filter(Boolean).join('');
 
-  const FUNNEL_TYPE_OPTS = [['','— select —'],['quiz','Quiz'],['landing-page','Landing Page'],['vsl','VSL'],['lead-gen','Lead Gen'],['multi-step','Multi-Step'],['advertorial','Advertorial'],['comparison','Comparison']];
+  const FUNNEL_TYPE_OPTS = [['','— select —'],['quiz','Quiz'],['landing-page','Landing Page'],['vsl','VSL'],['lead-gen','Lead Gen'],['multi-step','Multi-Step'],['advertorial','Advertorial'],['comparison','Comparison'],['checkout-page','Checkout Page']];
   const funnelTypeVal = _adpGetSelectVal(tds[4]) || '';
 
   const body = `
@@ -9224,23 +9226,6 @@ function applyThemeUI() {
 // ── Keyboard shortcuts ──
 document.addEventListener('keydown', function(e) {
   const mod = e.ctrlKey || e.metaKey;
-  if (mod && e.key === 'z' && !e.shiftKey) {
-    // If focus is in a contenteditable grid field, flush it first then undo
-    const ce = document.activeElement;
-    if (ce && ce.contentEditable === 'true' && ce.dataset.ta) {
-      ce.blur(); // flush gridInlineEdit via blur
-    }
-    e.preventDefault();
-    applyUndo(undoStack, redoStack);
-    return;
-  }
-  if (mod && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
-    const ce = document.activeElement;
-    if (ce && ce.contentEditable === 'true' && ce.dataset.ta) ce.blur();
-    e.preventDefault();
-    applyUndo(redoStack, undoStack);
-    return;
-  }
   // Tab inside table cell moves to next cell
   if (e.key === 'Tab' && e.target.matches('tbody td textarea, tbody td input:not([type="file"])')) {
     const td = e.target.closest('td');
@@ -9774,7 +9759,7 @@ function funnelRow(n) {
     <td><div class="sel-wrap">
       <select onchange="updateBadge(this);scheduleSave()">
         ${opt('','— select —')}${opt('quiz','Quiz / Survey')}${opt('landing-page','Direct Landing Page')}
-        ${opt('vsl','VSL')}${opt('lead-gen','Lead Gen Form')}${opt('multi-step','Multi-Step Form')}
+        ${opt('vsl','VSL')}${opt('lead-gen','Lead Gen Form')}${opt('multi-step','Multi-Step Form')}${opt('checkout-page','Checkout Page')}
         ${opt('advertorial','Advertorial')}${opt('comparison','Comparison Page')}
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
@@ -9930,7 +9915,7 @@ const BADGE_LABELS = {
   'direct': 'Direct', 'referral': 'Referral', 'display': 'Display',
   // Funnel Type
   'quiz': 'Quiz / Survey', 'landing-page': 'Direct Landing Page',
-  'vsl': 'VSL', 'lead-gen': 'Lead Gen Form', 'multi-step': 'Multi-Step Form',
+  'vsl': 'VSL', 'lead-gen': 'Lead Gen Form', 'multi-step': 'Multi-Step Form', 'checkout-page': 'Checkout Page',
   'advertorial': 'Advertorial', 'comparison': 'Comparison Page',
 };
 
@@ -10437,50 +10422,49 @@ function initAllDragReorder() {
 }
 
 function undoLast() {
-  const action = undoStack.pop();
-  if (!action) return;
-  if (action.type === 'delete') {
-    const tbody = document.getElementById(action.id);
-    const rows = tbody.querySelectorAll('tr');
-    if (action.idx >= rows.length) tbody.insertAdjacentHTML('beforeend', action.html);
-    else rows[action.idx].insertAdjacentHTML('beforebegin', action.html);
-    renumberTable(action.id);
-    setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); updateFrozenOffsets(); applyTextColors(); }, 0);
-    scheduleSave();
-    redoStack.push(action);
-    showToast('Undo successful', 'success');
-  }
+  // Delegate to snapshot undo
+  applyUndo(undoStack, redoStack);
 }
 
 function redoLast() {
-  const action = redoStack.pop();
-  if (!action) return;
-  if (action.type === 'delete') {
-    const tbody = document.getElementById(action.id);
-    const rows = tbody.querySelectorAll('tr');
-    if (rows[action.idx]) rows[action.idx].remove();
-    renumberTable(action.id);
-    scheduleSave();
-    undoStack.push(action);
-    showToast('Redo successful', 'success');
-  }
+  // Delegate to snapshot redo
+  applyUndo(redoStack, undoStack);
 }
 
 document.addEventListener('keydown', function(e) {
-  // Ctrl+Z — undo
-  if (e.key === 'z' && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
-    // Only intercept if not in a text field
-    if (!e.target.matches('textarea, input[type="text"], input[type="date"]')) {
-      e.preventDefault();
-      undoLast();
+  const mod = e.ctrlKey || e.metaKey;
+  if (!mod) return;
+
+  const target = e.target;
+  const inTextField = target.matches('textarea, input[type="text"], input[type="date"], input:not([type])');
+  const inContentEditable = target.isContentEditable && !target.dataset.ta;
+
+  // ── Ctrl+Z / Ctrl+Shift+Z / Ctrl+Y ──
+  const isUndo = e.key === 'z' && !e.shiftKey;
+  const isRedo = (e.key === 'z' && e.shiftKey) || e.key === 'y';
+
+  if (isUndo) {
+    if (inTextField || inContentEditable) {
+      // Let the browser handle native undo inside text fields
+      return;
     }
+    // Outside a field — flush any contenteditable grid field and do snapshot undo
+    const ce = document.activeElement;
+    if (ce && ce.contentEditable === 'true' && ce.dataset.ta) ce.blur();
+    e.preventDefault();
+    applyUndo(undoStack, redoStack);
+    return;
   }
-  // Ctrl+Shift+Z — redo
-  if (e.key === 'z' && (e.ctrlKey || e.metaKey) && e.shiftKey) {
-    if (!e.target.matches('textarea, input[type="text"], input[type="date"]')) {
-      e.preventDefault();
-      redoLast();
+
+  if (isRedo) {
+    if (inTextField || inContentEditable) {
+      return;
     }
+    const ce = document.activeElement;
+    if (ce && ce.contentEditable === 'true' && ce.dataset.ta) ce.blur();
+    e.preventDefault();
+    applyUndo(redoStack, undoStack);
+    return;
   }
 });
 function addRow(id, fn) {
@@ -12201,6 +12185,42 @@ document.addEventListener('click', function(e) {
     exitCardEditMode(window._cardEditingCard);
   }
 });
+</script>
+<script>
+  // ── Plain-text paste everywhere ──
+  document.addEventListener('paste', function(e) {
+    const target = e.target;
+    const isTextarea = target.tagName === 'TEXTAREA' || target.tagName === 'INPUT';
+    const isContentEditable = target.isContentEditable;
+    if (!isTextarea && !isContentEditable) return;
+
+    e.preventDefault();
+    const plain = (e.clipboardData || window.clipboardData).getData('text/plain');
+
+    if (isContentEditable) {
+      // Insert at cursor position in contenteditable
+      const sel = window.getSelection();
+      if (!sel.rangeCount) return;
+      sel.deleteFromDocument();
+      const range = sel.getRangeAt(0);
+      const textNode = document.createTextNode(plain);
+      range.insertNode(textNode);
+      range.setStartAfter(textNode);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      // Trigger input event so autosave picks it up
+      target.dispatchEvent(new Event('input', { bubbles: true }));
+    } else {
+      // Insert at cursor position in textarea/input
+      const start = target.selectionStart;
+      const end = target.selectionEnd;
+      const val = target.value;
+      target.value = val.slice(0, start) + plain + val.slice(end);
+      target.selectionStart = target.selectionEnd = start + plain.length;
+      target.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  }, true);
 </script>
 </body>
 </html>
