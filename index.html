@@ -5759,7 +5759,6 @@
     body.force-dark .md-badge--amber { background: rgba(146,64,14,.2) !important; color: #fbbf24 !important; }
     body.force-dark .md-link-btn { background: #27272a !important; border-color: rgba(255,255,255,.1) !important; color: #d4d4d8 !important; }
     body.force-dark .md-link-btn:hover { background: #3f3f46 !important; color: #f4f4f5 !important; }
-    body.force-dark #tc-expand-popover { background: #27272a !important; border-color: rgba(255,255,255,.1) !important; color: #f1f5f9 !important; box-shadow: 0 8px 24px rgba(0,0,0,.4) !important; }
 
     /* Fix all card corner radius */
     .ds-offer-card { border-radius: 16px !important; overflow: hidden !important; }
@@ -6148,10 +6147,6 @@
     .loader-bar { height: 100%; width: 0%; background: #2563eb; border-radius: 99px; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
     .loader-status { font-size: 13px; color: #6b7280; margin: 0; font-weight: 500; }
 
-    @keyframes popoverIn {
-      from { opacity: 0; transform: translateY(-4px) scale(0.97); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
-    }
 
     /* ── Row drop flash ── */
     @keyframes rowDropFlash {
@@ -8547,89 +8542,35 @@ document.addEventListener('mousedown', e => {
   }, 600);
 })();
 
-/* ── Table cell text expand on click ── */
+/* ── Table cell text expand on focus ── */
 function initTableCellExpand() {
-  // Remove existing popover if any
-  let existing = document.getElementById('tc-expand-popover');
-  if (!existing) {
-    const pop = document.createElement('div');
-    pop.id = 'tc-expand-popover';
-    pop.style.cssText = `
-      position:fixed; z-index:9999; background:#fff; border:1px solid #e5e7eb;
-      border-radius:12px; box-shadow:0 12px 32px rgba(0,0,0,.14), 0 2px 8px rgba(0,0,0,.06); padding:14px 16px;
-      font-size:13px; color:#0f172a; line-height:1.6; max-width:400px; min-width:180px;
-      white-space:pre-wrap; word-break:break-word; display:none;
-      font-family:'Inter',-apple-system,sans-serif;
-      animation: popoverIn 0.18s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    `;
-    document.body.appendChild(pop);
-    // Close on outside click
-    document.addEventListener('click', e => {
-      if (!e.target.closest('#tc-expand-popover') && !e.target.closest('#ads-table textarea') && !e.target.closest('#funnels-table textarea') && !e.target.closest('#traffic-table textarea')) {
-        pop.style.display = 'none';
-      }
-    }, true);
-  }
-
-  // Add click handlers to all table textareas with overflow
-  const tables = ['ads-table','funnels-table','traffic-table'];
-  tables.forEach(tid => {
-    const table = document.getElementById(tid);
-    if (!table) return;
-    table.querySelectorAll('tbody textarea').forEach(ta => {
-      if (ta._expandInit) return;
-      ta._expandInit = true;
-      ta.addEventListener('click', function(e) {
-        const val = this.value.trim();
-        if (!val || val === this.placeholder) return;
-        // Compare scrollHeight to clientHeight without touching styles (safe for absolute textareas too)
-        const isClipped = this.scrollHeight > this.clientHeight + 2;
-        if (!isClipped) return;
-        e.stopPropagation();
-        const pop = document.getElementById('tc-expand-popover');
-        const rect = this.getBoundingClientRect();
-        pop.textContent = val;
-        pop.style.display = 'block';
-        const spaceBelow = window.innerHeight - rect.bottom;
-        if (spaceBelow > 120) {
-          pop.style.top = (rect.bottom + 6) + 'px';
-          pop.style.bottom = '';
-        } else {
-          pop.style.top = '';
-          pop.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
-        }
-        pop.style.left = Math.min(rect.left, window.innerWidth - 380) + 'px';
-      });
-    });
-  });
-
-  // Also apply to all other textareas (notes, key takeaways, etc.)
-  document.querySelectorAll('textarea').forEach(ta => {
+  document.querySelectorAll('tbody textarea').forEach(ta => {
     if (ta._expandInit) return;
-    if (ta.closest('.comment-popup')) return;
-    if (ta.closest('.link-input-wrap')) return;
-    if (ta.id === 'notes-takeaways' || ta.id === 'notes-actions') return;
+    if (ta.closest('.comment-popup') || ta.closest('.link-input-wrap')) return;
     ta._expandInit = true;
-    ta.addEventListener('click', function(e) {
-      const val = this.value.trim();
-      if (!val || val === this.placeholder) return;
-      const isClipped = this.scrollHeight > this.clientHeight + 2;
-      if (!isClipped) return;
-      e.stopPropagation();
-      const pop = document.getElementById('tc-expand-popover');
-      if (!pop) return;
-      const rect = this.getBoundingClientRect();
-      pop.textContent = val;
-      pop.style.display = 'block';
-      const spaceBelow = window.innerHeight - rect.bottom;
-      if (spaceBelow > 120) {
-        pop.style.top = (rect.bottom + 6) + 'px';
-        pop.style.bottom = '';
-      } else {
-        pop.style.top = '';
-        pop.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
-      }
-      pop.style.left = Math.min(rect.left, window.innerWidth - 380) + 'px';
+
+    ta.addEventListener('focus', function() {
+      const td = this.closest('td');
+      const tr = this.closest('tr');
+      if (!td || !tr) return;
+      // Save original heights
+      this._origH = this.style.height;
+      this._origMinH = this.style.minHeight;
+      tr._origH = tr.style.height;
+      // Expand to fit all content
+      this.style.height = 'auto';
+      this.style.minHeight = 'unset';
+      this.style.height = this.scrollHeight + 'px';
+      tr.style.height = 'auto';
+    });
+
+    ta.addEventListener('blur', function() {
+      const tr = this.closest('tr');
+      // Restore heights
+      this.style.height = this._origH || '';
+      this.style.minHeight = this._origMinH || '';
+      if (tr) tr.style.height = tr._origH || '';
+      autoGrow(this);
     });
   });
 }
