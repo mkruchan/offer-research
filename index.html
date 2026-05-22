@@ -562,9 +562,9 @@
     td.frozen-offer textarea, td.frozen-offer input { width: 100%; }
     #ads-table td:nth-child(5), #ads-table td:nth-child(6) { position: relative; }
     #ads-table td:nth-child(5) textarea, #ads-table td:nth-child(6) textarea,
-    #ads-table td.frozen-offer textarea { position: absolute; inset: 0; width: 100%; height: 100% !important; border-right: none !important; }
+    #ads-table td.frozen-offer textarea { width: 100%; border-right: none !important; }
     #funnels-table td:nth-child(3), #funnels-table td:nth-child(4), #funnels-table td:nth-child(7) { position: relative; }
-    #funnels-table td:nth-child(3) textarea, #funnels-table td:nth-child(4) textarea, #funnels-table td:nth-child(7) textarea { position: absolute; inset: 0; width: 100%; height: 100% !important; border-right: none !important; }
+    #funnels-table td:nth-child(3) textarea, #funnels-table td:nth-child(4) textarea, #funnels-table td:nth-child(7) textarea { width: 100%; border-right: none !important; }
     #traffic-table td:nth-child(3), #traffic-table td:nth-child(4), #traffic-table td:nth-child(6) { position: relative; }
     #traffic-table td:nth-child(3) textarea, #traffic-table td:nth-child(4) textarea, #traffic-table td:nth-child(6) textarea { position: absolute; inset: 0; width: 100%; height: 100% !important; border-right: none !important; }
     tbody tr:hover td.frozen-num { background: var(--bg-secondary); }
@@ -616,7 +616,7 @@
     #traffic-table thead th:last-child, #traffic-table tbody td:last-child,
     #funnels-table thead th:last-child, #funnels-table tbody td:last-child { border-right: none !important; }
     tbody tr:last-child td { border-bottom: none; }
-    tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: middle; overflow: hidden; }
+    tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: top; overflow: hidden; }
     tbody td textarea:focus {
       z-index: 50 !important;
     }
@@ -626,7 +626,7 @@
       background: transparent; color: var(--text-primary);
       outline: none; font-family: inherit;
       box-sizing: border-box; resize: none; overflow: hidden; overflow-wrap: break-word;
-      line-height: 1.5; display: block; width: 100%; align-self: center;
+      line-height: 1.5; display: block; width: 100%; align-self: stretch;
     }
     #ads-table tbody td input::placeholder,
     #ads-table tbody td textarea::placeholder { color: var(--text-primary); opacity: 0.45; }
@@ -995,7 +995,7 @@
     .grid-card-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; flex: 1; user-select: text; -webkit-user-select: text; }
     .grid-card-body * { user-select: text; -webkit-user-select: text; }
     .gce { user-select: text !important; -webkit-user-select: text !important; cursor: text !important; }
-    tbody td { user-select: text; -webkit-user-select: text; }
+    tbody td { user-select: text; -webkit-user-select: text; vertical-align: top; }
     tbody td textarea, tbody td input { user-select: text !important; -webkit-user-select: text !important; cursor: text !important; }
     .adp-copy-block { user-select: text !important; -webkit-user-select: text !important; }
     .adp-body, .adp-body * { user-select: text; -webkit-user-select: text; }
@@ -2935,6 +2935,10 @@
       box-shadow: none !important;
       color: #9ca3af !important;
       flex-shrink: 0 !important;
+      align-self: center !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
     .ds-hdr-collapse-btn:hover { background: #f3f4f6 !important; border-radius: 8px !important; color: #374151 !important; }
     body.force-dark .ds-sidebar-logo { border-bottom-color: rgba(255,255,255,.08) !important; }
@@ -3109,12 +3113,12 @@
     tbody tr { border-bottom: 1px solid #f3f4f6 !important; transition: background .1s !important; }
     tbody tr:hover { background: #ffffff !important; }
     /* Only apply generous padding to traffic table — ads/funnels use position:absolute cells */
-    #traffic-table tbody td { padding: 0 !important; font-size: 12px !important; color: #000000 !important; vertical-align: middle !important; }
+    #traffic-table tbody td { padding: 0 !important; font-size: 12px !important; color: #000000 !important; vertical-align: top !important; }
     #traffic-table td.frozen-num, #traffic-table td.row-num { color: #000000 !important; }
     #traffic-table td.frozen-num input, #traffic-table td.row-num input, #traffic-table td.frozen-num * { color: #000000 !important; }
     #traffic-table tbody td textarea, #traffic-table tbody td input, #traffic-table tbody td select { color: #000000 !important; }
     #ads-table tbody td,
-    #funnels-table tbody td { padding: 0 !important; font-size: 12px !important; color: #000000 !important; vertical-align: middle !important; }
+    #funnels-table tbody td { padding: 0 !important; font-size: 12px !important; color: #000000 !important; vertical-align: top !important; }
 
     /* ── SPACING ── */
     .container {
@@ -3780,11 +3784,7 @@
     /* On focus, switch absolute textareas to static so they can expand */
     #traffic-table td:nth-child(3) textarea:focus,
     #traffic-table td:nth-child(4) textarea:focus,
-    #traffic-table td:nth-child(6) textarea:focus,
-    #ads-table td.frozen-offer textarea:focus,
-    #funnels-table td:nth-child(3) textarea:focus,
-    #funnels-table td:nth-child(4) textarea:focus,
-    #funnels-table td:nth-child(7) textarea:focus {
+    #traffic-table td:nth-child(6) textarea:focus {
       position: relative !important;
       inset: unset !important;
       height: auto !important;
@@ -8578,73 +8578,6 @@ document.addEventListener('mousedown', e => {
   }, 600);
 })();
 
-/* ── Table cell text expand on focus ── */
-function initTableCellExpand() {
-  document.querySelectorAll('tbody textarea').forEach(ta => {
-    if (ta._expandInit) return;
-    if (ta.closest('.comment-popup') || ta.closest('.link-input-wrap')) return;
-    ta._expandInit = true;
-
-    ta.addEventListener('focus', function() {
-      const td = this.closest('td');
-      const tr = this.closest('tr');
-      if (!td || !tr) return;
-      const isAbs = getComputedStyle(this).position === 'absolute';
-      this._wasAbsolute = isAbs;
-      this._origH = this.style.height;
-      this._origMinH = this.style.minHeight;
-      tr._origH = tr.style.height;
-      if (isAbs) {
-        // Switch to relative so it can expand beyond cell
-        this.style.position = 'relative';
-        this.style.inset = 'unset';
-        this.style.height = 'auto';
-        this.style.minHeight = '36px';
-        this.style.overflow = 'visible';
-        this.style.zIndex = '20';
-        this.style.background = 'var(--bg-secondary)';
-        this.style.height = this.scrollHeight + 'px';
-      } else {
-        this.style.height = 'auto';
-        this.style.minHeight = 'unset';
-        this.style.height = this.scrollHeight + 'px';
-        tr.style.height = 'auto';
-      }
-    });
-
-    ta.addEventListener('blur', function() {
-      const tr = this.closest('tr');
-      if (this._wasAbsolute) {
-        // Restore absolute positioning
-        this.style.position = '';
-        this.style.inset = '';
-        this.style.height = '';
-        this.style.minHeight = '';
-        this.style.overflow = '';
-        this.style.zIndex = '';
-        this.style.background = '';
-      } else {
-        this.style.height = this._origH || '';
-        this.style.minHeight = this._origMinH || '';
-        if (tr) tr.style.height = tr._origH || '';
-        autoGrow(this);
-      }
-    });
-  });
-}
-
-// Re-init after table rows are added
-const _origAddRow = window.addRow;
-if (typeof addRow === 'function') {
-  // Hook into row additions
-  const origAddRow = addRow;
-  window.addRow = function(...args) {
-    const r = origAddRow.apply(this, args);
-    setTimeout(initTableCellExpand, 50);
-    return r;
-  };
-}
-setTimeout(initTableCellExpand, 500);
 function openTrafficDetail(rowIdx) {
   const tr = document.querySelectorAll('#traffic-body tr')[rowIdx];
   if (!tr) return;
