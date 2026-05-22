@@ -6,6 +6,18 @@
   <title>Multi-Platform Creative Research</title>
   <script>
     // ── Loader globals — defined early so offerLoadAll can call them ──
+    // ── Apply theme before first paint to avoid flash ──
+    (function() {
+      var saved = localStorage.getItem('ecoverage_theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark) || (saved === 'auto' && prefersDark)) {
+        document.documentElement.classList.add('force-dark-early');
+        document.addEventListener('DOMContentLoaded', function() {
+          document.body.classList.add('force-dark');
+        });
+      }
+    })();
+
     window.history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
@@ -568,8 +580,8 @@
     body.force-dark .table-scroll::-webkit-scrollbar-track { background: #27272a !important; }
     body.force-dark .table-scroll::-webkit-scrollbar-thumb { background: #3f3f46 !important; border-color: #27272a !important; }
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .table-scroll::-webkit-scrollbar-track { background: #27272a !important; }
-      body:not(.force-light) .table-scroll::-webkit-scrollbar-thumb { background: #3f3f46 !important; border-color: #27272a !important; }
+      body:not(.force-light), body.force-dark .table-scroll::-webkit-scrollbar-track { background: #27272a !important; }
+      body:not(.force-light), body.force-dark .table-scroll::-webkit-scrollbar-thumb { background: #3f3f46 !important; border-color: #27272a !important; }
     }
     table { border-collapse: separate; border-spacing: 0; font-size: 12px; table-layout: fixed; width: max-content; }
     thead th {
@@ -982,6 +994,11 @@
     .grid-card-img-empty { width: 100%; aspect-ratio: 5/4; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; color: #9ca3af; font-size: 10px; border-radius: var(--radius-xl) var(--radius-xl) 0 0; }
     .grid-card-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; flex: 1; user-select: text; -webkit-user-select: text; }
     .grid-card-body * { user-select: text; -webkit-user-select: text; }
+    .gce { user-select: text !important; -webkit-user-select: text !important; cursor: text !important; }
+    tbody td { user-select: text; -webkit-user-select: text; }
+    tbody td textarea, tbody td input { user-select: text !important; -webkit-user-select: text !important; cursor: text !important; }
+    .adp-copy-block { user-select: text !important; -webkit-user-select: text !important; }
+    .adp-body, .adp-body * { user-select: text; -webkit-user-select: text; }
     .grid-card-offer { font-size: 13px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
     .grid-card-meta { font-size: 12px; color: var(--text-secondary); display: flex; flex-wrap: wrap; gap: 4px; }
     .grid-card-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
@@ -1958,44 +1975,44 @@
        SYSTEM DARK (prefers-color-scheme) — mirrors force-dark
     ═══════════════════════════════════════════════ */
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .ds-nav-item.active       { background: rgba(37,99,235,.18); color: #93c5fd; }
-      body:not(.force-light) .ds-nav-item:hover        { background: rgba(255,255,255,0.06); }
-      body:not(.force-light) .ds-hdr-btn               { background: var(--bg-secondary); }
-      body:not(.force-light) .ic-card--blue            { border-top-color: #3b82f6; }
-      body:not(.force-light) .ic-badge--blue           { background: rgba(37,99,235,.18); }
-      body:not(.force-light) .ic-card--green           { border-top-color: #22c55e; }
-      body:not(.force-light) .ic-badge--green          { background: rgba(34,197,94,0.15); }
-      body:not(.force-light) .remove-row-btn:hover     { background: rgba(239,68,68,0.2) !important; color: #fca5a5 !important; }
-      body:not(.force-light) .dup-row-btn:hover        { background: rgba(59,130,246,0.15) !important; color: #93c5fd !important; }
-      body:not(.force-light) .badge-meta               { background: #1e3a5f; color: #93c5fd; }
-      body:not(.force-light) .badge-google             { background: #14532d; color: #86efac; }
-      body:not(.force-light) .badge-native             { background: #14352b; color: #6ee7b7; }
-      body:not(.force-light) .badge-youtube            { background: #3d150a; color: #fca5a5; }
-      body:not(.force-light) .badge-static             { background: #1e3a5f; color: #93c5fd; }
-      body:not(.force-light) .badge-video              { background: #3d150a; color: #fca5a5; }
-      body:not(.force-light) .badge-advertorial        { background: #3d2b0a; color: #fcd34d; }
-      body:not(.force-light) .md-overlay              { background: rgba(0,0,0,0.65); }
-      body:not(.force-light) .md-footer               { background: var(--bg-secondary); }
-      body:not(.force-light) .md-input                { background: var(--bg-secondary) !important; }
-      body:not(.force-light) .export-menu             { background: var(--bg-primary); border-color: var(--border-mid); }
-      body:not(.force-light) .export-menu button      { color: var(--text-primary); }
-      body:not(.force-light) .tc-toggle--active       { background: var(--bg-secondary) !important; color: var(--accent) !important; }
-      body:not(.force-light) .adp-tab.active          { background: rgba(59,130,246,0.15); color: #93c5fd; border-bottom-color: #3b82f6; }
-      body:not(.force-light) .hp-panel                { background: var(--bg-primary); }
-      body:not(.force-light) .dp-panel                { background: var(--bg-primary); border-color: var(--border-mid); }
-      body:not(.force-light) .offers-panel-item.active { background: rgba(37,99,235,.18) !important; border-color: rgba(37,99,235,.3) !important; }
-      body:not(.force-light) .offers-panel-item.active .offers-panel-item-icon { background: rgba(37,99,235,.25) !important; color: #93c5fd !important; }
-      body:not(.force-light) .offers-panel-item.active .offers-panel-item-name { color: #93c5fd !important; }
-      body:not(.force-light) .offers-panel-item:hover { background: rgba(255,255,255,.05) !important; }
-      body:not(.force-light) .offers-panel-new-btn { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; border: 1px solid rgba(37,99,235,.35) !important; }
-      body:not(.force-light) .offers-panel-new-btn:hover { background: rgba(37,99,235,.28) !important; }
-      body:not(.force-light) #traffic-table thead th.remove-col::after,
-      body:not(.force-light) #ads-table thead th.remove-col::after,
-      body:not(.force-light) #funnels-table thead th.remove-col::after { color: #9ca3af !important; }
-      body:not(.force-light) .offers-panel-item-icon { background: #27272a !important; color: #a1a1aa !important; }
-      body:not(.force-light) .offers-panel-item-name { color: #f4f4f5 !important; }
-      body:not(.force-light) #offer-search-results > div:hover,
-      body:not(.force-light) #offer-search-results button:hover { background: rgba(59,130,246,0.12); }
+      body:not(.force-light), body.force-dark .ds-nav-item.active       { background: rgba(37,99,235,.18); color: #93c5fd; }
+      body:not(.force-light), body.force-dark .ds-nav-item:hover        { background: rgba(255,255,255,0.06); }
+      body:not(.force-light), body.force-dark .ds-hdr-btn               { background: var(--bg-secondary); }
+      body:not(.force-light), body.force-dark .ic-card--blue            { border-top-color: #3b82f6; }
+      body:not(.force-light), body.force-dark .ic-badge--blue           { background: rgba(37,99,235,.18); }
+      body:not(.force-light), body.force-dark .ic-card--green           { border-top-color: #22c55e; }
+      body:not(.force-light), body.force-dark .ic-badge--green          { background: rgba(34,197,94,0.15); }
+      body:not(.force-light), body.force-dark .remove-row-btn:hover     { background: rgba(239,68,68,0.2) !important; color: #fca5a5 !important; }
+      body:not(.force-light), body.force-dark .dup-row-btn:hover        { background: rgba(59,130,246,0.15) !important; color: #93c5fd !important; }
+      body:not(.force-light), body.force-dark .badge-meta               { background: #1e3a5f; color: #93c5fd; }
+      body:not(.force-light), body.force-dark .badge-google             { background: #14532d; color: #86efac; }
+      body:not(.force-light), body.force-dark .badge-native             { background: #14352b; color: #6ee7b7; }
+      body:not(.force-light), body.force-dark .badge-youtube            { background: #3d150a; color: #fca5a5; }
+      body:not(.force-light), body.force-dark .badge-static             { background: #1e3a5f; color: #93c5fd; }
+      body:not(.force-light), body.force-dark .badge-video              { background: #3d150a; color: #fca5a5; }
+      body:not(.force-light), body.force-dark .badge-advertorial        { background: #3d2b0a; color: #fcd34d; }
+      body:not(.force-light), body.force-dark .md-overlay              { background: rgba(0,0,0,0.65); }
+      body:not(.force-light), body.force-dark .md-footer               { background: var(--bg-secondary); }
+      body:not(.force-light), body.force-dark .md-input                { background: var(--bg-secondary) !important; }
+      body:not(.force-light), body.force-dark .export-menu             { background: var(--bg-primary); border-color: var(--border-mid); }
+      body:not(.force-light), body.force-dark .export-menu button      { color: var(--text-primary); }
+      body:not(.force-light), body.force-dark .tc-toggle--active       { background: var(--bg-secondary) !important; color: var(--accent) !important; }
+      body:not(.force-light), body.force-dark .adp-tab.active          { background: rgba(59,130,246,0.15); color: #93c5fd; border-bottom-color: #3b82f6; }
+      body:not(.force-light), body.force-dark .hp-panel                { background: var(--bg-primary); }
+      body:not(.force-light), body.force-dark .dp-panel                { background: var(--bg-primary); border-color: var(--border-mid); }
+      body:not(.force-light), body.force-dark .offers-panel-item.active { background: rgba(37,99,235,.18) !important; border-color: rgba(37,99,235,.3) !important; }
+      body:not(.force-light), body.force-dark .offers-panel-item.active .offers-panel-item-icon { background: rgba(37,99,235,.25) !important; color: #93c5fd !important; }
+      body:not(.force-light), body.force-dark .offers-panel-item.active .offers-panel-item-name { color: #93c5fd !important; }
+      body:not(.force-light), body.force-dark .offers-panel-item:hover { background: rgba(255,255,255,.05) !important; }
+      body:not(.force-light), body.force-dark .offers-panel-new-btn { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; border: 1px solid rgba(37,99,235,.35) !important; }
+      body:not(.force-light), body.force-dark .offers-panel-new-btn:hover { background: rgba(37,99,235,.28) !important; }
+      body:not(.force-light), body.force-dark #traffic-table thead th.remove-col::after,
+      body:not(.force-light), body.force-dark #ads-table thead th.remove-col::after,
+      body:not(.force-light), body.force-dark #funnels-table thead th.remove-col::after { color: #9ca3af !important; }
+      body:not(.force-light), body.force-dark .offers-panel-item-icon { background: #27272a !important; color: #a1a1aa !important; }
+      body:not(.force-light), body.force-dark .offers-panel-item-name { color: #f4f4f5 !important; }
+      body:not(.force-light), body.force-dark #offer-search-results > div:hover,
+      body:not(.force-light), body.force-dark #offer-search-results button:hover { background: rgba(59,130,246,0.12); }
     }
 
 
@@ -2444,17 +2461,17 @@
 
     /* prefers-color-scheme mirror */
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .ds-sidebar { background: #18181b !important; border-right: 1px solid rgba(255,255,255,0.10) !important; box-shadow: none !important; }
-      body:not(.force-light) .ds-top-header { background: #18181b; border-bottom-color: rgba(255,255,255,.08); }
-      body:not(.force-light) .ds-hdr-btn { background: #18181b; border-color: rgba(255,255,255,.12); color: #a1a1aa; }
-      body:not(.force-light) .ds-offer-card { background: #18181b; border-color: rgba(255,255,255,.08); }
-      body:not(.force-light) .oc-meta { background: #18181b; }
-      body:not(.force-light) .ic-card { background: #18181b; border-color: rgba(255,255,255,.08); }
-      body:not(.force-light) .ic-card--blue .ic-header { background: rgba(59,130,246,.1); }
-      body:not(.force-light) .ic-card--green .ic-header { background: rgba(34,197,94,.08); }
-      body:not(.force-light) .tc-card { background: #18181b; border-color: rgba(255,255,255,.08); }
-      body:not(.force-light) .tc-toggle--active { background: #18181b !important; color: #93c5fd !important; }
-      body:not(.force-light) .export-menu { background: #18181b; border-color: rgba(255,255,255,.12); }
+      body:not(.force-light), body.force-dark .ds-sidebar { background: #18181b !important; border-right: 1px solid rgba(255,255,255,0.10) !important; box-shadow: none !important; }
+      body:not(.force-light), body.force-dark .ds-top-header { background: #18181b; border-bottom-color: rgba(255,255,255,.08); }
+      body:not(.force-light), body.force-dark .ds-hdr-btn { background: #18181b; border-color: rgba(255,255,255,.12); color: #a1a1aa; }
+      body:not(.force-light), body.force-dark .ds-offer-card { background: #18181b; border-color: rgba(255,255,255,.08); }
+      body:not(.force-light), body.force-dark .oc-meta { background: #18181b; }
+      body:not(.force-light), body.force-dark .ic-card { background: #18181b; border-color: rgba(255,255,255,.08); }
+      body:not(.force-light), body.force-dark .ic-card--blue .ic-header { background: rgba(59,130,246,.1); }
+      body:not(.force-light), body.force-dark .ic-card--green .ic-header { background: rgba(34,197,94,.08); }
+      body:not(.force-light), body.force-dark .tc-card { background: #18181b; border-color: rgba(255,255,255,.08); }
+      body:not(.force-light), body.force-dark .tc-toggle--active { background: #18181b !important; color: #93c5fd !important; }
+      body:not(.force-light), body.force-dark .export-menu { background: #18181b; border-color: rgba(255,255,255,.12); }
     }
 
     /* ── RESPONSIVE ── */
@@ -3434,8 +3451,8 @@
     body.force-dark .oc-meta { border-left-color: rgba(255,255,255,.08) !important; background: transparent !important; box-shadow: inset 1px 0 0 rgba(255,255,255,.08) !important; }
     body.force-dark .oc-meta-field:not(:last-child) { border-right-color: rgba(255,255,255,.08) !important; box-shadow: inset -1px 0 0 rgba(255,255,255,.08) !important; }
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .oc-meta { border-left-color: rgba(255,255,255,.08) !important; box-shadow: inset 1px 0 0 rgba(255,255,255,.08) !important; }
-      body:not(.force-light) .oc-meta-field:not(:last-child) { border-right-color: rgba(255,255,255,.08) !important; box-shadow: inset -1px 0 0 rgba(255,255,255,.08) !important; }
+      body:not(.force-light), body.force-dark .oc-meta { border-left-color: rgba(255,255,255,.08) !important; box-shadow: inset 1px 0 0 rgba(255,255,255,.08) !important; }
+      body:not(.force-light), body.force-dark .oc-meta-field:not(:last-child) { border-right-color: rgba(255,255,255,.08) !important; box-shadow: inset -1px 0 0 rgba(255,255,255,.08) !important; }
     }
 
     /* Sidebar always on top of offers panel */
@@ -4083,17 +4100,17 @@
 
     /* Mirror for prefers-color-scheme */
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .ds-offer-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
-      body:not(.force-light) .oc-top { background: #18181b !important; }
-      body:not(.force-light) h1#main-title { color: #f4f4f5 !important; }
-      body:not(.force-light) .oc-meta { background: #18181b !important; }
-      body:not(.force-light) .oc-meta-input { color: #f4f4f5 !important; }
-      body:not(.force-light) .oc-select-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #d4d4d8 !important; }
-      body:not(.force-light) .ic-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
-      body:not(.force-light) .ic-title { color: #f4f4f5 !important; }
-      body:not(.force-light) .tc-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
-      body:not(.force-light) .ds-top-header { background: #18181b !important; }
-      body:not(.force-light) .ds-hdr-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #d4d4d8 !important; }
+      body:not(.force-light), body.force-dark .ds-offer-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
+      body:not(.force-light), body.force-dark .oc-top { background: #18181b !important; }
+      body:not(.force-light), body.force-dark h1#main-title { color: #f4f4f5 !important; }
+      body:not(.force-light), body.force-dark .oc-meta { background: #18181b !important; }
+      body:not(.force-light), body.force-dark .oc-meta-input { color: #f4f4f5 !important; }
+      body:not(.force-light), body.force-dark .oc-select-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #d4d4d8 !important; }
+      body:not(.force-light), body.force-dark .ic-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
+      body:not(.force-light), body.force-dark .ic-title { color: #f4f4f5 !important; }
+      body:not(.force-light), body.force-dark .tc-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
+      body:not(.force-light), body.force-dark .ds-top-header { background: #18181b !important; }
+      body:not(.force-light), body.force-dark .ds-hdr-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #d4d4d8 !important; }
     }
 
     /* ── 8. LiftIQ real logo ── */
@@ -4109,7 +4126,7 @@
     /* Dark mode logo tint */
     body.force-dark .ds-sidebar-logo svg path { fill: #60a5fa !important; }
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .ds-sidebar-logo svg path { fill: #60a5fa !important; }
+      body:not(.force-light), body.force-dark .ds-sidebar-logo svg path { fill: #60a5fa !important; }
     }
 
     /* ══ MEDIA CELL & HIDDEN INPUT FIX ══ */
@@ -4184,9 +4201,9 @@
     body.force-dark #ad-detail-panel ::-webkit-scrollbar-thumb { background: #3f3f46; border-color: #27272a; }
     body.force-dark #ad-detail-panel ::-webkit-scrollbar-thumb:hover { background: #52525b; }
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) #ad-detail-panel ::-webkit-scrollbar-track { background: #27272a; }
-      body:not(.force-light) #ad-detail-panel ::-webkit-scrollbar-thumb { background: #3f3f46; border-color: #27272a; }
-      body:not(.force-light) #ad-detail-panel ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+      body:not(.force-light), body.force-dark #ad-detail-panel ::-webkit-scrollbar-track { background: #27272a; }
+      body:not(.force-light), body.force-dark #ad-detail-panel ::-webkit-scrollbar-thumb { background: #3f3f46; border-color: #27272a; }
+      body:not(.force-light), body.force-dark #ad-detail-panel ::-webkit-scrollbar-thumb:hover { background: #52525b; }
     }
 
     /* ── Scrollbars inside all sidebar/overlay panels ── */
@@ -5132,8 +5149,8 @@
     body.force-dark .oc-meta-field:not(:last-child) { border-right-color: rgba(255,255,255,.06) !important; }
     body.force-dark .oc-meta-icon { color: #52525b !important; }
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .oc-meta { background: #18181b !important; border-top-color: rgba(255,255,255,.06) !important; }
-      body:not(.force-light) .oc-meta-icon { color: #52525b !important; }
+      body:not(.force-light), body.force-dark .oc-meta { background: #18181b !important; border-top-color: rgba(255,255,255,.06) !important; }
+      body:not(.force-light), body.force-dark .oc-meta-icon { color: #52525b !important; }
     }
 
     /* Custom calendar icon for date — hide native picker arrow */
@@ -5615,9 +5632,9 @@
     body.force-light .ds-sidebar-logo svg rect,
     body.force-light .ds-sidebar-logo svg polygon { fill: #016AC9 !important; }
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .ds-sidebar-logo svg path,
-      body:not(.force-light) .ds-sidebar-logo svg rect,
-      body:not(.force-light) .ds-sidebar-logo svg polygon { fill: #ffffff !important; }
+      body:not(.force-light), body.force-dark .ds-sidebar-logo svg path,
+      body:not(.force-light), body.force-dark .ds-sidebar-logo svg rect,
+      body:not(.force-light), body.force-dark .ds-sidebar-logo svg polygon { fill: #ffffff !important; }
     }
 
     /* ── HIGH CONTRAST TEXT ── */
@@ -5896,12 +5913,12 @@
     body.force-dark .ds-top-header-left,
     body.force-dark .ds-top-header-mobile-row { background: #18181b !important; }
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .ds-top-header,
-      body:not(.force-light) .ds-sidebar,
-      body:not(.force-light) .ds-sidebar-logo,
-      body:not(.force-light) .ds-top-header-left,
-      body:not(.force-light) .ds-top-header-mobile-row,
-      body:not(.force-light) .ds-app { background: #18181b !important; }
+      body:not(.force-light), body.force-dark .ds-top-header,
+      body:not(.force-light), body.force-dark .ds-sidebar,
+      body:not(.force-light), body.force-dark .ds-sidebar-logo,
+      body:not(.force-light), body.force-dark .ds-top-header-left,
+      body:not(.force-light), body.force-dark .ds-top-header-mobile-row,
+      body:not(.force-light), body.force-dark .ds-app { background: #18181b !important; }
     }
     /* Unified thead th color across all tables */
     thead th { color: #475569 !important; }
@@ -5918,17 +5935,17 @@
     body.force-dark .section-title { color: #a1a1aa !important; }
     body.force-dark thead th.remove-col::after { color: #a1a1aa !important; }
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .ds-top-header,
-      body:not(.force-light) .ds-sidebar,
-      body:not(.force-light) .ds-offer-card,
-      body:not(.force-light) .offers-panel,
-      body:not(.force-light) #history-panel,
-      body:not(.force-light) #export-panel { background: #18181b !important; }
-      body:not(.force-light) thead th { color: #a1a1aa !important; }
-      body:not(.force-light) .ic-title,
-      body:not(.force-light) .tc-title,
-      body:not(.force-light) .section-title { color: #a1a1aa !important; }
-      body:not(.force-light) thead th.remove-col::after { color: #9ca3af !important; }
+      body:not(.force-light), body.force-dark .ds-top-header,
+      body:not(.force-light), body.force-dark .ds-sidebar,
+      body:not(.force-light), body.force-dark .ds-offer-card,
+      body:not(.force-light), body.force-dark .offers-panel,
+      body:not(.force-light), body.force-dark #history-panel,
+      body:not(.force-light), body.force-dark #export-panel { background: #18181b !important; }
+      body:not(.force-light), body.force-dark thead th { color: #a1a1aa !important; }
+      body:not(.force-light), body.force-dark .ic-title,
+      body:not(.force-light), body.force-dark .tc-title,
+      body:not(.force-light), body.force-dark .section-title { color: #a1a1aa !important; }
+      body:not(.force-light), body.force-dark thead th.remove-col::after { color: #9ca3af !important; }
     }
     #nav-db { display: none !important; }
     #nav-db.visible { display: flex !important; }
@@ -6019,7 +6036,7 @@
       background: #18181b !important;
     }
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) .ds-sidebar { background: #18181b !important; }
+      body:not(.force-light), body.force-dark .ds-sidebar { background: #18181b !important; }
     }
     .ds-sidebar-footer { height: 56px !important; min-height: 56px !important; max-height: 56px !important; display: flex !important; flex-direction: row !important; align-items: center !important; padding: 0 8px !important; box-sizing: border-box !important; gap: 0 !important; }
     .ds-sidebar-footer .ds-sidebar-nav { flex: 1 !important; padding: 0 !important; }
@@ -6182,7 +6199,7 @@
     #traffic-table thead th { color: #475569 !important; }
     body.force-dark #traffic-table thead th { color: #a1a1aa !important; }
     @media (prefers-color-scheme: dark) {
-      body:not(.force-light) #traffic-table thead th { color: #a1a1aa !important; }
+      body:not(.force-light), body.force-dark #traffic-table thead th { color: #a1a1aa !important; }
     }
     #traffic-table thead th.frozen-num,
     #traffic-table tbody td.frozen-num {
@@ -6276,6 +6293,11 @@
 
 
 
+  <style>
+    /* Apply dark background immediately before JS runs to avoid white flash */
+    html.force-dark-early body,
+    html.force-dark-early { background: #18181b !important; }
+  </style>
 <body>
 
 <div id="liftiq-loader">
@@ -7572,7 +7594,7 @@ function buildAdsGrid() {
         </div>
       </div>
       <div class="grid-card-body">
-        <div class="grid-card-offer gce" contenteditable="false" spellcheck="false" data-ta="td:nth-child(2)" data-row="${idx}" data-table="ads-body" style="outline:none;cursor:default;" onclick="gcExpand(this)">${offer || ''}<span style="opacity:0.4;display:${offer?'none':'inline'}">Offer name</span></div>
+        <div class="grid-card-offer gce" contenteditable="false" spellcheck="false" data-ta="td:nth-child(2)" data-row="${idx}" data-table="ads-body" style="outline:none;" onclick="gcExpand(this)">${offer || ''}<span style="opacity:0.4;display:${offer?'none':'inline'}">Offer name</span></div>
         ${linkBlockTop}
         ${renderChip(tds[2], 'Traffic source', idx, 'ads-body')}
         ${renderChip(tds[3], 'Format', idx, 'ads-body')}
@@ -7837,14 +7859,16 @@ function gcExpand(el) {
   el.style.cursor = 'text';
   el.style.color = 'var(--text-primary)';
   el.style.opacity = '1';
-  el.focus();
-  // Place cursor at end
-  const range = document.createRange();
+  // Only move cursor if there's no active text selection (user might be selecting)
   const sel = window.getSelection();
-  range.selectNodeContents(el);
-  range.collapse(false);
-  sel.removeAllRanges();
-  sel.addRange(range);
+  if (!sel || sel.isCollapsed) {
+    el.focus();
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
 }
 
 function gcCollapse(el) {
@@ -9358,8 +9382,15 @@ document.addEventListener('keydown', function(e) {
         }, 50);
       }
     } else if (e.shiftKey) {
-      // Shift+Enter: insert line break (default textarea behavior — do nothing)
-      return;
+      // Shift+Enter: insert a newline at cursor position
+      e.preventDefault();
+      const ta = e.target;
+      const start = ta.selectionStart;
+      const end = ta.selectionEnd;
+      ta.value = ta.value.slice(0, start) + '\n' + ta.value.slice(end);
+      ta.selectionStart = ta.selectionEnd = start + 1;
+      autoGrow(ta);
+      scheduleSave();
     } else {
       // Plain Enter: blur to save and move to next cell
       e.preventDefault();
@@ -9382,6 +9413,14 @@ document.addEventListener('keydown', function(e) {
     e.target.blur();
   }
 });
+
+
+// Failsafe: always restore user-select on mouseup (in case drag cleanup missed it)
+document.addEventListener('mouseup', function() {
+  if (document.body.style.userSelect === 'none') {
+    document.body.style.userSelect = '';
+  }
+}, true);
 
 // ── URL auto-format handled in saveLinkChip ──
 
