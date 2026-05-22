@@ -7956,13 +7956,6 @@ function gcCollapse(el) {
   el.style.color = '';
 }
 
-function gcCollapse(el) {
-  el.style.display = '-webkit-box';
-  el.style.webkitLineClamp = '2';
-  el.style.overflow = 'hidden';
-  el.style.cursor = 'pointer';
-}
-
 // Collapse all expanded grid fields when clicking outside
 document.addEventListener('click', e => {
   if (!e.target.closest('.gce')) {
@@ -11077,7 +11070,7 @@ document.addEventListener('click', function(e) {
 function exportCSV() {
   const offerName = (document.getElementById('main-title')?.dataset?.text || 'research').replace(/[^a-z0-9\s\-]/gi,'').trim() || 'research';
   const tables = [
-    { id: 'ads-body',     name: 'Top Ads',             headers: ['#','Offer','Traffic Source','Format','Geo','Lifecycle','Landing Page','Fan Page','Spy Tool','Angle / Hook','Headline','CTA','Title','Impressions','Notes'] },
+    { id: 'ads-body',     name: 'Top Ads',             headers: ['#','Offer','Traffic Source','Format','Geo','Lifecycle','Landing Page','Fan Page','Spy Tool','Creative','Angle / Hook','Headline','CTA','Title','Impressions','Notes'] },
     { id: 'traffic-body', name: 'Top Traffic Channels',  headers: ['#','Source','Geo','Qty','Traffic Type','Notes'] },
     { id: 'funnels-body', name: 'Top Funnels',          headers: ['#','Link','Offer','Geo','Traffic Source','Funnel Type','Notes'] },
   ];
