@@ -4679,8 +4679,9 @@
     .ds-top-header { display: flex !important; align-items: center !important; justify-content: space-between !important; }
     .ds-top-header-left { display: flex !important; align-items: center !important; gap: 0 !important; flex-direction: row !important; }
     .ds-top-header-mobile-row { display: flex !important; align-items: center !important; gap: 10px !important; flex-direction: row !important; }
-    .ds-top-header-mobile-row > div { display: flex !important; flex-direction: column !important; gap: 2px !important; justify-content: center !important; }
-    .ds-top-header-title { line-height: 1.2 !important; display: block !important; }
+    .ds-top-header-mobile-row > div { display: flex !important; flex-direction: column !important; gap: 2px !important; justify-content: center !important; align-self: center !important; }
+    .ds-hdr-collapse-btn { align-self: center !important; }
+    .ds-top-header-title { line-height: 1.2 !important; display: block !important; margin: 0 !important; }
     .ds-top-header-subtitle { line-height: 1.2 !important; display: block !important; margin: 0 !important; }
     @media (min-width: 861px) { .ds-hdr-collapse-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; } }
     .ds-top-header-right { display: flex !important; align-items: center !important; gap: 8px !important; flex-shrink: 0 !important; }
@@ -6305,6 +6306,74 @@
     /* Apply dark background immediately before JS runs to avoid white flash */
     html.force-dark-early body,
     html.force-dark-early { background: #18181b !important; }
+  </style>
+  <style>
+    /* ── ADS & FUNNELS CELL ALIGNMENT — match Top Channels ── */
+    /* Plain textarea cells: use flex to vertically center the textarea within the 52px row */
+    #ads-table tbody td:has(> textarea),
+    #funnels-table tbody td:has(> textarea) {
+      display: table-cell !important;
+      vertical-align: middle !important;
+      padding: 0 !important;
+    }
+    #ads-table tbody td > textarea,
+    #funnels-table tbody td > textarea {
+      display: block !important;
+      width: 100% !important;
+      padding: 0 10px !important;
+      border: none !important;
+      background: transparent !important;
+      resize: none !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+      font-size: 12.5px !important;
+      line-height: 1.45 !important;
+      vertical-align: middle !important;
+    }
+    /* ── HEADER ALIGNMENT FINAL FIX ── */
+    .ds-top-header {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+    }
+    .ds-top-header-left {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      height: 100% !important;
+    }
+    .ds-top-header-mobile-row {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 10px !important;
+      height: 100% !important;
+    }
+    .ds-hdr-collapse-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      align-self: center !important;
+      flex-shrink: 0 !important;
+    }
+    .ds-top-header-mobile-row > div {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      align-self: center !important;
+      gap: 2px !important;
+    }
+    .ds-top-header-title {
+      display: block !important;
+      margin: 0 !important;
+      line-height: 1.2 !important;
+    }
+    .ds-top-header-subtitle {
+      display: block !important;
+      margin: 0 !important;
+      line-height: 1.2 !important;
+    }
   </style>
 <body>
 
