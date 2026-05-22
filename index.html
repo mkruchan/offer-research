@@ -563,8 +563,8 @@
     #ads-table td:nth-child(5), #ads-table td:nth-child(6) { position: relative; }
     #ads-table td:nth-child(5) textarea, #ads-table td:nth-child(6) textarea,
     #ads-table td.frozen-offer textarea { position: absolute; inset: 0; width: 100%; height: 100% !important; border-right: none !important; }
-    #funnels-table td:nth-child(3), #funnels-table td:nth-child(4), #funnels-table td:nth-child(6) { position: relative; }
-    #funnels-table td:nth-child(3) textarea, #funnels-table td:nth-child(4) textarea, #funnels-table td:nth-child(6) textarea { position: absolute; inset: 0; width: 100%; height: 100% !important; border-right: none !important; }
+    #funnels-table td:nth-child(3), #funnels-table td:nth-child(4), #funnels-table td:nth-child(7) { position: relative; }
+    #funnels-table td:nth-child(3) textarea, #funnels-table td:nth-child(4) textarea, #funnels-table td:nth-child(7) textarea { position: absolute; inset: 0; width: 100%; height: 100% !important; border-right: none !important; }
     #traffic-table td:nth-child(3), #traffic-table td:nth-child(4), #traffic-table td:nth-child(6) { position: relative; }
     #traffic-table td:nth-child(3) textarea, #traffic-table td:nth-child(4) textarea, #traffic-table td:nth-child(6) textarea { position: absolute; inset: 0; width: 100%; height: 100% !important; border-right: none !important; }
     tbody tr:hover td.frozen-num { background: var(--bg-secondary); }
@@ -625,7 +625,7 @@
       border: none; border-right: 1px solid var(--border-light);
       background: transparent; color: var(--text-primary);
       outline: none; font-family: inherit;
-      box-sizing: border-box; resize: none; overflow: hidden;
+      box-sizing: border-box; resize: none; overflow: hidden; overflow-wrap: break-word;
       line-height: 1.5; display: block; width: 100%; align-self: center;
     }
     #ads-table tbody td input::placeholder,
@@ -3764,8 +3764,8 @@
       inset: 0 !important;
       width: 100% !important;
       height: 100% !important;
-      padding: 0 10px !important;
-      line-height: 52px !important;
+      padding: 8px 10px !important;
+      line-height: 1.45 !important;
       font-size: 12.5px !important;
       color: #000000 !important;
       border: none !important;
@@ -3773,8 +3773,25 @@
       background: transparent !important;
       resize: none !important;
       overflow: hidden !important;
-      white-space: nowrap !important;
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
       box-sizing: border-box !important;
+    }
+    /* On focus, switch absolute textareas to static so they can expand */
+    #traffic-table td:nth-child(3) textarea:focus,
+    #traffic-table td:nth-child(4) textarea:focus,
+    #traffic-table td:nth-child(6) textarea:focus,
+    #ads-table td.frozen-offer textarea:focus,
+    #funnels-table td:nth-child(3) textarea:focus,
+    #funnels-table td:nth-child(4) textarea:focus,
+    #funnels-table td:nth-child(7) textarea:focus {
+      position: relative !important;
+      inset: unset !important;
+      height: auto !important;
+      min-height: 36px !important;
+      overflow: visible !important;
+      z-index: 20 !important;
+      background: var(--bg-secondary) !important;
     }
 
     /* Ads & funnels — consistent top-aligned padding */
@@ -6883,8 +6900,8 @@
       <div class="table-scroll">
         <table id="funnels-table"><thead><tr>
           <th class="num-col frozen-num">#</th><th>Link</th>
-          <th>Advertiser</th><th>Geo</th><th>Funnel Type</th>
-          <th>Key Observations</th>
+          <th>Offer</th><th>Geo</th><th>Traffic Source</th><th>Funnel Type</th>
+          <th>Notes</th>
           <th class="remove-col"></th>
         </tr></thead><tbody id="funnels-body"></tbody></table>
       </div>
@@ -7371,10 +7388,11 @@ function buildFunnelsGrid() {
   const cards = Array.from(rows).map((tr, idx) => {
     const tds = tr.querySelectorAll('td');
     const linkUrl = getLinkHref(tds[1]);
-    const advertiser = getText(tds[2]);
+    const advertiser = getText(tds[2]); // 'offer' column
     const geo = getText(tds[3]);
-    const funnelSel = tds[4]?.querySelector('select');
-    const obs = getText(tds[5]);
+    const sourceSel = tds[4]?.querySelector('select');
+    const funnelSel = tds[5]?.querySelector('select');
+    const obs = getText(tds[6]);
     const FUNNEL_CHIP_COLORS = {
       'quiz':{'bg':'#EDE9FE','color':'#6D28D9'},'landing-page':{'bg':'#DBEAFE','color':'#1D4ED8'},
       'vsl':{'bg':'#FEE2E2','color':'#B91C1C'},'lead-gen':{'bg':'#D1FAE5','color':'#065F46'},
@@ -7386,11 +7404,28 @@ function buildFunnelsGrid() {
     const ft = fv ? (funnelSel.options[funnelSel.selectedIndex]?.text || fv) : '';
     const fc = FUNNEL_CHIP_COLORS[fv] || {bg:'#E5E7EB',color:'#374151'};
     const funnelChipHtml = fv ? `<span style="background:${fc.bg};color:${fc.color};border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;letter-spacing:0.02em;white-space:nowrap;">${ft}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
+    // Source chip
+    const SOURCE_CHIP_COLORS = {'meta':{'bg':'#DBEAFE','color':'#1D4ED8'},'tiktok':{'bg':'#F3F4F6','color':'#111827'},'google':{'bg':'#dcfce7','color':'#166534'},'native':{'bg':'#D1FAE5','color':'#065F46'},'youtube':{'bg':'#FEE2E2','color':'#B91C1C'},'taboola':{'bg':'#FEF3C7','color':'#92400E'},'outbrain':{'bg':'#EDE9FE','color':'#6D28D9'},'mgid':{'bg':'#DBEAFE','color':'#00206A'},'revcontent':{'bg':'#D1FAE5','color':'#065F46'},'facebook':{'bg':'#DBEAFE','color':'#1D4ED8'},'push':{'bg':'#EDE9FE','color':'#6D28D9'}};
+    const sourceOpts = sourceSel ? Array.from(sourceSel.options).map(o => `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`).join('') : '';
+    const sv = sourceSel?.value || '';
+    const st = sv ? (sourceSel.options[sourceSel.selectedIndex]?.text || sv) : '';
+    const sc = SOURCE_CHIP_COLORS[sv] || {bg:'#E5E7EB',color:'#374151'};
+    const sourceChipHtml = sv ? `<span style="background:${sc.bg};color:${sc.color};border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;letter-spacing:0.02em;white-space:nowrap;">${st}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
+    const sourceChip = sourceSel ? `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
+      <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">Traffic source</div>
+      <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
+        ${sourceChipHtml}
+        <select data-row="${idx}" data-table="funnels-body" data-tdidx="5"
+          onchange="gridChipEdit(this)"
+          style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;"
+        >${sourceOpts}</select>
+      </span>
+    </div>` : '';
     const typeChip = funnelSel ? `<div style="font-size:13px;line-height:1.4;margin-bottom:0;padding:6px 0;flex-shrink:0;">
       <div class="gc-field-label" style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px;">Funnel type</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${funnelChipHtml}
-        <select data-row="${idx}" data-table="funnels-body" data-tdidx="5"
+        <select data-row="${idx}" data-table="funnels-body" data-tdidx="6"
           onchange="gridChipEdit(this)"
           style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;"
         >${funnelOpts}</select>
@@ -7408,9 +7443,10 @@ function buildFunnelsGrid() {
         </div>
         </div>
         <div class="grid-card-offer">${advertiser || '<span style="opacity:0.4">No advertiser</span>'}</div>
+        ${sourceChip}
         ${typeChip}
         ${gfField('Geo', geo, 'td:nth-child(4)', idx, 'funnels-body')}
-        ${gfField('Observations', obs, 'td:nth-child(6)', idx, 'funnels-body')}
+        ${gfField('Notes', obs, 'td:nth-child(7)', idx, 'funnels-body')}
         <div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;display:flex;align-items:center;gap:4px;" onclick="event.stopPropagation()">
           ${linkUrl
             ? `<a href="${linkUrl}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:3px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>Funnel link</a>`
@@ -8553,24 +8589,46 @@ function initTableCellExpand() {
       const td = this.closest('td');
       const tr = this.closest('tr');
       if (!td || !tr) return;
-      // Save original heights
+      const isAbs = getComputedStyle(this).position === 'absolute';
+      this._wasAbsolute = isAbs;
       this._origH = this.style.height;
       this._origMinH = this.style.minHeight;
       tr._origH = tr.style.height;
-      // Expand to fit all content
-      this.style.height = 'auto';
-      this.style.minHeight = 'unset';
-      this.style.height = this.scrollHeight + 'px';
-      tr.style.height = 'auto';
+      if (isAbs) {
+        // Switch to relative so it can expand beyond cell
+        this.style.position = 'relative';
+        this.style.inset = 'unset';
+        this.style.height = 'auto';
+        this.style.minHeight = '36px';
+        this.style.overflow = 'visible';
+        this.style.zIndex = '20';
+        this.style.background = 'var(--bg-secondary)';
+        this.style.height = this.scrollHeight + 'px';
+      } else {
+        this.style.height = 'auto';
+        this.style.minHeight = 'unset';
+        this.style.height = this.scrollHeight + 'px';
+        tr.style.height = 'auto';
+      }
     });
 
     ta.addEventListener('blur', function() {
       const tr = this.closest('tr');
-      // Restore heights
-      this.style.height = this._origH || '';
-      this.style.minHeight = this._origMinH || '';
-      if (tr) tr.style.height = tr._origH || '';
-      autoGrow(this);
+      if (this._wasAbsolute) {
+        // Restore absolute positioning
+        this.style.position = '';
+        this.style.inset = '';
+        this.style.height = '';
+        this.style.minHeight = '';
+        this.style.overflow = '';
+        this.style.zIndex = '';
+        this.style.background = '';
+      } else {
+        this.style.height = this._origH || '';
+        this.style.minHeight = this._origMinH || '';
+        if (tr) tr.style.height = tr._origH || '';
+        autoGrow(this);
+      }
     });
   });
 }
@@ -8630,26 +8688,31 @@ function openFunnelDetail(rowIdx) {
   const tr = document.querySelectorAll('#funnels-body tr')[rowIdx];
   if (!tr) return;
   _adpCurrentRowIdx = rowIdx; _adpCurrentTable = 'funnels-body';
-  const tds        = tr.querySelectorAll('td');
-  const linkUrl    = _adpGetLink(tds[1]);
-  const advertiser = _adpGetText(tds[2]) || '(no advertiser)';
-  const geo        = _adpGetText(tds[3]);
-  const funnelType = _adpGetSelect(tds[4]) || _adpGetBadgeText(tds[4]) || '';
-  const obs        = _adpGetText(tds[5]);
+  const tds           = tr.querySelectorAll('td');
+  const linkUrl       = _adpGetLink(tds[1]);
+  const advertiser    = _adpGetText(tds[2]) || '(no offer)';
+  const geo           = _adpGetText(tds[3]);
+  const trafficSource = _adpGetSelect(tds[4]) || _adpGetBadgeText(tds[4]) || '';
+  const funnelType    = _adpGetSelect(tds[5]) || _adpGetBadgeText(tds[5]) || '';
+  const obs           = _adpGetText(tds[6]);
 
+  const sourceChip = _adpChip(trafficSource, _ADP_SOURCE_COLORS);
   const funnelChip = _adpChip(funnelType, _ADP_FUNNEL_COLORS);
-  const subtitleChips = [funnelChip, geo ? `<span style="font-size:12px;color:var(--text-secondary);">${geo}</span>` : ''].filter(Boolean).join('');
+  const subtitleChips = [sourceChip, funnelChip, geo ? `<span style="font-size:12px;color:var(--text-secondary);">${geo}</span>` : ''].filter(Boolean).join('');
 
+  const SOURCE_OPTS = [['','— select —'],['meta','Meta'],['tiktok','TikTok'],['google','Google'],['native','Native'],['youtube','YouTube'],['pinterest','Pinterest'],['snapchat','Snapchat'],['twitter','Twitter/X'],['linkedin','LinkedIn'],['reddit','Reddit'],['email','Email'],['sms','SMS'],['push','Push Notifications'],['in-app-dsp','In-App DSP'],['programmatic','Programmatic/DSP'],['outbrain','Outbrain'],['mgid','MGID'],['taboola','Taboola'],['revcontent','RevContent']];
   const FUNNEL_TYPE_OPTS = [['','— select —'],['quiz','Quiz'],['landing-page','Landing Page'],['vsl','VSL'],['lead-gen','Lead Gen'],['multi-step','Multi-Step'],['advertorial','Advertorial'],['comparison','Comparison'],['checkout-page','Checkout Page']];
-  const funnelTypeVal = _adpGetSelectVal(tds[4]) || '';
+  const trafficSourceVal = _adpGetSelectVal(tds[4]) || '';
+  const funnelTypeVal    = _adpGetSelectVal(tds[5]) || '';
 
   const body = `
     <div class="adp-section">
       <div class="adp-section-header"><div class="adp-section-title">Funnel Details</div></div>
       <div class="adp-card">
-        ${_adpEditRow('Advertiser', advertiser, 2)}
-        ${_adpSelectRow('Funnel Type', funnelTypeVal, FUNNEL_TYPE_OPTS, 4, _ADP_FUNNEL_COLORS)}
+        ${_adpEditRow('Offer', advertiser, 2)}
         ${_adpEditRow('Geo', geo, 3)}
+        ${_adpSelectRow('Traffic Source', trafficSourceVal, SOURCE_OPTS, 4, _ADP_SOURCE_COLORS)}
+        ${_adpSelectRow('Funnel Type', funnelTypeVal, FUNNEL_TYPE_OPTS, 5, _ADP_FUNNEL_COLORS)}
       </div>
     </div>
     <div class="adp-section">
@@ -8659,8 +8722,8 @@ function openFunnelDetail(rowIdx) {
       </div>
     </div>
     <div class="adp-section">
-      <div class="adp-section-header"><div class="adp-section-title">Key Observations</div></div>
-      <div class="adp-copy-block" data-field="obs" data-td="5" contenteditable="false" style="min-height:60px;">${obs || '<span class=\"adp-copy-placeholder\">Add observations…</span>'}</div>
+      <div class="adp-section-header"><div class="adp-section-title">Notes</div></div>
+      <div class="adp-copy-block" data-field="obs" data-td="6" contenteditable="false" style="min-height:60px;">${obs || '<span class=\"adp-copy-placeholder\">Add notes…</span>'}</div>
     </div>
   `;
   _adpOpen(advertiser, '', body);
@@ -9335,12 +9398,14 @@ document.addEventListener('keydown', function(e) {
       // Shift+Enter: insert a newline at cursor position
       e.preventDefault();
       const ta = e.target;
-      const start = ta.selectionStart;
-      const end = ta.selectionEnd;
+      // Use execCommand for better cross-browser compatibility with absolute-positioned textareas
+      const start = ta.selectionStart ?? ta.value.length;
+      const end = ta.selectionEnd ?? ta.value.length;
       ta.value = ta.value.slice(0, start) + '\n' + ta.value.slice(end);
       ta.selectionStart = ta.selectionEnd = start + 1;
-      autoGrow(ta);
-      scheduleSave();
+      ta.scrollTop = ta.scrollHeight;
+      // Dispatch input event so oninput handlers (autoGrow, scheduleSave) fire
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
     } else {
       // Plain Enter: blur to save and move to next cell
       e.preventDefault();
@@ -9364,6 +9429,34 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+
+// ── .gce card field keyboard handling ──
+// Plain Enter = blur to save; Shift+Enter = insert line break as plain text
+document.addEventListener('keydown', function(e) {
+  if (!e.target.classList.contains('gce')) return;
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  if (e.shiftKey) {
+    // Shift+Enter in card field: insert plain text newline (no <br>/<div>)
+    const sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    // Insert newline + zero-width space so cursor lands on new line
+    const nl = document.createTextNode('\n\u200B');
+    range.insertNode(nl);
+    range.setStart(nl, 1);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    e.target.dispatchEvent(new Event('input', { bubbles: true }));
+    if (typeof gridInlineEdit === 'function') gridInlineEdit(e.target);
+  } else {
+    // Plain Enter: save and blur
+    if (typeof gridInlineEdit === 'function') gridInlineEdit(e.target);
+    e.target.blur();
+  }
+}, true);
 
 // Failsafe: always restore user-select on mouseup (in case drag cleanup missed it)
 document.addEventListener('mouseup', function() {
@@ -9860,8 +9953,14 @@ function funnelRow(n) {
         <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
       </div>
     </div></td>
-    <td><textarea placeholder="Advertiser name" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="Offer name" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. US, UK" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><div class="sel-wrap">
+      <select onchange="updateBadge(this);scheduleSave()">
+        ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}${opt('youtube','YouTube')}${opt('pinterest','Pinterest')}${opt('snapchat','Snapchat')}${opt('twitter','Twitter/X')}${opt('linkedin','LinkedIn')}${opt('reddit','Reddit')}${opt('email','Email')}${opt('sms','SMS')}${opt('push','Push Notifications')}${opt('in-app-dsp','In-App DSP')}${opt('programmatic','Programmatic/DSP')}${opt('outbrain','Outbrain')}${opt('mgid','MGID')}${opt('taboola','Taboola')}${opt('revcontent','RevContent')}
+      </select>
+      <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
+    </div></td>
     <td><div class="sel-wrap">
       <select onchange="updateBadge(this);scheduleSave()">
         ${opt('','— select —')}${opt('quiz','Quiz / Survey')}${opt('landing-page','Direct Landing Page')}
@@ -10628,7 +10727,7 @@ function _collectDataInner() {
     rowHeights: (function() { const d={}; document.querySelectorAll('table').forEach(t => { const id=t.id||'table'; d[id]={}; t.querySelectorAll('tbody tr').forEach((tr,i)=>{ if(tr.style.height) d[id][i]=tr.style.height; }); }); return d; })(),
     traffic: collectTable('traffic-body', ['num','source','geo','qty','type','notes']),
     ads: collectTable('ads-body', ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','angle','headline','cta','title','imp','notes']),
-    funnels: collectTable('funnels-body', ['num','link','advertiser','geo','type','obs']),
+    funnels: collectTable('funnels-body', ['num','link','advertiser','geo','trafficSource','type','obs']),
     savedSites: JSON.parse(localStorage.getItem('ecoverage_saved_sites') || '{}'),
   };
 }
@@ -10683,7 +10782,7 @@ function restoreData(data) {
   if (data.notes?.actionsH) { const c = document.getElementById('notes-card-actions'); if(c) c.style.height = data.notes.actionsH; }
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','qty','type','notes']);
   restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','angle','headline','cta','title','imp','notes']);
-  restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','type','obs']);
+  restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','trafficSource','type','obs']);
   if (data.savedSites) {
     try { localStorage.setItem('ecoverage_saved_sites', JSON.stringify(data.savedSites)); } catch(e) {}
   }
@@ -11026,7 +11125,7 @@ function exportCSV() {
   const tables = [
     { id: 'ads-body',     name: 'Top Ads',             headers: ['#','Offer','Traffic Source','Format','Geo','Lifecycle','Landing Page','Fan Page','Spy Tool','Angle / Hook','Headline','CTA','Title','Impressions','Notes'] },
     { id: 'traffic-body', name: 'Top Traffic Channels',  headers: ['#','Source','Geo','Qty','Traffic Type','Notes'] },
-    { id: 'funnels-body', name: 'Top Funnels',          headers: ['#','Link','Advertiser','Geo','Funnel Type','Key Observations'] },
+    { id: 'funnels-body', name: 'Top Funnels',          headers: ['#','Link','Offer','Geo','Traffic Source','Funnel Type','Notes'] },
   ];
   let csv = '';
   tables.forEach(t => {
