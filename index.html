@@ -9262,7 +9262,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function applyThemeUI() {
   const isDark = document.body.classList.contains('force-dark');
-  const saved = localStorage.getItem('ecoverage_theme') || 'light';
+  const saved = localStorage.getItem('ecoverage_theme') || 'auto';
   const btn = document.getElementById('themeToggle');
 
   if (btn) {
@@ -9291,11 +9291,12 @@ function applyThemeUI() {
   var saved = localStorage.getItem('ecoverage_theme');
   if (saved === 'dark') {
     document.body.classList.add('force-dark');
-  } else if (saved === 'auto') {
+  } else if (saved === 'light') {
+    document.body.classList.add('force-light');
+  } else {
+    // 'auto' or nothing saved — default to auto (follow system)
     var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     document.body.classList.add(prefersDark ? 'force-dark' : 'force-light');
-  } else {
-    document.body.classList.add('force-light');
   }
   // Also listen for system changes when in auto mode
   if (window.matchMedia) {
