@@ -6235,15 +6235,18 @@
       outline: 2px solid var(--accent) !important;
       background: var(--bg-primary) !important;
     }
-    .card-link-input { display: none !important; height: 0 !important; padding: 0 !important; margin: 0 !important; border: none !important; position: absolute !important; pointer-events: none !important; }
+    .grid-card:not(.card-editing) .card-link-input { display: none !important; height: 0 !important; padding: 0 !important; margin: 0 !important; border: none !important; position: absolute !important; pointer-events: none !important; }
     .grid-card.card-editing .card-link-display { display: none !important; }
     .grid-card.card-editing .card-link-input {
       display: block !important;
+      position: relative !important;
+      height: auto !important;
       font-size: 11px; font-family: inherit;
       border: 1px solid var(--accent); border-radius: 4px;
       padding: 3px 6px; background: var(--bg-primary);
       color: var(--text-primary); outline: none;
       width: 100%; box-sizing: border-box;
+      pointer-events: auto !important;
     }
     .grid-card.card-editing .card-link-input:focus {
       box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
@@ -7567,7 +7570,7 @@ function buildAdsGrid() {
         </div>
       </div>
       <div class="grid-card-body">
-        <div class="grid-card-offer">${offer || '<span style="opacity:0.4">No offer</span>'}</div>
+        <div class="grid-card-offer gce" contenteditable="false" spellcheck="false" data-ta="td:nth-child(2)" data-row="${idx}" data-table="ads-body" style="outline:none;cursor:default;" onclick="gcExpand(this)">${offer || ''}<span style="opacity:0.4;display:${offer?'none':'inline'}">Offer name</span></div>
         ${linkBlockTop}
         ${renderChip(tds[2], 'Traffic source', idx, 'ads-body')}
         ${renderChip(tds[3], 'Format', idx, 'ads-body')}
