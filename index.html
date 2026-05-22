@@ -7631,16 +7631,16 @@ function buildAdsGrid() {
     };
     const linkBlock = `<div style="padding-top:6px;border-top:1px solid var(--border-light);margin-top:4px;">
       <div style="display:flex;gap:12px;align-items:center;">
-        <div>${mkEditableLink(landingUrl,'Landing',6)}</div>
-        <div>${mkEditableLink(fanUrl,'Fan page',7)}</div>
-        <div>${mkEditableLink(spyUrl,'Spy tool',8)}</div>
+        <div>${mkEditableLink(landingUrl,'Landing',7)}</div>
+        <div>${mkEditableLink(fanUrl,'Fan page',8)}</div>
+        <div>${mkEditableLink(spyUrl,'Spy tool',9)}</div>
       </div>
     </div>`;
 
     const linkBlockTop = `<div style="margin-bottom:6px;padding:5px 0;border-bottom:1px solid var(--border-light);display:flex;gap:12px;align-items:center;">
-        <div>${mkEditableLink(landingUrl,'Landing',6)}</div>
-        <div>${mkEditableLink(fanUrl,'Fan page',7)}</div>
-        <div>${mkEditableLink(spyUrl,'Spy tool',8)}</div>
+        <div>${mkEditableLink(landingUrl,'Landing',7)}</div>
+        <div>${mkEditableLink(fanUrl,'Fan page',8)}</div>
+        <div>${mkEditableLink(spyUrl,'Spy tool',9)}</div>
       </div>`;
 
     return `<div class="grid-card" onclick="(function(e){if(e.currentTarget.classList.contains('card-editing'))return;if(!e.target.closest('button,a,select,.gce,.card-expand-toggle,.grid-card-img,.grid-card-img-empty,.link-input-wrap,.grid-drag-handle')){openAdDetail(${idx})}})(event)" style="cursor:default;" >
@@ -8374,8 +8374,8 @@ function openAdDetail(rowIdx) {
   const geo        = _adpGetText(tds[4]);
   const lifecycle  = _adpGetText(tds[5]);
   const landingUrl = _adpGetLink(tds[6]);
-  const spyUrl     = _adpGetLink(tds[7]);
-  const fanUrl     = _adpGetLink(tds[8]);
+  const fanUrl     = _adpGetLink(tds[7]);
+  const spyUrl     = _adpGetLink(tds[8]);
   const thumbImg   = tr.querySelector('img.media-thumb, video.media-thumb');
   const thumbSrc   = thumbImg?.src || '';
   const angle      = _adpGetText(tds[10]);
@@ -8452,8 +8452,8 @@ function openAdDetail(rowIdx) {
           <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Links</div></div>
           <div class="adp-lp-card">
             ${_adpLpRow(landingUrl,'Landing Page',_lpIcons.lp,'var(--blue-bg)',null,6)}
-            ${_adpLpRow(spyUrl,'Spy Tool',_lpIcons.spy,'var(--teal-bg)',null,7)}
-            ${_adpLpRow(fanUrl,'Fan Page',_lpIcons.fan,'var(--purple-bg)',null,8)}
+            ${_adpLpRow(fanUrl,'Fan Page',_lpIcons.fan,'var(--purple-bg)',null,7)}
+            ${_adpLpRow(spyUrl,'Spy Tool',_lpIcons.spy,'var(--teal-bg)',null,8)}
           </div>
         </div>
         <div class="adp-section" style="margin:0;">
