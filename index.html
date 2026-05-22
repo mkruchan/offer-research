@@ -2988,6 +2988,8 @@
       flex: 1 !important; min-width: 0 !important;
     }
     h1#main-title a, h1#main-title * { text-decoration: none !important; color: inherit !important; }
+    h1#main-title.has-url, h1#main-title.has-url a { text-decoration: underline !important; text-underline-offset: 3px; text-decoration-color: rgba(0,0,0,0.3) !important; cursor: pointer !important; }
+    body.force-dark h1#main-title.has-url, body.force-dark h1#main-title.has-url a { text-decoration-color: rgba(255,255,255,0.3) !important; }
     /* Buttons row on the right of title */
     .oc-actions {
       display: flex !important; align-items: center !important;
@@ -8980,9 +8982,12 @@ function updateOfferSlugPath(title) {
 
 function updateTitleLinkBtn(url) {
   const btn = document.getElementById('title-link-btn');
-  if (!btn) return;
-  if (url) { btn.href = url; btn.style.display = 'inline-flex'; }
-  else { btn.href = '#'; btn.style.display = 'none'; }
+  const title = document.getElementById('main-title');
+  if (btn) {
+    if (url) { btn.href = url; btn.style.display = 'inline-flex'; }
+    else { btn.href = '#'; btn.style.display = 'none'; }
+  }
+  if (title) title.classList.toggle('has-url', !!url);
 }
 
 function openReport() {
