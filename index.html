@@ -743,7 +743,7 @@
     .badge-native-dsp  { background: #DCFCE7; color: #166534; }
     .badge-programmatic { background: #F0F9FF; color: #0C4A6E; }
     .badge-outbrain    { background: #FEF3C7; color: #92400E; }
-    .badge-mgid        { background: #D1FAE5; color: #065F46; }
+    .badge-mgid        { background: #DBEAFE; color: #00206A; }
     .badge-taboola     { background: #DBEAFE; color: #1E40AF; }
     .badge-revcontent  { background: #EDE9FE; color: #6D28D9; }
     /* format */
@@ -1865,6 +1865,7 @@
     body.force-dark .badge-email       { background: #3b0d26; color: #f9a8d4; }
     body.force-dark .badge-sms         { background: #14352b; color: #6ee7b7; }
     body.force-dark .badge-push        { background: #2e1a4e; color: #c4b5fd; }
+    body.force-dark .badge-mgid        { background: #001845; color: #93c5fd; }
     body.force-dark .badge-static      { background: #1e3a5f; color: #93c5fd; }
     body.force-dark .badge-video       { background: #3d150a; color: #fca5a5; }
     body.force-dark .badge-carousel    { background: #2e1a4e; color: #c4b5fd; }
@@ -2131,6 +2132,45 @@
     .ds-nav-item.active { background: #eff6ff; color: #2563eb; font-weight: 600; }
     .ds-nav-item svg { flex-shrink: 0; opacity: .6; width: 16px; height: 16px; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s; }
     #themeToggle .theme-icon-wrap { position: relative; width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* Appearance dropdown menu */
+    .appearance-menu-wrap { position: static; width: 100%; }
+    .appearance-menu {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.13), 0 2px 12px rgba(0,0,0,0.08);
+      z-index: 9999;
+      overflow: hidden;
+      min-width: 160px;
+    }
+    .appearance-menu.open { display: flex; }
+    .appearance-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.13s, color 0.13s;
+      width: 100%;
+    }
+    .appearance-menu-item:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    .appearance-menu-item.active { color: var(--accent); }
+    .appearance-menu-item.active svg:first-child { stroke: var(--accent); }
+    .appearance-check { margin-left: auto; opacity: 0; flex-shrink: 0; }
+    .appearance-menu-item.active .appearance-check { opacity: 1; }
+    body.force-dark .appearance-menu { background: var(--surface); border-color: var(--border-light); }
+    body.force-dark .appearance-menu-item:hover { background: var(--bg-tertiary); }
     #themeToggle svg.theme-icon { position: absolute; top: 0; left: 0; width: 16px !important; height: 16px !important; transform-origin: center center; opacity: 0.6; }
     #themeToggle svg.theme-icon-hidden { display: none !important; }
     #themeToggle svg.theme-anim-in { animation: themeSwapIn 0.28s cubic-bezier(0.4, 0, 0.2, 1) both; }
@@ -6320,20 +6360,41 @@
   </nav>
 
   <!-- Footer: status + dark mode -->
-  <div class="ds-sidebar-footer" style="height:56px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box;">
+  <div class="ds-sidebar-footer" style="height:56px;display:flex;align-items:center;padding:0 8px;box-sizing:border-box;position:relative;overflow:visible;">
     <div style="display:none"><div id="ds-user-avatar">M</div><div id="ds-user-name">Analyst</div></div>
     <div id="sidebar-status" style="display:none;align-items:center;gap:8px;padding:4px 14px;font-size:12px;color:#9ca3af;">
       <div class="autosave-dot saved" id="autosaveDot"></div>
       <span id="autosaveText" class="ds-top-status-label" style="font-size:12px;">Cloud synced</span>
     </div>
     <nav class="ds-sidebar-nav" style="flex:unset;padding:0;width:100%;">
-      <button class="ds-nav-item" id="themeToggle" onclick="toggleTheme()">
-        <div class="theme-icon-wrap">
-          <svg class="theme-icon theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
-          <svg class="theme-icon theme-icon-sun theme-icon-hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <div class="appearance-menu-wrap" id="appearanceMenuWrap" style="position:relative;">
+        <button class="ds-nav-item" id="themeToggle" onclick="toggleAppearanceMenu(event)">
+          <div class="theme-icon-wrap">
+            <svg class="theme-icon theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+            <svg class="theme-icon theme-icon-sun theme-icon-hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            <svg class="theme-icon theme-icon-auto theme-icon-hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <span id="themeLabel">Appearance</span>
+          <svg class="appearance-chevron" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;opacity:0.5;transition:transform 0.2s;"><path d="M4 6l4 4 4-4"/></svg>
+        </button>
+        <div class="appearance-menu" id="appearanceMenu">
+          <button class="appearance-menu-item" id="appearance-auto" onclick="setAppearance('auto')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            Auto
+            <svg class="appearance-check" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l4 4 6-6"/></svg>
+          </button>
+          <button class="appearance-menu-item" id="appearance-light" onclick="setAppearance('light')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            Light
+            <svg class="appearance-check" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l4 4 6-6"/></svg>
+          </button>
+          <button class="appearance-menu-item" id="appearance-dark" onclick="setAppearance('dark')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+            Dark
+            <svg class="appearance-check" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l4 4 6-6"/></svg>
+          </button>
         </div>
-        <span id="themeLabel">Dark mode</span>
-      </button>
+      </div>
     </nav>
   </div>
 </aside>
@@ -9062,34 +9123,101 @@ function toggleTheme() {
   applyThemeUI();
 }
 
+function setAppearance(mode) {
+  document.body.classList.remove('force-dark', 'force-light');
+  if (mode === 'dark') {
+    document.body.classList.add('force-dark');
+  } else if (mode === 'light') {
+    document.body.classList.add('force-light');
+  } else {
+    // auto — mirror system preference using the existing force classes
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.body.classList.add(prefersDark ? 'force-dark' : 'force-light');
+  }
+  localStorage.setItem('ecoverage_theme', mode);
+  applyThemeUI();
+  closeAppearanceMenu();
+}
+
+function toggleAppearanceMenu(e) {
+  if (e) { e.stopPropagation(); e.preventDefault(); }
+  const menu = document.getElementById('appearanceMenu');
+  const btn = document.getElementById('themeToggle');
+  if (!menu || !btn) return;
+  const isOpen = menu.classList.contains('open');
+  if (!isOpen) {
+    const rect = btn.getBoundingClientRect();
+    menu.style.left = rect.left + 'px';
+    menu.style.width = rect.width + 'px';
+    menu.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+    menu.style.top = 'auto';
+  }
+  menu.classList.toggle('open', !isOpen);
+  const chevron = btn.querySelector('.appearance-chevron');
+  if (chevron) chevron.style.transform = !isOpen ? 'rotate(180deg)' : '';
+}
+
+function closeAppearanceMenu() {
+  const menu = document.getElementById('appearanceMenu');
+  if (menu) menu.classList.remove('open');
+  const btn = document.getElementById('themeToggle');
+  const chevron = btn && btn.querySelector('.appearance-chevron');
+  if (chevron) chevron.style.transform = '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('click', function(e) {
+    const wrap = document.getElementById('appearanceMenuWrap');
+    if (wrap && !wrap.contains(e.target)) closeAppearanceMenu();
+  }, true);
+});
+
 function applyThemeUI() {
   const isDark = document.body.classList.contains('force-dark');
+  const saved = localStorage.getItem('ecoverage_theme') || 'light';
   const btn = document.getElementById('themeToggle');
-  const label = document.getElementById('themeLabel');
 
   if (btn) {
     const moon = btn.querySelector('.theme-icon-moon');
     const sun  = btn.querySelector('.theme-icon-sun');
-    const visible = isDark ? sun : moon;
-    const hidden  = isDark ? moon : sun;
-
-    if (hidden)  { hidden.classList.add('theme-icon-hidden'); hidden.classList.remove('theme-anim-in'); }
+    const auto = btn.querySelector('.theme-icon-auto');
+    [moon, sun, auto].forEach(function(el) {
+      if (el) { el.classList.add('theme-icon-hidden'); el.classList.remove('theme-anim-in'); }
+    });
+    const visible = saved === 'auto' ? auto : isDark ? moon : sun;
     if (visible) {
       visible.classList.remove('theme-icon-hidden');
-      visible.classList.remove('theme-anim-in');
       void visible.offsetWidth;
       visible.classList.add('theme-anim-in');
     }
   }
 
-  if (label) label.textContent = isDark ? 'Light mode' : 'Dark mode';
+  ['auto','light','dark'].forEach(function(m) {
+    const el = document.getElementById('appearance-' + m);
+    if (el) el.classList.toggle('active', m === saved);
+  });
 }
 
 // Apply saved theme on load
 (function() {
-  const saved = localStorage.getItem('ecoverage_theme');
-  if (saved === 'dark') document.body.classList.add('force-dark');
-  else document.body.classList.add('force-light');
+  var saved = localStorage.getItem('ecoverage_theme');
+  if (saved === 'dark') {
+    document.body.classList.add('force-dark');
+  } else if (saved === 'auto') {
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.body.classList.add(prefersDark ? 'force-dark' : 'force-light');
+  } else {
+    document.body.classList.add('force-light');
+  }
+  // Also listen for system changes when in auto mode
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      if (localStorage.getItem('ecoverage_theme') === 'auto') {
+        document.body.classList.remove('force-dark', 'force-light');
+        document.body.classList.add(e.matches ? 'force-dark' : 'force-light');
+      }
+    });
+  }
   applyThemeUI();
 })();
 
@@ -9792,6 +9920,7 @@ const BADGE_LABELS = {
   'twitter': 'Twitter/X', 'linkedin': 'LinkedIn', 'reddit': 'Reddit',
   'email': 'Email', 'sms': 'SMS', 'push': 'Push Notifications',
   'in-app-dsp': 'In-App DSP', 'native-dsp': 'Native DSP', 'programmatic': 'Programmatic/DSP',
+  'outbrain': 'Outbrain', 'mgid': 'MGID', 'taboola': 'Taboola', 'revcontent': 'RevContent',
   // Format
   'static': 'Static Image', 'video': 'Video', 'carousel': 'Carousel',
   'text': 'Text / Search', 'native-article': 'Native Teaser', 'email': 'Email', 'playable': 'Playable',
