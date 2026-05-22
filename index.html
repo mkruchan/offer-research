@@ -9332,23 +9332,48 @@ document.addEventListener('keydown', function(e) {
       }
     }
   }
-  // Enter on last cell of row adds new row
-  if (e.key === 'Enter' && e.ctrlKey && e.target.matches('tbody td textarea')) {
-    e.preventDefault();
-    const tbody = e.target.closest('tbody');
-    if (tbody) {
-      const id = tbody.id;
-      const fn = id === 'traffic-body' ? trafficRow : id === 'ads-body' ? adsRow : funnelRow;
-      addRow(id, fn);
-      setTimeout(() => {
-        const rows = tbody.querySelectorAll('tr');
-        const lastRow = rows[rows.length - 1];
-        if (lastRow) {
-          const el = lastRow.querySelector('textarea, input:not([type="file"])');
-          if (el) el.focus();
-        }
-      }, 50);
+  // Enter in table textarea = save (blur); Shift+Enter = line break; Ctrl+Enter = add new row
+  if (e.key === 'Enter' && e.target.matches('tbody td textarea')) {
+    if (e.ctrlKey || e.metaKey) {
+      // Ctrl+Enter: add new row
+      e.preventDefault();
+      const tbody = e.target.closest('tbody');
+      if (tbody) {
+        const id = tbody.id;
+        const fn = id === 'traffic-body' ? trafficRow : id === 'ads-body' ? adsRow : funnelRow;
+        addRow(id, fn);
+        setTimeout(() => {
+          const rows = tbody.querySelectorAll('tr');
+          const lastRow = rows[rows.length - 1];
+          if (lastRow) {
+            const el = lastRow.querySelector('textarea, input:not([type="file"])');
+            if (el) el.focus();
+          }
+        }, 50);
+      }
+    } else if (e.shiftKey) {
+      // Shift+Enter: insert line break (default textarea behavior — do nothing)
+      return;
+    } else {
+      // Plain Enter: blur to save and move to next cell
+      e.preventDefault();
+      e.target.blur();
+      const td = e.target.closest('td');
+      const tr = td?.closest('tr');
+      const tds = tr ? Array.from(tr.querySelectorAll('td:not(.remove-col)')) : [];
+      const idx = tds.indexOf(td);
+      const next = tds[idx + 1];
+      if (next) {
+        const el = next.querySelector('textarea, select, input:not([type="file"])');
+        if (el) el.focus();
+      }
     }
+  }
+
+  // Enter in table text input (non-textarea) = blur to save
+  if (e.key === 'Enter' && !e.shiftKey && e.target.matches('tbody td input:not([type="file"])')) {
+    e.preventDefault();
+    e.target.blur();
   }
 });
 
@@ -10039,6 +10064,9 @@ function saveLinkChip(btn) {
   setLinkChipValue(wrap, val);
   wrap.querySelector('.link-chip-wrap-display').style.display = 'flex';
   wrap.querySelector('.link-input-wrap').classList.remove('editing');
+  // Sync to grid card if visible
+  const tbody = wrap.closest('tbody');
+  if (tbody) rebuildGridForTable(tbody.id);
   scheduleSave();
   snapForUndoForced();
 }
