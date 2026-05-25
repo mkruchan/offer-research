@@ -11914,22 +11914,11 @@ function offerRename() {
       _offerSyncNamePill(lastName);
     }
   }
-  // Try localStorage first, then fetch from master bin (works on any browser)
-  let url = localStorage.getItem(SB_URL_KEY);
-  let key = localStorage.getItem(SB_KEY_KEY);
-  if (!url || !key) {
-    const creds = await Promise.race([
-      loadSbCreds(),
-      new Promise(r => setTimeout(() => r(null), 4000))
-    ]);
-    if (creds?.url && creds?.key) {
-      url = creds.url;
-      key = creds.key;
-      localStorage.setItem(SB_URL_KEY, url);
-      localStorage.setItem(SB_KEY_KEY, key);
-    }
-  }
-  if (!url || !key) return;
+  // Hardcoded credentials — works on any browser without JSONBin
+  const url = 'https://vdannnwpikfipdamphlu.supabase.co';
+  const key = 'sb_publishable_0EgBovhUMdw7RH1qAPnxqA_BLvPVeHL';
+  localStorage.setItem(SB_URL_KEY, url);
+  localStorage.setItem(SB_KEY_KEY, key);
   document.getElementById('sb-url-input').value = url;
   document.getElementById('sb-key-input').value = key;
   await offerLoadAll();
