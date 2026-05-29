@@ -9572,7 +9572,7 @@ function notesResizeStart(e, handle) {
   function onUp() {
     overlay.remove();
     localStorage.setItem('notes-h-' + id, card.style.height);
-    if (partner) localStorage.setItem('notes-h-' + partner.querySelector('.ic-textarea').id, card.style.height);
+    if (partner) { var _pTa = partner.querySelector('.ic-textarea'); if (_pTa) localStorage.setItem('notes-h-' + _pTa.id, card.style.height); }
     try { doSave(); } catch(err) {}
     window.removeEventListener('mousemove', onMove);
     window.removeEventListener('mouseup', onUp);
