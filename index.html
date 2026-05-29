@@ -439,6 +439,9 @@
     .ic-card--blue { border-top: none; }
     /* Green left accent strip — removed, replaced by header bg */
     .ic-card--green { border-top: none; }
+    .ic-card--purple { border-top: none; }
+    .ic-card--purple .ic-header { background: #faf5ff; border-bottom-color: #e9d5ff; border-radius: 12px 12px 0 0; }
+    .ic-badge--purple { background: #e9d5ff; color: #7c3aed; }
 
     /* Header row */
     .ic-header {
@@ -1820,6 +1823,8 @@
     body.force-dark .ic-badge--blue { background: rgba(37,99,235,.18); }
     body.force-dark .ic-card--green { border-top-color: #22c55e; }
     body.force-dark .ic-badge--green { background: rgba(34,197,94,0.15); }
+    body.force-dark .ic-card--purple { border-top-color: #a855f7; }
+    body.force-dark .ic-badge--purple { background: rgba(168,85,247,.18); color: #d8b4fe; }
     body.force-dark .ic-textarea, body.force-dark .notes-body textarea {
       color: var(--text-primary);
     }
@@ -1982,6 +1987,8 @@
       body:not(.force-light), body.force-dark .ic-badge--blue           { background: rgba(37,99,235,.18); }
       body:not(.force-light), body.force-dark .ic-card--green           { border-top-color: #22c55e; }
       body:not(.force-light), body.force-dark .ic-badge--green          { background: rgba(34,197,94,0.15); }
+      body:not(.force-light), body.force-dark .ic-card--purple          { border-top-color: #a855f7; }
+      body:not(.force-light), body.force-dark .ic-badge--purple         { background: rgba(168,85,247,.18); }
       body:not(.force-light), body.force-dark .remove-row-btn:hover     { background: rgba(239,68,68,0.2) !important; color: #fca5a5 !important; }
       body:not(.force-light), body.force-dark .dup-row-btn:hover        { background: rgba(59,130,246,0.15) !important; color: #93c5fd !important; }
       body:not(.force-light), body.force-dark .badge-meta               { background: #1e3a5f; color: #93c5fd; }
@@ -2343,6 +2350,8 @@
     .ic-card--blue .ic-header { background: #f0f7ff; border-bottom: 1px solid #dbeafe; border-radius: 12px 12px 0 0; }
     .ic-card--green { border-top: none; }
     .ic-card--green .ic-header { background: #f0fdf4; border-bottom: 1px solid #bbf7d0; border-radius: 12px 12px 0 0; }
+    .ic-card--purple { border-top: none; }
+    .ic-card--purple .ic-header { background: #faf5ff; border-bottom: 1px solid #e9d5ff; border-radius: 12px 12px 0 0; }
     .ic-header { display: flex; align-items: center; gap: 10px; padding: 14px 20px; flex-shrink: 0; }
     .ic-badge { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .ic-badge--blue  { background: #dbeafe; }
@@ -5807,7 +5816,9 @@
 
     /* ── Card content text contrast ── */
     .ic-textarea, .notes-body textarea,
-    #notes-takeaways, #notes-actions {
+    #notes-takeaways, #notes-actions,
+    #notes-creative-takeaways, #notes-creative-actions,
+    #notes-media-takeaways, #notes-media-actions {
       color: #111827 !important;
     }
     #traffic-table tbody td { color: #000000 !important; }
@@ -5824,7 +5835,11 @@
     body.force-dark .ic-textarea,
     body.force-dark .notes-body textarea,
     body.force-dark #notes-takeaways,
-    body.force-dark #notes-actions { color: #f1f5f9 !important; }
+    body.force-dark #notes-actions,
+    body.force-dark #notes-creative-takeaways,
+    body.force-dark #notes-creative-actions,
+    body.force-dark #notes-media-takeaways,
+    body.force-dark #notes-media-actions { color: #f1f5f9 !important; }
     body.force-dark #traffic-table tbody td,
     body.force-dark #ads-table tbody td,
     body.force-dark #funnels-table tbody td { color: #f1f5f9 !important; }
@@ -6782,45 +6797,86 @@
   </div><!-- /.ds-offer-card -->
   <div class="ic-grid" id="ic-grid-notes">
 
-    <!-- ── Key Takeaways card ── -->
-    <div class="ic-card ic-card--blue notes-card" id="notes-card-takeaways">
+    <!-- ── Creative Takeaways card ── -->
+    <div class="ic-card ic-card--green notes-card" id="notes-card-creative-takeaways">
       <div class="ic-header">
-        <div class="ic-badge ic-badge--blue">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <div class="ic-badge ic-badge--green">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#16a34a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="8" cy="8" r="6.5"/>
             <path d="M8 5.5v2.8l1.8 1.1"/>
           </svg>
         </div>
-        <span class="ic-title">Key takeaways</span>
+        <span class="ic-title">Creative takeaways</span>
       </div>
       <div class="ic-body notes-body">
         <textarea
-          id="notes-takeaways"
+          id="notes-creative-takeaways"
           class="ic-textarea"
-          placeholder="Summarize the main findings, patterns, and strategic insights from this analysis..."
+          placeholder="Summarize creative findings, patterns, and insights — formats, angles, hooks, visuals..."
           oninput="scheduleCloudSave()"></textarea>
       </div>
-      <div class="notes-resize-handle ic-resize" onmousedown="notesResizeStart(event,this)" onselectstart="return false" data-for="notes-takeaways"></div>
+      <div class="notes-resize-handle ic-resize" onmousedown="notesResizeStart(event,this)" onselectstart="return false" data-for="notes-creative-takeaways"></div>
     </div>
 
-    <!-- ── Recommended Actions card ── -->
-    <div class="ic-card ic-card--green notes-card" id="notes-card-actions">
+    <!-- ── Media Buying Takeaways card ── -->
+    <div class="ic-card ic-card--purple notes-card" id="notes-card-media-takeaways">
+      <div class="ic-header">
+        <div class="ic-badge ic-badge--purple">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#7c3aed" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8" cy="8" r="6.5"/>
+            <path d="M8 5.5v2.8l1.8 1.1"/>
+          </svg>
+        </div>
+        <span class="ic-title">Media Buying takeaways</span>
+      </div>
+      <div class="ic-body notes-body">
+        <textarea
+          id="notes-media-takeaways"
+          class="ic-textarea"
+          placeholder="Summarize Media Buying findings — channels, geos, budget patterns, traffic sources..."
+          oninput="scheduleCloudSave()"></textarea>
+      </div>
+      <div class="notes-resize-handle ic-resize" onmousedown="notesResizeStart(event,this)" onselectstart="return false" data-for="notes-media-takeaways"></div>
+    </div>
+
+    <!-- ── Creative Recommendations card ── -->
+    <div class="ic-card ic-card--green notes-card" id="notes-card-creative-actions">
       <div class="ic-header">
         <div class="ic-badge ic-badge--green">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 8.5l3.5 3.5 6.5-7"/>
           </svg>
         </div>
-        <span class="ic-title">Recommended actions</span>
+        <span class="ic-title">Creative recommendations</span>
       </div>
       <div class="ic-body notes-body">
         <textarea
-          id="notes-actions"
+          id="notes-creative-actions"
           class="ic-textarea"
-          placeholder="List specific actions to test, replicate, or counter based on these findings..."
+          placeholder="List specific creative actions to test, replicate, or counter based on these findings..."
           oninput="scheduleCloudSave()"></textarea>
       </div>
-      <div class="notes-resize-handle ic-resize" onmousedown="notesResizeStart(event,this)" onselectstart="return false" data-for="notes-actions"></div>
+      <div class="notes-resize-handle ic-resize" onmousedown="notesResizeStart(event,this)" onselectstart="return false" data-for="notes-creative-actions"></div>
+    </div>
+
+    <!-- ── Media Buying Recommendations card ── -->
+    <div class="ic-card ic-card--purple notes-card" id="notes-card-media-actions">
+      <div class="ic-header">
+        <div class="ic-badge ic-badge--purple">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8.5l3.5 3.5 6.5-7"/>
+          </svg>
+        </div>
+        <span class="ic-title">Media Buying recommendations</span>
+      </div>
+      <div class="ic-body notes-body">
+        <textarea
+          id="notes-media-actions"
+          class="ic-textarea"
+          placeholder="List specific Media Buying actions — placements, bids, targeting, scaling strategies..."
+          oninput="scheduleCloudSave()"></textarea>
+      </div>
+      <div class="notes-resize-handle ic-resize" onmousedown="notesResizeStart(event,this)" onselectstart="return false" data-for="notes-media-actions"></div>
     </div>
 
   </div>
@@ -9515,7 +9571,7 @@ function notesResizeStart(e, handle) {
 
 
 function initNotesResize() {
-  [{id:'notes-takeaways',card:'notes-card-takeaways'},{id:'notes-actions',card:'notes-card-actions'}].forEach(({id,card}) => {
+  [{id:'notes-creative-takeaways',card:'notes-card-creative-takeaways'},{id:'notes-creative-actions',card:'notes-card-creative-actions'},{id:'notes-media-takeaways',card:'notes-card-media-takeaways'},{id:'notes-media-actions',card:'notes-card-media-actions'}].forEach(({id,card}) => {
     const el = document.getElementById(card);
     if (!el) return;
     const saved = localStorage.getItem('notes-h-' + id);
@@ -10670,10 +10726,14 @@ function _collectDataInner() {
     },
     meta: { analyst: document.getElementById('meta-analyst').value, date: document.getElementById('meta-date').value, period: document.getElementById('meta-period').value },
     notes: {
-      takeaways: document.getElementById('notes-takeaways').value,
-      actions: document.getElementById('notes-actions').value,
-      takeawaysH: document.getElementById('notes-card-takeaways')?.style.height || '',
-      actionsH: document.getElementById('notes-card-actions')?.style.height || '',
+      creativeTakeaways: document.getElementById('notes-creative-takeaways').value,
+      creativeActions: document.getElementById('notes-creative-actions').value,
+      mediaTakeaways: document.getElementById('notes-media-takeaways').value,
+      mediaActions: document.getElementById('notes-media-actions').value,
+      creativeTakeawaysH: document.getElementById('notes-card-creative-takeaways')?.style.height || '',
+      creativeActionsH: document.getElementById('notes-card-creative-actions')?.style.height || '',
+      mediaTakeawaysH: document.getElementById('notes-card-media-takeaways')?.style.height || '',
+      mediaActionsH: document.getElementById('notes-card-media-actions')?.style.height || '',
     },
     colWidths: (function() { const d={}; document.querySelectorAll('table').forEach(t => { const id=t.id||'table'; d[id]={}; t.querySelectorAll('thead th').forEach((th,i)=>{ if(th.style.width) d[id][i]=th.style.width; }); if(t.style.width) d[id]['_tableW']=t.style.width; }); return d; })(),
     rowHeights: (function() { const d={}; document.querySelectorAll('table').forEach(t => { const id=t.id||'table'; d[id]={}; t.querySelectorAll('tbody tr').forEach((tr,i)=>{ if(tr.style.height) d[id][i]=tr.style.height; }); }); return d; })(),
@@ -10730,10 +10790,14 @@ function restoreData(data) {
   const _md = data.meta?.date||''; document.getElementById('meta-date').value = _md;
   if (_md) { const _p = _md.split('-'); if (_p.length===3 && document.getElementById('meta-date-display')) document.getElementById('meta-date-display').textContent = `${_p[2]}.${_p[1]}.${_p[0]}`; }
   document.getElementById('meta-period').value = data.meta?.period||'';
-  document.getElementById('notes-takeaways').value = data.notes?.takeaways||'';
-  document.getElementById('notes-actions').value = data.notes?.actions||'';
-  if (data.notes?.takeawaysH) { const c = document.getElementById('notes-card-takeaways'); if(c) c.style.height = data.notes.takeawaysH; }
-  if (data.notes?.actionsH) { const c = document.getElementById('notes-card-actions'); if(c) c.style.height = data.notes.actionsH; }
+  document.getElementById('notes-creative-takeaways').value = data.notes?.creativeTakeaways||data.notes?.takeaways||'';
+  document.getElementById('notes-creative-actions').value = data.notes?.creativeActions||data.notes?.actions||'';
+  document.getElementById('notes-media-takeaways').value = data.notes?.mediaTakeaways||'';
+  document.getElementById('notes-media-actions').value = data.notes?.mediaActions||'';
+  if (data.notes?.creativeTakeawaysH) { const c = document.getElementById('notes-card-creative-takeaways'); if(c) c.style.height = data.notes.creativeTakeawaysH; }
+  if (data.notes?.creativeActionsH) { const c = document.getElementById('notes-card-creative-actions'); if(c) c.style.height = data.notes.creativeActionsH; }
+  if (data.notes?.mediaTakeawaysH) { const c = document.getElementById('notes-card-media-takeaways'); if(c) c.style.height = data.notes.mediaTakeawaysH; }
+  if (data.notes?.mediaActionsH) { const c = document.getElementById('notes-card-media-actions'); if(c) c.style.height = data.notes.mediaActionsH; }
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','qty','type','notes']);
   restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','angle','headline','cta','title','imp','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','trafficSource','type','obs']);
@@ -11642,7 +11706,7 @@ function clearPageData(title) {
     const el = document.getElementById(id); if (el) el.value = '';
   });
   // Clear notes
-  ['notes-takeaways','notes-actions'].forEach(id => {
+  ['notes-creative-takeaways','notes-creative-actions','notes-media-takeaways','notes-media-actions'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
   });
   // Set title in DOM and localStorage
