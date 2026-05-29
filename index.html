@@ -1140,12 +1140,12 @@
 
     /* LP table */
     .adp-lp-card { background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; }
-    .adp-lp-row { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-bottom: 1px solid var(--border-light); }
+    .adp-lp-row { display: flex; align-items: flex-start; gap: 8px; padding: 6px 12px; border-bottom: 1px solid var(--border-light); }
     .adp-lp-row:last-child { border-bottom: none; }
-    .adp-lp-icon { width: 22px; height: 22px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .adp-lp-icon { width: 22px; height: 22px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
     .adp-lp-info { flex: 1; min-width: 0; }
     .adp-lp-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #9ca3af; margin-bottom: 2px; }
-    .adp-lp-url { font-size: 11px; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .adp-lp-url { font-size: 11px; color: var(--accent); text-decoration: none; display: flex; align-items: flex-start; gap: 4px; }
     .adp-lp-url:hover { text-decoration: underline; }
     .adp-lp-url-text { word-break: break-all; flex: 1; min-width: 0; }
     .adp-lp-empty { font-size: 12px; color: #9ca3af; font-style: italic; }
@@ -7061,7 +7061,19 @@
 const MASTER_BIN_ID = '69fb9158adc21f119a6273c4';
 const MASTER_API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6WvXt6';
 
-// Base path = first path segment (e.g. /creative-research-editor/) — strip any trailing slug
+// ── Restore path encoded by 404.html (GitHub Pages SPA routing) ──
+(function() {
+  var params = new URLSearchParams(location.search);
+  var p = params.get('p');
+  if (!p) return;
+  var rest = decodeURIComponent(p);
+  var q = params.get('q') ? '?' + decodeURIComponent(params.get('q')) : '';
+  params.delete('p'); params.delete('q');
+  var remaining = params.toString() ? '?' + params.toString() : '';
+  var base = location.pathname.replace(/\/$/, '');
+  var newPath = base + rest + (q || remaining) + location.hash;
+  history.replaceState(null, '', newPath);
+})();
 const _basePath = '/' + (location.pathname.split('/').filter(Boolean)[0] || '') + '/';
 const _hostPath = (location.hostname + _basePath).replace(/\/$/, '');
 const _urlBin = new URLSearchParams(location.search).get('bin') || '';
