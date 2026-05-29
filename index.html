@@ -6813,7 +6813,7 @@
           id="notes-creative-takeaways"
           class="ic-textarea"
           placeholder="Summarize creative findings, patterns, and insights — formats, angles, hooks, visuals..."
-          oninput="scheduleCloudSave()"></textarea>
+          oninput="syncNotesHeight();scheduleCloudSave()"></textarea>
       </div>
       <div class="notes-resize-handle ic-resize" onmousedown="notesResizeStart(event,this)" onselectstart="return false" data-for="notes-creative-takeaways"></div>
     </div>
@@ -6834,7 +6834,7 @@
           id="notes-media-takeaways"
           class="ic-textarea"
           placeholder="Summarize Media Buying findings — channels, geos, budget patterns, traffic sources..."
-          oninput="scheduleCloudSave()"></textarea>
+          oninput="syncNotesHeight();scheduleCloudSave()"></textarea>
       </div>
       <div class="notes-resize-handle ic-resize" onmousedown="notesResizeStart(event,this)" onselectstart="return false" data-for="notes-media-takeaways"></div>
     </div>
@@ -6854,7 +6854,7 @@
           id="notes-creative-actions"
           class="ic-textarea"
           placeholder="List specific creative actions to test, replicate, or counter based on these findings..."
-          oninput="scheduleCloudSave()"></textarea>
+          oninput="syncNotesHeight();scheduleCloudSave()"></textarea>
       </div>
       <div class="notes-resize-handle ic-resize" onmousedown="notesResizeStart(event,this)" onselectstart="return false" data-for="notes-creative-actions"></div>
     </div>
@@ -6874,7 +6874,7 @@
           id="notes-media-actions"
           class="ic-textarea"
           placeholder="List specific Media Buying actions — placements, bids, targeting, scaling strategies..."
-          oninput="scheduleCloudSave()"></textarea>
+          oninput="syncNotesHeight();scheduleCloudSave()"></textarea>
       </div>
       <div class="notes-resize-handle ic-resize" onmousedown="notesResizeStart(event,this)" onselectstart="return false" data-for="notes-media-actions"></div>
     </div>
@@ -9554,12 +9554,25 @@ function notesResizeStart(e, handle) {
   overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:2147483647;cursor:ns-resize;';
   document.body.appendChild(overlay);
 
+  const rowPairs = [
+    ['notes-card-creative-takeaways', 'notes-card-media-takeaways'],
+    ['notes-card-creative-actions',   'notes-card-media-actions']
+  ];
+  const partner = rowPairs.reduce((p, pair) => {
+    if (pair[0] === card.id) return document.getElementById(pair[1]);
+    if (pair[1] === card.id) return document.getElementById(pair[0]);
+    return p;
+  }, null);
+
   function onMove(ev) {
-    card.style.height = Math.max(120, startH + (ev.clientY - startY)) + 'px';
+    const h = Math.max(120, startH + (ev.clientY - startY)) + 'px';
+    card.style.height = h;
+    if (partner) partner.style.height = h;
   }
   function onUp() {
     overlay.remove();
     localStorage.setItem('notes-h-' + id, card.style.height);
+    if (partner) localStorage.setItem('notes-h-' + partner.querySelector('.ic-textarea').id, card.style.height);
     try { doSave(); } catch(err) {}
     window.removeEventListener('mousemove', onMove);
     window.removeEventListener('mouseup', onUp);
@@ -9569,6 +9582,32 @@ function notesResizeStart(e, handle) {
 }
 
 
+function syncNotesHeight() {
+  var rows = [
+    ['notes-card-creative-takeaways', 'notes-card-media-takeaways'],
+    ['notes-card-creative-actions',   'notes-card-media-actions']
+  ];
+  rows.forEach(function(rowIds) {
+    var cards = rowIds.map(function(id) { return document.getElementById(id); }).filter(Boolean);
+    // Reset heights to measure natural content size
+    cards.forEach(function(card) {
+      card.style.height = 'auto';
+      var ta = card.querySelector('.ic-textarea');
+      if (ta) ta.style.height = 'auto';
+    });
+    // Find tallest needed height in this row
+    var maxH = 0;
+    cards.forEach(function(card) {
+      var ta = card.querySelector('.ic-textarea');
+      var header = card.querySelector('.ic-header');
+      var handle = card.querySelector('.notes-resize-handle');
+      var needed = (header ? header.offsetHeight : 0) + (ta ? ta.scrollHeight : 0) + (handle ? handle.offsetHeight : 0);
+      if (needed > maxH) maxH = needed;
+    });
+    var finalH = Math.max(maxH, 200) + 'px';
+    cards.forEach(function(card) { card.style.height = finalH; });
+  });
+}
 
 function initNotesResize() {
   [{id:'notes-creative-takeaways',card:'notes-card-creative-takeaways'},{id:'notes-creative-actions',card:'notes-card-creative-actions'},{id:'notes-media-takeaways',card:'notes-card-media-takeaways'},{id:'notes-media-actions',card:'notes-card-media-actions'}].forEach(({id,card}) => {
@@ -10804,7 +10843,7 @@ function restoreData(data) {
   if (data.savedSites) {
     try { localStorage.setItem('ecoverage_saved_sites', JSON.stringify(data.savedSites)); } catch(e) {}
   }
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(data.colWidths); restoreRowHeights(data.rowHeights); setTimeout(resizeAllInputs, 50); centerTextareas(); initAllDragReorder();
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(data.colWidths); restoreRowHeights(data.rowHeights); setTimeout(resizeAllInputs, 50); centerTextareas(); initAllDragReorder(); setTimeout(syncNotesHeight, 50);
     // Reset all textarea scroll positions to show text from start
     setTimeout(() => { document.querySelectorAll('textarea').forEach(ta => { ta.scrollTop = 0; }); }, 100);
   }, 0);
