@@ -7068,7 +7068,7 @@ const _initialUrlSlug = (function() {
   const params = new URLSearchParams(location.search);
   const offerParam = params.get('offer');
   if (offerParam) return offerParam;
-  const pathSlug = location.pathname.replace('/creative-research/', '').replace(/\/$/, '').replace(/\.html$/, '');
+  const pathSlug = location.pathname.replace(/^\/[^/]+\//, '').replace(/\/$/, '').replace(/\.html$/, '');
   // Only use pathname slug if it looks like a real slug (not a full file path)
   if (pathSlug && !pathSlug.includes('/') && !pathSlug.includes('.')) return pathSlug;
   return '';
@@ -8965,7 +8965,8 @@ function offerSlugFromTitle(title) {
 function updateOfferSlugPath(title) {
   if (window._offerSwitching) return;
   const slug = offerSlugFromTitle(title);
-  const base = '/creative-research/';
+  // Use the current base path instead of a hardcoded one
+  const base = location.pathname.replace(/\/[^/]*$/, '/') || '/';
   const newPath = slug ? base + slug : base;
   try {
     if (location.pathname !== newPath) {
@@ -11517,7 +11518,7 @@ async function offerLoadAll() {
 
   // If table empty AND no URL slug, auto-save current page as first offer
   const _initUrlParams = new URLSearchParams(location.search);
-  const _initSlug = _initUrlParams.get('offer') || location.pathname.replace('/creative-research/', '').replace(/\/$/, '').replace(/\.html$/, '') || '';
+  const _initSlug = _initUrlParams.get('offer') || location.pathname.replace(/^\/[^/]+\//, '').replace(/\/$/, '').replace(/\.html$/, '') || '';
   if (_allOffers.length === 0 && !_initSlug) {
     const title = (document.getElementById('main-title')?.dataset?.text || '').trim();
     if (title && title !== '—') {
