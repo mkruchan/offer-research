@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Multi-Platform Creative Research</title>
   <script>
+    // ── crypto.randomUUID polyfill for non-HTTPS contexts ──
+    if (typeof crypto !== 'undefined' && !crypto.randomUUID) {
+      crypto.randomUUID = function() {
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, function(c) {
+          return (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16);
+        });
+      };
+    }
     // ── Loader globals — defined early so offerLoadAll can call them ──
     // ── Apply theme before first paint to avoid flash ──
     (function() {
@@ -607,8 +615,9 @@
     th.frozen-offer .col-resizer::after { display: none; }
 
     tbody tr { position: relative; }
-    .row-resizer { position: absolute; bottom: 0; left: -9999px; right: 0; height: 4px; cursor: row-resize; z-index: 5; }
+    .row-resizer { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; cursor: row-resize; z-index: 5; }
     .row-resizer:hover, .row-resizer:active { background: var(--accent-muted); }
+    tbody tr { position: relative; }
 
     th.remove-col { min-width: 76px; }
     th.num-col { min-width: 28px; }
@@ -1163,8 +1172,8 @@
       font-size: 12px; color: var(--text-primary); line-height: 1.5;
       white-space: pre-wrap; word-break: break-word;
     }
-    .adp-copy-block[contenteditable="true"] { cursor: text; outline: none; }
-    .adp-copy-block[contenteditable="true"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.10); }
+    .adp-copy-block[contenteditable="false"] { cursor: text; outline: none; }
+    .adp-copy-block[contenteditable="false"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.10); }
     .adp-copy-placeholder { color: #9ca3af; font-style: italic; }
 
     /* Chip */
@@ -3961,9 +3970,9 @@
       letter-spacing: 0.07em !important;
       color: #9ca3af !important;
     }
-    #traffic-table thead th.remove-col,
-    #ads-table thead th.remove-col,
-    #funnels-table thead th.remove-col {
+    #traffic-table th.remove-col, #traffic-table td.remove-col,
+    #ads-table th.remove-col, #ads-table td.remove-col,
+    #funnels-table th.remove-col, #funnels-table td.remove-col { display: none !important; }
       text-align: left !important;
       padding: 10px 14px !important;
     }
@@ -4437,7 +4446,7 @@
     }
     .adp-copy-block:empty::before,
     .adp-copy-placeholder { color: #d1d5db !important; font-style: italic !important; font-size: 13px !important; }
-    .adp-copy-block[contenteditable="true"]:focus { border-color: #2563eb !important; box-shadow: 0 0 0 3px rgba(37,99,235,.08) !important; background: #fff !important; }
+    .adp-copy-block[contenteditable="false"]:focus { border-color: #2563eb !important; box-shadow: 0 0 0 3px rgba(37,99,235,.08) !important; background: #fff !important; }
 
     /* Notes textarea */
     .adp-row-ta {
@@ -4469,7 +4478,7 @@
     body.force-dark .adp-lp-icon { background: #27272a !important; }
     body.force-dark .adp-row-val { color: #f4f4f5 !important; }
     body.force-dark .adp-copy-block { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; color: #f4f4f5 !important; }
-    body.force-dark .adp-copy-block[contenteditable="true"]:focus { background: #27272a !important; }
+    body.force-dark .adp-copy-block[contenteditable="false"]:focus { background: #27272a !important; }
     body.force-dark .adp-section-title { color: #f4f4f5 !important; }
     body.force-dark .adp-row-ta { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
     body.force-dark .adp-row-ta:focus { background: #27272a !important; }
@@ -6408,12 +6417,6 @@
       Funnels
     </button>
 
-    <!-- History -->
-    <button class="ds-nav-item" id="nav-history" onclick="openHistoryPanel()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-      History
-    </button>
-
     <!-- Export -->
     <button class="ds-nav-item" id="nav-export" onclick="openExportPanel()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
@@ -6487,12 +6490,6 @@
   </div>
   <div class="offers-panel-list" id="offers-panel-list">
     <div class="offers-panel-empty">Loading offers…</div>
-  </div>
-  <div style="padding:10px 8px;border-top:1px solid var(--border-light, #e5e7eb);flex-shrink:0;box-sizing:border-box;height:56px;display:flex;align-items:center;">
-    <button onclick="closeOffersPanel();offerNewToggle()" class="new-offer-btn" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 10px;font-size:13px;font-weight:500;font-family:inherit;border-radius:8px;border:none;cursor:pointer;box-sizing:border-box;">
-      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg>
-      New offer
-    </button>
   </div>
 </div>
 
@@ -6697,9 +6694,6 @@
         <div class="oc-label">Offer</div>
         <div class="oc-title-row">
           <h1 id="main-title" data-text="" data-url=""></h1>
-          <button onclick="editTitle()" title="Edit title &amp; link" class="title-icon-btn oc-edit-btn">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
-          </button>
           <a id="title-link-btn" href="#" target="_blank" rel="noopener" title="Open in Everflow"
              onclick="return openTitleLink(event)" style="display:none;text-decoration:none;align-items:center;gap:5px;padding:4px 10px;font-size:12px;font-weight:600;font-family:inherit;background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:6px;color:var(--text-secondary);cursor:pointer;white-space:nowrap;transition:all 0.15s;">
             <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -6710,7 +6704,7 @@
 
       <!-- Offer picker buttons + hidden select (all IDs + event bindings preserved) -->
       <div class="oc-actions" id="offer-picker" style="position:relative;">
-        <select id="offer-select" onchange="offerLoadFromSelect(this.value)" style="display:none;"></select>
+        <select id="offer-select" style="display:none;"></select>
         <button onmousedown="event.stopPropagation();offerSearchToggle()"
                 id="offer-search-trigger" class="offer-pill-btn oc-select-btn">
           <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7">
@@ -6718,14 +6712,7 @@
           </svg>
           Select offer
         </button>
-        <button onmousedown="event.stopPropagation();offerNewToggle()"
-                id="offer-new-trigger"
-                class="new-offer-btn" style="display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 16px;font-size:13px;font-weight:600;font-family:inherit;border-radius:8px;border:none;cursor:pointer;flex-shrink:0;">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M8 2v12M2 8h12" stroke-linecap="round"/>
-          </svg>
-          New offer
-        </button>
+        
       </div>
 
     </div><!-- /.oc-top -->
@@ -6735,14 +6722,7 @@
 
     <!-- Bottom row: metadata fields -->
     <div class="oc-meta">
-      <div class="oc-meta-field">
-        <label class="oc-meta-label" for="meta-analyst">Analyst</label>
-        <div class="oc-meta-value-row">
-          <svg class="oc-meta-icon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M2.5 14c0-2.76 2.46-5 5.5-5s5.5 2.24 5.5 5"/></svg>
-          <input type="text" id="meta-analyst" class="oc-meta-input" placeholder="Your name">
-        </div>
-      </div>
-      <div class="oc-meta-sep" style="width:0.85px!important;"></div>
+      <input type="hidden" id="meta-analyst">
       <div class="oc-meta-field" style="position:relative;">
         <label class="oc-meta-label" for="meta-date-display">Date</label>
         <div class="oc-meta-value-row" style="cursor:pointer;" onclick="toggleCustomCal(event)">
@@ -6857,12 +6837,6 @@
       </div>
       <div id="traffic-grid" style="display:none;padding:16px;"></div>
     </div>
-    <div class="tc-footer add-row">
-      <button class="tc-add-btn add-btn" onclick="addRow('traffic-body',trafficRow)" title="Ctrl+Enter to add row from last cell">
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
-        Add row
-      </button>
-    </div>
   </div>
 
   <!-- ── Top Ads ── -->
@@ -6899,12 +6873,6 @@
       </div>
       <div id="ads-grid" style="display:none;padding:16px;"></div>
     </div>
-    <div class="tc-footer add-row">
-      <button class="tc-add-btn add-btn" onclick="addRow('ads-body',adsRow)" title="Ctrl+Enter to add row from last cell">
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
-        Add row
-      </button>
-    </div>
   </div>
 
   <!-- ── Top Funnels ── -->
@@ -6936,12 +6904,6 @@
       </div>
       <div id="funnels-grid" style="display:none;padding:16px;"></div>
     </div>
-    <div class="tc-footer add-row">
-      <button class="tc-add-btn add-btn" onclick="addRow('funnels-body',funnelRow)" title="Ctrl+Enter to add row from last cell">
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
-        Add row
-      </button>
-    </div>
   </div>
 
 </div><!-- /.container -->
@@ -6949,25 +6911,9 @@
 </div><!-- /.ds-main -->
 </div><!-- /.ds-app -->
 
-<!-- History Panel -->
-<!-- History side panel (offers-panel style) -->
-<div class="offers-panel-overlay" id="history-panel-overlay" onclick="closeHistoryPanel()"></div>
-<div class="offers-panel" id="history-panel">
-  <div class="offers-panel-header">
-    <div class="offers-panel-title">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-      Version History
-    </div>
-    <button class="offers-panel-close" onclick="closeHistoryPanel()">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
-    </button>
-  </div>
-  <div style="padding:10px 18px 6px;font-size:11px;color:var(--text-muted);border-bottom:1px solid var(--border-light);flex-shrink:0;">
-    Last <strong id="history-count">0</strong> versions saved
-  </div>
-  <div id="history-list" class="offers-panel-list" style="padding:10px;gap:6px;display:flex;flex-direction:column;"></div>
-</div>
-<!-- Keep legacy overlay ID for JS compatibility -->
+<!-- History panel removed from public version -->
+<div id="history-panel-overlay"></div>
+<div id="history-panel"></div>
 <div id="history-overlay" style="display:none;"></div>
 
 <!-- Export side panel (offers-panel style) -->
@@ -7024,10 +6970,6 @@
         <div class="adp-subtitle" id="adp-source-chips">—</div>
       </div>
       <div class="adp-header-actions">
-        <button class="adp-edit-btn" id="adp-edit-toggle" onclick="adpToggleEdit()">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
-          Edit
-        </button>
         <button class="adp-close" onclick="closeAdDetail()">×</button>
       </div>
     </div>
@@ -7040,7 +6982,7 @@
   </div>
   <div class="adp-body" id="adp-body-content">
   </div>
-  <div class="adp-save-bar" id="adp-save-bar">
+  <div class="adp-save-bar" id="adp-save-bar" style="display:none !important;">
     <button class="adp-cancel-btn" onclick="adpCancelEdit()">Cancel</button>
     <button class="adp-save-btn" onclick="adpSaveEdit()">Save changes</button>
   </div>
@@ -7061,33 +7003,22 @@
 const MASTER_BIN_ID = '69fb9158adc21f119a6273c4';
 const MASTER_API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6WvXt6';
 
-// ── Restore path encoded by 404.html (GitHub Pages SPA routing) ──
-(function() {
-  var params = new URLSearchParams(location.search);
-  var p = params.get('p');
-  if (!p) return;
-  var rest = decodeURIComponent(p);
-  var q = params.get('q') ? '?' + decodeURIComponent(params.get('q')) : '';
-  params.delete('p'); params.delete('q');
-  var remaining = params.toString() ? '?' + params.toString() : '';
-  var base = location.pathname.replace(/\/$/, '');
-  var newPath = base + rest + (q || remaining) + location.hash;
-  history.replaceState(null, '', newPath);
-})();
+
+
+// Base path = first path segment — strip any trailing slug segment
 const _basePath = '/' + (location.pathname.split('/').filter(Boolean)[0] || '') + '/';
 const _hostPath = (location.hostname + _basePath).replace(/\/$/, '');
 const _urlBin = new URLSearchParams(location.search).get('bin') || '';
-// ── Capture slug from URL immediately — before init() can overwrite pathname via runPostInit ──
+// ── Capture slug from URL immediately — before runPostInit can overwrite pathname ──
 const _initialUrlSlug = (function() {
   const params = new URLSearchParams(location.search);
   const offerParam = params.get('offer');
   if (offerParam) return offerParam;
   const pathSlug = location.pathname.replace(_basePath, '').replace(/\/$/, '').replace(/\.html$/, '');
-  // Only use pathname slug if it looks like a real slug (not a full file path)
   if (pathSlug && !pathSlug.includes('/') && !pathSlug.includes('.')) return pathSlug;
   return '';
 })();
-// Per-file key — always keyed to base path, not the slug URL
+// Per-file key — always keyed to the base path, not the slug URL
 const _pageKey = btoa(location.hostname + _basePath).replace(/[^a-zA-Z0-9]/g,'').slice(-16);
 const LS_SETTINGS = 'ecoverage_settings_v1_' + _pageKey;
 const LS_LOCAL    = 'ecoverage_local_v2_' + _pageKey;
@@ -7380,11 +7311,7 @@ function buildTrafficGrid() {
       <div class="grid-card-body">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${idx+1}</span>
-          <div style="display:flex;align-items:center;gap:2px;background:rgba(0,0,0,0.55);border-radius:8px;padding:4px 6px;backdrop-filter:blur(4px);height:28px;box-sizing:border-box;" onclick="event.stopPropagation()">
-          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px 3px;font-size:14px;line-height:1;display:flex;align-items:center;height:20px;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
-          <button title="Edit" onclick="event.stopPropagation();toggleCardEditMode(this.closest('.grid-card'),${idx},'traffic-body');" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin='round'/></svg></button>
-          <button title="Delete" onclick="gridRemoveRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(239,68,68,.75)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'">×</button>
-        </div>
+          
         </div>
         ${renderChip(tds[1], 'Traffic source', idx, 'traffic-body')}
         ${renderChip(tds[4], 'Traffic type', idx, 'traffic-body')}
@@ -7479,11 +7406,7 @@ function buildFunnelsGrid() {
       <div class="grid-card-body">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${idx+1}</span>
-          <div style="display:flex;align-items:center;gap:2px;background:rgba(0,0,0,0.55);border-radius:8px;padding:4px 6px;backdrop-filter:blur(4px);height:28px;box-sizing:border-box;" onclick="event.stopPropagation()">
-          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px 3px;font-size:14px;line-height:1;display:flex;align-items:center;height:20px;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
-          <button title="Edit" onclick="event.stopPropagation();toggleCardEditMode(this.closest('.grid-card'),${idx},'funnels-body');" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin='round'/></svg></button>
-          <button title="Delete" onclick="gridRemoveRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(239,68,68,.75)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'">×</button>
-        </div>
+          
         </div>
         <div class="grid-card-offer">${advertiser || '<span style="opacity:0.4">No advertiser</span>'}</div>
         ${sourceChip}
@@ -7671,11 +7594,7 @@ function buildAdsGrid() {
       <div style="position:relative;overflow:hidden;border-radius:8px 8px 0 0;">${imgHtml}
         <div style="position:absolute;top:4px;left:4px;right:4px;display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${num}</span>
-          <div style="display:flex;align-items:center;gap:2px;background:rgba(0,0,0,0.55);border-radius:8px;padding:4px 6px;backdrop-filter:blur(4px);height:28px;box-sizing:border-box;" onclick="event.stopPropagation()">
-          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px 3px;font-size:14px;line-height:1;display:flex;align-items:center;height:20px;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
-          <button title="Edit" onclick="event.stopPropagation();toggleCardEditMode(this.closest('.grid-card'),${idx},'ads-body');" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin='round'/></svg></button>
-          <button title="Delete" onclick="gridCardDelete(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:0 4px;font-size:13px;line-height:1;border-radius:5px;transition:all .16s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;height:20px;" onmouseover="this.style.background='rgba(239,68,68,.75)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'">×</button>
-        </div>
+          
         </div>
       </div>
       <div class="grid-card-body">
@@ -8370,9 +8289,12 @@ function _adpOpen(titleText, subtitleChipsHtml, bodyHtml) {
   setTimeout(initMediaDragDrop, 0);
   _adpEditMode = false;
   const btn = document.getElementById('adp-edit-toggle');
-  btn.classList.remove('active');
-  btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Edit`;
-  document.getElementById('adp-save-bar').classList.remove('visible');
+  if (btn) {
+    btn.classList.remove('active');
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Edit`;
+  }
+  const saveBar = document.getElementById('adp-save-bar');
+  if (saveBar) saveBar.classList.remove('visible');
   document.getElementById('ad-detail-overlay').classList.add('open');
   document.getElementById('ad-detail-panel').classList.add('open');
   document.getElementById('ad-detail-panel').scrollTop = 0;
@@ -8768,10 +8690,12 @@ function adpStartRenameOffer(el) {
 function adpToggleEdit() {
   _adpEditMode = !_adpEditMode;
   const btn = document.getElementById('adp-edit-toggle');
-  btn.classList.toggle('active', _adpEditMode);
-  btn.innerHTML = _adpEditMode
-    ? `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Editing`
-    : `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Edit`;
+  if (btn) {
+    btn.classList.toggle('active', _adpEditMode);
+    btn.innerHTML = _adpEditMode
+      ? `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Editing`
+      : `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Edit`;
+  }
   const offerTitle = document.getElementById('adp-offer');
   if (offerTitle) {
     if (_adpEditMode) {
@@ -8788,7 +8712,8 @@ function adpToggleEdit() {
   document.querySelectorAll('.adp-creative-edit-bar').forEach(bar => {
     bar.style.display = _adpEditMode ? 'flex' : 'none';
   });
-  document.getElementById('adp-save-bar').classList.toggle('visible', _adpEditMode);
+  const saveBar2 = document.getElementById('adp-save-bar');
+  if (saveBar2) saveBar2.classList.toggle('visible', _adpEditMode);
   document.querySelectorAll('.adp-copy-block[data-field]').forEach(el => {
     el.contentEditable = _adpEditMode ? 'true' : 'false';
     el.style.borderColor = _adpEditMode ? 'var(--border-mid)' : 'var(--border-light)';
@@ -8825,9 +8750,10 @@ function adpKey(e) { if (e.key === 'Escape') closeAdDetail(); }
 
 function adpCancelEdit() {
   _adpEditMode = false;
-  document.getElementById('adp-edit-toggle').classList.remove('active');
-  document.getElementById('adp-edit-toggle').innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Edit`;
-  document.getElementById('adp-save-bar').classList.remove('visible');
+  const btn = document.getElementById('adp-edit-toggle');
+  if (btn) { btn.classList.remove('active'); btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Edit`; }
+  const saveBar = document.getElementById('adp-save-bar');
+  if (saveBar) saveBar.classList.remove('visible');
   if (_adpCurrentTable === 'ads-body') openAdDetail(_adpCurrentRowIdx);
   else if (_adpCurrentTable === 'traffic-body') openTrafficDetail(_adpCurrentRowIdx);
   else if (_adpCurrentTable === 'funnels-body') openFunnelDetail(_adpCurrentRowIdx);
@@ -8979,9 +8905,7 @@ function offerSlugFromTitle(title) {
 function updateOfferSlugPath(title) {
   if (window._offerSwitching) return;
   const slug = offerSlugFromTitle(title);
-  // Use the current base path instead of a hardcoded one
-  const base = location.pathname.replace(/\/[^/]*$/, '/') || '/';
-  const newPath = slug ? base + slug : base;
+  const newPath = slug ? _basePath + slug : _basePath;
   try {
     if (location.pathname !== newPath) {
       history.replaceState(null, '', newPath);
@@ -9582,7 +9506,7 @@ function saveSetup() {
   if (bin) BIN_ID = bin;
   if (key) API_KEY = key;
   saveSettings();
-  if (bin) { history.replaceState(null, '', location.pathname + '?bin=' + bin); updateShareUrl(); }
+  if (bin) { updateShareUrl(); }
   document.getElementById('setupModal').classList.add('hidden');
   if (BIN_ID && API_KEY) {
     showToast('Connected! Loading data…', 'success');
@@ -9681,10 +9605,7 @@ function saveSetup() {
   if (key) API_KEY = key;
   saveSettings();
   // Update URL without reload so share link is correct
-  if (bin) {
-    const newUrl = location.origin + location.pathname + '?bin=' + bin;
-    history.replaceState(null, '', newUrl);
-  }
+  // URL update on bin change disabled
   document.getElementById('setupModal').classList.add('hidden');
   if (BIN_ID && API_KEY) {
     showToast('Connected! Loading data…', 'success');
@@ -9790,17 +9711,17 @@ function opt(v, l) { return `<option value="${v}">${l}</option>`; }
 
 function trafficRow(n) {
   return `<tr>
-    <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()" ondblclick="resetRowHeight(this)" title="Double-click to reset row height"></td>
+    <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" title="Double-click to reset row height"></td>
     <td><div class="sel-wrap">
-      <select onchange="updateBadge(this);scheduleSave()">
+      <select>
         ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}${opt('youtube','YouTube')}${opt('pinterest','Pinterest')}${opt('snapchat','Snapchat')}${opt('twitter','Twitter/X')}${opt('linkedin','LinkedIn')}${opt('reddit','Reddit')}${opt('email','Email')}${opt('sms','SMS')}${opt('push','Push Notifications')}${opt('in-app-dsp','In-App DSP')}${opt('programmatic','Programmatic/DSP')}${opt('outbrain','Outbrain')}${opt('mgid','MGID')}${opt('taboola','Taboola')}${opt('revcontent','RevContent')}
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
-    <td><textarea placeholder="e.g. US, UK" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="e.g. 120" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="e.g. US, UK"></textarea></td>
+    <td><textarea placeholder="e.g. 120"></textarea></td>
     <td><div class="sel-wrap">
-      <select onchange="updateBadge(this);scheduleSave()">
+      <select>
         ${opt('','— select —')}${opt('paid-search','Paid Search')}${opt('organic-search','Organic Search')}
         ${opt('paid-social','Paid Social')}${opt('organic-social','Organic Social')}
         ${opt('email','Email')}${opt('direct','Direct')}${opt('referral','Referral')}
@@ -9808,47 +9729,41 @@ function trafficRow(n) {
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
-    <td><textarea placeholder="Observations..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'traffic-body')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
+    <td><textarea placeholder="Observations..."></textarea></td>
+    
   </tr>`;
 }
 
 function adsRow(n) {
   const uid = 'media-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
   return `<tr>
-    <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()" ondblclick="resetRowHeight(this)" title="Double-click to reset row height"></td>
-    <td class="frozen-offer"><textarea placeholder="Offer name" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" title="Double-click to reset row height"></td>
+    <td class="frozen-offer"><textarea placeholder="Offer name"></textarea></td>
     <td><div class="sel-wrap">
-      <select onchange="updateBadge(this);scheduleSave()">
+      <select>
         ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}${opt('youtube','YouTube')}${opt('pinterest','Pinterest')}${opt('snapchat','Snapchat')}${opt('twitter','Twitter/X')}${opt('linkedin','LinkedIn')}${opt('reddit','Reddit')}${opt('email','Email')}${opt('sms','SMS')}${opt('push','Push Notifications')}${opt('in-app-dsp','In-App DSP')}${opt('programmatic','Programmatic/DSP')}${opt('outbrain','Outbrain')}${opt('mgid','MGID')}${opt('taboola','Taboola')}${opt('revcontent','RevContent')}
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
     <td><div class="sel-wrap">
-      <select onchange="updateBadge(this);scheduleSave()">
+      <select>
         ${opt('','— select —')}${opt('static','Static Image')}${opt('video','Video')}${opt('carousel','Carousel')}
         ${opt('text','Text / Search')}${opt('native-article','Native Teaser')}${opt('email','Email')}${opt('playable','Playable')}
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
-    <td><textarea placeholder="e.g. US, UK" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="e.g. 16 days" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="e.g. US, UK"></textarea></td>
+    <td><textarea placeholder="e.g. 16 days"></textarea></td>
     <td class="link-cell"><div class="link-chip-wrap">
       <div class="link-chip-wrap-display">
         <a class="link-chip" href="#" target="_blank" style="display:none">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-icon" onclick="startLinkEdit(this)" title="Edit link">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+        
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
-      <div class="link-input-wrap">
-        <input class="link-input-field" type="url" placeholder="https://...">
-        <button class="link-save-btn" onclick="saveLinkChip(this)">Save</button>
-        <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
-      </div>
+      
     </div></td>
     <td class="link-cell"><div class="link-chip-wrap">
       <div class="link-chip-wrap-display">
@@ -9856,16 +9771,10 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-icon" onclick="startLinkEdit(this)" title="Edit link">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+        
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
-      <div class="link-input-wrap">
-        <input class="link-input-field" type="url" placeholder="https://...">
-        <button class="link-save-btn" onclick="saveLinkChip(this)">Save</button>
-        <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
-      </div>
+      
     </div></td>
     <td class="link-cell"><div class="link-chip-wrap">
       <div class="link-chip-wrap-display">
@@ -9873,19 +9782,13 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-icon" onclick="startLinkEdit(this)" title="Edit link">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+        
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
-      <div class="link-input-wrap">
-        <input class="link-input-field" type="url" placeholder="https://...">
-        <button class="link-save-btn" onclick="saveLinkChip(this)">Save</button>
-        <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
-      </div>
+      
     </div></td>
     <td class="media-cell">
-      <input type="file" id="${uid}" class="hidden-input" accept="image/*,video/*" onchange="handleMediaUpload(this,'${uid}-preview')">
+      <input type="file" id="${uid}" class="hidden-input" accept="image/*,video/*">
       <div id="${uid}-preview">
         <button class="media-upload-btn" onclick="document.getElementById('${uid}').click()">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
@@ -9895,54 +9798,48 @@ function adsRow(n) {
         </button>
       </div>
     </td>
-    <td><textarea placeholder="Angle / hook description" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="Ad headline text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="e.g. Get a Free Quote" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="Ad title text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="e.g. 500K" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="Additional notes..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'ads-body')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button><button class="remove-row-btn" onclick="removeRow(this,'ads-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
+    <td><textarea placeholder="Angle / hook description"></textarea></td>
+    <td><textarea placeholder="Ad headline text"></textarea></td>
+    <td><textarea placeholder="e.g. Get a Free Quote"></textarea></td>
+    <td><textarea placeholder="Ad title text"></textarea></td>
+    <td><textarea placeholder="e.g. 500K"></textarea></td>
+    <td><textarea placeholder="Additional notes..."></textarea></td>
+    
   </tr>`;
 }
 
 function funnelRow(n) {
   return `<tr>
-    <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()" ondblclick="resetRowHeight(this)" title="Double-click to reset row height"></td>
+    <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" title="Double-click to reset row height"></td>
     <td class="link-cell"><div class="link-chip-wrap">
       <div class="link-chip-wrap-display">
         <a class="link-chip" href="#" target="_blank" style="display:none">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-icon" onclick="startLinkEdit(this)" title="Edit link">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+        
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
-      <div class="link-input-wrap">
-        <input class="link-input-field" type="url" placeholder="https://...">
-        <button class="link-save-btn" onclick="saveLinkChip(this)">Save</button>
-        <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
-      </div>
+      
     </div></td>
-    <td><textarea placeholder="Offer name" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="e.g. US, UK" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="Offer name"></textarea></td>
+    <td><textarea placeholder="e.g. US, UK"></textarea></td>
     <td><div class="sel-wrap">
-      <select onchange="updateBadge(this);scheduleSave()">
+      <select>
         ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}${opt('youtube','YouTube')}${opt('pinterest','Pinterest')}${opt('snapchat','Snapchat')}${opt('twitter','Twitter/X')}${opt('linkedin','LinkedIn')}${opt('reddit','Reddit')}${opt('email','Email')}${opt('sms','SMS')}${opt('push','Push Notifications')}${opt('in-app-dsp','In-App DSP')}${opt('programmatic','Programmatic/DSP')}${opt('outbrain','Outbrain')}${opt('mgid','MGID')}${opt('taboola','Taboola')}${opt('revcontent','RevContent')}
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
     <td><div class="sel-wrap">
-      <select onchange="updateBadge(this);scheduleSave()">
+      <select>
         ${opt('','— select —')}${opt('quiz','Quiz / Survey')}${opt('landing-page','Direct Landing Page')}
         ${opt('vsl','VSL')}${opt('lead-gen','Lead Gen Form')}${opt('multi-step','Multi-Step Form')}${opt('checkout-page','Checkout Page')}
         ${opt('advertorial','Advertorial')}${opt('comparison','Comparison Page')}
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
-    <td><textarea placeholder="Structure, copy, offer details..." oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td class="remove-col"><div class="cell-actions"><span class="drag-handle" draggable="false">⠿</span><button class="dup-row-btn" title="Duplicate row" onclick="dupRow(this,'funnels-body')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')">×</button></div><div class="comment-popup"><textarea placeholder="Add a note or comment..."></textarea><div class="comment-popup-footer"><button onclick="closeComment(this)">Cancel</button><button class="primary" onclick="saveComment(this)">Save</button></div></div></td>
+    <td><textarea placeholder="Structure, copy, offer details..."></textarea></td>
+    
   </tr>`;
 }
 
@@ -10406,8 +10303,7 @@ function initRowResize(table) {
     const resizer = document.createElement('div');
     resizer.className = 'row-resizer';
     resizer.title = 'Drag to resize row';
-    const lastTd = tr.querySelector('td:last-child');
-    if (lastTd) lastTd.appendChild(resizer); else tr.appendChild(resizer);
+    tr.appendChild(resizer);
 
     let startY, startH;
     resizer.addEventListener('mousedown', e => {
@@ -11414,13 +11310,13 @@ let _sbClient      = null;
 let _currentOfferId = null;
 let _allOffers     = [];
 
-/* ── Client ── */
+/* ── Client — hardcoded for public read-only version ── */
+const _SB_PUBLIC_URL = 'https://vdannnwpikfipdamphlu.supabase.co';
+const _SB_PUBLIC_KEY = 'sb_publishable_0EgBovhUMdw7RH1qAPnxqA_BLvPVeHL';
+
 function sbGetClient() {
   if (_sbClient) return _sbClient;
-  const url = localStorage.getItem(SB_URL_KEY);
-  const key = localStorage.getItem(SB_KEY_KEY);
-  if (!url || !key) return null;
-  try { _sbClient = supabase.createClient(url, key); return _sbClient; }
+  try { _sbClient = supabase.createClient(_SB_PUBLIC_URL, _SB_PUBLIC_KEY); return _sbClient; }
   catch(e) { console.error('Supabase init:', e); return null; }
 }
 
@@ -11555,7 +11451,6 @@ async function offerLoadAll() {
   offerRebuildSelect();
 
   // Restore last selected — prefer URL slug match first
-  // Use _initialUrlSlug captured at page-load time (before runPostInit can overwrite pathname)
   const _urlSlug = _initialUrlSlug;
   const slugMatch = _urlSlug && _allOffers.find(o => offerSlugFromTitle(o.name) === _urlSlug);
   const lastId = localStorage.getItem(SB_OFFER_KEY);
@@ -12387,6 +12282,94 @@ document.addEventListener('click', function(e) {
       target.dispatchEvent(new Event('input', { bubbles: true }));
     }
   }, true);
+</script>
+<style>
+/* ── PUBLIC VERSION — chips and selects non-editable ── */
+.gce { pointer-events: none !important; cursor: default !important; user-select: text !important; -webkit-user-select: text !important; }
+.sel-wrap select { pointer-events: none !important; }
+.sel-wrap .sel-display { pointer-events: none !important; cursor: default !important; }
+.sel-arrow { display: none !important; }
+.link-chip-empty { pointer-events: none !important; cursor: default !important; opacity: 0.4 !important; }
+.text-badge-input { pointer-events: none !important; }
+</style>
+<script>
+// ── PUBLIC VERSION — editing disabled ──
+window.addEventListener('DOMContentLoaded', function() {
+  // Re-run autoGrow whenever table data is rendered so text isn't clipped
+  var _origRestoreData = window.restoreData;
+  if (typeof _origRestoreData === 'function') {
+    window.restoreData = function(data) {
+      _origRestoreData(data);
+      setTimeout(function() {
+        document.querySelectorAll('tbody td textarea').forEach(function(ta) {
+          if (typeof autoGrow === 'function') autoGrow(ta);
+        });
+      }, 100);
+    };
+  }
+  // Also trigger after runPostInit (covers Supabase offer loads)
+  var _origRunPostInit = window.runPostInit;
+  if (typeof _origRunPostInit === 'function') {
+    window.runPostInit = function(data) {
+      _origRunPostInit(data);
+      setTimeout(function() {
+        document.querySelectorAll('tbody td textarea').forEach(function(ta) {
+          if (typeof autoGrow === 'function') autoGrow(ta);
+        });
+        if (typeof restoreColWidths === 'function') restoreColWidths(null);
+        if (typeof restoreRowHeights === 'function') restoreRowHeights(null);
+      }, 300);
+    };
+  }
+  // Disable title editing
+  var title = document.getElementById('main-title');
+  if (title) { title.contentEditable = 'false'; title.style.cursor = 'default'; }
+  // Disable meta field editing
+  ['meta-analyst','meta-date-display','meta-period'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.readOnly = true; el.disabled = false; el.style.pointerEvents = 'none'; }
+  });
+  // Disable notes
+  document.querySelectorAll('.notes-body textarea, .ic-textarea').forEach(function(el) {
+    el.readOnly = true;
+    el.style.pointerEvents = 'none';
+  });
+  // Remove adp detail panel editing
+  window.addRow = function() {};
+  window.removeRow = function() {};
+  window.dupRow = function() {};
+  window.gridRemoveRow = function() {};
+  window.gridDupRow = function() {};
+  window.toggleCardEditMode = function() {};
+  window.exitCardEditMode = function() {};
+  window.startLinkEdit = function() {};
+  window.adpToggleEdit = function() {};
+  window.gcExpand = function() {};
+  window.gcCollapse = function() {};
+  // Suppress cloud saves — resize/col widths save to localStorage only
+  window.scheduleCloudSave = function() {};
+  window.doSave = function() {};
+  window.cloudSave = function() {};
+  // Init col + row resize after tables are populated
+  var _origRunPostInit2 = window.runPostInit;
+  window.runPostInit = function(data) {
+    if (typeof _origRunPostInit2 === 'function') _origRunPostInit2(data);
+    setTimeout(function() {
+      if (typeof initAllColResize === 'function') initAllColResize();
+    }, 400);
+  };
+  window.offerNew = function() {};
+  window.offerDelete = function() {};
+  window.offerNewConfirm = function() {};
+  window.saveData = function() {};
+  window.autoSave = function() {};
+  window.openHistoryPanel = function() {};
+  window.showHistory = function() {};
+  window.snapForUndo = function() {};
+  window.snapForUndoForced = function() {};
+  window.cloudHistorySave = function() {};
+  window.cloudHistoryLoad = function() { return Promise.resolve(); };
+});
 </script>
 </body>
 </html>
