@@ -1,16 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>Redirecting…</title>
   <script>
-    // Redirect /creative-research/<slug> → /creative-research/?offer=<slug>
-    const base = '/creative-research/';
-    const slug = window.location.pathname.replace(base, '').replace(/\/$/, '').replace(/\.html$/, '');
-    if (slug && slug !== 'index') {
-      window.location.replace(base + '?offer=' + encodeURIComponent(slug));
-    } else {
-      window.location.replace(base);
-    }
+    // GitHub Pages SPA redirect trick.
+    // When GitHub serves this 404.html for an unknown path like /creative-research/obd-fuel,
+    // we encode the full path + query into a ?p= param and redirect to the repo root index.html,
+    // which then decodes it and restores the original URL via history.replaceState.
+    (function() {
+      var loc = window.location;
+      var base = loc.pathname.split('/').slice(0, 2).join('/'); // e.g. /creative-research
+      var rest = loc.pathname.slice(base.length) || '/';        // e.g. /obd-fuel
+      var search = loc.search ? loc.search.slice(1) : '';
+      var hash = loc.hash || '';
+      var redirect = base + '/?p=' + encodeURIComponent(rest) +
+        (search ? '&q=' + encodeURIComponent(search) : '') +
+        hash;
+      loc.replace(redirect);
+    })();
   </script>
 </head>
 <body></body>
