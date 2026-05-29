@@ -1147,7 +1147,7 @@
     .adp-lp-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #9ca3af; margin-bottom: 2px; }
     .adp-lp-url { font-size: 11px; color: var(--accent); text-decoration: none; display: flex; align-items: center; gap: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .adp-lp-url:hover { text-decoration: underline; }
-    .adp-lp-url-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+    .adp-lp-url-text { word-break: break-all; flex: 1; min-width: 0; }
     .adp-lp-empty { font-size: 12px; color: #9ca3af; font-style: italic; }
     .adp-lp-edit-input { flex: 1; font-size: 12px; font-family: inherit; border: 1px solid var(--accent); border-radius: var(--radius-md); padding: 4px 8px; background: var(--bg-primary); color: var(--text-primary); outline: none; min-width: 0; box-shadow: 0 0 0 3px rgba(37,99,235,0.10); }
 
@@ -8333,7 +8333,7 @@ const _lpTextColor = {
   'var(--coral-bg)':  'var(--coral-text)',
 };
 function _adpLpRow(url, label, icon, bg, _color, tdIdx) {
-  const short = url && url.length > 42 ? url.slice(0,39)+'…' : url;
+  const short = url;
   const col = _lpTextColor[bg] || 'currentColor';
   return `<div class="adp-lp-row">
     <div class="adp-lp-icon" style="background:${bg};color:${col};">${icon}</div>
@@ -10722,13 +10722,15 @@ function restoreData(data) {
   if (data.header) {
     const h1 = document.getElementById('main-title');
     const t = data.header.title || ''; const tu = data.header.titleUrl || '';
+    // Always persist titleUrl so runPostInit reads the correct value for this offer
+    localStorage.setItem('ecoverage_title_url', tu);
+    updateTitleLinkBtn(tu);
     if (h1 && t) {
       h1.dataset.text = t; h1.dataset.url = tu;
       h1.style.cssText = 'color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:8px;padding:4px 14px;font-size:inherit;';
       if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:none;'; h1.innerHTML = ''; h1.appendChild(a); } else { h1.textContent = t; }
-      updateTitleLinkBtn(tu);
       // Persist to localStorage so runPostInit doesn't overwrite with stale value
-      if (t) { localStorage.setItem('ecoverage_title', t); localStorage.setItem('ecoverage_title_url', tu || ''); document.title = 'Multi-Platform Creative Research'; }
+      if (t) { localStorage.setItem('ecoverage_title', t); document.title = 'Multi-Platform Creative Research'; }
     }
 
   }
