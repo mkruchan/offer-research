@@ -2437,6 +2437,7 @@
     body.force-dark .ic-card { background: #18181b; border-color: rgba(255,255,255,.08); }
     body.force-dark .ic-card--blue .ic-header { background: rgba(37,99,235,.18); border-bottom-color: rgba(37,99,235,.25); }
     body.force-dark .ic-card--green .ic-header { background: rgba(34,197,94,.08); border-bottom-color: rgba(34,197,94,.2); }
+    body.force-dark .ic-card--purple .ic-header { background: rgba(168,85,247,.10); border-bottom-color: rgba(168,85,247,.25); }
     body.force-dark .ic-badge--blue { background: rgba(37,99,235,.18); color: #93c5fd; }
     body.force-dark .ic-badge--green { background: rgba(34,197,94,.15); }
     body.force-dark .ic-title { color: #f4f4f5; }
@@ -2477,6 +2478,7 @@
       body:not(.force-light), body.force-dark .ic-card { background: #18181b; border-color: rgba(255,255,255,.08); }
       body:not(.force-light), body.force-dark .ic-card--blue .ic-header { background: rgba(59,130,246,.1); }
       body:not(.force-light), body.force-dark .ic-card--green .ic-header { background: rgba(34,197,94,.08); }
+      body:not(.force-light), body.force-dark .ic-card--purple .ic-header { background: rgba(168,85,247,.10); border-bottom-color: rgba(168,85,247,.25); }
       body:not(.force-light), body.force-dark .tc-card { background: #18181b; border-color: rgba(255,255,255,.08); }
       body:not(.force-light), body.force-dark .tc-toggle--active { background: #18181b !important; color: #93c5fd !important; }
       body:not(.force-light), body.force-dark .export-menu { background: #18181b; border-color: rgba(255,255,255,.12); }
@@ -4108,6 +4110,8 @@
     body.force-dark .ic-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
     body.force-dark .ic-card--blue .ic-header { background: rgba(37,99,235,.18) !important; border-bottom-color: rgba(37,99,235,.25) !important; }
     body.force-dark .ic-card--green .ic-header { background: rgba(22,163,74,.08) !important; border-bottom-color: rgba(22,163,74,.18) !important; }
+    body.force-dark .ic-card--purple .ic-header { background: rgba(168,85,247,.10) !important; border-bottom-color: rgba(168,85,247,.25) !important; }
+    body.force-dark .ic-badge--purple { background: rgba(168,85,247,.18) !important; color: #d8b4fe !important; }
     body.force-dark .ic-badge--blue { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; }
     body.force-dark .ic-badge--green { background: rgba(34,197,94,.15) !important; }
     body.force-dark .ic-title { color: #9ca3af !important; }
@@ -5073,6 +5077,8 @@
     /* Insight cards headers */
     body.force-dark .ic-card--blue .ic-header { background: rgba(37,99,235,.18) !important; border-bottom-color: rgba(37,99,235,.25) !important; }
     body.force-dark .ic-card--green .ic-header { background: rgba(22,163,74,.08) !important; border-bottom-color: rgba(22,163,74,.18) !important; }
+    body.force-dark .ic-card--purple .ic-header { background: rgba(168,85,247,.10) !important; border-bottom-color: rgba(168,85,247,.25) !important; }
+    body.force-dark .ic-badge--purple { background: rgba(168,85,247,.18) !important; color: #d8b4fe !important; }
     body.force-dark .ic-badge--blue { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; }
     body.force-dark .ic-badge--green { background: rgba(34,197,94,.15) !important; }
     body.force-dark .ic-title { color: #9ca3af !important; }
@@ -9605,7 +9611,11 @@ function syncNotesHeight() {
       if (needed > maxH) maxH = needed;
     });
     var finalH = Math.max(maxH, 200) + 'px';
-    cards.forEach(function(card) { card.style.height = finalH; });
+    cards.forEach(function(card) {
+      card.style.height = finalH;
+      var ta = card.querySelector('.ic-textarea');
+      if (ta) localStorage.setItem('notes-h-' + ta.id, finalH);
+    });
   });
 }
 
@@ -10833,10 +10843,27 @@ function restoreData(data) {
   document.getElementById('notes-creative-actions').value = data.notes?.creativeActions||data.notes?.actions||'';
   document.getElementById('notes-media-takeaways').value = data.notes?.mediaTakeaways||'';
   document.getElementById('notes-media-actions').value = data.notes?.mediaActions||'';
-  if (data.notes?.creativeTakeawaysH) { const c = document.getElementById('notes-card-creative-takeaways'); if(c) c.style.height = data.notes.creativeTakeawaysH; }
-  if (data.notes?.creativeActionsH) { const c = document.getElementById('notes-card-creative-actions'); if(c) c.style.height = data.notes.creativeActionsH; }
-  if (data.notes?.mediaTakeawaysH) { const c = document.getElementById('notes-card-media-takeaways'); if(c) c.style.height = data.notes.mediaTakeawaysH; }
-  if (data.notes?.mediaActionsH) { const c = document.getElementById('notes-card-media-actions'); if(c) c.style.height = data.notes.mediaActionsH; }
+  const _nhMap = {
+    'notes-creative-takeaways': data.notes?.creativeTakeawaysH,
+    'notes-creative-actions':   data.notes?.creativeActionsH,
+    'notes-media-takeaways':    data.notes?.mediaTakeawaysH,
+    'notes-media-actions':      data.notes?.mediaActionsH,
+  };
+  const _ncMap = {
+    'notes-creative-takeaways': 'notes-card-creative-takeaways',
+    'notes-creative-actions':   'notes-card-creative-actions',
+    'notes-media-takeaways':    'notes-card-media-takeaways',
+    'notes-media-actions':      'notes-card-media-actions',
+  };
+  Object.entries(_nhMap).forEach(([taId, h]) => {
+    const cardId = _ncMap[taId];
+    // Cloud height takes priority; fall back to localStorage
+    const finalH = h || localStorage.getItem('notes-h-' + taId);
+    if (finalH) {
+      const c = document.getElementById(cardId);
+      if (c) { c.style.height = finalH; localStorage.setItem('notes-h-' + taId, finalH); }
+    }
+  });
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','qty','type','notes']);
   restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','angle','headline','cta','title','imp','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','trafficSource','type','obs']);
