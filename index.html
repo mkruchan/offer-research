@@ -7061,20 +7061,22 @@
 const MASTER_BIN_ID = '69fb9158adc21f119a6273c4';
 const MASTER_API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6WvXt6';
 
-const _hostPath = (location.hostname + location.pathname).replace(/\/index\.html$/, '').replace(/\/$/, '');
+// Base path = first path segment (e.g. /creative-research-editor/) — strip any trailing slug
+const _basePath = '/' + (location.pathname.split('/').filter(Boolean)[0] || '') + '/';
+const _hostPath = (location.hostname + _basePath).replace(/\/$/, '');
 const _urlBin = new URLSearchParams(location.search).get('bin') || '';
 // ── Capture slug from URL immediately — before init() can overwrite pathname via runPostInit ──
 const _initialUrlSlug = (function() {
   const params = new URLSearchParams(location.search);
   const offerParam = params.get('offer');
   if (offerParam) return offerParam;
-  const pathSlug = location.pathname.replace(/^\/[^/]+\//, '').replace(/\/$/, '').replace(/\.html$/, '');
+  const pathSlug = location.pathname.replace(_basePath, '').replace(/\/$/, '').replace(/\.html$/, '');
   // Only use pathname slug if it looks like a real slug (not a full file path)
   if (pathSlug && !pathSlug.includes('/') && !pathSlug.includes('.')) return pathSlug;
   return '';
 })();
-// Per-file key — all storage is isolated per page URL
-const _pageKey = btoa(location.hostname + location.pathname.replace(/\/index\.html$/, '')).replace(/[^a-zA-Z0-9]/g,'').slice(-16);
+// Per-file key — always keyed to base path, not the slug URL
+const _pageKey = btoa(location.hostname + _basePath).replace(/[^a-zA-Z0-9]/g,'').slice(-16);
 const LS_SETTINGS = 'ecoverage_settings_v1_' + _pageKey;
 const LS_LOCAL    = 'ecoverage_local_v2_' + _pageKey;
 const LS_HISTORY  = 'ecoverage_history_v1_' + _pageKey;
@@ -11518,7 +11520,7 @@ async function offerLoadAll() {
 
   // If table empty AND no URL slug, auto-save current page as first offer
   const _initUrlParams = new URLSearchParams(location.search);
-  const _initSlug = _initUrlParams.get('offer') || location.pathname.replace(/^\/[^/]+\//, '').replace(/\/$/, '').replace(/\.html$/, '') || '';
+  const _initSlug = _initUrlParams.get('offer') || location.pathname.replace(_basePath, '').replace(/\/$/, '').replace(/\.html$/, '') || '';
   if (_allOffers.length === 0 && !_initSlug) {
     const title = (document.getElementById('main-title')?.dataset?.text || '').trim();
     if (title && title !== '—') {
